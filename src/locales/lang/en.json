@@ -1,0 +1,11 @@
+{
+    "nav": {
+        "home": "Home",
+        "singleMenuItem": "Single menu item",
+        "collapseMenu": {
+            "collapseMenu": "Financial Plan",
+            "item1": "Assumption General",
+            "item2": "Assumption Ventas"
+        }
+    }
+}
