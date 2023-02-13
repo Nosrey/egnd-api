@@ -1,21 +1,21 @@
 import React from 'react'
-import { FormContainer, FormItem, Input, Select, Button } from 'components/ui'
+import { Input, Button, Select, FormItem, FormContainer } from 'components/ui'
 import { Field, Form, Formik } from 'formik'
-import { Link } from 'react-router-dom'
 import * as Yup from 'yup'
+import { Link } from 'react-router-dom'
 
-function AssumptionGeneral() {
-    const colourOptions = [
-        { value: 'ocean', label: 'Ocean', color: '#00B8D9' },
-        { value: 'blue', label: 'Blue', color: '#0052CC' },
-        { value: 'purple', label: 'Purple', color: '#5243AA' },
-    ]
+const options = [
+    { value: 'foo', label: 'Foo' },
+    { value: 'bar', label: 'Bar' },
+]
 
-    const validationSchema = Yup.object().shape({
-        nombreEmpresa: Yup.string().required('Please input user name!'),
-        modeloNegocio: Yup.string().required('Please select one!'),
-        moneda: Yup.string().required('Please select one!'),
-    })
+const validationSchema = Yup.object().shape({
+    nombreEmpresa: Yup.string().required('Please input user name!'),
+    modeloNegorcio: Yup.string().required('Please select one!'),
+    moneda: Yup.string().required('Please select one!'),
+})
+
+const AssumptionGeneral = () => {
     return (
         <div>
             <div className="border-b-2 mb-8 pb-1">
@@ -30,25 +30,24 @@ function AssumptionGeneral() {
                     <Formik
                         initialValues={{
                             nombreEmpresa: '',
-                            modeloNegocio: '',
+                            modeloNegorcio: '',
                             moneda: '',
                         }}
                         validationSchema={validationSchema}
                         onSubmit={(values, { resetForm, setSubmitting }) => {
                             console.log('values', values)
                             setTimeout(() => {
-                                alert(JSON.stringify(values, null, 2))
                                 setSubmitting(false)
                                 resetForm()
                             }, 400)
                         }}
                     >
-                        {({ touched, errors, resetForm, values }) => (
+                        {({ values, touched, errors, resetForm }) => (
                             <Form>
                                 <FormContainer className="grid grid-cols-3 grid-rows-4 items-center gap-x-3">
                                     <FormItem
-                                        label="Nombre de la empresa"
                                         className="col-span-1 row-start-1"
+                                        label="Nombre de la empresa"
                                         invalid={
                                             errors.nombreEmpresa &&
                                             touched.nombreEmpresa
@@ -56,10 +55,10 @@ function AssumptionGeneral() {
                                         errorMessage={errors.nombreEmpresa}
                                     >
                                         <Field
+                                            placeholder="Mi empresa SRL"
                                             type="text"
                                             name="nombreEmpresa"
                                             component={Input}
-                                            placeholder="Mi empresa SRL"
                                         />
                                     </FormItem>
 
@@ -68,24 +67,25 @@ function AssumptionGeneral() {
                                     </span>
 
                                     <FormItem
-                                        label="Modelo de negocio"
                                         className="col-span-1 row-start-2"
+                                        label="Modelo de negocio"
                                         invalid={
-                                            errors.modeloNegocio &&
-                                            touched.modeloNegocio
+                                            errors.modeloNegorcio &&
+                                            touched.modeloNegorcio
                                         }
-                                        errorMessage={errors.modeloNegocio}
+                                        errorMessage={errors.modeloNegorcio}
                                     >
-                                        <Field name="modeloNegocio">
+                                        <Field name="modeloNegorcio">
                                             {({ field, form }) => (
                                                 <Select
+                                                    placeholder="Selector de negocio"
                                                     field={field}
                                                     form={form}
-                                                    options={colourOptions}
-                                                    value={colourOptions.filter(
+                                                    options={options}
+                                                    value={options.filter(
                                                         (option) =>
                                                             option.value ===
-                                                            values.modeloNegocio
+                                                            values.modeloNegorcio
                                                     )}
                                                     onChange={(option) =>
                                                         form.setFieldValue(
@@ -102,25 +102,42 @@ function AssumptionGeneral() {
                                         Determina el modelo de negocio de tu
                                         compañía, si no lo sabes puedes usar la
                                         guia donde te mostraremos varios
-                                        ejemplos. <Link>Ver guia.</Link>
+                                        ejemplos.{' '}
+                                        <Link className="underline decoration-solid text-blue-600">
+                                            Ver guia.
+                                        </Link>
                                     </span>
-                                    {/* 
+
                                     <FormItem
-                                        label="Moneda"
                                         className="col-span-1 row-start-3"
+                                        label="Moneda"
                                         invalid={
                                             errors.moneda && touched.moneda
                                         }
                                         errorMessage={errors.moneda}
                                     >
-                                        <Field
-                                            type="select"
-                                            name="moneda"
-                                            component={Select}
-                                            options={colourOptions}
-                                            placeholder="Selector de moneda"
-                                        />
-                                    </FormItem> */}
+                                        <Field name="moneda">
+                                            {({ field, form }) => (
+                                                <Select
+                                                    placeholder="Selector de moneda"
+                                                    field={field}
+                                                    form={form}
+                                                    options={options}
+                                                    value={options.filter(
+                                                        (option) =>
+                                                            option.value ===
+                                                            values.moneda
+                                                    )}
+                                                    onChange={(option) =>
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            option.value
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </Field>
+                                    </FormItem>
 
                                     <span className="col-start-2 col-end-3 row-start-3">
                                         Es la moneda para el armado del plan,
@@ -133,9 +150,6 @@ function AssumptionGeneral() {
                                             <Button
                                                 variant="solid"
                                                 type="submit"
-                                                onClick={() =>
-                                                    console.log('hasd')
-                                                }
                                             >
                                                 Cargar datos
                                             </Button>
@@ -152,97 +166,3 @@ function AssumptionGeneral() {
 }
 
 export default AssumptionGeneral
-
-// import React from 'react'
-// import { Input, Button, Select, FormItem, FormContainer } from 'components/ui'
-// import { Field, Form, Formik } from 'formik'
-// import * as Yup from 'yup'
-
-// const options = [
-//     { value: 'foo', label: 'Foo' },
-//     { value: 'bar', label: 'Bar' },
-// ]
-
-// const validationSchema = Yup.object().shape({
-//     input: Yup.string()
-//         .min(3, 'Too Short!')
-//         .max(20, 'Too Long!')
-//         .required('Please input user name!'),
-//     select: Yup.string().required('Please select one!'),
-// })
-
-// const AssumptionGeneral = () => {
-//     return (
-//         <div>
-//             <Formik
-//                 enableReinitialize
-//                 initialValues={{
-//                     input: '',
-//                     select: '',
-//                 }}
-//                 validationSchema={validationSchema}
-//                 onSubmit={(values, { setSubmitting }) => {
-//                     console.log('values', values)
-//                     setTimeout(() => {
-//                         alert(JSON.stringify(values, null, 2))
-//                         setSubmitting(false)
-//                     }, 400)
-//                 }}
-//             >
-//                 {({ values, touched, errors, resetForm }) => (
-//                     <Form>
-//                         <FormContainer>
-//                             <FormItem
-//                                 label="Empresa"
-//                                 asterisk
-//                                 invalid={errors.input && touched.input}
-//                                 errorMessage={errors.input}
-//                             >
-//                                 <Field
-//                                     type="text"
-//                                     name="input"
-//                                     component={Input}
-//                                 />
-//                             </FormItem>
-//                             <FormItem
-//                                 label="Select"
-//                                 asterisk
-//                                 invalid={errors.select && touched.select}
-//                                 errorMessage={errors.select}
-//                             >
-//                                 <Field name="select">
-//                                     {({ field, form }) => (
-//                                         <Select
-//                                             field={field}
-//                                             form={form}
-//                                             options={options}
-//                                             value={options.filter(
-//                                                 (option) =>
-//                                                     option.value ===
-//                                                     values.select
-//                                             )}
-//                                             onChange={(option) =>
-//                                                 form.setFieldValue(
-//                                                     field.name,
-//                                                     option.value
-//                                                 )
-//                                             }
-//                                         />
-//                                     )}
-//                                 </Field>
-//                             </FormItem>
-
-//                             <FormItem>
-//                                 <Button variant="solid" type="submit">
-//                                     Submit
-//                                 </Button>
-//                             </FormItem>
-//                         </FormContainer>
-//                     </Form>
-//                 )}
-//             </Formik>
-//         </div>
-//     )
-// }
-
-// export default AssumptionGeneral
