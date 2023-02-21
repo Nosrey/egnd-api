@@ -16,7 +16,7 @@ const navigationConfig = [
         subMenu: [],
     },
     /** Example purpose only, please remove */
-    
+
     {
         key: 'collapseMenu',
         path: '',
@@ -46,9 +46,18 @@ const navigationConfig = [
                 authority: [],
                 subMenu: [],
             },
+            {
+                key: 'collapseMenu.item3',
+                path: '/volumenq',
+                title: 'Volumen Q',
+                translateKey: 'nav.collapseMenu.item3',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
         ],
     },
-    
 ]
 
 export default navigationConfig

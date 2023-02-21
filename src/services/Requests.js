@@ -1,23 +1,16 @@
 import axios from 'axios'
 
-export const getUser = async (id) => {
+const idUser = '63f3d1ac6ecccfda2c07ac4a'
+const URL_API = 'http://localhost:4000'
+
+export const getUser = async () => {
     try {
-        const response = await axios.get(`/users/:${id}`)
-        return response.data
+        const res = await fetch(URL_API + '/api/users/' + idUser)
+        const data = await res.json()
+        return data.response
     } catch (error) {
-        if (error.response) {
-            // El servidor respondió con un código de error
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-        } else if (error.request) {
-            // La petición fue enviada pero no se recibió respuesta
-            console.log(error.request)
-        } else {
-            // Algo sucedió en la configuración de la petición
-            console.log('Error', error.message)
-        }
-        return { error: error.message }
+        console.error('Error:', error)
+        throw new Error('No se pudo obtener los datos del usuario.')
     }
 }
 
