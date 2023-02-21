@@ -1,3 +1,6 @@
+const idUser = '63f3d1ac6ecccfda2c07ac4a'
+const URL_API = 'http://localhost:4000'
+
 export const getUser = async (id) => {
     try {
         const res = await fetch(URL_API + '/api/users/' + idUser)
