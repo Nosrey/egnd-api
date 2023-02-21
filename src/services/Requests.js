@@ -1,30 +1,25 @@
-import axios from 'axios'
-
 export const getUser = async (id) => {
     try {
-        const response = await axios.get(`/users/:${id}`)
-        return response.data
+        const res = await fetch(URL_API + '/api/users/' + idUser)
+        const data = await res.json()
+        return data.response
     } catch (error) {
-        if (error.response) {
-            // El servidor respondió con un código de error
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-        } else if (error.request) {
-            // La petición fue enviada pero no se recibió respuesta
-            console.log(error.request)
-        } else {
-            // Algo sucedió en la configuración de la petición
-            console.log('Error', error.message)
-        }
-        return { error: error.message }
+        console.error('Error:', error)
+        throw new Error('No se pudo obtener los datos del usuario.')
     }
 }
 
 export const signUp = async (body) => {
     try {
-        const response = await axios.post(`/signup`, body)
-        return response.data
+        const response = await fetch(`/signup`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        const data = await response.json()
+        return data
     } catch (error) {
         if (error.response) {
             console.error(error.response.data)
@@ -46,171 +41,153 @@ export const createAssumpVenta = async ({
     productos,
 }) => {
     try {
-        const response = await axios.post(`/assumpventa`, {
-            canales: canales,
-            churns: churns,
-            paises: paises,
-            productos: productos,
-            idUser: idUser,
+        const response = await fetch('/assumpventa', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                canales: canales,
+                churns: churns,
+                paises: paises,
+                productos: productos,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error.message)
         throw error
     }
 }
 
 export const createVolumen = async (body) => {
     try {
-        const response = await axios.post(`/volumen`, {
-            volumen: body,
-            idUser: idUser,
+        const response = await fetch(`/volumen`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                volumen: body,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error)
         throw error
     }
 }
 
 export const createBienes = async (body) => {
     try {
-        const response = await axios.post(`/bienes`, {
-            bienes: body,
-            idUser: idUser,
+        const response = await fetch(`/bienes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                bienes: body,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error)
         throw error
     }
 }
 
 export const createCosto = async (body) => {
     try {
-        const response = axios.post(`/costo`, {
-            costo: body,
-            idUser: idUser,
+        const response = await fetch(`/costo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                costo: body,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error)
         throw error
     }
 }
 
 export const createGastos = async (body) => {
     try {
-        const response = axios.post(`/gastos`, {
-            gastos: body,
-            idUser: idUser,
+        const response = await fetch(`/gastos`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gastos: body,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error)
         throw error
     }
 }
 
 export const createPrecio = async (body) => {
     try {
-        const response = axios.post(`/precio`, {
-            precio: body,
-            idUser: idUser,
+        const response = await fetch(`/precio`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                precio: body,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error)
         throw error
     }
 }
 
 export const createPuestosq = async (body) => {
     try {
-        const response = axios.post(`/Puestosq`, {
-            Puestosq: body,
-            idUser: idUser,
+        const response = await fetch('/Puestosq', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Puestosq: body,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error.message)
         throw error
     }
 }
 
 export const createPuestosv = async (body) => {
     try {
-        const response = axios.post(`/puestosv`, {
-            puestosv: body,
-            idUser: idUser,
+        const response = await fetch('/puestosv', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                puestosv: body,
+                idUser: idUser,
+            }),
         })
-        return response.data
+        const data = await response.json()
+        return data
     } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
-        }
+        console.error('Error', error.message)
         throw error
     }
 }
