@@ -1,5 +1,4 @@
-import React from 'react'
-import { Field, FieldArray, Form, Formik, getIn } from 'formik'
+import React, {useState, useEffect} from 'react'
 import {
     Input,
     Button,
@@ -8,7 +7,7 @@ import {
     Select,
     Avatar,
 } from 'components/ui'
-import { HiMinus } from 'react-icons/hi'
+import { MdDelete } from "react-icons/md";
 import * as Yup from 'yup'
 import CreatableSelect from 'react-select/creatable'
 
@@ -27,9 +26,9 @@ const validationSchema = Yup.object({
 const optionsModel = [
     { value: 'oneShot', label: 'One Shot' },
     { value: 'mensual', label: 'Suscripción Mensual' },
-    { value: '% transacción', label: '% Transacción' },
+    { value: 'transacción', label: '% Transacción' },
     {
-        value: 'tix price por transacción',
+        value: 'FixPrice',
         label: 'Fix price por transacción',
     },
 ]
@@ -46,16 +45,109 @@ const optionsCountry = [
     { value: 'uruguay', label: 'Uruguay' },
 ]
 
-const fieldFeedback = (form, name) => {
-    const error = getIn(form.errors, name)
-    const touch = getIn(form.touched, name)
-    return {
-        errorMessage: error || '',
-        invalid: typeof touch === 'undefined' ? false : error && touch,
-    }
-}
 
-const DynamicForm = () => {
+const optionsClients = [
+    { value: 'si', label: 'SI' },
+    { value: 'no', label: 'NO' },
+]
+
+
+const AssumptionVentas = () => {
+    const [productos, setProductos] = useState([{
+        id: 1,
+        name: '',
+        model: '',
+        type: '',
+    }])
+    const [countries, setCountries] =useState([])
+    const [channels, setChannels] =useState([{
+        name: '',
+        sameClient: '',
+        items: [],
+    }])
+    const [churn, setChurn] =useState([{
+        channel: channels[0].name,
+        items: [],
+    }])
+    const [showRemoveProd, setShowRemoveProd] =useState(false)
+    const [showRemoveChannel, setShowRemoveChannel] =useState(false)
+
+    const addProduct = (newProduct) => {
+        setProductos([...productos, newProduct])
+    }
+    const addChurn = (newChurn) => {
+        setChurn([...churn, newChurn])
+    }
+    const addChannel = (newChannel) => {
+        setChannels([...channels, newChannel])
+        addChurn({
+            channel: '',
+            items: [],
+        })
+    }
+    
+    const removeProd = (id) => {
+        setProductos([...productos.filter(item => id !== item.id ) ])
+    } 
+    const removeChannel = (channelName) => {
+        setChannels([...channels.filter(item => channelName !== item.name ) ])
+    } 
+
+    const handleEditProduct = (idProd, campo, value) => {
+        const position = productos.findIndex(prod => prod.id === idProd);
+        const copyProd = [...productos];
+        copyProd[position][campo] = value
+        setProductos(() => [...copyProd] )
+    }
+
+    const handleEditChannel = (nameChannel, campo, value, prodId) => {
+        const position = channels.findIndex(c => c.name === nameChannel);
+        const copyChannels = [...channels];
+        const copyChurn = [...churn]
+        
+        if (prodId) {
+           const item = {
+            prodId: prodId,
+            volumen: value,
+            }
+            if ( copyChannels[position].items.some(i => i.prodId === prodId ) ) { //modifico 
+                const positionI = copyChannels[position].items.findIndex(c => c.prodId === prodId);
+                copyChannels[position].items[positionI].volumen = value;
+            } else { //agrego nuevo
+                copyChannels[position].items.push(item);
+            }
+        } else {
+            copyChannels[position][campo] = value
+            if (campo === 'name') {
+                copyChurn[position]['channel'] = value
+                setChurn(() => [...copyChurn])
+            }
+        }
+        setChannels(() => [...copyChannels] )
+    }
+    const handleEditChurn = (nameChannel, value, prodId) => {
+        const position = churn.findIndex(c => c.channel === nameChannel);
+        const copyChurn = [...churn];       
+        const item = {
+        prodId: prodId,
+        porcentajeChurn: value,
+        }
+        if ( copyChurn[position].items.some(i => i.prodId === prodId ) ) { //modifico 
+            const positionI = copyChurn[position].items.findIndex(c => c.prodId === prodId);
+            copyChurn[position].items[positionI].porcentajeChurn = value;
+        } else { //agrego nuevo
+            copyChurn[position].items.push(item);
+        }
+       
+        setChurn(() => [...copyChurn] )
+    }
+
+    const onSubmit = () => {
+        console.log("PRODuCTOS " , productos);
+        console.log("Canales " , channels);
+        console.log("Churns " , churn);
+        console.log("PAISES " , countries);
+    }
     return (
         <div>
             <div className="border-b-2 mb-8 pb-1">
@@ -68,544 +160,533 @@ const DynamicForm = () => {
                 </div>
 
                 <div className="px-4 py-5">
-                    <Formik
-                        onSubmit={(values) =>
-                            alert(JSON.stringify(values, null, 2))
-                        }
-                        validationSchema={validationSchema}
-                        initialValues={{
-                            productos: [
-                                {
-                                    name: '',
-                                    model: '',
-                                    type: '',
-                                },
-                            ],
-                            country: [],
-                            channels: [{ nameChannel: '', volumeCustomer: '' }],
-                        }}
-                    >
-                        {({ touched, errors, values }) => {
-                            const productos = values.productos
-                            const channels = values.channels
-                            return (
-                                <Form>
-                                    <FormContainer>
-                                        <div className="flex flex-col gap-y-6">
-                                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                                <span className=" ">ID</span>
-                                                <span className="col-start-2 col-end-6">
-                                                    Producto / Servicio
-                                                </span>
-                                                <span className="col-start-6 col-end-10">
-                                                    Revenue Model
-                                                </span>
-                                                <span className="col-start-10 col-end-13">
-                                                    Tipo
-                                                </span>
-                                            </div>
-                                            <FieldArray name="productos">
-                                                {({ form, remove, push }) => (
-                                                    <div>
-                                                        {productos &&
-                                                        productos.length > 0
-                                                            ? productos.map(
-                                                                  (
-                                                                      _,
-                                                                      index
-                                                                  ) => {
-                                                                      const nameFeedBack =
-                                                                          fieldFeedback(
-                                                                              form,
-                                                                              `productos[${index}].name`
-                                                                          )
-                                                                      const modelFeedBack =
-                                                                          fieldFeedback(
-                                                                              form,
-                                                                              `productos[${index}].model`
-                                                                          )
-                                                                      const typeFeedback =
-                                                                          fieldFeedback(
-                                                                              form,
-                                                                              `productos[${index}].type`
-                                                                          )
+                    <FormContainer>
+                        <div className="flex flex-col gap-y-6">
+{/*****************************************************************************************************/}
+{/**************************      P R O D U C T O S      *********************************************/}
+{/*****************************************************************************************************/}
+                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
+                                <span className=" ">ID</span>
+                                <span className="col-start-2 col-end-6">
+                                    Producto / Servicio
+                                </span>
+                                <span className="col-start-6 col-end-10">
+                                    Revenue Model
+                                </span>
+                                <span className="col-start-10 col-end-13">
+                                    Tipo
+                                </span>
+                            </div>
+                            <div>
+                           
+                                        {productos &&
+                                        productos.length > 0
+                                            ? productos.map(
+                                                    (
+                                                        prod,
+                                                        index
+                                                    ) => {
 
-                                                                      return (
-                                                                          <div
-                                                                              className="grid grid-cols-12 items-center gap-x-3 mb-6 auto-cols-max"
-                                                                              key={
-                                                                                  index
-                                                                              }
-                                                                          >
-                                                                              <Avatar className="col-start-1 row-start-2 mr-4 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                                                                                  {index +
-                                                                                      1}
-                                                                              </Avatar>
-                                                                              <FormItem
-                                                                                  className="col-start-2 col-end-6 row-start-2 mb-0"
-                                                                                  invalid={
-                                                                                      nameFeedBack.invalid
-                                                                                  }
-                                                                                  errorMessage={
-                                                                                      nameFeedBack.errorMessage
-                                                                                  }
-                                                                              >
-                                                                                  <Field
-                                                                                      invalid={
-                                                                                          nameFeedBack.invalid
-                                                                                      }
-                                                                                      placeholder="Nombre"
-                                                                                      name={`productos[${index}].name`}
-                                                                                      type="text"
-                                                                                      component={
-                                                                                          Input
-                                                                                      }
-                                                                                  />
-                                                                              </FormItem>
-
-                                                                              <FormItem
-                                                                                  className="col-start-6 col-end-10 row-start-2 mb-0"
-                                                                                  invalid={
-                                                                                      modelFeedBack.invalid
-                                                                                  }
-                                                                                  errorMessage={
-                                                                                      modelFeedBack.errorMessage
-                                                                                  }
-                                                                              >
-                                                                                  <Field
-                                                                                      name={`productos[${index}].model`}
-                                                                                  >
-                                                                                      {({
-                                                                                          field,
-                                                                                          form,
-                                                                                      }) => (
-                                                                                          <Select
-                                                                                              field={
-                                                                                                  field
-                                                                                              }
-                                                                                              form={
-                                                                                                  form
-                                                                                              }
-                                                                                              options={
-                                                                                                  optionsModel
-                                                                                              }
-                                                                                              value={optionsModel.filter(
-                                                                                                  (
-                                                                                                      option
-                                                                                                  ) =>
-                                                                                                      option.value ===
-                                                                                                      values.select
-                                                                                              )}
-                                                                                              onChange={(
-                                                                                                  option
-                                                                                              ) =>
-                                                                                                  form.setFieldValue(
-                                                                                                      field.name,
-                                                                                                      option.value
-                                                                                                  )
-                                                                                              }
-                                                                                          />
-                                                                                      )}
-                                                                                  </Field>
-                                                                              </FormItem>
-
-                                                                              <FormItem
-                                                                                  className="col-start-10 col-end-13 row-start-2 mb-0"
-                                                                                  invalid={
-                                                                                      typeFeedback.invalid
-                                                                                  }
-                                                                                  errorMessage={
-                                                                                      typeFeedback.errorMessage
-                                                                                  }
-                                                                              >
-                                                                                  <Field
-                                                                                      name={`productos[${index}].type`}
-                                                                                  >
-                                                                                      {({
-                                                                                          field,
-                                                                                          form,
-                                                                                      }) => (
-                                                                                          <Select
-                                                                                              field={
-                                                                                                  field
-                                                                                              }
-                                                                                              form={
-                                                                                                  form
-                                                                                              }
-                                                                                              options={
-                                                                                                  optionsType
-                                                                                              }
-                                                                                              value={optionsType.filter(
-                                                                                                  (
-                                                                                                      option
-                                                                                                  ) =>
-                                                                                                      option.value ===
-                                                                                                      values.select
-                                                                                              )}
-                                                                                              onChange={(
-                                                                                                  option
-                                                                                              ) =>
-                                                                                                  form.setFieldValue(
-                                                                                                      field.name,
-                                                                                                      option.value
-                                                                                                  )
-                                                                                              }
-                                                                                          />
-                                                                                      )}
-                                                                                  </Field>
-                                                                              </FormItem>
-
-                                                                              {/* <Button
-                                                                                  shape="circle"
-                                                                                  size="sm"
-                                                                                  icon={
-                                                                                      <HiMinus />
-                                                                                  }
-                                                                                  onClick={() =>
-                                                                                      remove(
-                                                                                          index
-                                                                                      )
-                                                                                  }
-                                                                              /> */}
-                                                                          </div>
-                                                                      )
-                                                                  }
-                                                              )
-                                                            : null}
-                                                        <div>
-                                                            {/* <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                                                <FormItem className=" col-start-10 col-end-13 mb-0">
-                                                                    <div className="flex justify-between gap-x-2">
-                                                                        <Button
-                                                                            style={{
-                                                                                width: '47%',
-                                                                            }}
-                                                                            className=" flex justify-center items-center"
-                                                                            variant="solid"
-                                                                            color="red-600"
-                                                                        >
-                                                                            Eliminar
-                                                                            item
-                                                                        </Button>
-                                                                        <Button
-                                                                            style={{
-                                                                                width: '47%',
-                                                                            }}
-                                                                            className=" flex justify-center items-center"
-                                                                            variant="solid"
-                                                                            type="button"
-                                                                            onClick={() => {
-                                                                                push(
-                                                                                    {
-                                                                                        name: '',
-                                                                                        model: '',
-                                                                                        type: '',
-                                                                                    }
-                                                                                )
-                                                                            }}
-                                                                        >
-                                                                            Agregar
-                                                                            item
-                                                                        </Button>
-                                                                    </div>
+                                                        return (
+                                                            <div
+                                                                className="grid grid-cols-12 items-center gap-x-3 mb-6 auto-cols-max"
+                                                                key={
+                                                                    index
+                                                                }
+                                                            >
+                                                                <Avatar className="col-start-1 col-end-2  row-start-2 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
+                                                                    {prod.id}
+                                                                </Avatar>
+                                                                <FormItem
+                                                                    className="col-start-2 col-end-6 row-start-2 mb-0"
+                                                                    invalid={false}
+                                                                    errorMessage={
+                                                                        'prueba'
+                                                                    }
+                                                                >
+                                                                    <Input
+                                                                        invalid={
+                                                                            false
+                                                                        }
+                                                                        placeholder="Nombre"
+                                                                        name='name'
+                                                                        type="text"
+                                                                      onChange={(e) =>handleEditProduct(prod.id,e.target.name,e.target.value)}
+                                                                    />
                                                                 </FormItem>
-                                                            </div> */}
 
+                                                                <FormItem
+                                                                    className="col-start-6 col-end-9 row-start-2 mb-0"
+                                                                    invalid={false
+                                                                    }
+                                                                    errorMessage={
+                                                                        'prueba'
+                                                                    }
+                                                                >
+                                                                     <Select
+                                                                                options={
+                                                                                    optionsModel
+                                                                                }
+                                                                                value={optionsModel.filter(( option ) => option.value ===
+                                                                                        productos[productos.findIndex(p => p.id === prod.id)].model
+                                                                                )}
+                                                                                onChange={(e) =>handleEditProduct(prod.id,'model',e.value)}
+
+                                                                            />
+                                                                </FormItem>
+
+                                                                <FormItem
+                                                                    className="col-start-9 col-end-12 row-start-2 mb-0"
+                                                                    invalid={false
+                                                                    }
+                                                                    errorMessage={
+                                                                        'prueba'
+                                                                    }
+                                                                >
+                                                                 <Select
+                                                                            name={`productos[${index}].model`}
+                                                                                options={
+                                                                                    optionsType
+                                                                                }
+                                                                                value={optionsType.filter(
+                                                                                    (
+                                                                                        option
+                                                                                    ) =>
+                                                                                        option.value ===
+                                                                                        productos[productos.findIndex(p => p.id === prod.id)].type
+                                                                                )}
+                                                                                onChange={(e) =>handleEditProduct(prod.id,'type',e.value)}
+                                                                            />
+                                                                </FormItem>
+                                                                {showRemoveProd && (
+                                                                <Button
+                                                                shape="circle"
+                                                                size="sm"
+                                                                variant="twoTone"
+                                                                color="red-600"
+                                                                className="col-start-12 col-end-13 row-start-2 mb-0"
+                                                                icon={
+                                                                    <MdDelete />
+                                                                }
+                                                                onClick={() =>
+                                                                    removeProd(
+                                                                        prod.id
+                                                                    )
+                                                                }
+                                                                />
+
+                                                                )}
+                                                            
+                                                            </div>
+                                                        )
+                                                    }
+                                                )
+                                            :(
+                                            <div className='py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]'>
+                                                <span>No hay productos creados. Créalos con el botón de Agregar.</span>
+                                            </div>
+                                            )}
+                                        <div>
+                                                <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
+                                                <FormItem className=" col-start-10 col-end-13 mb-0">
+                                                    <div className="flex justify-between gap-x-2">
+                                                        {
+                                                            productos.length > 0 ? (
                                                             <Button
-                                                                type="button"
-                                                                className="ltr:mr-2 rtl:ml-2"
+                                                                style={{
+                                                                    width: '47%',
+                                                                }}
+                                                                className=" flex justify-center items-center"
+                                                                // variant="solid"
+                                                                variant="twoTone"
+                    // color="blue-600"
+                                                                color="red-600"
                                                                 onClick={() => {
-                                                                    push({
+                                                                    setShowRemoveProd(!showRemoveProd)
+                                                                }}
+                                                            >
+                                                                { showRemoveProd === true ? 'Anular' : 'Eliminar item'}
+                                                            
+                                                            </Button>
+                                                            )
+                                                            : (
+                                                                <div style={{
+                                                                    width: '47%',
+                                                                }}
+                                                                className=" flex justify-center items-center"></div>
+                                                            )
+                                                        }
+                                                        
+                                                        <Button
+                                                            style={{
+                                                                width: '47%',
+                                                            }}
+                                                            className=" flex justify-center items-center"
+                                                            // variant="solid"
+                                                            variant="twoTone"
+
+                                                            type="button"
+                                                            onClick={() => {
+                                                                addProduct(
+                                                                    {
+                                                                        id: productos.length + 1,
                                                                         name: '',
                                                                         model: '',
                                                                         type: '',
-                                                                    })
-                                                                }}
-                                                            >
-                                                                Add a User
-                                                            </Button>
-                                                            <Button
-                                                                // type="submit"
-                                                                variant="solid"
-                                                            >
-                                                                Submit
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </FieldArray>
-
-                                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                                <span className="col-start-1 col-end-6">
-                                                    Pais
-                                                </span>
-                                            </div>
-
-                                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                                <FormItem
-                                                    className="col-start-1 col-end-6 mb-0"
-                                                    invalid={Boolean(
-                                                        errors.country &&
-                                                            touched.country
-                                                    )}
-                                                    errorMessage={
-                                                        errors.country
-                                                    }
-                                                >
-                                                    <Field name="country">
-                                                        {({ field, form }) => (
-                                                            <Select
-                                                                placeholder="País"
-                                                                componentAs={
-                                                                    CreatableSelect
-                                                                }
-                                                                isMulti
-                                                                field={field}
-                                                                form={form}
-                                                                options={
-                                                                    optionsCountry
-                                                                }
-                                                                value={
-                                                                    values.pais
-                                                                }
-                                                                onChange={(
-                                                                    option
-                                                                ) => {
-                                                                    form.setFieldValue(
-                                                                        field.name,
-                                                                        option
-                                                                    )
-                                                                }}
-                                                            />
-                                                        )}
-                                                    </Field>
-                                                </FormItem>
-                                            </div>
-
-                                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                                <span className=" col-start-1  col-end-6">
-                                                    Canal
-                                                </span>
-                                                <span className=" col-start-6  col-end-8">
-                                                    Volumen por cliente
-                                                </span>
-                                                <span className=" col-start-8  col-end-13">
-                                                    ¿Son las ventas de productos
-                                                    a un mismo cliente?
-                                                </span>
-                                            </div>
-
-                                            <FieldArray name="channels">
-                                                {({ form, remove, push }) => (
-                                                    <div>
-                                                        {channels &&
-                                                        channels.length > 0
-                                                            ? channels.map(
-                                                                  (
-                                                                      _,
-                                                                      index
-                                                                  ) => {
-                                                                      const nameFeedBack =
-                                                                          fieldFeedback(
-                                                                              form,
-                                                                              `productos[${index}].name`
-                                                                          )
-                                                                      const nameChannelFeedBack =
-                                                                          fieldFeedback(
-                                                                              form,
-                                                                              `productos[${index}].name`
-                                                                          )
-                                                                      const volumeCustomerFeedBack =
-                                                                          fieldFeedback(
-                                                                              form,
-                                                                              `productos[${index}].model`
-                                                                          )
-
-                                                                      return (
-                                                                          <div
-                                                                              className="grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max"
-                                                                              key={
-                                                                                  index
-                                                                              }
-                                                                          >
-                                                                              <FormItem
-                                                                                  className="col-start-1 col-end-8 row-start-1 mb-0"
-                                                                                  invalid={
-                                                                                      nameChannelFeedBack.invalid
-                                                                                  }
-                                                                                  errorMessage={
-                                                                                      nameChannelFeedBack.errorMessage
-                                                                                  }
-                                                                              >
-                                                                                  <Field
-                                                                                      invalid={
-                                                                                          nameChannelFeedBack.invalid
-                                                                                      }
-                                                                                      placeholder="Nombre canal"
-                                                                                      name={`productos[${index}].nameChannel`}
-                                                                                      type="text"
-                                                                                      component={
-                                                                                          Input
-                                                                                      }
-                                                                                  />
-                                                                              </FormItem>
-
-                                                                              {/* <FormItem
-                                                                                  className="col-start-8 col-end-11 row-start-1 mb-0"
-                                                                                  invalid={
-                                                                                      modelFeedBack.invalid
-                                                                                  }
-                                                                                  errorMessage={
-                                                                                      modelFeedBack.errorMessage
-                                                                                  }
-                                                                              >
-                                                                                  <Field
-                                                                                      name={`productos[${index}].model`}
-                                                                                  >
-                                                                                      {({
-                                                                                          field,
-                                                                                          form,
-                                                                                      }) => (
-                                                                                          <Select
-                                                                                              field={
-                                                                                                  field
-                                                                                              }
-                                                                                              form={
-                                                                                                  form
-                                                                                              }
-                                                                                              options={
-                                                                                                  optionsModel
-                                                                                              }
-                                                                                              value={optionsModel.filter(
-                                                                                                  (
-                                                                                                      option
-                                                                                                  ) =>
-                                                                                                      option.value ===
-                                                                                                      values.select
-                                                                                              )}
-                                                                                              onChange={(
-                                                                                                  option
-                                                                                              ) =>
-                                                                                                  form.setFieldValue(
-                                                                                                      field.name,
-                                                                                                      option.value
-                                                                                                  )
-                                                                                              }
-                                                                                          />
-                                                                                      )}
-                                                                                  </Field>
-                                                                              </FormItem> */}
-
-                                                                              <FormItem
-                                                                                  className="col-start-1 col-end-6 row-start-2 mb-0"
-                                                                                  invalid={
-                                                                                      nameFeedBack.invalid
-                                                                                  }
-                                                                                  errorMessage={
-                                                                                      nameFeedBack.errorMessage
-                                                                                  }
-                                                                              >
-                                                                                  <Field
-                                                                                      disabled
-                                                                                      invalid={
-                                                                                          nameFeedBack.invalid
-                                                                                      }
-                                                                                      placeholder="Nombre"
-                                                                                      name={`productos[${index}].name`}
-                                                                                      type="text"
-                                                                                      component={
-                                                                                          Input
-                                                                                      }
-                                                                                  />
-                                                                              </FormItem>
-
-                                                                              <FormItem
-                                                                                  className="col-start-6 col-end-8 row-start-2 mb-0"
-                                                                                  invalid={
-                                                                                      volumeCustomerFeedBack.invalid
-                                                                                  }
-                                                                                  errorMessage={
-                                                                                      volumeCustomerFeedBack.errorMessage
-                                                                                  }
-                                                                              >
-                                                                                  <Field
-                                                                                      invalid={
-                                                                                          volumeCustomerFeedBack.invalid
-                                                                                      }
-                                                                                      placeholder="Volumen por venta"
-                                                                                      name={`productos[${index}].volumeCustomer`}
-                                                                                      type="number"
-                                                                                      component={
-                                                                                          Input
-                                                                                      }
-                                                                                  />
-                                                                              </FormItem>
-
-                                                                              {/* <Button
-                                                                                  shape="circle"
-                                                                                  size="sm"
-                                                                                  icon={
-                                                                                      <HiMinus />
-                                                                                  }
-                                                                                  onClick={() =>
-                                                                                      remove(
-                                                                                          index
-                                                                                      )
-                                                                                  }
-                                                                              /> */}
-                                                                          </div>
-                                                                      )
-                                                                  }
-                                                              )
-                                                            : null}
-                                                        <div>
-                                                            <Button
-                                                                type="button"
-                                                                className="ltr:mr-2 rtl:ml-2"
-                                                                onClick={() => {
-                                                                    push({
-                                                                        nameChannel:
-                                                                            '',
-                                                                        volumeCustomer:
-                                                                            '',
-                                                                    })
-                                                                }}
-                                                            >
-                                                                Add a User
-                                                            </Button>
-                                                            <Button
-                                                                // type="submit"
-                                                                variant="solid"
-                                                            >
-                                                                Submit
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </FieldArray>
-
-                                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                                <FormItem className="col-start-10 col-end-13 mb-0">
-                                                    <div className="flex justify-end">
-                                                        <Button
-                                                            variant="solid"
-                                                            type="submit"
+                                                                    }
+                                                                )
+                                                            }}
                                                         >
-                                                            Cargar datos
+                                                            Agregar
+                                                            item
                                                         </Button>
                                                     </div>
                                                 </FormItem>
-                                            </div>
+                                            </div> 
                                         </div>
-                                    </FormContainer>
-                                </Form>
-                            )
-                        }}
-                    </Formik>
+                                    </div>
+{/*****************************************************************************************************/}
+{/**************************        P A I S E S       ***********************************************/}
+{/*****************************************************************************************************/}
+                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
+                                <span className="col-start-1 col-end-6 font-bold">
+                                    Pais
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max mb-[30px]">
+                            <FormItem
+                                className="col-start-1 col-end-5 row-start-1 mb-0"
+                            
+                            > 
+                                                                
+                                <Select
+                                            placeholder="País"
+                                            componentAs={
+                                                CreatableSelect
+                                            }
+                                            isMulti
+                                            options={
+                                                optionsCountry
+                                            }
+                                            values={countries}
+                                        
+                                            onChange={(
+                                                option
+                                            ) => {
+                                                setCountries(()=> [...option]);
+                                            }}
+                                        />                             
+                             </FormItem>
+                              
+                            </div>
+
+{/*****************************************************************************************************/}
+{/**************************        C A N A L E S       ***********************************************/}
+{/*****************************************************************************************************/}
+
+                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max  ">
+                                <span className=" col-start-1  col-end-6 font-bold">
+                                    Canal
+                                </span>
+                                {
+                                    channels.length !== 0 && (
+                                        <>
+                                        <span className=" col-start-6  col-end-8">
+                                            Volumen por cliente
+                                        </span>
+                                        <span className=" col-start-9  col-end-13">
+                                            ¿Son las ventas de productos
+                                            a un mismo cliente?
+                                        </span>
+                                        </>
+                                    )
+                                }
+                                
+                            </div>
+
+                            <div>
+                            {channels &&
+                            channels.length > 0
+                                ? channels.map(
+                                        (
+                                            channel,
+                                            index
+                                        ) => {
+                                            return (
+                                                <div
+                                                className="grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max"
+                                                key={
+                                                    index
+                                                }
+                                            >
+                                                    <FormItem
+                                                        className="col-start-1 col-end-8 row-start-1 mb-0"
+                                                        invalid={false}
+                                                        errorMessage={'prueba'}
+                                                    >
+                                                        <Input
+                                                                invalid={false}
+                                                            placeholder="Nombre canal"
+                                                            value={channels[index].name}
+                                                            type="text"
+                                                            name="name"
+                                                            onChange={(e) =>handleEditChannel(channel.name,e.target.name,e.target.value, null)}
+                                                        />
+                                                    </FormItem>
+                                                    <FormItem
+                                                        className="col-start-9 col-end-11 row-start-1 mb-0"
+                                                        invalid={false
+                                                        }
+                                                        errorMessage={
+                                                            'prueba'
+                                                        }
+                                                    >
+                                                        <Select
+                                                            name={`channels[${index}].sameClient`}
+                                                                options={
+                                                                    optionsClients
+                                                                }
+                                                                value={optionsClients.filter(
+                                                                    (
+                                                                        option
+                                                                    ) =>
+                                                                        option.value === 
+                                                                        channels[channels.findIndex(c => c.name === channel.name)].sameClient
+                                                                )}
+                                                                onChange={(e) =>handleEditChannel(channel.name,'sameClient',e.value, null)}
+                                                            />
+                                                    </FormItem>
+                                                    {showRemoveChannel && (
+                                                                <Button
+                                                                shape="circle"
+                                                                size="sm"
+                                                                variant="twoTone"
+                                                                color="red-600"
+                                                                className="col-start-12 col-end-13 row-start-1 mb-0"
+                                                                icon={
+                                                                    <MdDelete />
+                                                                }
+                                                                onClick={() =>
+                                                                    removeChannel(
+                                                                        channel.name
+                                                                    )
+                                                                }
+                                                                />
+
+                                                                )}
+                                                    {productos &&
+                                        productos.length > 0
+                                            ? productos.map(
+                                                    (
+                                                        prod,
+                                                        index
+                                                    ) => {
+
+                                                        return (
+                                                            <div 
+                                                            className='grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max' 
+                                                            key={
+                                                                index
+                                                            }><FormItem
+                                                                className="col-start-1  col-end-6  mb-0"
+                                                            >
+                                                                <Input
+                                                                    disabled
+                                                                    value={prod.name}
+                                                                    type="text" />
+                                                            </FormItem>
+                                                            <FormItem
+                                                                className="col-start-6 col-end-8   mb-0"
+                                                                invalid={false}
+                                                                errorMessage={'prueba'}
+                                                            >
+                                                                    <Input
+                                                                        invalid={false}
+                                                                        placeholder="Volumen por venta"
+                                                                        name="volumen"
+                                                                        value={channels[channels.findIndex(c => c.name === channel.name)].items[channels[channels.findIndex(c => c.name === channel.name)].items.findIndex(c => c.prodId === prod.id)]?.volumen}
+                                                                        onChange={(e) =>handleEditChannel(channel.name , 'volumen', e.target.value, prod.id)}
+                                                                        type="number" />
+                                                                </FormItem></div>
+                                                        )
+                                                    }
+                                                )
+                                            : null}
+                                         </div>
+                                            )
+                                        })
+                                        : null
+                                    }
+                            {channels.length === 0 &&
+                                <div className='py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]'>
+                                    <span>No hay canales creados. Créalos con el botón de Agregar.</span>
+                                </div>
+                            }
+                          
+                                <div>
+                                    <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
+                                        <FormItem className=" col-start-10 col-end-13 mb-0">
+                                            <div className="flex justify-between gap-x-2">
+                                                {
+                                                    channels.length > 0 ? (
+                                                    <Button
+                                                        style={{
+                                                            width: '47%',
+                                                        }}
+                                                        className=" flex justify-center items-center"
+                                                        variant="twoTone"
+                                                        color="red-600"
+                                                        onClick={() => {
+                                                            setShowRemoveChannel(!showRemoveChannel)
+                                                        }}
+                                                    >
+                                                        { showRemoveChannel === true ? 'Anular' : 'Eliminar Canal'}
+                                                    
+                                                    </Button>
+                                                    )
+                                                    : (
+                                                        <div style={{
+                                                            width: '47%',
+                                                        }}
+                                                        className=" flex justify-center items-center"></div>
+                                                    )
+                                                }
+                                                
+                                                <Button
+                                                    style={{
+                                                        width: '47%',
+                                                    }}
+                                                    className=" flex justify-center items-center"
+                                                    variant="twoTone"
+                                                    type="button"
+                                                    onClick={() => {
+                                                        addChannel(
+                                                            {
+                                                                name: '',
+                                                                sameClient: '',
+                                                                items: [],
+                                                            }
+                                                        )
+                                                    }}
+                                                >
+                                                    Agregar
+                                                    Canal
+                                                </Button>
+                                            </div>
+                                        </FormItem>
+                                    </div> 
+                                </div>
+                            </div>
+
+{/*****************************************************************************************************/}
+{/**************************          C H U R N         ***********************************************/}
+{/*****************************************************************************************************/}
+                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max  ">
+                                <span className=" col-start-1  col-end-6 font-bold">
+                                    Churns
+                                </span>
+                                {
+                                    channels.length !== 0 && (
+                                        <span className=" col-start-6  col-end-8">
+                                            % Churn mensual
+                                        </span>
+                                    )
+                                }
+                                
+                            </div>
+                            <div>
+                            {channels &&
+                            channels.length > 0
+                                ? channels.map(
+                                        (
+                                            channel,
+                                            index
+                                        ) => {
+                                            return (
+                                                <div
+                                                className="grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max"
+                                                key={
+                                                    index
+                                                }
+                                            >
+                                                    <FormItem
+                                                        className="col-start-1 col-end-8 row-start-1 mb-0"
+                                                        invalid={false}
+                                                        errorMessage={'prueba'}
+                                                    >
+                                                        <Input
+                                                            disabled
+                                                            invalid={false}
+                                                            placeholder="Nombre canal"
+                                                            value={channels[index].name}
+                                                            type="text"
+                                                            name="name"
+                                                        />
+                                                    </FormItem>
+                                                    {productos &&
+                                        productos.length > 0
+                                            ? productos.map(
+                                                    (
+                                                        prod,
+                                                        index
+                                                    ) => {
+
+                                                        return (
+                                                            <div 
+                                                            className='grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max' 
+                                                            key={
+                                                                index
+                                                            }><FormItem
+                                                                className="col-start-1  col-end-6  mb-0"
+                                                            >
+                                                                <Input
+                                                                    disabled
+                                                                    value={prod.name}
+                                                                    type="text" />
+                                                            </FormItem>
+                                                            <FormItem
+                                                                className="col-start-6 col-end-8   mb-0"
+                                                                invalid={false}
+                                                                errorMessage={'prueba'}
+                                                            >
+                                                                    <Input
+                                                                        invalid={false}
+                                                                        placeholder="Churn Mensual"
+                                                                        name="churn"
+                                                                        suffix="%" 
+                                                                        value={churn[churn.findIndex(c => c.channel === channel.name)].items[churn[churn.findIndex(c => c.channel === channel.name)].items.findIndex(c => c.prodId === prod.id)]?.porcentajeChurn}
+                                                                        onChange={(e) =>handleEditChurn(channel.name , e.target.value, prod.id)}
+                                                                        type="number" />
+                                                                </FormItem></div>
+                                                        )
+                                                    }
+                                                )
+                                            : null}
+                                         </div>
+                                            )
+                                        })
+                                        : null
+                                    }
+                            {channels.length === 0 &&
+                                <div className='py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]'>
+                                    <span>No hay canales creados. Créalos con el botón de Agregar en la sección superior.</span>
+                                </div>
+                            }
+                            </div>
+
+                        </div>
+                <div className='flex justify-end'>
+                    <Button className="mr-2 mb-2  " variant="solid" size='lg' color="blue-600" onClick={onSubmit}>
+                        Guardar
+                    </Button>
+                </div>
+                    
+                    </FormContainer>
                 </div>
             </div>
         </div>
     )
 }
 
-export default DynamicForm
+export default AssumptionVentas
