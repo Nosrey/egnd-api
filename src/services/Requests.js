@@ -1,3 +1,6 @@
+const idUser = '63f3d1ac6ecccfda2c07ac4a'
+const URL_API = 'http://localhost:4000'
+
 export const getUser = async (id) => {
     try {
         const res = await fetch(URL_API + '/api/users/' + idUser)
@@ -34,25 +37,22 @@ export const signUp = async (body) => {
     }
 }
 
-export const createAssumpVenta = async ({
-    canales,
-    churns,
-    paises,
-    productos,
-}) => {
+export const createAssumpVenta = async (canales, churns, paises, productos) => {
     try {
-        const response = await fetch('/assumpventa', {
+        const response = await fetch(URL_API + '/api/assumpventa', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                canales: canales,
-                churns: churns,
-                paises: paises,
-                productos: productos,
-                idUser: idUser,
-            }),
+            body: JSON.stringify([
+                {
+                    canales: canales,
+                    churns: churns,
+                    paises: paises,
+                    productos: productos,
+                    idUser: idUser,
+                },
+            ]),
         })
         const data = await response.json()
         return data
