@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
+    Alert,
     Input,
     Button,
     FormItem,
@@ -11,18 +12,6 @@ import { MdDelete } from 'react-icons/md'
 import * as Yup from 'yup'
 import CreatableSelect from 'react-select/creatable'
 import { createAssumpVenta } from 'services/Requests'
-
-const validationSchema = Yup.object({
-    productos: Yup.array().of(
-        Yup.object().shape({
-            name: Yup.string().required('Name required'),
-            model: Yup.string().required('Name required'),
-            type: Yup.string().required('Name required'),
-            country: Yup.array().min(1, 'At least one is selected!'),
-            nameChannel: Yup.string().required('Name required'),
-        })
-    ),
-})
 
 const optionsModel = [
     { value: 'oneShot', label: 'One Shot' },
@@ -52,6 +41,18 @@ const optionsClients = [
 ]
 
 const AssumptionVentas = () => {
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const [showErrorAlert, setShowErrorAlert] = useState(false)
+    const [errors, setErrors] = useState({})
+
+    const validate = (inputValue) => {
+        let errors = {}
+        if (!inputValue.name) errors.name = 'Este campo no puede estar vacío'
+        if (!inputValue.model) errors.model = 'Este campo no puede estar vacío'
+        if (!inputValue.type) errors.texto = 'Este campo no puede estar vacío'
+        return errors
+    }
+
     const [productos, setProductos] = useState([
         {
             id: 1,
@@ -155,17 +156,52 @@ const AssumptionVentas = () => {
         setChurn(() => [...copyChurn])
     }
 
+    const handleKeyPressVolumen = (e) => {
+        if (e.key === '-') {
+            e.preventDefault()
+        }
+    }
+    const handleKeyPressChurn = (e) => {
+        if (e.key === '-') {
+            e.preventDefault()
+        }
+        const value = e.target.value + e.key
+        if (value > 100) {
+            e.preventDefault()
+        }
+    }
+
     const onSubmit = () => {
-        console.log('PRODuCTOS ', productos)
-        console.log('Canales ', channels)
-        console.log('Churns ', churn)
-        console.log('PAISES ', countries)
         createAssumpVenta(channels, churn, countries, productos)
-            .then((data) => console.log(data))
-            .catch((error) => console.error(error))
+            .then((data) => {
+                console.log(data)
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+                setShowSuccessAlert(true)
+                setTimeout(() => {
+                    setShowSuccessAlert(false)
+                }, 5000)
+            })
+            .catch((error) => {
+                console.error(error)
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+                setShowErrorAlert(true)
+                setTimeout(() => {
+                    setShowErrorAlert(false)
+                }, 5000)
+            })
     }
     return (
         <div>
+            {showSuccessAlert && (
+                <Alert className="mb-4" type="success" showIcon>
+                    Los datos se guardaron satisfactoriamente.
+                </Alert>
+            )}
+            {showErrorAlert && (
+                <Alert className="mb-4" type="danger" showIcon>
+                    No se pudieron guardar los datos.
+                </Alert>
+            )}
             <div className="border-b-2 mb-8 pb-1">
                 <h4>Assumptions ventas</h4>
                 <span>Plan de ventas</span>
@@ -204,13 +240,8 @@ const AssumptionVentas = () => {
                                                 <Avatar className="col-start-1 col-end-2  row-start-2 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
                                                     {prod.id}
                                                 </Avatar>
-                                                <FormItem
-                                                    className="col-start-2 col-end-6 row-start-2 mb-0"
-                                                    invalid={false}
-                                                    errorMessage={'prueba'}
-                                                >
+                                                <FormItem className="col-start-2 col-end-6 row-start-2 mb-0">
                                                     <Input
-                                                        invalid={false}
                                                         placeholder="Nombre"
                                                         name="name"
                                                         type="text"
@@ -222,14 +253,22 @@ const AssumptionVentas = () => {
                                                             )
                                                         }
                                                     />
+                                                    {errors[prod.id] &&
+                                                        errors[prod.id]
+                                                            .name && (
+                                                            <p className="danger">
+                                                                {
+                                                                    errors[
+                                                                        prod.id
+                                                                    ].name
+                                                                }
+                                                            </p>
+                                                        )}
                                                 </FormItem>
 
-                                                <FormItem
-                                                    className="col-start-6 col-end-9 row-start-2 mb-0"
-                                                    invalid={false}
-                                                    errorMessage={'prueba'}
-                                                >
+                                                <FormItem className="col-start-6 col-end-9 row-start-2 mb-0">
                                                     <Select
+                                                        name="model"
                                                         options={optionsModel}
                                                         value={optionsModel.filter(
                                                             (option) =>
@@ -250,15 +289,22 @@ const AssumptionVentas = () => {
                                                             )
                                                         }
                                                     />
+                                                    {errors[prod.id] &&
+                                                        errors[prod.id]
+                                                            .name && (
+                                                            <p className="danger">
+                                                                {
+                                                                    errors[
+                                                                        prod.id
+                                                                    ].name
+                                                                }
+                                                            </p>
+                                                        )}
                                                 </FormItem>
 
-                                                <FormItem
-                                                    className="col-start-9 col-end-12 row-start-2 mb-0"
-                                                    invalid={false}
-                                                    errorMessage={'prueba'}
-                                                >
+                                                <FormItem className="col-start-9 col-end-12 row-start-2 mb-0">
                                                     <Select
-                                                        name={`productos[${index}].model`}
+                                                        name="type"
                                                         options={optionsType}
                                                         value={optionsType.filter(
                                                             (option) =>
@@ -279,6 +325,17 @@ const AssumptionVentas = () => {
                                                             )
                                                         }
                                                     />
+                                                    {errors[prod.id] &&
+                                                        errors[prod.id]
+                                                            .name && (
+                                                            <p className="danger">
+                                                                {
+                                                                    errors[
+                                                                        prod.id
+                                                                    ].name
+                                                                }
+                                                            </p>
+                                                        )}
                                                 </FormItem>
                                                 {showRemoveProd && (
                                                     <Button
@@ -564,6 +621,10 @@ const AssumptionVentas = () => {
                                                                                     )
                                                                                 }
                                                                                 type="number"
+                                                                                min="1"
+                                                                                onKeyPress={
+                                                                                    handleKeyPressVolumen
+                                                                                }
                                                                             />
                                                                         </FormItem>
                                                                     </div>
@@ -754,6 +815,11 @@ const AssumptionVentas = () => {
                                                                                     )
                                                                                 }
                                                                                 type="number"
+                                                                                min="1"
+                                                                                max="100"
+                                                                                onKeyPress={
+                                                                                    handleKeyPressChurn
+                                                                                }
                                                                             />
                                                                         </FormItem>
                                                                     </div>

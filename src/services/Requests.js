@@ -44,13 +44,15 @@ export const createAssumpVenta = async (canales, churns, paises, productos) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                canales: canales,
-                churns: churns,
-                paises: paises,
-                productos: productos,
-                idUser: idUser,
-            }),
+            body: JSON.stringify([
+                {
+                    canales: canales,
+                    churns: churns,
+                    paises: paises,
+                    productos: productos,
+                    idUser: idUser,
+                },
+            ]),
         })
         const data = await response.json()
         return data
