@@ -46,6 +46,16 @@ const navigationConfig = [
                 authority: [],
                 subMenu: [],
             },
+             {
+                key: 'collapseMenu.item4',
+                path: '/assumptionfinancieras',
+                title: 'Assumption Financieras',
+                translateKey: 'nav.collapseMenu.item4',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
         ],
     },
     
