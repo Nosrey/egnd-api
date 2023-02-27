@@ -11,9 +11,13 @@ const options = [
 ]
 
 const validationSchema = Yup.object().shape({
-    nombreEmpresa: Yup.string().required('Please input user name!'),
-    modeloNegorcio: Yup.string().required('Please select one!'),
-    moneda: Yup.string().required('Please select one!'),
+    nombreEmpresa: Yup.string().required(
+        'Por favor ingrese su nombre de negocio'
+    ),
+    modeloNegorcio: Yup.string().required(
+        'Por favor seleccione un modelo de negocio'
+    ),
+    moneda: Yup.string().required('Por favor seleccione una moneda'),
 })
 
 const AssumptionGeneral = () => {
