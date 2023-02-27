@@ -12,6 +12,33 @@ export const getUser = async (id) => {
     }
 }
 
+export const editBusinessInfo = async (businessModel, currency) => {
+    try {
+        const response = await fetch(URL_API + '/api/users/' + idUser, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                businessInfo: [
+                    { businessModel: businessModel, currency: currency },
+                ],
+            }),
+        })
+        const data = await response.json()
+        return data
+    } catch (error) {
+        if (error.response) {
+            console.error(error.response.data)
+            console.error(error.response.status)
+            console.error(error.response.headers)
+        } else if (error.request) {
+            console.error(error.request)
+        } else {
+            console.error('Error', error.message)
+        }
+        throw error
+    }
+}
+
 export const signUp = async (body) => {
     try {
         const response = await fetch(`/signup`, {
