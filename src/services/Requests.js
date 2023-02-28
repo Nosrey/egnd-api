@@ -3,8 +3,8 @@ const URL_API = 'http://localhost:4000'
 
 export const getUser = async (id) => {
     try {
-        const res = await fetch(URL_API + '/api/users/' + idUser)
-        const data = await res.json()
+        const resp = await fetch(URL_API + '/api/users/' + idUser)
+        const data = await resp.json()
         return data.response
     } catch (error) {
         console.error('Error:', error)
@@ -12,14 +12,16 @@ export const getUser = async (id) => {
     }
 }
 
-export const signUp = async (body) => {
+export const editBusinessInfo = async (businessModel, currency) => {
     try {
-        const response = await fetch(`/signup`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const response = await fetch(URL_API + '/api/users/' + idUser, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                businessInfo: [
+                    { businessModel: businessModel, currency: currency },
+                ],
+            }),
         })
         const data = await response.json()
         return data
@@ -37,25 +39,58 @@ export const signUp = async (body) => {
     }
 }
 
-export const createAssumpVenta = async ({
-    canales,
-    churns,
-    paises,
-    productos,
-}) => {
+export const createSignUp = async (body) => {
+    const { email, password, businessName, modeloNegocio, moneda } = body
+
+    if (!email || !password || !businessName || !modeloNegocio || !moneda) {
+        throw new Error('Todos los campos son obligatorios')
+    }
+
     try {
-        const response = await fetch('/assumpventa', {
+        const resp = await fetch(`${URL_API}/api/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                canales: canales,
-                churns: churns,
-                paises: paises,
-                productos: productos,
-                idUser: idUser,
+                mail: email,
+                password: password,
+                businessName: businessName,
+                businessInfo: [
+                    { businessModel: modeloNegocio, currency: moneda },
+                ],
             }),
+        })
+
+        if (!resp.ok) {
+            const error = await resp.json()
+            throw new Error(error.message)
+        }
+
+        const data = await resp.json()
+        return data.response
+    } catch (error) {
+        console.error(`Error calling ${URL_API}/api/signup: ${error.message}`)
+        throw error
+    }
+}
+
+export const createAssumpVenta = async (canales, churns, paises, productos) => {
+    try {
+        const response = await fetch(URL_API + '/api/assumpventa', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify([
+                {
+                    canales: canales,
+                    churns: churns,
+                    paises: paises,
+                    productos: productos,
+                    idUser: idUser,
+                },
+            ]),
         })
         const data = await response.json()
         return data

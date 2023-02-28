@@ -1,21 +1,40 @@
 import React from 'react'
-import { Input, Button, FormItem, FormContainer, Alert } from 'components/ui'
+import {
+    Input,
+    Button,
+    FormItem,
+    FormContainer,
+    Alert,
+    Select,
+} from 'components/ui'
 import { PasswordInput, ActionLink } from 'components/shared'
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import useAuth from 'utils/hooks/useAuth'
+import { createSignUp } from 'services/Requests'
+
+const options = [
+    { value: 'foo', label: 'Foo' },
+    { value: 'bar', label: 'Bar' },
+]
 
 const validationSchema = Yup.object().shape({
-    userName: Yup.string().required('Please enter your user name'),
     email: Yup.string()
-        .email('Invalid email')
-        .required('Please enter your email'),
-    password: Yup.string().required('Please enter your password'),
+        .email('Correo electrónico invalido')
+        .required('Por favor introduzca su correo electrónico'),
+    password: Yup.string().required('Por favor introduzca su contraseña'),
     confirmPassword: Yup.string().oneOf(
         [Yup.ref('password'), null],
-        'Your passwords do not match'
+        'Tus contraseñas no coinciden'
     ),
+    businessName: Yup.string().required(
+        'Por favor ingrese su nombre de negocio'
+    ),
+    modeloNegocio: Yup.string().required(
+        'Por favor seleccione un modelo de negocio'
+    ),
+    moneda: Yup.string().required('Por favor seleccione una moneda'),
 })
 
 const SignUpForm = (props) => {
@@ -26,9 +45,15 @@ const SignUpForm = (props) => {
     const [message, setMessage] = useTimeOutMessage()
 
     const onSignUp = async (values, setSubmitting) => {
-        const { userName, password, email } = values
+        const { businessName, password, email, modeloNegocio, moneda } = values
         setSubmitting(true)
-        const result = await signUp({ userName, password, email })
+        const result = await signUp({
+            businessName,
+            password,
+            email,
+            modeloNegocio,
+            moneda,
+        })
 
         if (result.status === 'failed') {
             setMessage(result.message)
@@ -46,36 +71,32 @@ const SignUpForm = (props) => {
             )}
             <Formik
                 initialValues={{
-                    userName: 'admin1',
-                    password: '123Qwe1',
-                    confirmPassword: '123Qwe1',
-                    email: 'test@testmail.com',
+                    email: '',
+                    password: '',
+                    confirmPassword: '',
+                    businessName: '',
+                    modeloNegocio: '',
+                    moneda: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    if (!disableSubmit) {
-                        onSignUp(values, setSubmitting)
-                    } else {
-                        setSubmitting(false)
-                    }
+                    createSignUp(values)
+                        .then(() => {
+                            if (!disableSubmit) {
+                                onSignUp(values, setSubmitting)
+                            } else setSubmitting(false)
+                        })
+                        .catch((error) => {
+                            console.error(
+                                'Error de API:',
+                                error.response.data.message
+                            )
+                        })
                 }}
             >
-                {({ touched, errors, isSubmitting }) => (
+                {({ values, touched, errors, isSubmitting }) => (
                     <Form>
                         <FormContainer>
-                            <FormItem
-                                label="User Name"
-                                invalid={errors.userName && touched.userName}
-                                errorMessage={errors.userName}
-                            >
-                                <Field
-                                    type="text"
-                                    autoComplete="off"
-                                    name="userName"
-                                    placeholder="User Name"
-                                    component={Input}
-                                />
-                            </FormItem>
                             <FormItem
                                 label="Email"
                                 invalid={errors.email && touched.email}
@@ -90,19 +111,19 @@ const SignUpForm = (props) => {
                                 />
                             </FormItem>
                             <FormItem
-                                label="Password"
+                                label="Contraseña"
                                 invalid={errors.password && touched.password}
                                 errorMessage={errors.password}
                             >
                                 <Field
                                     autoComplete="off"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Contraseña"
                                     component={PasswordInput}
                                 />
                             </FormItem>
                             <FormItem
-                                label="Confirm Password"
+                                label="Confirmar contraseña"
                                 invalid={
                                     errors.confirmPassword &&
                                     touched.confirmPassword
@@ -112,10 +133,84 @@ const SignUpForm = (props) => {
                                 <Field
                                     autoComplete="off"
                                     name="confirmPassword"
-                                    placeholder="Confirm Password"
+                                    placeholder="Confirmar contraseña"
                                     component={PasswordInput}
                                 />
                             </FormItem>
+                            <FormItem
+                                label="Nombre de la empresa"
+                                invalid={
+                                    errors.businessName && touched.businessName
+                                }
+                                errorMessage={errors.businessName}
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="businessName"
+                                    placeholder="Mi empresa SRL"
+                                    component={Input}
+                                />
+                            </FormItem>
+                            <FormItem
+                                label="Modelo de negocio"
+                                invalid={
+                                    errors.modeloNegocio &&
+                                    touched.modeloNegocio
+                                }
+                                errorMessage={errors.modeloNegocio}
+                            >
+                                <Field name="modeloNegocio">
+                                    {({ field, form }) => (
+                                        <Select
+                                            placeholder="Seleccionar..."
+                                            field={field}
+                                            form={form}
+                                            options={options}
+                                            value={options.filter(
+                                                (option) =>
+                                                    option.value ===
+                                                    values.modeloNegocio
+                                            )}
+                                            onChange={(option) =>
+                                                form.setFieldValue(
+                                                    field.name,
+                                                    option.value
+                                                )
+                                            }
+                                        />
+                                    )}
+                                </Field>
+                            </FormItem>
+
+                            <FormItem
+                                label="Moneda"
+                                invalid={errors.moneda && touched.moneda}
+                                errorMessage={errors.moneda}
+                            >
+                                <Field name="moneda">
+                                    {({ field, form }) => (
+                                        <Select
+                                            placeholder="Seleccionar..."
+                                            field={field}
+                                            form={form}
+                                            options={options}
+                                            value={options.filter(
+                                                (option) =>
+                                                    option.value ===
+                                                    values.moneda
+                                            )}
+                                            onChange={(option) =>
+                                                form.setFieldValue(
+                                                    field.name,
+                                                    option.value
+                                                )
+                                            }
+                                        />
+                                    )}
+                                </Field>
+                            </FormItem>
+
                             <Button
                                 block
                                 loading={isSubmitting}

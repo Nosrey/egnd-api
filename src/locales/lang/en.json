@@ -6,7 +6,11 @@
             "collapseMenu": "Financial Plan",
             "item1": "Assumption General",
             "item2": "Assumption Ventas",
+<<<<<<< HEAD
             "item3": "Volumen Q"
+=======
+            "item4": "Assumption Financieras"
+>>>>>>> f3ef578b26ca8e660a5f088a282896f870bc923f
         }
     }
 }
