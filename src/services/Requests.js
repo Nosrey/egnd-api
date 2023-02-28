@@ -3,8 +3,8 @@ const URL_API = 'http://localhost:4000'
 
 export const getUser = async (id) => {
     try {
-        const res = await fetch(URL_API + '/api/users/' + idUser)
-        const data = await res.json()
+        const resp = await fetch(URL_API + '/api/users/' + idUser)
+        const data = await resp.json()
         return data.response
     } catch (error) {
         console.error('Error:', error)
@@ -39,27 +39,38 @@ export const editBusinessInfo = async (businessModel, currency) => {
     }
 }
 
-export const signUp = async (body) => {
+export const createSignUp = async (body) => {
+    const { email, password, businessName, modeloNegocio, moneda } = body
+
+    if (!email || !password || !businessName || !modeloNegocio || !moneda) {
+        throw new Error('Todos los campos son obligatorios')
+    }
+
     try {
-        const response = await fetch(`/signup`, {
+        const resp = await fetch(`${URL_API}/api/signup`, {
             method: 'POST',
-            body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+                mail: email,
+                password: password,
+                businessName: businessName,
+                businessInfo: [
+                    { businessModel: modeloNegocio, currency: moneda },
+                ],
+            }),
         })
-        const data = await response.json()
-        return data
-    } catch (error) {
-        if (error.response) {
-            console.error(error.response.data)
-            console.error(error.response.status)
-            console.error(error.response.headers)
-        } else if (error.request) {
-            console.error(error.request)
-        } else {
-            console.error('Error', error.message)
+
+        if (!resp.ok) {
+            const error = await resp.json()
+            throw new Error(error.message)
         }
+
+        const data = await resp.json()
+        return data.response
+    } catch (error) {
+        console.error(`Error calling ${URL_API}/api/signup: ${error.message}`)
         throw error
     }
 }

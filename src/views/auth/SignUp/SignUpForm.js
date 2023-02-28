@@ -12,6 +12,7 @@ import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import useAuth from 'utils/hooks/useAuth'
+import { createSignUp } from 'services/Requests'
 
 const options = [
     { value: 'foo', label: 'Foo' },
@@ -30,7 +31,7 @@ const validationSchema = Yup.object().shape({
     businessName: Yup.string().required(
         'Por favor ingrese su nombre de negocio'
     ),
-    modeloNegorcio: Yup.string().required(
+    modeloNegocio: Yup.string().required(
         'Por favor seleccione un modelo de negocio'
     ),
     moneda: Yup.string().required('Por favor seleccione una moneda'),
@@ -44,13 +45,13 @@ const SignUpForm = (props) => {
     const [message, setMessage] = useTimeOutMessage()
 
     const onSignUp = async (values, setSubmitting) => {
-        const { businessName, password, email, modeloNegorcio, moneda } = values
+        const { businessName, password, email, modeloNegocio, moneda } = values
         setSubmitting(true)
         const result = await signUp({
             businessName,
             password,
             email,
-            modeloNegorcio,
+            modeloNegocio,
             moneda,
         })
 
@@ -74,16 +75,23 @@ const SignUpForm = (props) => {
                     password: '',
                     confirmPassword: '',
                     businessName: '',
-                    modeloNegorcio: '',
+                    modeloNegocio: '',
                     moneda: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    if (!disableSubmit) {
-                        onSignUp(values, setSubmitting)
-                    } else {
-                        setSubmitting(false)
-                    }
+                    createSignUp(values)
+                        .then(() => {
+                            if (!disableSubmit) {
+                                onSignUp(values, setSubmitting)
+                            } else setSubmitting(false)
+                        })
+                        .catch((error) => {
+                            console.error(
+                                'Error de API:',
+                                error.response.data.message
+                            )
+                        })
                 }}
             >
                 {({ values, touched, errors, isSubmitting }) => (
@@ -147,12 +155,12 @@ const SignUpForm = (props) => {
                             <FormItem
                                 label="Modelo de negocio"
                                 invalid={
-                                    errors.modeloNegorcio &&
-                                    touched.modeloNegorcio
+                                    errors.modeloNegocio &&
+                                    touched.modeloNegocio
                                 }
-                                errorMessage={errors.modeloNegorcio}
+                                errorMessage={errors.modeloNegocio}
                             >
-                                <Field name="modeloNegorcio">
+                                <Field name="modeloNegocio">
                                     {({ field, form }) => (
                                         <Select
                                             placeholder="Seleccionar..."
@@ -162,7 +170,7 @@ const SignUpForm = (props) => {
                                             value={options.filter(
                                                 (option) =>
                                                     option.value ===
-                                                    values.modeloNegorcio
+                                                    values.modeloNegocio
                                             )}
                                             onChange={(option) =>
                                                 form.setFieldValue(
