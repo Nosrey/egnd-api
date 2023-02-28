@@ -46,19 +46,17 @@ const navigationConfig = [
                 authority: [],
                 subMenu: [],
             },
-<<<<<<< HEAD
+            // {
+            //     key: 'collapseMenu.item3',
+            //     path: '/volumenq',
+            //     title: 'Volumen Q',
+            //     translateKey: 'nav.collapseMenu.item3',
+            // },
             {
-                key: 'collapseMenu.item3',
-                path: '/volumenq',
-                title: 'Volumen Q',
-                translateKey: 'nav.collapseMenu.item3',
-=======
-             {
                 key: 'collapseMenu.item4',
                 path: '/assumptionfinancieras',
                 title: 'Assumption Financieras',
                 translateKey: 'nav.collapseMenu.item4',
->>>>>>> f3ef578b26ca8e660a5f088a282896f870bc923f
                 icon: '',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [],
