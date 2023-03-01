@@ -46,12 +46,16 @@ const navigationConfig = [
                 authority: [],
                 subMenu: [],
             },
-            // {
-            //     key: 'collapseMenu.item3',
-            //     path: '/volumenq',
-            //     title: 'Volumen Q',
-            //     translateKey: 'nav.collapseMenu.item3',
-            // },
+            {
+                key: 'collapseMenu.item3',
+                path: '/volumenq',
+                title: 'VolumenQ',
+                translateKey: 'nav.collapseMenu.item3',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
             {
                 key: 'collapseMenu.item4',
                 path: '/assumptionfinancieras',

@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getUser } from 'services/Requests'
-import { Tabs } from 'components/ui'
+import { Tabs, Input } from 'components/ui'
 
 const { TabNav, TabList, TabContent } = Tabs
 
 function VolumenQ() {
+    const [info, setInfo] = useState(null)
+    const [defaultCountry, setDefaultCountry] = useState(null)
     useEffect(() => {
         getUser()
-            .then((data) => console.log(data))
+            .then((data) => {
+                console.log(data)
+                setInfo(data?.assumptionData)
+                setDefaultCountry(data?.assumptionData[0]?.paises[0])
+            })
             .catch((error) => console.error(error))
     }, [])
-
+    console.log(info)
     return (
         <div>
             <div className="border-b-2 mb-8 pb-1">
@@ -22,36 +28,26 @@ function VolumenQ() {
                     <h6>Carga de productos / servicios</h6>
                 </div>
 
-                <Tabs defaultValue="tab1" variant="pill">
+                <Tabs defaultValue={defaultCountry}>
                     <TabList>
-                        <TabNav value="tab1">Home</TabNav>
-                        <TabNav value="tab2">Profile</TabNav>
-                        <TabNav value="tab3">Contact</TabNav>
+                        {info &&
+                            info[0]?.paises.map((tab, index) => (
+                                <TabNav key={index} value={tab.value}>
+                                    <div>{tab.label}</div>
+                                </TabNav>
+                            ))}
                     </TabList>
                     <div className="p-4">
-                        <TabContent value="tab1">
-                            <p>
-                                If builders built buildings the way programmers
-                                wrote programs, then the first woodpecker that
-                                came along would destroy civilization. (Gerald
-                                Weinberg)
-                            </p>
-                        </TabContent>
-                        <TabContent value="tab2">
-                            <p>
-                                A computer lets you make more mistakes faster
-                                than any invention in human history–with the
-                                possible exceptions of handguns and tequila.
-                                (Mitch Radcliffe).
-                            </p>
-                        </TabContent>
-                        <TabContent value="tab3">
-                            <p>
-                                In C++ it’s harder to shoot yourself in the
-                                foot, but when you do, you blow off your whole
-                                leg. (Bjarne Stroustrup)
-                            </p>
-                        </TabContent>
+                        {info &&
+                            info[0]?.paises.map((tab) => (
+                                <TabContent value={tab.value} key={tab.value}>
+                                    {info[0]?.canales.map((channel, index) => (
+                                        <div key={index}>
+                                            <div>{channel.name}</div>
+                                        </div>
+                                    ))}
+                                </TabContent>
+                            ))}
                     </div>
                 </Tabs>
             </div>

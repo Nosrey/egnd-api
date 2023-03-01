@@ -1,4 +1,4 @@
-const idUser = '63f3d1ac6ecccfda2c07ac4a'
+const idUser = '63fe6f29cba641d81cd9bd29'
 const URL_API = 'http://localhost:4000'
 
 export const getUser = async (id) => {

@@ -22,11 +22,12 @@ export const protectedRoutes = [
         component: React.lazy(() => import('views/AssumptionVentas')),
         authority: [],
     },
-    // {
-    //     key: 'volumenq',
-    //     path: '/volumenq',
-    //     component: React.lazy(() => import('views/VolumenQ')),
-    // },
+    {
+        key: 'volumenq',
+        path: '/volumenq',
+        component: React.lazy(() => import('views/VolumenQ')),
+        authority: [],
+    },
     {
         key: 'assumptionfinancieras',
         path: '/assumptionfinancieras',
