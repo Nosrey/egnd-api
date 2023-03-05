@@ -61,16 +61,49 @@ export const createSignUp = async (body) => {
                 ],
             }),
         })
-
+console.log(resp);
         if (!resp.ok) {
             const error = await resp.json()
-            throw new Error(error.message)
+            throw new Error(error.errors[0])
         }
 
         const data = await resp.json()
         return data.response
     } catch (error) {
         console.error(`Error calling ${URL_API}/api/signup: ${error.message}`)
+        throw error
+    }
+}
+export const signIn = async (body) => {
+    const { email, password } = body
+    console.log(body);
+
+    if (!email || !password ) {
+        throw new Error('Todos los campos son obligatorios')
+    }
+
+    try {
+        const resp = await fetch(`${URL_API}/api/signin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                mail: email,
+                password: password,
+            }),
+        })
+
+        console.log(resp);
+        if (!resp.ok) {
+            const error = await resp.json()
+            throw new Error(error.response)
+        }
+
+        const data = await resp.json()
+        return data.response
+    } catch (error) {
+        console.error(`Error calling ${URL_API}/api/sigin: ${error.message}`)
         throw error
     }
 }
