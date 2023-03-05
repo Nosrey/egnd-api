@@ -5,8 +5,8 @@ const SignUp = () => {
     return (
         <>
             <div className="mb-8">
-                <h3 className="mb-1">Sign Up</h3>
-                <p>And lets get started with your free trial</p>
+                <h3 className="mb-1">Crear Cuenta</h3>
+                <p>Complete su información de perfil</p>
             </div>
             <SignUpForm disableSubmit={false} />
         </>

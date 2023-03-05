@@ -11,8 +11,8 @@ import { PasswordInput, ActionLink } from 'components/shared'
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import useAuth from 'utils/hooks/useAuth'
 import { createSignUp } from 'services/Requests'
+import { useNavigate } from "react-router-dom";
 
 const options = [
     { value: 'foo', label: 'Foo' },
@@ -38,29 +38,10 @@ const validationSchema = Yup.object().shape({
 })
 
 const SignUpForm = (props) => {
-    const { disableSubmit = false, className, signInUrl = '/sign-in' } = props
-
-    const { signUp } = useAuth()
+    const { className, signInUrl = '/sign-in' } = props
+    const navigate = useNavigate();
 
     const [message, setMessage] = useTimeOutMessage()
-
-    const onSignUp = async (values, setSubmitting) => {
-        const { businessName, password, email, modeloNegocio, moneda } = values
-        setSubmitting(true)
-        const result = await signUp({
-            businessName,
-            password,
-            email,
-            modeloNegocio,
-            moneda,
-        })
-
-        if (result.status === 'failed') {
-            setMessage(result.message)
-        }
-
-        setSubmitting(false)
-    }
 
     return (
         <div className={className}>
@@ -81,15 +62,18 @@ const SignUpForm = (props) => {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     createSignUp(values)
-                        .then(() => {
-                            if (!disableSubmit) {
-                                onSignUp(values, setSubmitting)
-                            } else setSubmitting(false)
+                        .then((resp) => {
+                            console.log("registro exitoso");
+                           localStorage.setItem("userId", resp.id)
+                            setSubmitting(false)
+                           navigate('/sign-in')
                         })
                         .catch((error) => {
+                            if (error.stack.includes("usuario ya existe"))  setMessage("Este email ya está registrado")
+                          
                             console.error(
                                 'Error de API:',
-                                error.response.data.message
+                                error
                             )
                         })
                 }}
@@ -218,12 +202,12 @@ const SignUpForm = (props) => {
                                 type="submit"
                             >
                                 {isSubmitting
-                                    ? 'Creating Account...'
-                                    : 'Sign Up'}
+                                    ? 'Creando cuenta...'
+                                    : 'Crear Cuenta'}
                             </Button>
                             <div className="mt-4 text-center">
-                                <span>Already have an account? </span>
-                                <ActionLink to={signInUrl}>Sign in</ActionLink>
+                                <span>¿Ya tienes una cuenta? </span>
+                                <ActionLink to={signInUrl}>Inicia Sesión</ActionLink>
                             </div>
                         </FormContainer>
                     </Form>

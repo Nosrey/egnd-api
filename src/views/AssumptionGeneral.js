@@ -49,8 +49,7 @@ const AssumptionGeneral = () => {
                                     info?.businessInfo[0]?.businessModel.toLowerCase() ||
                                     '',
                                 moneda:
-                                    info?.businessInfo[0].businessModel
-                                        ?.currency || '',
+                                    info?.businessInfo[0]?.currency.toLowerCase() || '',
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(
