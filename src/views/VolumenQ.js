@@ -9,7 +9,7 @@ import {
     Avatar,
 } from 'components/ui'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
-
+import { FiMinus, FiPlus } from 'react-icons/fi'
 const { TabNav, TabList, TabContent } = Tabs
 const meses = {
     enero: null,
@@ -117,7 +117,7 @@ function VolumenQ() {
             })
             .catch((error) => console.error(error))
     }, [])
-    
+    // console.log(info)
 
 
     //  Table SCROLL EFFECT 
@@ -182,6 +182,21 @@ function VolumenQ() {
     const handleMouseUp = () => {
         setActiveDrag(false)
         containerTableRef.current.classList.remove('dragging')
+    }
+
+    // FIN TABLE SCROLL 
+
+
+
+    const hideYear = (index) => {
+        console.log(`input${index + 1}`);
+        const key = `.input${index + 1}`;
+        const inputs = document.querySelectorAll(key);
+        console.log(inputs);
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].style.display = "none"
+            
+        }
     }
 
     return (
@@ -280,7 +295,7 @@ function VolumenQ() {
                                                                                         ?.productos
                                                                                         .length >
                                                                                         0 &&
-                                                                                    info[0]?.productos.map(
+                                                                                    info[0]?.productos.filter((prod)=> prod.type !== "servicio").map(
                                                                                         (
                                                                                             prod,
                                                                                             index
@@ -392,6 +407,10 @@ function VolumenQ() {
                                                                                                     year.año
                                                                                                 }
                                                                                             </p>
+                                                                                            <div className='iconYear' onClick={()=> hideYear(index)}>
+                                                                                                <FiMinus/>
+
+                                                                                            </div>
                                                                                         </div>
                                                                                         <div className='titleMonths gap-x-3 gap-y-3 mb-3'>
                                                                                             <p className='month w-[90px]'>Enero</p>
@@ -437,7 +456,7 @@ function VolumenQ() {
                                                                                                                                 key={
                                                                                                                                     index
                                                                                                                                 }
-                                                                                                                                className="mb-0"
+                                                                                                                                className={`mb-0 input${year.año}}`}
                                                                                                                             >
                                                                                                                                 <Field
                                                                                                                                     className="w-[90px]"
