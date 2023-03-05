@@ -3,11 +3,9 @@ import { getUser } from 'services/Requests'
 import { Field, Form, Formik } from 'formik'
 import { Tabs, Input, Tooltip, DatePicker } from 'components/ui'
 import {
-    Alert,
     Button,
     FormItem,
     FormContainer,
-    Select,
     Avatar,
 } from 'components/ui'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
@@ -119,9 +117,10 @@ function VolumenQ() {
             })
             .catch((error) => console.error(error))
     }, [])
+    
 
-    // console.log(info)
 
+    //  Table SCROLL EFFECT 
     const [scrollPosition, setScrollPosition] = useState(0)
     const containerTableRef = useRef(null)
     const btnLeftRef = useRef(null)
@@ -192,7 +191,6 @@ function VolumenQ() {
                 <span>Plan de ventas</span>
             </div>
 
-            {/* este */}
             <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
                 <div className="border-b-2 px-4 py-1">
                     <h6>Carga de productos / servicios</h6>
@@ -211,8 +209,8 @@ function VolumenQ() {
                             initialValues={{
                                 argentina: {
                                     B2B: {
-                                        1: {
-                                            volInicial: 888,
+                                        celular: {
+                                            volInicial: null,
                                             fechaInicial: null,
                                             tasaCrecimiento: null,
                                             anio1: meses,
@@ -240,12 +238,12 @@ function VolumenQ() {
                                         >
                                             <MdKeyboardArrowLeft
                                                 onClick={handleLeftClick}
-                                                className="text-8xl absolute left-0 cursor-pointer"
+                                                className="text-8xl absolute left-0 top-[50vh] z-50 cursor-pointer"
                                                 ref={btnLeftRef}
                                             />
                                             <MdKeyboardArrowRight
                                                 onClick={handleRightClick}
-                                                className="text-8xl absolute right-0 cursor-pointer"
+                                                className="text-8xl absolute right-0 top-[50vh] z-50 cursor-pointer"
                                                 ref={btnRightRef}
                                             />
                                             {info &&
@@ -264,9 +262,10 @@ function VolumenQ() {
                                                                         key={
                                                                             index
                                                                         }
+                                                                        className="contenedor"
                                                                     >
                                                                         <div className="titleChannel">
-                                                                            <p>
+                                                                            <p className='canal'>
                                                                                 {
                                                                                     channel.name
                                                                                 }
@@ -275,6 +274,7 @@ function VolumenQ() {
                                                                         <div className="flex">
                                                                             <div className="rowLeft">
                                                                                 <div className="titleRowEmpty"></div>
+                                                                                <div className="titleRowEmpty2"></div>
                                                                                 {info[0] &&
                                                                                     info[0]
                                                                                         ?.productos
@@ -345,7 +345,6 @@ function VolumenQ() {
                                                                                                                     DatePicker
                                                                                                                 }
                                                                                                             />
-                                                                                                            {/* <DatePicker inputFormat="DD, MMM, YYYY" placeholder="Fecha Inicial" /> */}
                                                                                                         </Tooltip>
                                                                                                     </FormItem>
                                                                                                     <FormItem className="col-start-7 col-end-10 row-start-2 mb-0">
@@ -365,6 +364,7 @@ function VolumenQ() {
                                                                                                                 component={
                                                                                                                     Input
                                                                                                                 }
+                                                                                                               
                                                                                                             />
                                                                                                         </Tooltip>
                                                                                                     </FormItem>
@@ -393,6 +393,22 @@ function VolumenQ() {
                                                                                                 }
                                                                                             </p>
                                                                                         </div>
+                                                                                        <div className='titleMonths gap-x-3 gap-y-3 mb-3'>
+                                                                                            <p className='month w-[90px]'>Enero</p>
+                                                                                            <p className='month w-[90px]'>Febrero</p>
+                                                                                            <p className='month w-[90px]'>Marzo</p>
+                                                                                            <p className='month w-[90px]'>Abril</p>
+                                                                                            <p className='month w-[90px]'>Mayo</p>
+                                                                                            <p className='month w-[90px]'>Junio</p>
+                                                                                            <p className='month w-[90px]'>Julio</p>
+                                                                                            <p className='month w-[90px]'>Agosto</p>
+                                                                                            <p className='month w-[90px]'>Septiembre</p>
+                                                                                            <p className='month w-[90px]'>Octubre</p>
+                                                                                            <p className='month w-[90px]'>Noviembre</p>
+                                                                                            <p className='month w-[90px]'>Diciembre</p>
+                                                                                            <p className='month w-[90px]'>Total</p>
+
+                                                                                        </div>
                                                                                         {info[0] &&
                                                                                             info[0]
                                                                                                 ?.productos
@@ -405,7 +421,7 @@ function VolumenQ() {
                                                                                                 ) => {
                                                                                                     return (
                                                                                                         <div
-                                                                                                            className="flex gap-x-3 gap-y-3  mb-6 auto-cols-max"
+                                                                                                            className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd"
                                                                                                             key={
                                                                                                                 index
                                                                                                             }
@@ -421,10 +437,10 @@ function VolumenQ() {
                                                                                                                                 key={
                                                                                                                                     index
                                                                                                                                 }
-                                                                                                                                className=" mb-0"
+                                                                                                                                className="mb-0"
                                                                                                                             >
                                                                                                                                 <Field
-                                                                                                                                    placeholder="Mes"
+                                                                                                                                    className="w-[90px]"
                                                                                                                                     name={`${
                                                                                                                                         tab.value
                                                                                                                                     }[${
@@ -441,6 +457,27 @@ function VolumenQ() {
                                                                                                                         )
                                                                                                                     }
                                                                                                                 )}
+                                                                                                                <FormItem
+                                                                                                                    key={
+                                                                                                                        index
+                                                                                                                    }
+                                                                                                                    className="mb-0"
+                                                                                                                >
+                                                                                                                    <Field
+                                                                                                                        className="w-[90px]"
+                                                                                                                        name={`${
+                                                                                                                            tab.value
+                                                                                                                        }[${
+                                                                                                                            channel.name
+                                                                                                                        }][${prod.name.trim()}][${
+                                                                                                                            year.name
+                                                                                                                        }].total`}
+                                                                                                                        type="number"
+                                                                                                                        component={
+                                                                                                                            Input
+                                                                                                                        }
+                                                                                                                    />
+                                                                                                                </FormItem>
                                                                                                         </div>
                                                                                                     )
                                                                                                 }

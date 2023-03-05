@@ -18,31 +18,63 @@ input[type=number] { -moz-appearance:textfield; }
   height: 32px;
   margin-bottom: 16px;
 }
+.titleRowEmpty2{
+  width: 100%;
+  height: 37px;
+}
 .titleChannel {
-  background-color: #E7E7E9;
+  background-color:#9ca3afba;
   border-radius: 4px;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  color: rgb(41, 40, 40);
+  color: white;
   font-family: Inter,ui-sans-serif,system-ui;
   font-weight: 600;
+  width: 100%;
+  position: relative;
+}
+.canal{
+  position: sticky;
+  left: 47%;
+  display: inline;
 }
 
 .titleRow {
   border-radius: 4px;
   color: rgb(41, 40, 40);
   font-family: Inter,ui-sans-serif,system-ui;
-  background-color: #9696c4;
+  background-color:  #E7E7E9;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.titleMonths {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 16px;
+}
+
+.month {
+  font-weight: bold;
+  color: rgb(112, 116, 112);
+  width: 90px;
+  text-align: center;
+}
 .rowLeft {
   width: 40%;
   min-width: 500px;
 }
 .rowRight {
-  width: 60%;
+  width: fit-content;
+  padding-left: 18px;
+}
+.rowInputsProd{
+  margin-bottom: 84px !important;
+}
+.contenedor {
+  width: fit-content;
 }
