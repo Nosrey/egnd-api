@@ -1,0 +1,16 @@
+.wrapper.dragging {
+    scroll-behavior: unset;
+    cursor: grab;
+}
+
+.wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* .wrapper.dragging .countrie {
+    pointer-events: none;
+} */
+.cont-countries {
+    max-width: fit-content;
+    position: relative;
+}

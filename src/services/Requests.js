@@ -1,4 +1,4 @@
-const idUser = '63fe6f29cba641d81cd9bd29'
+const idUser = '64040284d9a91413da049e67'
 const URL_API = 'http://localhost:4000'
 
 export const getUser = async (id) => {
@@ -82,15 +82,13 @@ export const createAssumpVenta = async (canales, churns, paises, productos) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(
-                {
-                    canales: canales,
-                    churns: churns,
-                    paises: paises,
-                    productos: productos,
-                    idUser: idUser,
-                },
-            ),
+            body: JSON.stringify({
+                canales: canales,
+                churns: churns,
+                paises: paises,
+                productos: productos,
+                idUser: idUser,
+            }),
         })
         const data = await response.json()
         return data

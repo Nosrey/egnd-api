@@ -9,6 +9,7 @@ import history from './history'
 import mockServer from './mock'
 import appConfig from 'configs/app.config'
 import './locales'
+import '../src/app.css'
 
 const environment = process.env.NODE_ENV
 
