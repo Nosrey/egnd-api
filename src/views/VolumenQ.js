@@ -12,85 +12,13 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 const { TabNav, TabList, TabContent } = Tabs
 const meses = {
-    enero: null,
-    febrero: null,
-    marzo: null,
-    abril: null,
-    mayo: null,
-    junio: null,
-    julio: null,
-    agosto: null,
-    septiembre: null,
-    octubre: null,
-    noviembre: null,
-    diciembre: null,
+    enero: null, febrero: null, marzo: null, abril: null, mayo: null, junio: null, julio: null, agosto: null, septiembre: null, octubre: null, noviembre: null, diciembre: null,
 }
 const months = [
-    'enero',
-    'febrero',
-    'marzo',
-    'abril',
-    'mayo',
-    'junio',
-    'julio',
-    'agosto',
-    'septiembre',
-    'octubre',
-    'noviembre',
-    'diciembre',
+    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
 ]
-// const años = [
-//     {
-//         año: 1,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 2,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 3,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 4,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 5,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 6,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 7,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 8,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 9,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-//     {
-//         año: 10,
-//         volMeses: meses,
-//         volTotal: null,
-//     },
-// ]
+
+
 const años = [
     {
         año: 1,
@@ -117,7 +45,6 @@ function VolumenQ() {
             })
             .catch((error) => console.error(error))
     }, [])
-    // console.log(info)
 
 
     //  Table SCROLL EFFECT 
@@ -198,6 +125,15 @@ function VolumenQ() {
             
         }
     }
+    const [valorInicial, setValorInicial] = useState(1000);
+const [percentage, setPercentage] = useState(10);
+
+const calculateMonthValue = (index) => {
+    const value = valorInicial * Math.pow(1 + percentage / 100, index);
+    return value.toFixed(2);
+};
+
+console.log(calculateMonthValue(3))
 
     return (
         <div>
@@ -233,13 +169,9 @@ function VolumenQ() {
                                     },
                                 },
                             }}
-                            onSubmit={(
-                                values,
-                                { resetForm, setSubmitting }
-                            ) => {
+                            onSubmit={(values, { resetForm, setSubmitting }) => {
                                 console.log('values', values)
-                            }}
-                        >
+                            }}>
                             {({ values, touched, errors, resetForm }) => (
                                 <Form className="container-countries">
                                     <FormContainer className="cont-countries">
@@ -265,25 +197,14 @@ function VolumenQ() {
                                                 info[0]?.paises.map((tab) => (
                                                     <TabContent
                                                         value={tab.value}
-                                                        key={tab.value}
-                                                    >
+                                                        key={tab.value}>
                                                         <FormContainer>
                                                             {info[0]?.canales.map(
-                                                                (
-                                                                    channel,
-                                                                    index
-                                                                ) => (
-                                                                    <section
-                                                                        key={
-                                                                            index
-                                                                        }
-                                                                        className="contenedor"
-                                                                    >
+                                                                (channel, index) => (
+                                                                    <section key={index} className="contenedor">
                                                                         <div className="titleChannel">
                                                                             <p className='canal'>
-                                                                                {
-                                                                                    channel.name
-                                                                                }
+                                                                                {channel.name}
                                                                             </p>
                                                                         </div>
                                                                         <div className="flex">
@@ -303,25 +224,16 @@ function VolumenQ() {
                                                                                             return (
                                                                                                 <div
                                                                                                     className="grid grid-cols-12 items-center gap-x-3 gap-y-3  mb-6 auto-cols-max"
-                                                                                                    key={
-                                                                                                        index
-                                                                                                    }
-                                                                                                >
+                                                                                                    key={index}>
                                                                                                     <Avatar className="col-start-1 col-end-2  row-start-1 mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                                                                                                        {
-                                                                                                            prod.id
-                                                                                                        }
+                                                                                                        {prod.id}
                                                                                                     </Avatar>
                                                                                                     <FormItem className="col-start-2 col-end-7 row-start-1 mb-1">
                                                                                                         <Input
                                                                                                             placeholder="Producto"
-                                                                                                            disabled={
-                                                                                                                true
-                                                                                                            }
+                                                                                                            disabled={true}
                                                                                                             type="text"
-                                                                                                            value={
-                                                                                                                prod.name
-                                                                                                            }
+                                                                                                            value={prod.name}
                                                                                                         />
                                                                                                     </FormItem>
                                                                                                     <FormItem className="col-start-7 col-end-10 row-start-1 mb-0">
@@ -331,15 +243,11 @@ function VolumenQ() {
                                                                                                         >
                                                                                                             <Field
                                                                                                                 placeholder="Inicial"
-                                                                                                                name={`${
-                                                                                                                    tab.value
-                                                                                                                }[${
-                                                                                                                    channel.name
-                                                                                                                }][${prod.name.trim()}].volInicial`}
+                                                                                                                name={`${tab.value
+                                                                                                                    }[${channel.name
+                                                                                                                    }][${prod.name.trim()}].volInicial`}
                                                                                                                 type="number"
-                                                                                                                component={
-                                                                                                                    Input
-                                                                                                                }
+                                                                                                                component={Input}
                                                                                                             />
                                                                                                         </Tooltip>
                                                                                                     </FormItem>
@@ -349,16 +257,12 @@ function VolumenQ() {
                                                                                                             title="Fecha Inicial"
                                                                                                         >
                                                                                                             <Field
-                                                                                                                name={`${
-                                                                                                                    tab.value
-                                                                                                                }[${
-                                                                                                                    channel.name
-                                                                                                                }][${prod.name.trim()}].fechaInicial`}
+                                                                                                                name={`${tab.value
+                                                                                                                    }[${channel.name
+                                                                                                                    }][${prod.name.trim()}].fechaInicial`}
                                                                                                                 inputFormat="DD, MMM, YYYY"
                                                                                                                 placeholder="Fecha Inicial"
-                                                                                                                component={
-                                                                                                                    DatePicker
-                                                                                                                }
+                                                                                                                component={DatePicker}
                                                                                                             />
                                                                                                         </Tooltip>
                                                                                                     </FormItem>
@@ -371,15 +275,10 @@ function VolumenQ() {
                                                                                                                 placeholder="Crecimiento Mensual"
                                                                                                                 type="number"
                                                                                                                 suffix="%"
-                                                                                                                name={`${
-                                                                                                                    tab.value
-                                                                                                                }[${
-                                                                                                                    channel.name
-                                                                                                                }][${prod.name.trim()}].tasaCrecimiento`}
-                                                                                                                component={
-                                                                                                                    Input
-                                                                                                                }
-                                                                                                               
+                                                                                                                name={`${tab.value
+                                                                                                                    }[${channel.name
+                                                                                                                    }][${prod.name.trim()}].tasaCrecimiento`}
+                                                                                                                component={Input}
                                                                                                             />
                                                                                                         </Tooltip>
                                                                                                     </FormItem>
@@ -427,82 +326,52 @@ function VolumenQ() {
                                                                                             <p className='month w-[90px]'>Diciembre</p>
                                                                                             <p className='month w-[90px]'>Total</p>
 
-                                                                                        </div>
-                                                                                        {info[0] &&
-                                                                                            info[0]
-                                                                                                ?.productos
-                                                                                                .length >
-                                                                                                0 &&
-                                                                                            info[0]?.productos.map(
-                                                                                                (
-                                                                                                    prod,
-                                                                                                    index
-                                                                                                ) => {
+                                                                                    </div>
+                                                                                    {info[0] && info[0]?.productos.length > 0 && info[0]?.productos.map((prod, index) => {
+                                                                                        return (
+                                                                                            <div
+                                                                                                className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd"
+                                                                                                key={index}
+                                                                                            >
+                                                                                                {info[0] && months.map((month, index) => {
                                                                                                     return (
-                                                                                                        <div
-                                                                                                            className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd"
-                                                                                                            key={
-                                                                                                                index
-                                                                                                            }
+                                                                                                        <FormItem
+                                                                                                            key={index}
+                                                                                                            className="mb-0"
                                                                                                         >
-                                                                                                            {info[0] &&
-                                                                                                                months.map(
-                                                                                                                    (
-                                                                                                                        month,
-                                                                                                                        index
-                                                                                                                    ) => {
-                                                                                                                        return (
-                                                                                                                            <FormItem
-                                                                                                                                key={
-                                                                                                                                    index
-                                                                                                                                }
-                                                                                                                                className={`mb-0 input${year.año}}`}
-                                                                                                                            >
-                                                                                                                                <Field
-                                                                                                                                    className="w-[90px]"
-                                                                                                                                    name={`${
-                                                                                                                                        tab.value
-                                                                                                                                    }[${
-                                                                                                                                        channel.name
-                                                                                                                                    }][${prod.name.trim()}][${
-                                                                                                                                        year.name
-                                                                                                                                    }].${month}`}
-                                                                                                                                    type="number"
-                                                                                                                                    component={
-                                                                                                                                        Input
-                                                                                                                                    }
-                                                                                                                                />
-                                                                                                                            </FormItem>
-                                                                                                                        )
-                                                                                                                    }
-                                                                                                                )}
-                                                                                                                <FormItem
-                                                                                                                    key={
-                                                                                                                        index
-                                                                                                                    }
-                                                                                                                    className="mb-0"
-                                                                                                                >
-                                                                                                                    <Field
-                                                                                                                        className="w-[90px]"
-                                                                                                                        name={`${
-                                                                                                                            tab.value
-                                                                                                                        }[${
-                                                                                                                            channel.name
-                                                                                                                        }][${prod.name.trim()}][${
-                                                                                                                            year.name
-                                                                                                                        }].total`}
-                                                                                                                        type="number"
-                                                                                                                        component={
-                                                                                                                            Input
-                                                                                                                        }
-                                                                                                                    />
-                                                                                                                </FormItem>
-                                                                                                        </div>
+                                                                                                            <Field
+                                                                                                                className="w-[90px]"
+                                                                                                                name={`${tab.value
+                                                                                                                    }[${channel.name
+                                                                                                                    }][${prod.name.trim()}][${year.name
+                                                                                                                    }].${month}`}
+                                                                                                                type="number"
+                                                                                                                component={Input}
+                                                                                                            />
+                                                                                                        </FormItem>
                                                                                                     )
                                                                                                 }
-                                                                                            )}
-                                                                                    </div>
-                                                                                )
+                                                                                                )}
+                                                                                                <FormItem
+                                                                                                    key={index}
+                                                                                                    className="mb-0"
+                                                                                                >
+                                                                                                    <Field
+                                                                                                        className="w-[90px]"
+                                                                                                        name={`${tab.value
+                                                                                                            }[${channel.name
+                                                                                                            }][${prod.name.trim()}][${year.name
+                                                                                                            }].total`}
+                                                                                                        type="number"
+                                                                                                        component={Input}
+                                                                                                    />
+                                                                                                </FormItem>
+                                                                                            </div>
+                                                                                        )
+                                                                                    }
+                                                                                    )}
+                                                                                </div>
+                                                                            )
                                                                             )}
                                                                         </div>
                                                                     </section>
