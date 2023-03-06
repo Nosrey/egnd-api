@@ -75,6 +75,7 @@ const StackedSideNavMini = (props) => {
                 type="streamline"
                 gutter={SIDE_NAV_CONTENT_GUTTER}
             />
+
             <Menu
                 className="px-4 pb-4"
                 variant={navMode}
