@@ -113,27 +113,40 @@ function VolumenQ() {
 
     // FIN TABLE SCROLL 
 
-
+    const [visibleItems, setVisibleItems] = useState([]);
 
     const hideYear = (index) => {
-        console.log(`input${index + 1}`);
-        const key = `.input${index + 1}`;
-        const inputs = document.querySelectorAll(key);
-        console.log(inputs);
-        for (let i = 0; i < inputs.length; i++) {
-            inputs[i].style.display = "none"
+
+        setVisibleItems((prevItems) => {
+            if (prevItems.includes(index)) {
+              // Si el elemento ya está en la lista, lo eliminamos para ocultarlo
+              return prevItems.filter((id) => id !== index);
+            } else {
+              // Si el elemento no está en la lista, lo agregamos para mostrarlo
+              return [...prevItems, index];
+            }
+          });
+        console.log("funciona");
+        // console.log(`.input${index + 1}`);
+        // const key = `.input${index + 1}`;
+        // const inputs = document.querySelectorAll(key);
+        // console.log(inputs);
+        // for (let i = 0; i < inputs.length; i++) {
+        //     inputs[i].style.display = "none"
             
-        }
+        // }
     }
+
+    // calculo de campos
     const [valorInicial, setValorInicial] = useState(1000);
-const [percentage, setPercentage] = useState(10);
+    const [percentage, setPercentage] = useState(10);
 
-const calculateMonthValue = (index) => {
-    const value = valorInicial * Math.pow(1 + percentage / 100, index);
-    return value.toFixed(2);
-};
+    const calculateMonthValue = (index) => {
+        const value = valorInicial * Math.pow(1 + percentage / 100, index);
+        return value.toFixed(2); // hacer numero redondo hacia abajo
+    };
 
-console.log(calculateMonthValue(3))
+    // console.log(calculateMonthValue(3))
 
     return (
         <div>
@@ -290,12 +303,12 @@ console.log(calculateMonthValue(3))
                                                                             {años.map(
                                                                                 (
                                                                                     year,
-                                                                                    index
+                                                                                    indexYear
                                                                                 ) => (
                                                                                     <div
                                                                                         className="rowRight"
                                                                                         key={
-                                                                                            index
+                                                                                            indexYear
                                                                                         }
                                                                                     >
                                                                                         <div className="titleRow">
@@ -306,52 +319,62 @@ console.log(calculateMonthValue(3))
                                                                                                     year.año
                                                                                                 }
                                                                                             </p>
-                                                                                            <div className='iconYear' onClick={()=> hideYear(index)}>
-                                                                                                <FiMinus/>
-
+                                                                                            <div className='iconYear' onClick={() => hideYear(indexYear)}>
+                                                                                                {visibleItems.includes(indexYear) ? <FiMinus/> : <FiPlus/>}
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div className='titleMonths gap-x-3 gap-y-3 mb-3'>
-                                                                                            <p className='month w-[90px]'>Enero</p>
-                                                                                            <p className='month w-[90px]'>Febrero</p>
-                                                                                            <p className='month w-[90px]'>Marzo</p>
-                                                                                            <p className='month w-[90px]'>Abril</p>
-                                                                                            <p className='month w-[90px]'>Mayo</p>
-                                                                                            <p className='month w-[90px]'>Junio</p>
-                                                                                            <p className='month w-[90px]'>Julio</p>
-                                                                                            <p className='month w-[90px]'>Agosto</p>
-                                                                                            <p className='month w-[90px]'>Septiembre</p>
-                                                                                            <p className='month w-[90px]'>Octubre</p>
-                                                                                            <p className='month w-[90px]'>Noviembre</p>
-                                                                                            <p className='month w-[90px]'>Diciembre</p>
+                                                                                        <div className='titleMonths gap-x-3 gap-y-3 mb-3 '>
+                                                                                            {visibleItems.includes(indexYear) &&
+                                                                                                <div className='titleMonths gap-x-3'>
+                                                                                                    <p className='month w-[90px]'>Enero</p>
+                                                                                                    <p className='month w-[90px]'>Febrero</p>
+                                                                                                    <p className='month w-[90px]'>Marzo</p>
+                                                                                                    <p className='month w-[90px]'>Abril</p>
+                                                                                                    <p className='month w-[90px]'>Mayo</p>
+                                                                                                    <p className='month w-[90px]'>Junio</p>
+                                                                                                    <p className='month w-[90px]'>Julio</p>
+                                                                                                    <p className='month w-[90px]'>Agosto</p>
+                                                                                                    <p className='month w-[90px]'>Septiembre</p>
+                                                                                                    <p className='month w-[90px]'>Octubre</p>
+                                                                                                    <p className='month w-[90px]'>Noviembre</p>
+                                                                                                    <p className='month w-[90px]'>Diciembre</p>
+                                                                                                </div>
+                                                                                            }
+                                                                                            
                                                                                             <p className='month w-[90px]'>Total</p>
 
-                                                                                    </div>
+                                                                                        </div>
                                                                                     {info[0] && info[0]?.productos.length > 0 && info[0]?.productos.map((prod, index) => {
                                                                                         return (
                                                                                             <div
-                                                                                                className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd"
+                                                                                            className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd"
                                                                                                 key={index}
                                                                                             >
-                                                                                                {info[0] && months.map((month, index) => {
-                                                                                                    return (
-                                                                                                        <FormItem
-                                                                                                            key={index}
-                                                                                                            className="mb-0"
-                                                                                                        >
-                                                                                                            <Field
-                                                                                                                className="w-[90px]"
-                                                                                                                name={`${tab.value
-                                                                                                                    }[${channel.name
-                                                                                                                    }][${prod.name.trim()}][${year.name
-                                                                                                                    }].${month}`}
-                                                                                                                type="number"
-                                                                                                                component={Input}
-                                                                                                            />
-                                                                                                        </FormItem>
-                                                                                                    )
-                                                                                                }
-                                                                                                )}
+
+                                                                                            {visibleItems.includes(indexYear) && <div className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd">
+                                                                                                    {info[0] && months.map((month, index) => {
+                                                                                                        return (
+                                                                                                            <FormItem
+                                                                                                                key={index}
+                                                                                                                className="mb-0"
+                                                                                                            >
+                                                                                                                <Field
+                                                                                                                    className="w-[90px]"
+                                                                                                                    name={`${tab.value
+                                                                                                                        }[${channel.name
+                                                                                                                        }][${prod.name.trim()}][${year.name
+                                                                                                                        }].${month}`}
+                                                                                                                    type="number"
+                                                                                                                    component={Input}
+                                                                                                                    value={calculateMonthValue(index)}
+                                                                                                                />
+                                                                                                            </FormItem>
+                                                                                                        )
+                                                                                                    }
+                                                                                                    )}
+                                                                                                </div>}
+
+                                                                                                
                                                                                                 <FormItem
                                                                                                     key={index}
                                                                                                     className="mb-0"
