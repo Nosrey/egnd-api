@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { getUser } from 'services/Requests'
-import { Field, Form, Formik } from 'formik'
 import { Tabs, Input, Tooltip, DatePicker } from 'components/ui'
 import {
     Button,
@@ -10,33 +9,48 @@ import {
 } from 'components/ui'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { FiMinus, FiPlus } from 'react-icons/fi'
+import { AÑOS, MONTHS, MESES } from 'constants/forms.constants'
 const { TabNav, TabList, TabContent } = Tabs
-const meses = {
-    enero: null, febrero: null, marzo: null, abril: null, mayo: null, junio: null, julio: null, agosto: null, septiembre: null, octubre: null, noviembre: null, diciembre: null,
-}
-const months = [
-    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
-]
 
-
-const años = [
-    {
-        año: 1,
-        name: 'anio1',
-        volMeses: meses,
-        volTotal: null,
-    },
-    {
-        año: 2,
-        name: 'anio2',
-        volMeses: meses,
-        volTotal: null,
-    },
-]
 
 function VolumenQ() {
     const [info, setInfo] = useState(null)
     const [defaultCountry, setDefaultCountry] = useState('')
+    const [infoForm, setInfoForm] = useState()
+    useEffect(() => {
+        console.log(info)
+        let estructura = {}
+        if(info && info[0]) {
+            for (let i = 0; i < info[0]?.paises.length; i++) {
+                let productos =[]
+                const realProds = info[0]?.productos.filter((prod)=> prod.type !== "servicio")
+                for (let x = 0; x < realProds.length; x++) {
+                    let prod = {}
+                    prod["id"] = realProds[x].id
+                    prod["volInicial"] = 0
+                    prod["tasa"] = 0
+                    prod["fecha"] = ""
+                    prod["años"]=[...AÑOS]
+                    productos.push(prod)
+                }
+                let canales =[]
+                for (let x = 0; x < info[0]?.canales.length; x++) {
+                    let canal = {}
+                    canal["canalName"] = info[0]?.canales[x].name
+                    canal["productos"] = [...productos]
+                    canales.push(canal)
+                }
+                estructura[info[0]?.paises[i].value] = [...canales]
+               
+            }
+            setInfoForm( () => {
+                return {...estructura}
+            })
+        }
+       
+    }, [info])
+
+
     useEffect(() => {
         getUser()
             .then((data) => {
@@ -126,27 +140,91 @@ function VolumenQ() {
               return [...prevItems, index];
             }
           });
-        console.log("funciona");
-        // console.log(`.input${index + 1}`);
-        // const key = `.input${index + 1}`;
-        // const inputs = document.querySelectorAll(key);
-        // console.log(inputs);
-        // for (let i = 0; i < inputs.length; i++) {
-        //     inputs[i].style.display = "none"
-            
-        // }
     }
 
     // calculo de campos
-    const [valorInicial, setValorInicial] = useState(1000);
-    const [percentage, setPercentage] = useState(10);
 
-    const calculateMonthValue = (index) => {
+    const calculateMonthValue = (index, valorInicial, percentage) => {
         const value = valorInicial * Math.pow(1 + percentage / 100, index);
-        return value.toFixed(2); // hacer numero redondo hacia abajo
+        return Math.round(value); 
     };
 
-    // console.log(calculateMonthValue(3))
+    const sumYear = (months) => {
+        let sum = 0;
+        for (let key in months) {
+        sum += months[key];
+        }
+        return sum;
+    }
+
+    const handleEditInput = (e, indexYear, indexProd, country, indexChannel , month) => {   
+        let copyInfoForm = {...infoForm}
+        if (e.target.name === "inicial" && indexYear == null) {
+            // actualizo esta info
+            copyInfoForm[country][indexChannel].productos[indexProd].volInicial = e.target.value;
+
+            //actualizo todos los campos de volumen de este producto en base a este cambio por los 10 años
+            let initValue = parseInt(e.target.value)
+            let initPercentaje = copyInfoForm[country][indexChannel].productos[indexProd].tasa 
+            for (let i = 0; i < 10; i++) { 
+                const mesesActualizados = {
+                    enero: calculateMonthValue(0 , initValue , initPercentaje),
+                    febrero: calculateMonthValue(1 , initValue , initPercentaje), 
+                    marzo: calculateMonthValue(2 , initValue , initPercentaje),
+                    abril: calculateMonthValue(3 , initValue , initPercentaje),
+                    mayo: calculateMonthValue(4 , initValue , initPercentaje),
+                    junio: calculateMonthValue(5 , initValue , initPercentaje),
+                    julio: calculateMonthValue(6 , initValue , initPercentaje),
+                    agosto: calculateMonthValue(7 , initValue , initPercentaje),
+                    septiembre: calculateMonthValue(8 , initValue , initPercentaje),
+                    octubre: calculateMonthValue(9 , initValue , initPercentaje),
+                    noviembre: calculateMonthValue(10 , initValue , initPercentaje),
+                    diciembre: calculateMonthValue(11 , initValue , initPercentaje),
+                }
+                copyInfoForm[country][indexChannel].productos[indexProd].años[i].volMeses = {...mesesActualizados}
+                copyInfoForm[country][indexChannel].productos[indexProd].años[i].volTotal = sumYear(mesesActualizados)
+                initValue= calculateMonthValue(12 , initValue , initPercentaje)
+                
+            }
+        }
+        if (e.target.name === "tasa" && indexYear == null) {
+            // actualizo esta info
+            copyInfoForm[country][indexChannel].productos[indexProd].tasa = e.target.value;
+
+             //actualizo todos los campos de volumen de este producto en base a este cambio por los 10 años
+             let initValue = copyInfoForm[country][indexChannel].productos[indexProd].volInicial;
+             let initPercentaje =  parseInt(e.target.value);
+             for (let i = 0; i < 10; i++) { 
+                 const mesesActualizados = {
+                     enero: calculateMonthValue(0 , initValue , initPercentaje),
+                     febrero: calculateMonthValue(1 , initValue , initPercentaje), 
+                     marzo: calculateMonthValue(2 , initValue , initPercentaje),
+                     abril: calculateMonthValue(3 , initValue , initPercentaje),
+                     mayo: calculateMonthValue(4 , initValue , initPercentaje),
+                     junio: calculateMonthValue(5 , initValue , initPercentaje),
+                     julio: calculateMonthValue(6 , initValue , initPercentaje),
+                     agosto: calculateMonthValue(7 , initValue , initPercentaje),
+                     septiembre: calculateMonthValue(8 , initValue , initPercentaje),
+                     octubre: calculateMonthValue(9 , initValue , initPercentaje),
+                     noviembre: calculateMonthValue(10 , initValue , initPercentaje),
+                     diciembre: calculateMonthValue(11 , initValue , initPercentaje),
+                 }
+                 copyInfoForm[country][indexChannel].productos[indexProd].años[i].volMeses = {...mesesActualizados}
+                 copyInfoForm[country][indexChannel].productos[indexProd].años[i].volTotal = sumYear(mesesActualizados)
+
+                 initValue= calculateMonthValue(12 , initValue , initPercentaje)
+                 
+             }
+        }
+        if (e.target.name === "month") {
+            copyInfoForm[country][indexChannel].productos[indexProd].años[indexYear].volMeses[month]  = parseInt(e.target.value);
+            const mesesActualizados = copyInfoForm[country][indexChannel].productos[indexProd].años[indexYear].volMeses;
+            copyInfoForm[country][indexChannel].productos[indexProd].años[indexYear].volTotal = sumYear(mesesActualizados)
+        }
+       setInfoForm(() => {
+        return {...copyInfoForm}
+       })
+    }
 
     return (
         <div>
@@ -169,255 +247,226 @@ function VolumenQ() {
                                     </TabNav>
                                 ))}
                         </TabList>
-                        <Formik
-                            initialValues={{
-                                argentina: {
-                                    B2B: {
-                                        celular: {
-                                            volInicial: null,
-                                            fechaInicial: null,
-                                            tasaCrecimiento: null,
-                                            anio1: meses,
-                                        },
-                                    },
-                                },
-                            }}
-                            onSubmit={(values, { resetForm, setSubmitting }) => {
-                                console.log('values', values)
-                            }}>
-                            {({ values, touched, errors, resetForm }) => (
-                                <Form className="container-countries">
-                                    <FormContainer className="cont-countries">
-                                        <div
-                                            className="wrapper p-4 overflow-x-auto scroll-smooth"
-                                            ref={containerTableRef}
-                                            onScroll={iconVisibility}
-                                            onMouseDown={handleMouseDown}
-                                            onMouseMove={handleMouseMove}
-                                            onMouseUp={handleMouseUp}
-                                        >
-                                            <MdKeyboardArrowLeft
-                                                onClick={handleLeftClick}
-                                                className="text-8xl absolute left-0 top-[50vh] z-50 cursor-pointer"
-                                                ref={btnLeftRef}
-                                            />
-                                            <MdKeyboardArrowRight
-                                                onClick={handleRightClick}
-                                                className="text-8xl absolute right-0 top-[50vh] z-50 cursor-pointer"
-                                                ref={btnRightRef}
-                                            />
-                                            {info &&
-                                                info[0]?.paises.map((tab) => (
-                                                    <TabContent
-                                                        value={tab.value}
-                                                        key={tab.value}>
-                                                        <FormContainer>
-                                                            {info[0]?.canales.map(
-                                                                (channel, index) => (
-                                                                    <section key={index} className="contenedor">
-                                                                        <div className="titleChannel">
-                                                                            <p className='canal'>
-                                                                                {channel.name}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className="flex">
-                                                                            <div className="rowLeft">
-                                                                                <div className="titleRowEmpty"></div>
-                                                                                <div className="titleRowEmpty2"></div>
-                                                                                {info[0] &&
-                                                                                    info[0]
-                                                                                        ?.productos
-                                                                                        .length >
-                                                                                        0 &&
-                                                                                    info[0]?.productos.filter((prod)=> prod.type !== "servicio").map(
-                                                                                        (
-                                                                                            prod,
-                                                                                            index
-                                                                                        ) => {
-                                                                                            return (
-                                                                                                <div
-                                                                                                    className="grid grid-cols-12 items-center gap-x-3 gap-y-3  mb-6 auto-cols-max"
-                                                                                                    key={index}>
-                                                                                                    <Avatar className="col-start-1 col-end-2  row-start-1 mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                                                                                                        {prod.id}
-                                                                                                    </Avatar>
-                                                                                                    <FormItem className="col-start-2 col-end-7 row-start-1 mb-1">
-                                                                                                        <Input
-                                                                                                            placeholder="Producto"
-                                                                                                            disabled={true}
-                                                                                                            type="text"
-                                                                                                            value={prod.name}
-                                                                                                        />
-                                                                                                    </FormItem>
-                                                                                                    <FormItem className="col-start-7 col-end-10 row-start-1 mb-0">
-                                                                                                        <Tooltip
-                                                                                                            placement="top-end"
-                                                                                                            title="Volumen Inicial"
-                                                                                                        >
-                                                                                                            <Field
-                                                                                                                placeholder="Inicial"
-                                                                                                                name={`${tab.value
-                                                                                                                    }[${channel.name
-                                                                                                                    }][${prod.name.trim()}].volInicial`}
-                                                                                                                type="number"
-                                                                                                                component={Input}
-                                                                                                            />
-                                                                                                        </Tooltip>
-                                                                                                    </FormItem>
-                                                                                                    <FormItem className="col-start-10 col-end-13 row-start-1 mb-0">
-                                                                                                        <Tooltip
-                                                                                                            placement="top-end"
-                                                                                                            title="Fecha Inicial"
-                                                                                                        >
-                                                                                                            <Field
-                                                                                                                name={`${tab.value
-                                                                                                                    }[${channel.name
-                                                                                                                    }][${prod.name.trim()}].fechaInicial`}
-                                                                                                                inputFormat="DD, MMM, YYYY"
-                                                                                                                placeholder="Fecha Inicial"
-                                                                                                                component={DatePicker}
-                                                                                                            />
-                                                                                                        </Tooltip>
-                                                                                                    </FormItem>
-                                                                                                    <FormItem className="col-start-7 col-end-10 row-start-2 mb-0">
-                                                                                                        <Tooltip
-                                                                                                            placement="left"
-                                                                                                            title="Crecimiento Mensual"
-                                                                                                        >
-                                                                                                            <Field
-                                                                                                                placeholder="Crecimiento Mensual"
-                                                                                                                type="number"
-                                                                                                                suffix="%"
-                                                                                                                name={`${tab.value
-                                                                                                                    }[${channel.name
-                                                                                                                    }][${prod.name.trim()}].tasaCrecimiento`}
-                                                                                                                component={Input}
-                                                                                                            />
-                                                                                                        </Tooltip>
-                                                                                                    </FormItem>
-                                                                                                </div>
-                                                                                            )
-                                                                                        }
-                                                                                    )}
-                                                                            </div>
-                                                                            {años.map(
-                                                                                (
-                                                                                    year,
-                                                                                    indexYear
-                                                                                ) => (
-                                                                                    <div
-                                                                                        className="rowRight"
-                                                                                        key={
-                                                                                            indexYear
-                                                                                        }
-                                                                                    >
-                                                                                        <div className="titleRow">
-                                                                                            <p>
-                                                                                                {' '}
-                                                                                                Año{' '}
-                                                                                                {
-                                                                                                    year.año
-                                                                                                }
-                                                                                            </p>
-                                                                                            <div className='iconYear' onClick={() => hideYear(indexYear)}>
-                                                                                                {visibleItems.includes(indexYear) ? <FiMinus/> : <FiPlus/>}
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div className='titleMonths gap-x-3 gap-y-3 mb-3 '>
-                                                                                            {visibleItems.includes(indexYear) &&
-                                                                                                <div className='titleMonths gap-x-3'>
-                                                                                                    <p className='month w-[90px]'>Enero</p>
-                                                                                                    <p className='month w-[90px]'>Febrero</p>
-                                                                                                    <p className='month w-[90px]'>Marzo</p>
-                                                                                                    <p className='month w-[90px]'>Abril</p>
-                                                                                                    <p className='month w-[90px]'>Mayo</p>
-                                                                                                    <p className='month w-[90px]'>Junio</p>
-                                                                                                    <p className='month w-[90px]'>Julio</p>
-                                                                                                    <p className='month w-[90px]'>Agosto</p>
-                                                                                                    <p className='month w-[90px]'>Septiembre</p>
-                                                                                                    <p className='month w-[90px]'>Octubre</p>
-                                                                                                    <p className='month w-[90px]'>Noviembre</p>
-                                                                                                    <p className='month w-[90px]'>Diciembre</p>
-                                                                                                </div>
-                                                                                            }
-                                                                                            
-                                                                                            <p className='month w-[90px]'>Total</p>
-
-                                                                                        </div>
-                                                                                    {info[0] && info[0]?.productos.length > 0 && info[0]?.productos.map((prod, index) => {
+                  
+                            <div className="container-countries">
+                                <FormContainer className="cont-countries">
+                                    <div
+                                        className="wrapper p-4 overflow-x-auto scroll-smooth"
+                                        ref={containerTableRef}
+                                        onScroll={iconVisibility}
+                                        onMouseDown={handleMouseDown}
+                                        onMouseMove={handleMouseMove}
+                                        onMouseUp={handleMouseUp}
+                                    >
+                                        <MdKeyboardArrowLeft
+                                            onClick={handleLeftClick}
+                                            className="text-8xl absolute left-0 top-[50vh] z-50 cursor-pointer"
+                                            ref={btnLeftRef}
+                                        />
+                                        <MdKeyboardArrowRight
+                                            onClick={handleRightClick}
+                                            className="text-8xl absolute right-0 top-[50vh] z-50 cursor-pointer"
+                                            ref={btnRightRef}
+                                        />
+                                        {info &&
+                                            info[0]?.paises.map((tab) => (
+                                                <TabContent
+                                                    value={tab.value}
+                                                    key={tab.value}>
+                                                    <FormContainer>
+                                                        {info[0]?.canales.map(
+                                                            (channel, indexChannel) => (
+                                                                <section key={indexChannel} className="contenedor">
+                                                                    <div className="titleChannel">
+                                                                        <p className='canal'>
+                                                                            {channel.name}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div className="flex">
+                                                                        <div className="rowLeft">
+                                                                            <div className="titleRowEmpty"></div>
+                                                                            <div className="titleRowEmpty2"></div>
+                                                                            {info[0] &&
+                                                                                info[0]
+                                                                                    ?.productos
+                                                                                    .length >
+                                                                                    0 &&
+                                                                                info[0]?.productos.filter((prod)=> prod.type !== "servicio").map(
+                                                                                    (
+                                                                                        prod,
+                                                                                        index
+                                                                                    ) => {
                                                                                         return (
                                                                                             <div
-                                                                                            className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd"
-                                                                                                key={index}
-                                                                                            >
-
-                                                                                            {visibleItems.includes(indexYear) && <div className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd">
-                                                                                                    {info[0] && months.map((month, index) => {
-                                                                                                        return (
-                                                                                                            <FormItem
-                                                                                                                key={index}
-                                                                                                                className="mb-0"
-                                                                                                            >
-                                                                                                                <Field
-                                                                                                                    className="w-[90px]"
-                                                                                                                    name={`${tab.value
-                                                                                                                        }[${channel.name
-                                                                                                                        }][${prod.name.trim()}][${year.name
-                                                                                                                        }].${month}`}
-                                                                                                                    type="number"
-                                                                                                                    component={Input}
-                                                                                                                    value={calculateMonthValue(index)}
-                                                                                                                />
-                                                                                                            </FormItem>
-                                                                                                        )
-                                                                                                    }
-                                                                                                    )}
-                                                                                                </div>}
-
-                                                                                                
-                                                                                                <FormItem
-                                                                                                    key={index}
-                                                                                                    className="mb-0"
-                                                                                                >
-                                                                                                    <Field
-                                                                                                        className="w-[90px]"
-                                                                                                        name={`${tab.value
-                                                                                                            }[${channel.name
-                                                                                                            }][${prod.name.trim()}][${year.name
-                                                                                                            }].total`}
-                                                                                                        type="number"
-                                                                                                        component={Input}
+                                                                                                className="grid grid-cols-12 items-center gap-x-3 gap-y-3  mb-6 auto-cols-max"
+                                                                                                key={index}>
+                                                                                                <Avatar className="col-start-1 col-end-2  row-start-1 mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
+                                                                                                    {prod.id}
+                                                                                                </Avatar>
+                                                                                                <FormItem className="col-start-2 col-end-7 row-start-1 mb-1">
+                                                                                                    <Input
+                                                                                                        placeholder="Producto"
+                                                                                                        disabled={true}
+                                                                                                        type="text"
+                                                                                                        value={prod.name}
                                                                                                     />
+                                                                                                </FormItem>
+                                                                                                <FormItem className="col-start-7 col-end-10 row-start-1 mb-0">
+                                                                                                    <Tooltip
+                                                                                                        placement="top-end"
+                                                                                                        title="Volumen Inicial"
+                                                                                                    >
+                                                                                                        <Input
+                                                                                                            placeholder="Inicial"
+                                                                                                            type="number"
+                                                                                                            name="inicial"
+                                                                                                            value={(infoForm &&  Object.keys(infoForm).length !== 0) ? infoForm[tab.value][indexChannel].productos[index].volInicial : 0}
+                                                                                                            onChange={(e) => handleEditInput(e, null, index, tab.value,indexChannel )}
+                                                                                                        />
+                                                                                                    </Tooltip>
+                                                                                                </FormItem>
+                                                                                                <FormItem className="col-start-10 col-end-13 row-start-1 mb-0">
+                                                                                                    <Tooltip
+                                                                                                        placement="top-end"
+                                                                                                        title="Fecha Inicial"
+                                                                                                    >
+                                                                                                        <DatePicker
+                                                                                                            inputFormat="DD, MMM, YYYY"
+                                                                                                            placeholder="Fecha Inicial"
+                                                                                                        />
+                                                                                                    </Tooltip>
+                                                                                                </FormItem>
+                                                                                                <FormItem className="col-start-7 col-end-10 row-start-2 mb-0">
+                                                                                                    <Tooltip
+                                                                                                        placement="left"
+                                                                                                        title="Crecimiento Mensual"
+                                                                                                    >
+                                                                                                        <Input
+                                                                                                            placeholder="Crecimiento Mensual"
+                                                                                                            type="number"
+                                                                                                            name="tasa"
+                                                                                                            suffix="%"
+                                                                                                            value={(infoForm &&  Object.keys(infoForm).length !== 0) ? infoForm[tab.value][indexChannel].productos[index].tasa : 0}
+                                                                                                            onChange={(e) => handleEditInput(e, null, index, tab.value,indexChannel )}
+                                                                                                        />
+                                                                                                    </Tooltip>
                                                                                                 </FormItem>
                                                                                             </div>
                                                                                         )
                                                                                     }
-                                                                                    )}
-                                                                                </div>
-                                                                            )
-                                                                            )}
+                                                                                )}
                                                                         </div>
-                                                                    </section>
-                                                                )
-                                                            )}
+                                                                        {AÑOS.map(
+                                                                            (
+                                                                                year,
+                                                                                indexYear
+                                                                            ) => (
+                                                                                <div
+                                                                                    className="rowRight"
+                                                                                    key={
+                                                                                        indexYear
+                                                                                    }
+                                                                                >
+                                                                                    <div className="titleRow">
+                                                                                        <p>
+                                                                                            {' '}
+                                                                                            Año{' '}
+                                                                                            {
+                                                                                                year.año
+                                                                                            }
+                                                                                        </p>
+                                                                                        <div className='iconYear' onClick={() => hideYear(indexYear)}>
+                                                                                            {visibleItems.includes(indexYear) ? <FiMinus/> : <FiPlus/>}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className='titleMonths gap-x-3 gap-y-3 mb-[18px] '>
+                                                                                        {visibleItems.includes(indexYear) &&
+                                                                                            <div className='titleMonths gap-x-3'>
+                                                                                                <p className='month w-[90px]'>Enero</p>
+                                                                                                <p className='month w-[90px]'>Febrero</p>
+                                                                                                <p className='month w-[90px]'>Marzo</p>
+                                                                                                <p className='month w-[90px]'>Abril</p>
+                                                                                                <p className='month w-[90px]'>Mayo</p>
+                                                                                                <p className='month w-[90px]'>Junio</p>
+                                                                                                <p className='month w-[90px]'>Julio</p>
+                                                                                                <p className='month w-[90px]'>Agosto</p>
+                                                                                                <p className='month w-[90px]'>Septiembre</p>
+                                                                                                <p className='month w-[90px]'>Octubre</p>
+                                                                                                <p className='month w-[90px]'>Noviembre</p>
+                                                                                                <p className='month w-[90px]'>Diciembre</p>
+                                                                                            </div>
+                                                                                        }
+                                                                                        
+                                                                                        <p className='month w-[90px]'>Total</p>
 
-                                                            <div className="flex justify-end">
-                                                                <Button
-                                                                    className="flex justify-end mt-6"
-                                                                    variant="solid"
-                                                                    type="submit"
-                                                                >
-                                                                    Cargar datos
-                                                                </Button>
-                                                            </div>
-                                                        </FormContainer>
-                                                    </TabContent>
-                                                ))}
-                                        </div>
-                                    </FormContainer>
-                                </Form>
-                            )}
-                        </Formik>
+                                                                                    </div>
+                                                                                {info[0] && info[0]?.productos.length > 0 && info[0]?.productos.filter((prod)=> prod.type !== "servicio").map((prod, indexProd) => {
+                                                                                    return (
+                                                                                        <div
+                                                                                        className="flex gap-x-3 gap-y-3 auto-cols-max rowInputsProd"
+                                                                                            key={indexProd}
+                                                                                        >
+
+                                                                                        {visibleItems.includes(indexYear) && <div className="flex gap-x-3 gap-y-3 auto-cols-max">
+                                                                                                {info[0] && MONTHS.map((month, indexMonth) => {
+                                                                                                    return (
+                                                                                                        <FormItem
+                                                                                                            key={indexMonth}
+                                                                                                            className="mb-0"
+                                                                                                        >
+                                                                                                            <Input
+                                                                                                                className="w-[90px]"
+                                                                                                                type="number"
+                                                                                                                value={(infoForm &&  Object.keys(infoForm).length !== 0) ? infoForm[tab.value][indexChannel].productos[indexProd].años[indexYear].volMeses[month] : 0}
+                                                                                                                onChange={(e) => handleEditInput(e, indexYear,indexProd, tab.value, indexChannel, month)}
+                                                                                                                name="month"
+                                                                                                            />
+                                                                                                        </FormItem>
+                                                                                                    )
+                                                                                                }
+                                                                                                )}
+                                                                                            </div>}
+
+                                                                                            
+                                                                                            <FormItem
+                                                                                                className="mb-0"
+                                                                                            >
+                                                                                                <Input
+                                                                                                    className="w-[90px]"
+                                                                                                    type="number"
+                                                                                                    disabled={true}
+                                                                                                    name="total"
+                                                                                                    value={(infoForm &&  Object.keys(infoForm).length !== 0) ? infoForm[tab.value][indexChannel].productos[indexProd].años[indexYear].volTotal : 0}
+                                                                                                />
+                                                                                            </FormItem>
+                                                                                        </div>
+                                                                                    )
+                                                                                }
+                                                                                )}
+                                                                            </div>
+                                                                        )
+                                                                        )}
+                                                                    </div>
+                                                                </section>
+                                                            )
+                                                        )}
+
+                                                        <div className="flex justify-end">
+                                                            <Button
+                                                                className="flex justify-end mt-6"
+                                                                variant="solid"
+                                                                type="submit"
+                                                            >
+                                                                Cargar datos
+                                                            </Button>
+                                                        </div>
+                                                    </FormContainer>
+                                                </TabContent>
+                                            ))}
+                                    </div>
+                                </FormContainer>
+                            </div>
+                       
                     </Tabs>
                 )}
             </div>
