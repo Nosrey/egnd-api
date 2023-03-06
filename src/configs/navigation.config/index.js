@@ -249,10 +249,10 @@ const navigationConfig = [
                 subMenu: [],
             },
             {
-                key: 'collapsePlanVentas.item4',
+                key: 'collapseMenu.item4',
                 path: '/preciop',
-                title: 'Precio (P)',
-                translateKey: 'nav.collapsePlanVentas.item4',
+                title: 'Precio (p)',
+                translateKey: 'nav.collapseMenu.item4',
                 icon: '',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [],
