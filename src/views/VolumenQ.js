@@ -18,7 +18,7 @@ function VolumenQ() {
     const [defaultCountry, setDefaultCountry] = useState('')
     const [infoForm, setInfoForm] = useState()
     useEffect(() => {
-        console.log(info)
+        // console.log(info)
         let estructura = {}
         if(info && info[0]) {
             for (let i = 0; i < info[0]?.paises.length; i++) {
@@ -46,6 +46,7 @@ function VolumenQ() {
             setInfoForm( () => {
                 return {...estructura}
             })
+            console.log(estructura)
         }
        
     }, [info])
@@ -251,7 +252,7 @@ function VolumenQ() {
                             <div className="container-countries">
                                 <FormContainer className="cont-countries">
                                     <div
-                                        className="wrapper p-4 overflow-x-auto scroll-smooth"
+                                        className="wrapper p-4 overflow-x-auto scroll-smooth "
                                         ref={containerTableRef}
                                         onScroll={iconVisibility}
                                         onMouseDown={handleMouseDown}
@@ -272,6 +273,7 @@ function VolumenQ() {
                                             info[0]?.paises.map((tab) => (
                                                 <TabContent
                                                     value={tab.value}
+                                                    className="mb-[20px]"
                                                     key={tab.value}>
                                                     <FormContainer>
                                                         {info[0]?.canales.map(
@@ -305,7 +307,6 @@ function VolumenQ() {
                                                                                                 </Avatar>
                                                                                                 <FormItem className="col-start-2 col-end-7 row-start-1 mb-1">
                                                                                                     <Input
-                                                                                                        placeholder="Producto"
                                                                                                         disabled={true}
                                                                                                         type="text"
                                                                                                         value={prod.name}
@@ -451,18 +452,105 @@ function VolumenQ() {
                                                             )
                                                         )}
 
-                                                        <div className="flex justify-end">
-                                                            <Button
-                                                                className="flex justify-end mt-6"
-                                                                variant="solid"
-                                                                type="submit"
-                                                            >
-                                                                Cargar datos
-                                                            </Button>
+                    {/*  CONTENEDOR TOTALES */}
+
+                                                    <div className='bg-indigo-50 px-[25px] py-[30px] w-fit rounded '>
+                                                        <div className='flex items-center'>
+                                                            <p className=' text-[#707470] font-bold mb-3 text-left w-[40%] min-w-[505px] '>Volumen total por producto</p>
+                                                            {/* <div  className='flex '>
+                                                                {AÑOS.map(
+                                                                (
+                                                                    year,
+                                                                    indexYear
+                                                                ) => (
+                                                                    <div
+                                                                        className=" pl-[0] w-fit"
+                                                                        key={
+                                                                            indexYear
+                                                                        }
+                                                                    >
+                                                                        <div className='titleMonths ml-[18px] gap-y-3 mb-[18px] '>
+                                                                            {visibleItems.includes(indexYear) &&
+                                                                                <div className='titleMonths gap-x-3'>
+                                                                                    <p className='month w-[90px] '>Enero</p>
+                                                                                    <p className='month w-[90px] '>Febrero</p>
+                                                                                    <p className='month w-[90px] '>Marzo</p>
+                                                                                    <p className='month w-[90px] '>Abril</p>
+                                                                                    <p className='month w-[90px] '>Mayo</p>
+                                                                                    <p className='month w-[90px] '>Junio</p>
+                                                                                    <p className='month w-[90px] '>Julio</p>
+                                                                                    <p className='month w-[90px] '>Agosto</p>
+                                                                                    <p className='month w-[90px] '>Septiembre</p>
+                                                                                    <p className='month w-[90px] '>Octubre</p>
+                                                                                    <p className='month w-[90px] '>Noviembre</p>
+                                                                                    <p className='month w-[90px] '>Diciembre</p>
+                                                                                </div>
+                                                                            }
+                                                                            
+                                                                            <p  key={ indexYear } className='month w-[90px]'>Total</p>
+
+                                                                        </div>
+                                                                </div>
+                                                            )
+                                                                )}
+                                                            </div> */}
                                                         </div>
+                                                       
+                                                        <div className='w-fit pt-3 border border-neutral-600 border-x-0 border-b-0'>
+                                                            {info[0] && info[0]?.productos.length >0 &&
+                                                            info[0]?.productos.filter((prod)=> prod.type !== "servicio").map(
+                                                                (prod, index ) => {
+                                                                    return (
+                                                                        <div key={index} className='flex gap-x-3 w-fit pt-3 '>
+                                                                            <p className='w-[40%] min-w-[465px] pl-[45px] capitalize'>{prod.name}</p>
+                                                                            {AÑOS.map(
+                                                                            (
+                                                                                year,
+                                                                                indexYear
+                                                                            ) => (
+                                                                                <div
+                                                                                    className=" pl-[0] w-fit"
+                                                                                    key={
+                                                                                        indexYear
+                                                                                    }
+                                                                                >
+                                                                                <div
+                                                                                    className="flex  gap-y-3 auto-cols-max"
+                                                                                    >
+
+                                                                                    {visibleItems.includes(indexYear) && <div className="flex gap-x-3 gap-y-3 auto-cols-max">
+                                                                                            {info[0] && MONTHS.map((month, indexMonth) => {
+                                                                                                return (
+                                                                                                    <p className=' w-[90px] text-center'>453</p>
+                                                                                                )
+                                                                                            }
+                                                                                            )}
+                                                                                        </div>}
+
+                                                                                        <p className=' w-[90px] text-center ml-[9px]'>1000</p>
+                                                                                    </div>
+                                                                            </div>
+                                                                        )
+                                                                        )}
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    
+                                    
+                                                        
                                                     </FormContainer>
                                                 </TabContent>
                                             ))}
+                                                <Button
+                                                    className="border mt-6b btnSubmitTable mt-[40px]"
+                                                    variant="solid"
+                                                    type="submit"
+                                                >
+                                                    Cargar datos
+                                                </Button>
                                     </div>
                                 </FormContainer>
                             </div>

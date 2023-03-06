@@ -39,7 +39,10 @@ input[type=number] { -moz-appearance:textfield; }
   left: 47%;
   display: inline;
 }
-
+.btnSubmitTable{
+  position: sticky;
+  left: 80%;
+}
 .titleRow {
   border-radius: 4px;
   color: rgb(41, 40, 40);
@@ -90,7 +93,7 @@ input[type=number] { -moz-appearance:textfield; }
   padding-left: 18px;
 }
 .rowInputsProd{
-  margin-bottom: 45px !important;
+  margin-bottom: 84px !important;
 }
 .contenedor {
   width: fit-content;
