@@ -2,19 +2,9 @@
     "nav": {
         "home": "Home",
         "singleMenuItem": "Single menu item",
+        "financialPlan": "Financial Plan",
         "collapseMenu": {
-            "collapseMenu": "Financial Plan",
-
-            "item2": "Plan de Cuentas",
-            "item3": "Plan de Ventas",
-            "item4": "Costos Directos",
-            "item5": "Headcount",
-            "item6": "Financial Plan",
-            "item7": "Gastos de Estructura",
-            "item8": "Inversiones y Amortizaciones",
-            "item9": "Gastos Financieros",
-            "item10": "Estados Financieros",
-            "item11": "Uso de Fondos"
+            "collapseMenu": "Financial Plan"
         },
         "collapseGeneral": {
             "collapseGeneral": "Assumptions General",
@@ -27,7 +17,7 @@
             "item1": "Assumptions Ventas",
             "item2": "GMV y Take Rate",
             "item3": "Volumen (Q)",
-            "item4": "Precio (p)",
+            "item4": "Precio (P)",
             "item5": "Ventas",
             "item6": "Clientes - Alta",
             "item7": "Clientes - Churn",
