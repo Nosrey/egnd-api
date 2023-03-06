@@ -7,7 +7,8 @@
             "item1": "Assumption General",
             "item2": "Assumption Ventas",
             "item3": "Volumen Q",
-            "item4": "Assumption Financieras"
+            "item4": "PrecioP",
+            "item5": "Assumption Financieras"
         }
     }
 }
