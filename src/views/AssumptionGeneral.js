@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
         'Por favor seleccione un modelo de negocio'
     ),
     moneda: Yup.string().required('Por favor seleccione una moneda'),
-    upload: Yup.array().min(MIN_UPLOAD, 'At least one file uploaded!'),
+    upload: Yup.array().min(MIN_UPLOAD, '¡Al menos un archivo subido!'),
 })
 
 const AssumptionGeneral = () => {
@@ -52,16 +52,16 @@ const AssumptionGeneral = () => {
         const MAX_FILE_SIZE = 500000
 
         if (fileList.length >= MAX_UPLOAD) {
-            return `You can only upload ${MAX_UPLOAD} file(s)`
+            return `Solo puede cargar ${MAX_UPLOAD} file(s)`
         }
 
         for (let f of file) {
             if (!allowedFileType.includes(f.type)) {
-                valid = 'Please upload a .jpeg or .png file!'
+                valid = '¡Cargue un archivo .jpeg o .png!'
             }
 
             if (f.size >= MAX_FILE_SIZE) {
-                valid = 'Upload image cannot more then 500kb!'
+                valid = '¡La imagen no puede superar los 500kb!'
             }
         }
 
