@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Button, Select, FormItem, FormContainer } from 'components/ui'
+import {
+    Input,
+    Button,
+    Select,
+    FormItem,
+    FormContainer,
+    Upload,
+} from 'components/ui'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
@@ -10,6 +17,9 @@ const options = [
     { value: 'bar', label: 'Bar' },
 ]
 
+const MIN_UPLOAD = 1
+const MAX_UPLOAD = 1
+
 const validationSchema = Yup.object().shape({
     nombreEmpresa: Yup.string().required(
         'Por favor ingrese su nombre de negocio'
@@ -18,6 +28,7 @@ const validationSchema = Yup.object().shape({
         'Por favor seleccione un modelo de negocio'
     ),
     moneda: Yup.string().required('Por favor seleccione una moneda'),
+    upload: Yup.array().min(MIN_UPLOAD, 'At least one file uploaded!'),
 })
 
 const AssumptionGeneral = () => {
@@ -29,6 +40,33 @@ const AssumptionGeneral = () => {
             })
             .catch((error) => console.error(error))
     }, [])
+
+    const onSetFormFile = (form, field, files) => {
+        form.setFieldValue(field.name, files)
+    }
+
+    const beforeUpload = (file, fileList) => {
+        let valid = true
+
+        const allowedFileType = ['image/jpeg', 'image/png']
+        const MAX_FILE_SIZE = 500000
+
+        if (fileList.length >= MAX_UPLOAD) {
+            return `You can only upload ${MAX_UPLOAD} file(s)`
+        }
+
+        for (let f of file) {
+            if (!allowedFileType.includes(f.type)) {
+                valid = 'Please upload a .jpeg or .png file!'
+            }
+
+            if (f.size >= MAX_FILE_SIZE) {
+                valid = 'Upload image cannot more then 500kb!'
+            }
+        }
+
+        return valid
+    }
 
     return (
         <div>
@@ -49,13 +87,15 @@ const AssumptionGeneral = () => {
                                     info?.businessInfo[0]?.businessModel.toLowerCase() ||
                                     '',
                                 moneda:
-                                    info?.businessInfo[0]?.currency.toLowerCase() || '',
+                                    info?.businessInfo[0]?.currency.toLowerCase() ||
+                                    '',
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(
                                 values,
                                 { resetForm, setSubmitting }
                             ) => {
+                                console.log(values)
                                 editBusinessInfo(
                                     values?.modeloNegorcio,
                                     values?.moneda
@@ -178,7 +218,42 @@ const AssumptionGeneral = () => {
                                             compañía.
                                         </span>
 
-                                        <FormItem className="col-start-3 row-start-4">
+                                        <FormItem
+                                            className="row-start-4"
+                                            label="Upload"
+                                            invalid={Boolean(
+                                                errors.upload && touched.upload
+                                            )}
+                                            errorMessage={errors.upload}
+                                        >
+                                            <Field name="upload">
+                                                {({ field, form }) => (
+                                                    <Upload
+                                                        draggable
+                                                        onChange={(files) =>
+                                                            onSetFormFile(
+                                                                form,
+                                                                field,
+                                                                files
+                                                            )
+                                                        }
+                                                        onFileRemove={(files) =>
+                                                            onSetFormFile(
+                                                                form,
+                                                                field,
+                                                                files
+                                                            )
+                                                        }
+                                                        beforeUpload={
+                                                            beforeUpload
+                                                        }
+                                                        fileList={values.upload}
+                                                    />
+                                                )}
+                                            </Field>
+                                        </FormItem>
+
+                                        <FormItem className="col-start-3 row-start-5">
                                             <div className="flex justify-center">
                                                 <Button
                                                     variant="solid"
