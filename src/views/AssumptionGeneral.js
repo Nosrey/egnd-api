@@ -95,7 +95,6 @@ const AssumptionGeneral = () => {
                                 values,
                                 { resetForm, setSubmitting }
                             ) => {
-                                console.log(values)
                                 editBusinessInfo(
                                     values?.modeloNegorcio,
                                     values?.moneda
@@ -116,7 +115,7 @@ const AssumptionGeneral = () => {
                         >
                             {({ values, touched, errors, resetForm }) => (
                                 <Form>
-                                    <FormContainer className="grid grid-cols-3 grid-rows-4 items-center gap-x-3">
+                                    <FormContainer className="grid grid-cols-3 grid-rows-5 items-center gap-x-3">
                                         <FormItem
                                             className="col-span-1 row-start-1"
                                             label="Nombre de la empresa"
@@ -219,7 +218,7 @@ const AssumptionGeneral = () => {
                                         </span>
 
                                         <FormItem
-                                            className="row-start-4"
+                                            className="col-span-1 row-start-4"
                                             label="Upload"
                                             invalid={Boolean(
                                                 errors.upload && touched.upload
