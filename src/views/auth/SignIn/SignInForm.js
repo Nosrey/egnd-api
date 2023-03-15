@@ -1,21 +1,23 @@
-import React from 'react'
+import { ActionLink, PasswordInput } from 'components/shared'
 import {
-    Input,
+    Alert,
     Button,
     Checkbox,
-    FormItem,
     FormContainer,
-    Alert,
+    FormItem,
+    Input,
 } from 'components/ui'
-import { PasswordInput, ActionLink } from 'components/shared'
-import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
+import { useNavigate } from 'react-router-dom'
+import { signIn } from 'services/Requests'
+import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import * as Yup from 'yup'
-import useAuth from 'utils/hooks/useAuth'
 
 const validationSchema = Yup.object().shape({
-    userName: Yup.string().required('Please enter your user name'),
-    password: Yup.string().required('Please enter your password'),
+    email: Yup.string()
+        .email('Correo electrónico invalido')
+        .required('Por favor introduzca su correo electrónico'),
+    password: Yup.string().required('Por favor introduzca su contraseña'),
     rememberMe: Yup.bool(),
 })
 
@@ -28,20 +30,26 @@ const SignInForm = (props) => {
     } = props
 
     const [message, setMessage] = useTimeOutMessage()
-
-    const { signIn } = useAuth()
+    const navigate = useNavigate()
 
     const onSignIn = async (values, setSubmitting) => {
-        const { userName, password } = values
+        const { email, password } = values
+
         setSubmitting(true)
 
-        const result = signIn({ userName, password })
-
-        if (result.status === 'failed') {
-            setMessage(result.message)
-        }
-
-        setSubmitting(false)
+        signIn({ email, password })
+            .then((resp) => {
+                if (resp.success) {
+                    console.log(resp)
+                    localStorage.setItem('userId', resp.id)
+                    navigate('/home')
+                    setSubmitting(false)
+                } else {
+                    setMessage(resp)
+                    setSubmitting(false)
+                }
+            })
+            .catch((error) => console.log('[ERROR]', error))
     }
 
     return (
@@ -54,7 +62,7 @@ const SignInForm = (props) => {
             <Formik
                 // Remove this initial value
                 initialValues={{
-                    userName: 'admin',
+                    email: 'admin',
                     password: '123Qwe',
                     rememberMe: true,
                 }}
@@ -71,27 +79,27 @@ const SignInForm = (props) => {
                     <Form>
                         <FormContainer>
                             <FormItem
-                                label="User Name"
-                                invalid={errors.userName && touched.userName}
-                                errorMessage={errors.userName}
+                                label="Correo electronico"
+                                invalid={errors.email && touched.email}
+                                errorMessage={errors.email}
                             >
                                 <Field
-                                    type="text"
+                                    type="email"
                                     autoComplete="off"
-                                    name="userName"
-                                    placeholder="User Name"
+                                    name="email"
+                                    placeholder="Correo electronico"
                                     component={Input}
                                 />
                             </FormItem>
                             <FormItem
-                                label="Password"
+                                label="Contraseña"
                                 invalid={errors.password && touched.password}
                                 errorMessage={errors.password}
                             >
                                 <Field
                                     autoComplete="off"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Contraseña"
                                     component={PasswordInput}
                                 />
                             </FormItem>
