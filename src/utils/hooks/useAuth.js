@@ -20,7 +20,6 @@ function useAuth() {
     const signIn = async (values) => {
         try {
             const resp = await apiSignIn(values)
-            console.log('resp', resp)
             if (resp.success) {
                 const { response } = resp
                 const { id, token, mail } = response

@@ -92,7 +92,6 @@ export const signIn = async (body) => {
             }),
         })
 
-        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.response)

@@ -60,7 +60,7 @@ const SignInForm = (props) => {
                 initialValues={{
                     email: '',
                     password: '',
-                    rememberMe: true,
+                    rememberMe: false,
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
