@@ -8,8 +8,7 @@ import {
     Input,
 } from 'components/ui'
 import { Field, Form, Formik } from 'formik'
-import { useNavigate } from 'react-router-dom'
-import { signIn } from 'services/Requests'
+import useAuth from 'utils/hooks/useAuth'
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import * as Yup from 'yup'
 
@@ -30,26 +29,23 @@ const SignInForm = (props) => {
     } = props
 
     const [message, setMessage] = useTimeOutMessage()
-    const navigate = useNavigate()
+    const { signIn } = useAuth()
 
     const onSignIn = async (values, setSubmitting) => {
         const { email, password } = values
-
         setSubmitting(true)
 
-        signIn({ email, password })
-            .then((resp) => {
-                if (resp.success) {
-                    console.log(resp)
-                    localStorage.setItem('userId', resp.id)
-                    navigate('/home')
-                    setSubmitting(false)
-                } else {
-                    setMessage(resp)
-                    setSubmitting(false)
-                }
-            })
-            .catch((error) => console.log('[ERROR]', error))
+        const result = await signIn({ email, password })
+
+        if (result.error) {
+            setMessage(result.message)
+        }
+
+        if (result.status === 'failed') {
+            setMessage(result.message)
+        }
+
+        setSubmitting(false)
     }
 
     return (
@@ -62,8 +58,8 @@ const SignInForm = (props) => {
             <Formik
                 // Remove this initial value
                 initialValues={{
-                    email: 'admin',
-                    password: '123Qwe',
+                    email: '',
+                    password: '',
                     rememberMe: true,
                 }}
                 validationSchema={validationSchema}
@@ -108,10 +104,10 @@ const SignInForm = (props) => {
                                     className="mb-0"
                                     name="rememberMe"
                                     component={Checkbox}
-                                    children="Remember Me"
+                                    children="Recordarme"
                                 />
                                 <ActionLink to={forgotPasswordUrl}>
-                                    Forgot Password?
+                                    Olvidaste la constraseña?
                                 </ActionLink>
                             </div>
                             <Button
@@ -120,11 +116,15 @@ const SignInForm = (props) => {
                                 variant="solid"
                                 type="submit"
                             >
-                                {isSubmitting ? 'Signing in...' : 'Sign In'}
+                                {isSubmitting
+                                    ? 'Iniciando sesión...'
+                                    : 'Iniciar sesión'}
                             </Button>
                             <div className="mt-4 text-center">
-                                <span>Don't have an account yet? </span>
-                                <ActionLink to={signUpUrl}>Sign up</ActionLink>
+                                <span>No tienes cuenta? </span>
+                                <ActionLink to={signUpUrl}>
+                                    Crear cuenta
+                                </ActionLink>
                             </div>
                         </FormContainer>
                     </Form>
