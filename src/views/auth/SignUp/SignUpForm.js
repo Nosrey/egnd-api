@@ -12,11 +12,21 @@ import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { createSignUp } from 'services/Requests'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
-const options = [
-    { value: 'foo', label: 'Foo' },
-    { value: 'bar', label: 'Bar' },
+const businessOptions = [
+    { value: 'marketplace', label: 'Marketplace' },
+    { value: 'ecommerce', label: 'Ecommerce' },
+    { value: 'saas', label: 'SaaS' },
+    { value: 'transaccional', label: 'Transaccional' },
+    { value: 'producto', label: 'Producto' },
+    { value: 'suscripcion', label: 'Suscripcion' },
+]
+
+const currencyOptions = [
+    { value: 'ars', label: 'ARS' },
+    { value: 'usd', label: 'USD' },
+    { value: 'eur', label: 'EUR' },
 ]
 
 const validationSchema = Yup.object().shape({
@@ -39,7 +49,7 @@ const validationSchema = Yup.object().shape({
 
 const SignUpForm = (props) => {
     const { className, signInUrl = '/sign-in' } = props
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const [message, setMessage] = useTimeOutMessage()
 
@@ -63,18 +73,16 @@ const SignUpForm = (props) => {
                 onSubmit={(values, { setSubmitting }) => {
                     createSignUp(values)
                         .then((resp) => {
-                            console.log("registro exitoso");
-                           localStorage.setItem("userId", resp.id)
+                            console.log('registro exitoso')
+                            localStorage.setItem('userId', resp.id)
                             setSubmitting(false)
-                           navigate('/sign-in')
+                            navigate('/sign-in')
                         })
                         .catch((error) => {
-                            if (error.stack.includes("usuario ya existe"))  setMessage("Este email ya está registrado")
-                          
-                            console.error(
-                                'Error de API:',
-                                error
-                            )
+                            if (error.stack.includes('usuario ya existe'))
+                                setMessage('Este email ya está registrado')
+
+                            console.error('Error de API:', error)
                         })
                 }}
             >
@@ -150,8 +158,8 @@ const SignUpForm = (props) => {
                                             placeholder="Seleccionar..."
                                             field={field}
                                             form={form}
-                                            options={options}
-                                            value={options.filter(
+                                            options={businessOptions}
+                                            value={businessOptions.filter(
                                                 (option) =>
                                                     option.value ===
                                                     values.modeloNegocio
@@ -178,8 +186,8 @@ const SignUpForm = (props) => {
                                             placeholder="Seleccionar..."
                                             field={field}
                                             form={form}
-                                            options={options}
-                                            value={options.filter(
+                                            options={currencyOptions}
+                                            value={currencyOptions.filter(
                                                 (option) =>
                                                     option.value ===
                                                     values.moneda
@@ -207,7 +215,9 @@ const SignUpForm = (props) => {
                             </Button>
                             <div className="mt-4 text-center">
                                 <span>¿Ya tienes una cuenta? </span>
-                                <ActionLink to={signInUrl}>Inicia Sesión</ActionLink>
+                                <ActionLink to={signInUrl}>
+                                    Inicia Sesión
+                                </ActionLink>
                             </div>
                         </FormContainer>
                     </Form>
