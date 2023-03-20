@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
+    Alert,
     Input,
     Button,
     Select,
@@ -12,9 +13,22 @@ import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
 import { editBusinessInfo, getUser } from 'services/Requests'
 
-const options = [
-    { value: 'foo', label: 'Foo' },
-    { value: 'bar', label: 'Bar' },
+import { HiOutlineCloudUpload } from 'react-icons/hi'
+import { FcImageFile } from 'react-icons/fc'
+
+const optionsBusiness = [
+    { value: 'marketplace', label: 'Marketplace' },
+    { value: 'ecommerce', label: 'Ecommerce' },
+    { value: 'saas', label: 'SaaS' },
+    { value: 'transaccional', label: 'Transaccional' },
+    { value: 'producto', label: 'Producto' },
+    { value: 'suscripcion', label: 'Suscripcion' },
+]
+
+const optionsMoney = [
+    { value: 'ars', label: 'ARS' },
+    { value: 'usd', label: 'USD' },
+    { value: 'eur', label: 'EUR' },
 ]
 
 const MIN_UPLOAD = 1
@@ -32,11 +46,15 @@ const validationSchema = Yup.object().shape({
 })
 
 const AssumptionGeneral = () => {
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const [showErrorAlert, setShowErrorAlert] = useState(false)
+
     const [info, setInfo] = useState()
     useEffect(() => {
         getUser()
             .then((data) => {
                 setInfo(data)
+                console.log(data)
             })
             .catch((error) => console.error(error))
     }, [])
@@ -70,6 +88,16 @@ const AssumptionGeneral = () => {
 
     return (
         <div>
+            {showSuccessAlert && (
+                <Alert className="mb-4" type="success" showIcon>
+                    Los datos se guardaron satisfactoriamente.
+                </Alert>
+            )}
+            {showErrorAlert && (
+                <Alert className="mb-4" type="danger" showIcon>
+                    No se pudieron guardar los datos.
+                </Alert>
+            )}
             <div className="border-b-2 mb-8 pb-1">
                 <h4>Assumptions Generales</h4>
                 <span>Supuestos Generales</span>
@@ -89,18 +117,30 @@ const AssumptionGeneral = () => {
                                 moneda:
                                     info?.businessInfo[0]?.currency.toLowerCase() ||
                                     '',
+                                upload: [],
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(
                                 values,
                                 { resetForm, setSubmitting }
                             ) => {
+                                console.log(values)
                                 editBusinessInfo(
+                                    values?.nombreEmpresa,
                                     values?.modeloNegorcio,
                                     values?.moneda
                                 )
                                     .then((data) => {
+                                        console.log(data)
                                         setTimeout(() => {
+                                            window.scrollTo({
+                                                top: 0,
+                                                behavior: 'smooth',
+                                            })
+                                            setShowSuccessAlert(true)
+                                            setTimeout(() => {
+                                                setShowSuccessAlert(false)
+                                            }, 5000)
                                             setSubmitting(false)
                                             resetForm()
                                         }, 400)
@@ -110,6 +150,14 @@ const AssumptionGeneral = () => {
                                             'Error de API:',
                                             error.response.data.message
                                         )
+                                        window.scrollTo({
+                                            top: 0,
+                                            behavior: 'smooth',
+                                        })
+                                        setShowErrorAlert(true)
+                                        setTimeout(() => {
+                                            setShowErrorAlert(false)
+                                        }, 5000)
                                     })
                             }}
                         >
@@ -152,8 +200,10 @@ const AssumptionGeneral = () => {
                                                         placeholder="Selector de negocio"
                                                         field={field}
                                                         form={form}
-                                                        options={options}
-                                                        value={options.filter(
+                                                        options={
+                                                            optionsBusiness
+                                                        }
+                                                        value={optionsBusiness.filter(
                                                             (option) =>
                                                                 option.value ===
                                                                 values.modeloNegorcio
@@ -193,8 +243,8 @@ const AssumptionGeneral = () => {
                                                         placeholder="Selector de moneda"
                                                         field={field}
                                                         form={form}
-                                                        options={options}
-                                                        value={options.filter(
+                                                        options={optionsMoney}
+                                                        value={optionsMoney.filter(
                                                             (option) =>
                                                                 option.value ===
                                                                 values.moneda

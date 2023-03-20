@@ -12,12 +12,17 @@ export const getUser = async (id) => {
     }
 }
 
-export const editBusinessInfo = async (businessModel, currency) => {
+export const editBusinessInfo = async (
+    businessName,
+    businessModel,
+    currency
+) => {
     try {
         const response = await fetch(URL_API + '/api/users/' + idUser, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                businessName: businessName,
                 businessInfo: [
                     { businessModel: businessModel, currency: currency },
                 ],
@@ -61,7 +66,7 @@ export const createSignUp = async (body) => {
                 ],
             }),
         })
-console.log(resp);
+        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.errors[0])
@@ -76,9 +81,9 @@ console.log(resp);
 }
 export const signIn = async (body) => {
     const { email, password } = body
-    console.log(body);
+    console.log(body)
 
-    if (!email || !password ) {
+    if (!email || !password) {
         throw new Error('Todos los campos son obligatorios')
     }
 
@@ -94,7 +99,7 @@ export const signIn = async (body) => {
             }),
         })
 
-        console.log(resp);
+        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.response)
