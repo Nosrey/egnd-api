@@ -1,7 +1,14 @@
-const idUser = '64040284d9a91413da049e67'
-const URL_API = 'http://localhost:4000'
+import store from '../store/index'
 
-export const getUser = async (id) => {
+const app = store.getState()
+
+const ls = JSON.parse(window.localStorage.getItem('admin'))
+const auth = JSON.parse(ls.auth)
+
+const URL_API = 'http://localhost:4000'
+const idUser = app.auth.user.id ? app.auth.user.id : auth.user.id
+
+export const getUser = async () => {
     try {
         const resp = await fetch(URL_API + '/api/users/' + idUser)
         const data = await resp.json()
