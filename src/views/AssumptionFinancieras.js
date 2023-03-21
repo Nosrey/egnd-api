@@ -1,32 +1,42 @@
-import React from 'react'
-import { Field, Form, Formik} from 'formik'
 import {
-    Input,
     Button,
-    FormItem,
-    Table,
     Card,
     FormContainer,
+    FormItem,
+    Input,
+    Table,
 } from 'components/ui'
+import { Field, Form, Formik } from 'formik'
+import { useEffect, useState } from 'react'
+import { createAssumpFinanciera, getUser } from 'services/Requests'
 const { Tr, Td, TBody } = Table
 
 const plazos = {
-    contado:'',
+    contado: '',
     treintaDias: '',
     cuarentaycincoDias: '',
     sesentaDias: '',
     noventaDias: '',
-    cveinteDias:'',
-    ccincuentaDias:'',
-    cochenteDias:'',
-    ddiezDiaz:'',
-    dcuarentaDias:'',
-    dsetentaDias:'',
-    trescientosDias:'',
-    ttreintaDias:'',
-    IVA:'',
-    imponible:'',
+    cveinteDias: '',
+    ccincuentaDias: '',
+    cochenteDias: '',
+    ddiezDiaz: '',
+    dcuarentaDias: '',
+    dsetentaDias: '',
+    trescientosDias: '',
+    ttreintaDias: '',
+    IVA: '',
+    imponible: '',
 }
+
+const defaultState = {
+    cobranzas: plazos,
+    pagoProducto: plazos,
+    pagoServicio: plazos,
+    stock: '',
+    inversion: plazos,
+}
+
 const tiempos = [
     { name: 'contado', label: 'Contado' },
     { name: 'treintaDias', label: '30 días' },
@@ -45,10 +55,39 @@ const tiempos = [
     { name: 'imponible', label: 'Imponible' },
 ]
 
+const AssumptionsFinancieras = () => {
+    const [userData, setUserData] = useState()
+    const [dataFinanciera, setDataFinanciera] = useState(defaultState)
+    useEffect(() => {
+        getUser().then((d) => {
+            setUserData(d)
+            setDataFinanciera(d.assumpFinancierasData[0])
+        })
+    }, [])
 
-const AssumptionsFinancieras
- = () => {
-    
+    console.log(dataFinanciera)
+
+    const submit = (values) => {
+        const { cobranzas, inversion, pagoProducto, pagoServicio, stock } =
+            values
+
+        createAssumpFinanciera(
+            cobranzas,
+            pagoProducto,
+            pagoServicio,
+            stock,
+            inversion
+        )
+            .then((data) => {
+                console.log(data)
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+            })
+            .catch((error) => {
+                console.error(error)
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+            })
+    }
+
     return (
         <div>
             <div className="border-b-2 mb-8 pb-1">
@@ -60,81 +99,203 @@ const AssumptionsFinancieras
                     <h6>Carga de Plazos</h6>
                 </div>
 
-                <div className="px-4 py-5">     
+                <div className="px-4 py-5">
                     <Formik
-                    initialValues={{
-                        cobranzas: plazos,
-                        pagoProducto: plazos,
-                        pagoServicio: plazos,
-                        stock:'',
-                        inversion: plazos,
-                    }}
-                    onSubmit={(values, { resetForm, setSubmitting }) => {
-                        console.log('values', values)
-                    }}
-                >
-                    {({ values, touched, errors, resetForm }) => (
-                        <Form>
-                            <FormContainer >
-                                <Table>
-                                    <TBody>
-                                        <Tr className="w-[1900px]">
-                                            <Td className="w-[1900px] grid grid-cols-10  gap-x-3 ">
-                                        <Card className="col-start-1 col-end-3 row-start-1">
-                                            <h5 className='mb-[18px]'>Plazo de cobranzas</h5>
-                                            <div className='flex justify-end mb-3'>
-                                                <p className='w-[60%] '>% Sobre Total</p>
-                                            </div>
-                                            <div>
-                                                {tiempos.map((
-                                                            time,
-                                                            index
-                                                        ) => {
-                                                            return (
-                                                            <div key={index} className={`flex justify-between items-center mb-1 ${time.name=== 'IVA' && 'border border-transparent border-t-gray-300 pt-2'}`}>
-                                                                <p className='mt-[-30px] w-[40%]'>
-                                                                {time.name === 'IVA' ? 'IVA DF (venta)' :
-                                                                    (time.name === 'imponible' ? 'Imponible sobre venta' : time.label)}
+                        initialValues={{
+                            cobranzas: dataFinanciera.cobranzas,
+                            pagoProducto: dataFinanciera.pagoProducto,
+                            pagoServicio: dataFinanciera.pagoServicio,
+                            stock: dataFinanciera.stock,
+                            inversion: dataFinanciera.inversion,
+                        }}
+                        onSubmit={(values, { resetForm, setSubmitting }) => {
+                            console.log(values.cobranzas.contado)
+                            submit(values)
+                            console.log('values', values)
+                        }}
+                    >
+                        {({ values, touched, errors, resetForm }) => {
+                            return (
+                                <Form>
+                                    <FormContainer>
+                                        <Table>
+                                            <TBody>
+                                                <Tr className="w-[1900px]">
+                                                    <Td className="w-[1900px] grid grid-cols-10  gap-x-3 ">
+                                                        <Card className="col-start-1 col-end-3 row-start-1">
+                                                            <h5 className="mb-[18px]">
+                                                                Plazo de
+                                                                cobranzas
+                                                            </h5>
+                                                            <div className="flex justify-end mb-3">
+                                                                <p className="w-[60%] ">
+                                                                    % Sobre
+                                                                    Total
                                                                 </p>
-                                                                <FormItem className=" w-[60%]"
-                                                                >
-                                                                    <Field
-                                                                        placeholder="0.0"
-                                                                        name={`cobranzas.${time.name}`}
-                                                                        type="number"
-                                                                        size="sm"
-                                                                        suffix="%"
-                                                                        component={
-                                                                            Input
-                                                                        }
-                                                                    />
-                                                                </FormItem>
                                                             </div>
-                                                            )
-                                                        }
-                                                ) }
-                                            </div>
-                                        </Card>
-                                        <Card className="col-start-3 col-end-5 row-start-1">
-                                            <h5 className='mb-[18px]'>Plazo de pago - Productos</h5>
-                                            <div className='flex justify-end mb-3'>
-                                                <p className='w-[60%] '>% Sobre Total</p>
-                                            </div>
-                                            <div>
-                                            {tiempos.map((
-                                                            time,
-                                                            index
-                                                        ) => {
-                                                            return (
-                                                            <div key={index}  className={`flex justify-between items-center mb-1 ${time.name=== 'IVA' && 'border border-transparent border-t-gray-300 pt-2'}`}>
-                                                                <p  className='mt-[-30px] w-[40%]'>
-                                                                    {time.name=== 'IVA' ? 'IVA CF (costo)' :
-                                                                    (time.name=== 'imponible' ? 'Imponible sobre costo' : time.label)}
-                                                                    </p>
+                                                            <div>
+                                                                {tiempos.map(
+                                                                    (
+                                                                        time,
+                                                                        index
+                                                                    ) => {
+                                                                        return (
+                                                                            <div
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                                className={`flex justify-between items-center mb-1 ${
+                                                                                    time.name ===
+                                                                                        'IVA' &&
+                                                                                    'border border-transparent border-t-gray-300 pt-2'
+                                                                                }`}
+                                                                            >
+                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                    {time.name ===
+                                                                                    'IVA'
+                                                                                        ? 'IVA DF (venta)'
+                                                                                        : time.name ===
+                                                                                          'imponible'
+                                                                                        ? 'Imponible sobre venta'
+                                                                                        : time.label}
+                                                                                </p>
+                                                                                <FormItem className=" w-[60%]">
+                                                                                    <Field
+                                                                                        placeholder="0.0"
+                                                                                        name={`cobranzas.${time.name}`}
+                                                                                        type="text"
+                                                                                        size="sm"
+                                                                                        suffix="%"
+                                                                                        component={
+                                                                                            Input
+                                                                                        }
+                                                                                    />
+                                                                                </FormItem>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                )}
+                                                            </div>
+                                                        </Card>
+                                                        <Card className="col-start-3 col-end-5 row-start-1">
+                                                            <h5 className="mb-[18px]">
+                                                                Plazo de pago -
+                                                                Productos
+                                                            </h5>
+                                                            <div className="flex justify-end mb-3">
+                                                                <p className="w-[60%] ">
+                                                                    % Sobre
+                                                                    Total
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                {tiempos.map(
+                                                                    (
+                                                                        time,
+                                                                        index
+                                                                    ) => {
+                                                                        return (
+                                                                            <div
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                                className={`flex justify-between items-center mb-1 ${
+                                                                                    time.name ===
+                                                                                        'IVA' &&
+                                                                                    'border border-transparent border-t-gray-300 pt-2'
+                                                                                }`}
+                                                                            >
+                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                    {time.name ===
+                                                                                    'IVA'
+                                                                                        ? 'IVA CF (costo)'
+                                                                                        : time.name ===
+                                                                                          'imponible'
+                                                                                        ? 'Imponible sobre costo'
+                                                                                        : time.label}
+                                                                                </p>
+                                                                                <FormItem className=" w-[60%]">
+                                                                                    <Field
+                                                                                        placeholder="0.0"
+                                                                                        name={`pagoProducto.${time.name}`}
+                                                                                        type="number"
+                                                                                        size="sm"
+                                                                                        suffix="%"
+                                                                                        component={
+                                                                                            Input
+                                                                                        }
+                                                                                    />
+                                                                                </FormItem>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                )}
+                                                            </div>
+                                                        </Card>
+                                                        <Card className="col-start-5 col-end-7 row-start-1">
+                                                            <h5 className="mb-[18px]">
+                                                                Plazo de pago -
+                                                                Servicios/Gasto
+                                                            </h5>
+                                                            <div className="flex justify-end mb-3">
+                                                                <p className="w-[60%] ">
+                                                                    % Sobre
+                                                                    Total
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                {tiempos.map(
+                                                                    (
+                                                                        time,
+                                                                        index
+                                                                    ) => {
+                                                                        return (
+                                                                            <div
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                                className={`flex justify-between items-center mb-1 ${
+                                                                                    time.name ===
+                                                                                        'IVA' &&
+                                                                                    'border border-transparent border-t-gray-300 pt-2'
+                                                                                }`}
+                                                                            >
+                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                    {time.name ===
+                                                                                    'IVA'
+                                                                                        ? 'IVA CF (costo)'
+                                                                                        : time.name ===
+                                                                                          'imponible'
+                                                                                        ? 'Imponible sobre costo'
+                                                                                        : time.label}
+                                                                                </p>
+                                                                                <FormItem className=" w-[60%]">
+                                                                                    <Field
+                                                                                        placeholder="0.0"
+                                                                                        name={`pagoServicio.${time.name}`}
+                                                                                        type="number"
+                                                                                        size="sm"
+                                                                                        suffix="%"
+                                                                                        component={
+                                                                                            Input
+                                                                                        }
+                                                                                    />
+                                                                                </FormItem>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                )}
+                                                            </div>
+                                                        </Card>
+                                                        <Card className="col-start-7 col-end-9 row-start-1">
+                                                            <h5 className="mb-[18px]">
+                                                                Meses de Stock
+                                                            </h5>
+                                                            <div>
                                                                 <FormItem className=" w-[60%]">
                                                                     <Field
                                                                         placeholder="0.0"
-                                                                        name={`pagoProducto.${time.name}`}
+                                                                        name="stock"
                                                                         type="number"
                                                                         size="sm"
                                                                         suffix="%"
@@ -144,115 +305,79 @@ const AssumptionsFinancieras
                                                                     />
                                                                 </FormItem>
                                                             </div>
-                                                            )
-                                                        }
-                                                ) }
-                                            </div>
-                                        </Card>
-                                        <Card className="col-start-5 col-end-7 row-start-1">
-                                            <h5 className='mb-[18px]'>Plazo de pago - Servicios/Gasto</h5>
-                                            <div className='flex justify-end mb-3'>
-                                                <p className='w-[60%] '>% Sobre Total</p>
-                                            </div>
-                                            <div>
-                                            {tiempos.map((
-                                                            time,
-                                                            index
-                                                        ) => {
-                                                            return (
-                                                            <div key={index}  className={`flex justify-between items-center mb-1 ${time.name=== 'IVA' && 'border border-transparent border-t-gray-300 pt-2'}`}>
-                                                                <p className='mt-[-30px] w-[40%]'>
-                                                                    {time.name === 'IVA' ? 'IVA CF (costo)' :
-                                                                    (time.name === 'imponible' ? 'Imponible sobre costo' : time.label)}
+                                                        </Card>
+                                                        <Card className="col-start-9 col-end-11 row-start-1">
+                                                            <h5 className="mb-[18px]">
+                                                                Inversión
+                                                            </h5>
+                                                            <div className="flex justify-end mb-3">
+                                                                <p className="w-[60%] ">
+                                                                    % Sobre
+                                                                    Total
                                                                 </p>
-                                                                <FormItem className=" w-[60%]">
-                                                                    <Field
-                                                                        placeholder="0.0"
-                                                                        name={`pagoServicio.${time.name}`}
-                                                                        type="number"
-                                                                        size="sm"
-                                                                        suffix="%"
-                                                                        component={
-                                                                            Input
-                                                                        }
-                                                                    />
-                                                                </FormItem>
                                                             </div>
-                                                            )
-                                                        }
-                                                ) }
-                                            </div>
-                                        </Card>
-                                        <Card className="col-start-7 col-end-9 row-start-1">
-                                            <h5 className='mb-[18px]'>Meses de Stock</h5>
-                                            <div>
-                                                <FormItem className=" w-[60%]">
-                                                    <Field
-                                                        placeholder="0.0"
-                                                        name="stock"
-                                                        type="number"
-                                                        size="sm"
-                                                        suffix="%"
-                                                        component={
-                                                            Input
-                                                        }
-                                                    />
-                                                </FormItem>
-                                            </div>
-                                        </Card>
-                                        <Card className="col-start-9 col-end-11 row-start-1">
-                                            <h5 className='mb-[18px]'>Inversión</h5>
-                                            <div className='flex justify-end mb-3'>
-                                                <p className='w-[60%] '>% Sobre Total</p>
-                                            </div>
-                                            <div>
-                                            {tiempos.map((
-                                                            time,
-                                                            index
-                                                        ) => {
-                                                            return (
-                                                            <div key={index}  className={`flex justify-between items-center ${time.name=== 'IVA' && 'border border-transparent border-t-gray-300 pt-2'}`}>
-                                                                <p className='mt-[-30px] w-[40%]'>
-                                                                    {time.name === 'IVA' ? 'IVA CF (costo)' :
-                                                                    (time.name === 'imponible' ? 'Imponible sobre costo' : time.label)}
-                                                                </p>
-                                                                <FormItem className=" w-[60%] ">
-                                                                    <Field
-                                                                        placeholder="0.0"
-                                                                        name={`inversion.${time.name}`}
-                                                                        type="number"
-                                                                        size="sm"
-                                                                        suffix="%"
-                                                                        component={
-                                                                            Input
-                                                                        }
-                                                                    />
-                                                                </FormItem>
+                                                            <div>
+                                                                {tiempos.map(
+                                                                    (
+                                                                        time,
+                                                                        index
+                                                                    ) => {
+                                                                        return (
+                                                                            <div
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                                className={`flex justify-between items-center ${
+                                                                                    time.name ===
+                                                                                        'IVA' &&
+                                                                                    'border border-transparent border-t-gray-300 pt-2'
+                                                                                }`}
+                                                                            >
+                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                    {time.name ===
+                                                                                    'IVA'
+                                                                                        ? 'IVA CF (costo)'
+                                                                                        : time.name ===
+                                                                                          'imponible'
+                                                                                        ? 'Imponible sobre costo'
+                                                                                        : time.label}
+                                                                                </p>
+                                                                                <FormItem className=" w-[60%] ">
+                                                                                    <Field
+                                                                                        placeholder="0.0"
+                                                                                        name={`inversion.${time.name}`}
+                                                                                        type="number"
+                                                                                        size="sm"
+                                                                                        suffix="%"
+                                                                                        component={
+                                                                                            Input
+                                                                                        }
+                                                                                    />
+                                                                                </FormItem>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                )}
                                                             </div>
-                                                            )
-                                                        }
-                                                ) }
-                                            </div>
-                                        </Card>
-                                        </Td>
-                                        </Tr>
-                                    </TBody>
-                                </Table>
-                                
-                                <div className='flex justify-end'>
-                                    <Button
-                                    className='flex justify-end mt-6'
-                                        variant="solid"
-                                        type="submit"
-                                    >
-                                        Cargar datos
-                                    </Button>
-                                </div>
-                                
-                            </FormContainer>
+                                                        </Card>
+                                                    </Td>
+                                                </Tr>
+                                            </TBody>
+                                        </Table>
 
-                        </Form>
-                    )}
+                                        <div className="flex justify-end">
+                                            <Button
+                                                className="flex justify-end mt-6"
+                                                variant="solid"
+                                                type="submit"
+                                            >
+                                                Cargar datos
+                                            </Button>
+                                        </div>
+                                    </FormContainer>
+                                </Form>
+                            )
+                        }}
                     </Formik>
                 </div>
             </div>
@@ -261,4 +386,3 @@ const AssumptionsFinancieras
 }
 
 export default AssumptionsFinancieras
-

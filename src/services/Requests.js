@@ -61,7 +61,7 @@ export const createSignUp = async (body) => {
                 ],
             }),
         })
-console.log(resp);
+        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.errors[0])
@@ -76,9 +76,9 @@ console.log(resp);
 }
 export const signIn = async (body) => {
     const { email, password } = body
-    console.log(body);
+    console.log(body)
 
-    if (!email || !password ) {
+    if (!email || !password) {
         throw new Error('Todos los campos son obligatorios')
     }
 
@@ -94,7 +94,7 @@ export const signIn = async (body) => {
             }),
         })
 
-        console.log(resp);
+        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.response)
@@ -250,6 +250,36 @@ export const createPuestosv = async (body) => {
             },
             body: JSON.stringify({
                 puestosv: body,
+                idUser: idUser,
+            }),
+        })
+        const data = await response.json()
+        return data
+    } catch (error) {
+        console.error('Error', error.message)
+        throw error
+    }
+}
+
+export const createAssumpFinanciera = async (
+    cobranzas,
+    pagoProducto,
+    pagoServicio,
+    stock,
+    inversion
+) => {
+    try {
+        const response = await fetch(URL_API + '/api/assumpfinanciera', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cobranzas,
+                pagoProducto,
+                pagoServicio,
+                stock,
+                inversion,
                 idUser: idUser,
             }),
         })
