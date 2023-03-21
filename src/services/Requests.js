@@ -66,7 +66,6 @@ export const createSignUp = async (body) => {
                 ],
             }),
         })
-        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.errors[0])
@@ -81,7 +80,6 @@ export const createSignUp = async (body) => {
 }
 export const signIn = async (body) => {
     const { email, password } = body
-    console.log(body)
 
     if (!email || !password) {
         throw new Error('Todos los campos son obligatorios')
@@ -99,14 +97,13 @@ export const signIn = async (body) => {
             }),
         })
 
-        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.response)
         }
 
         const data = await resp.json()
-        return data.response
+        return data
     } catch (error) {
         console.error(`Error calling ${URL_API}/api/sigin: ${error.message}`)
         throw error
