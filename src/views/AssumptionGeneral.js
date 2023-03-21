@@ -12,9 +12,7 @@ import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
 import { editBusinessInfo, getUser } from 'services/Requests'
-
-import { HiOutlineCloudUpload } from 'react-icons/hi'
-import { FcImageFile } from 'react-icons/fc'
+import { useMedia } from 'utils/hooks/useMedia'
 
 const optionsBusiness = [
     { value: 'marketplace', label: 'Marketplace' },
@@ -46,6 +44,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const AssumptionGeneral = () => {
+    const media = useMedia()
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showErrorAlert, setShowErrorAlert] = useState(false)
 
@@ -54,7 +53,6 @@ const AssumptionGeneral = () => {
         getUser()
             .then((data) => {
                 setInfo(data)
-                console.log(data)
             })
             .catch((error) => console.error(error))
     }, [])
@@ -124,7 +122,6 @@ const AssumptionGeneral = () => {
                                 values,
                                 { resetForm, setSubmitting }
                             ) => {
-                                console.log(values)
                                 editBusinessInfo(
                                     values?.nombreEmpresa,
                                     values?.modeloNegorcio,
@@ -163,7 +160,13 @@ const AssumptionGeneral = () => {
                         >
                             {({ values, touched, errors, resetForm }) => (
                                 <Form>
-                                    <FormContainer className="grid grid-cols-3 grid-rows-5 items-center gap-x-3">
+                                    <FormContainer
+                                        className={`grid grid-cols-3 grid-rows-5 items-center gap-x-3 ${
+                                            media === 'mobile'
+                                                ? 'grid-cols-1'
+                                                : ''
+                                        } `}
+                                    >
                                         <FormItem
                                             className="col-span-1 row-start-1"
                                             label="Nombre de la empresa"
@@ -181,7 +184,13 @@ const AssumptionGeneral = () => {
                                             />
                                         </FormItem>
 
-                                        <span className="col-start-2 col-end-3 row-start-1">
+                                        <span
+                                            className={`col-start-2 col-end-3 row-start-1 ${
+                                                media === 'mobile'
+                                                    ? 'hidden'
+                                                    : ''
+                                            }`}
+                                        >
                                             Escribe el nombre de tu compañía.
                                         </span>
 
@@ -219,7 +228,13 @@ const AssumptionGeneral = () => {
                                             </Field>
                                         </FormItem>
 
-                                        <span className="col-start-2 col-end-3 row-start-2">
+                                        <span
+                                            className={`col-start-2 col-end-3 row-start-2 ${
+                                                media === 'mobile'
+                                                    ? 'hidden'
+                                                    : ''
+                                            }`}
+                                        >
                                             Determina el modelo de negocio de tu
                                             compañía, si no lo sabes puedes usar
                                             la guia donde te mostraremos varios
@@ -260,7 +275,13 @@ const AssumptionGeneral = () => {
                                             </Field>
                                         </FormItem>
 
-                                        <span className="col-start-2 col-end-3 row-start-3">
+                                        <span
+                                            className={`col-start-2 col-end-3 row-start-3 col-start-2 col-end-3 row-start-2 ${
+                                                media === 'mobile'
+                                                    ? 'hidden'
+                                                    : ''
+                                            }`}
+                                        >
                                             Es la moneda para el armado del
                                             plan, luego podras convertir en
                                             otras monedas para entender mejor tu
@@ -269,7 +290,7 @@ const AssumptionGeneral = () => {
 
                                         <FormItem
                                             className="col-span-1 row-start-4"
-                                            label="Upload"
+                                            label="Subí tu logo"
                                             invalid={Boolean(
                                                 errors.upload && touched.upload
                                             )}
@@ -278,7 +299,6 @@ const AssumptionGeneral = () => {
                                             <Field name="upload">
                                                 {({ field, form }) => (
                                                     <Upload
-                                                        draggable
                                                         onChange={(files) =>
                                                             onSetFormFile(
                                                                 form,
@@ -302,8 +322,20 @@ const AssumptionGeneral = () => {
                                             </Field>
                                         </FormItem>
 
-                                        <FormItem className="col-start-3 row-start-5">
-                                            <div className="flex justify-center">
+                                        <FormItem
+                                            className={`col-start-3 col-end-4 row-start-5 ${
+                                                media === 'mobile'
+                                                    ? 'col-start-0 col-end-1'
+                                                    : ''
+                                            }`}
+                                        >
+                                            <div
+                                                className={`flex  ${
+                                                    media === 'mobile'
+                                                        ? 'justify-end'
+                                                        : 'justify-center'
+                                                }`}
+                                            >
                                                 <Button
                                                     variant="solid"
                                                     type="submit"
