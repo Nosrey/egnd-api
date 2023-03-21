@@ -19,12 +19,17 @@ export const getUser = async () => {
     }
 }
 
-export const editBusinessInfo = async (businessModel, currency) => {
+export const editBusinessInfo = async (
+    businessName,
+    businessModel,
+    currency
+) => {
     try {
         const response = await fetch(URL_API + '/api/users/' + idUser, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                businessName: businessName,
                 businessInfo: [
                     { businessModel: businessModel, currency: currency },
                 ],

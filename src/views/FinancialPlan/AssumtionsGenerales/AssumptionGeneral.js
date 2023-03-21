@@ -1,4 +1,7 @@
 import {
+
+    Alert,
+    Input,
     Button,
     FormContainer,
     FormItem,
@@ -10,11 +13,23 @@ import { Field, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { editBusinessInfo, getUser } from 'services/Requests'
+
+import { useMedia } from 'utils/hooks/useMedia'
 import * as Yup from 'yup'
 
-const options = [
-    { value: 'foo', label: 'Foo' },
-    { value: 'bar', label: 'Bar' },
+const optionsBusiness = [
+    { value: 'marketplace', label: 'Marketplace' },
+    { value: 'ecommerce', label: 'Ecommerce' },
+    { value: 'saas', label: 'SaaS' },
+    { value: 'transaccional', label: 'Transaccional' },
+    { value: 'producto', label: 'Producto' },
+    { value: 'suscripcion', label: 'Suscripcion' },
+]
+
+const optionsMoney = [
+    { value: 'ars', label: 'ARS' },
+    { value: 'usd', label: 'USD' },
+    { value: 'eur', label: 'EUR' },
 ]
 
 const MIN_UPLOAD = 1
@@ -32,6 +47,10 @@ const validationSchema = Yup.object().shape({
 })
 
 const AssumptionGeneral = () => {
+    const media = useMedia()
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const [showErrorAlert, setShowErrorAlert] = useState(false)
+
     const [info, setInfo] = useState()
     useEffect(() => {
         getUser()
@@ -70,6 +89,16 @@ const AssumptionGeneral = () => {
 
     return (
         <div>
+            {showSuccessAlert && (
+                <Alert className="mb-4" type="success" showIcon>
+                    Los datos se guardaron satisfactoriamente.
+                </Alert>
+            )}
+            {showErrorAlert && (
+                <Alert className="mb-4" type="danger" showIcon>
+                    No se pudieron guardar los datos.
+                </Alert>
+            )}
             <div className="border-b-2 mb-8 pb-1">
                 <h4>Assumptions Generales</h4>
                 <span>Supuestos Generales</span>
@@ -89,6 +118,7 @@ const AssumptionGeneral = () => {
                                 moneda:
                                     info?.businessInfo[0]?.currency.toLowerCase() ||
                                     '',
+                                upload: [],
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(
@@ -96,11 +126,21 @@ const AssumptionGeneral = () => {
                                 { resetForm, setSubmitting }
                             ) => {
                                 editBusinessInfo(
+                                    values?.nombreEmpresa,
                                     values?.modeloNegorcio,
                                     values?.moneda
                                 )
                                     .then((data) => {
+                                        console.log(data)
                                         setTimeout(() => {
+                                            window.scrollTo({
+                                                top: 0,
+                                                behavior: 'smooth',
+                                            })
+                                            setShowSuccessAlert(true)
+                                            setTimeout(() => {
+                                                setShowSuccessAlert(false)
+                                            }, 5000)
                                             setSubmitting(false)
                                             resetForm()
                                         }, 400)
@@ -110,12 +150,26 @@ const AssumptionGeneral = () => {
                                             'Error de API:',
                                             error.response.data.message
                                         )
+                                        window.scrollTo({
+                                            top: 0,
+                                            behavior: 'smooth',
+                                        })
+                                        setShowErrorAlert(true)
+                                        setTimeout(() => {
+                                            setShowErrorAlert(false)
+                                        }, 5000)
                                     })
                             }}
                         >
                             {({ values, touched, errors, resetForm }) => (
                                 <Form>
-                                    <FormContainer className="grid grid-cols-3 grid-rows-5 items-center gap-x-3">
+                                    <FormContainer
+                                        className={`grid grid-cols-3 grid-rows-5 items-center gap-x-3 ${
+                                            media === 'mobile'
+                                                ? 'grid-cols-1'
+                                                : ''
+                                        } `}
+                                    >
                                         <FormItem
                                             className="col-span-1 row-start-1"
                                             label="Nombre de la empresa"
@@ -133,7 +187,13 @@ const AssumptionGeneral = () => {
                                             />
                                         </FormItem>
 
-                                        <span className="col-start-2 col-end-3 row-start-1">
+                                        <span
+                                            className={`col-start-2 col-end-3 row-start-1 ${
+                                                media === 'mobile'
+                                                    ? 'hidden'
+                                                    : ''
+                                            }`}
+                                        >
                                             Escribe el nombre de tu compañía.
                                         </span>
 
@@ -152,8 +212,10 @@ const AssumptionGeneral = () => {
                                                         placeholder="Selector de negocio"
                                                         field={field}
                                                         form={form}
-                                                        options={options}
-                                                        value={options.filter(
+                                                        options={
+                                                            optionsBusiness
+                                                        }
+                                                        value={optionsBusiness.filter(
                                                             (option) =>
                                                                 option.value ===
                                                                 values.modeloNegorcio
@@ -169,7 +231,13 @@ const AssumptionGeneral = () => {
                                             </Field>
                                         </FormItem>
 
-                                        <span className="col-start-2 col-end-3 row-start-2">
+                                        <span
+                                            className={`col-start-2 col-end-3 row-start-2 ${
+                                                media === 'mobile'
+                                                    ? 'hidden'
+                                                    : ''
+                                            }`}
+                                        >
                                             Determina el modelo de negocio de tu
                                             compañía, si no lo sabes puedes usar
                                             la guia donde te mostraremos varios
@@ -193,8 +261,8 @@ const AssumptionGeneral = () => {
                                                         placeholder="Selector de moneda"
                                                         field={field}
                                                         form={form}
-                                                        options={options}
-                                                        value={options.filter(
+                                                        options={optionsMoney}
+                                                        value={optionsMoney.filter(
                                                             (option) =>
                                                                 option.value ===
                                                                 values.moneda
@@ -210,7 +278,13 @@ const AssumptionGeneral = () => {
                                             </Field>
                                         </FormItem>
 
-                                        <span className="col-start-2 col-end-3 row-start-3">
+                                        <span
+                                            className={`col-start-2 col-end-3 row-start-3 col-start-2 col-end-3 row-start-2 ${
+                                                media === 'mobile'
+                                                    ? 'hidden'
+                                                    : ''
+                                            }`}
+                                        >
                                             Es la moneda para el armado del
                                             plan, luego podras convertir en
                                             otras monedas para entender mejor tu
@@ -219,7 +293,7 @@ const AssumptionGeneral = () => {
 
                                         <FormItem
                                             className="col-span-1 row-start-4"
-                                            label="Upload"
+                                            label="Subí tu logo"
                                             invalid={Boolean(
                                                 errors.upload && touched.upload
                                             )}
@@ -228,7 +302,6 @@ const AssumptionGeneral = () => {
                                             <Field name="upload">
                                                 {({ field, form }) => (
                                                     <Upload
-                                                        draggable
                                                         onChange={(files) =>
                                                             onSetFormFile(
                                                                 form,
@@ -252,8 +325,20 @@ const AssumptionGeneral = () => {
                                             </Field>
                                         </FormItem>
 
-                                        <FormItem className="col-start-3 row-start-5">
-                                            <div className="flex justify-center">
+                                        <FormItem
+                                            className={`col-start-3 col-end-4 row-start-5 ${
+                                                media === 'mobile'
+                                                    ? 'col-start-0 col-end-1'
+                                                    : ''
+                                            }`}
+                                        >
+                                            <div
+                                                className={`flex  ${
+                                                    media === 'mobile'
+                                                        ? 'justify-end'
+                                                        : 'justify-center'
+                                                }`}
+                                            >
                                                 <Button
                                                     variant="solid"
                                                     type="submit"
