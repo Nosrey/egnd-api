@@ -82,7 +82,7 @@ const SignUpForm = (props) => {
                     <Form>
                         <FormContainer>
                             <FormItem
-                                label="Email"
+                                label="Correo electronico"
                                 invalid={errors.email && touched.email}
                                 errorMessage={errors.email}
                             >
@@ -90,7 +90,7 @@ const SignUpForm = (props) => {
                                     type="email"
                                     autoComplete="off"
                                     name="email"
-                                    placeholder="Email"
+                                    placeholder="Correo electronico"
                                     component={Input}
                                 />
                             </FormItem>

@@ -24,6 +24,7 @@ function useAuth() {
                 const { response } = resp
                 const { id, token, mail } = response
                 dispatch(onSignInSuccess(token))
+                console.log(id)
                 dispatch(
                     setUser({
                         id,
