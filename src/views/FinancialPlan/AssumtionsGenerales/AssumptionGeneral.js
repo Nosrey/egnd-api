@@ -5,7 +5,6 @@ import {
     Button,
     FormContainer,
     FormItem,
-    Input,
     Select,
     Upload,
 } from 'components/ui'
