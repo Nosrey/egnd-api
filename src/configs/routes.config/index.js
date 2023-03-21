@@ -13,31 +13,31 @@ export const protectedRoutes = [
     {
         key: 'assumptiongeneral',
         path: '/assumptiongeneral',
-        component: React.lazy(() => import('views/AssumptionGeneral')),
+        component: React.lazy(() => import('views/FinancialPlan/AssumtionsGenerales/AssumptionGeneral')),
         authority: [],
     },
     {
         key: 'assumptionventas',
         path: '/assumptionventas',
-        component: React.lazy(() => import('views/AssumptionVentas')),
+        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/AssumptionVentas')),
         authority: [],
     },
     {
         key: 'volumenq',
         path: '/volumenq',
-        component: React.lazy(() => import('views/VolumenQ')),
+        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/VolumenQ')),
         authority: [],
     },
     {
         key: 'preciop',
         path: '/preciop',
-        component: React.lazy(() => import('views/PrecioP')),
+        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/PrecioP')),
         authority: [],
     },
     {
         key: 'assumptionfinancieras',
         path: '/assumptionfinancieras',
-        component: React.lazy(() => import('views/AssumptionFinancieras.js')),
+        component: React.lazy(() => import('views/FinancialPlan/FinancialPlanItem/AssumptionFinancieras.js')),
         authority: [],
     },
 ]
