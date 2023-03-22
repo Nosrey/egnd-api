@@ -9,6 +9,8 @@ import {
 import { Field, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { createAssumpFinanciera, getUser } from 'services/Requests'
+import { useMedia } from 'utils/hooks/useMedia'
+
 const { Tr, Td, TBody } = Table
 
 const plazos = {
@@ -56,12 +58,16 @@ const tiempos = [
 ]
 
 const AssumptionsFinancieras = () => {
+    const media = useMedia()
     const [userData, setUserData] = useState()
+
     const [dataFinanciera, setDataFinanciera] = useState(defaultState)
     useEffect(() => {
         getUser().then((d) => {
             setUserData(d)
-            setDataFinanciera(d.assumpFinancierasData[0])
+            if (d.assumpFinancierasData[0]) {
+                setDataFinanciera(d.assumpFinancierasData[0])
+            }
         })
     }, [])
 
@@ -79,11 +85,11 @@ const AssumptionsFinancieras = () => {
             inversion
         )
             .then((data) => {
-                console.log(data)
+                console.log(data, 'response')
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             })
             .catch((error) => {
-                console.error(error)
+                console.error(error, '[ERROR]')
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             })
     }
@@ -109,7 +115,6 @@ const AssumptionsFinancieras = () => {
                             inversion: dataFinanciera.inversion,
                         }}
                         onSubmit={(values, { resetForm, setSubmitting }) => {
-                            console.log(values.cobranzas.contado)
                             submit(values)
                             console.log('values', values)
                         }}
@@ -144,13 +149,25 @@ const AssumptionsFinancieras = () => {
                                                                                 key={
                                                                                     index
                                                                                 }
-                                                                                className={`flex justify-between items-center mb-1 ${
+                                                                                className={`${
+                                                                                    media ===
+                                                                                    'mobile'
+                                                                                        ? 'flex items-center mb-1'
+                                                                                        : 'flex justify-between items-center mb-1 '
+                                                                                }${
                                                                                     time.name ===
                                                                                         'IVA' &&
                                                                                     'border border-transparent border-t-gray-300 pt-2'
                                                                                 }`}
                                                                             >
-                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                <p
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'mt-[-30px] w-[30%]'
+                                                                                            : 'mt-[-30px] w-[40%]'
+                                                                                    }`}
+                                                                                >
                                                                                     {time.name ===
                                                                                     'IVA'
                                                                                         ? 'IVA DF (venta)'
@@ -158,8 +175,15 @@ const AssumptionsFinancieras = () => {
                                                                                           'imponible'
                                                                                         ? 'Imponible sobre venta'
                                                                                         : time.label}
-                                                                                </p>
-                                                                                <FormItem className=" w-[60%]">
+                                                                                </p>{' '}
+                                                                                <FormItem
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'w-[50%]'
+                                                                                            : 'w-[60%]'
+                                                                                    } `}
+                                                                                >
                                                                                     <Field
                                                                                         placeholder="0.0"
                                                                                         name={`cobranzas.${time.name}`}
@@ -199,13 +223,25 @@ const AssumptionsFinancieras = () => {
                                                                                 key={
                                                                                     index
                                                                                 }
-                                                                                className={`flex justify-between items-center mb-1 ${
+                                                                                className={`${
+                                                                                    media ===
+                                                                                    'mobile'
+                                                                                        ? 'flex items-center mb-1'
+                                                                                        : 'flex justify-between items-center mb-1 '
+                                                                                }${
                                                                                     time.name ===
                                                                                         'IVA' &&
                                                                                     'border border-transparent border-t-gray-300 pt-2'
                                                                                 }`}
                                                                             >
-                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                <p
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'mt-[-30px] w-[30%]'
+                                                                                            : 'mt-[-30px] w-[40%]'
+                                                                                    }`}
+                                                                                >
                                                                                     {time.name ===
                                                                                     'IVA'
                                                                                         ? 'IVA CF (costo)'
@@ -214,7 +250,14 @@ const AssumptionsFinancieras = () => {
                                                                                         ? 'Imponible sobre costo'
                                                                                         : time.label}
                                                                                 </p>
-                                                                                <FormItem className=" w-[60%]">
+                                                                                <FormItem
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'w-[60%]'
+                                                                                            : 'w-[60%]'
+                                                                                    } `}
+                                                                                >
                                                                                     <Field
                                                                                         placeholder="0.0"
                                                                                         name={`pagoProducto.${time.name}`}
@@ -254,13 +297,25 @@ const AssumptionsFinancieras = () => {
                                                                                 key={
                                                                                     index
                                                                                 }
-                                                                                className={`flex justify-between items-center mb-1 ${
+                                                                                className={`${
+                                                                                    media ===
+                                                                                    'mobile'
+                                                                                        ? 'flex items-center mb-1'
+                                                                                        : 'flex justify-between items-center mb-1 '
+                                                                                }${
                                                                                     time.name ===
                                                                                         'IVA' &&
                                                                                     'border border-transparent border-t-gray-300 pt-2'
                                                                                 }`}
                                                                             >
-                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                <p
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'mt-[-30px] w-[30%]'
+                                                                                            : 'mt-[-30px] w-[40%]'
+                                                                                    }`}
+                                                                                >
                                                                                     {time.name ===
                                                                                     'IVA'
                                                                                         ? 'IVA CF (costo)'
@@ -269,7 +324,14 @@ const AssumptionsFinancieras = () => {
                                                                                         ? 'Imponible sobre costo'
                                                                                         : time.label}
                                                                                 </p>
-                                                                                <FormItem className=" w-[60%]">
+                                                                                <FormItem
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'w-[60%]'
+                                                                                            : 'w-[60%]'
+                                                                                    } `}
+                                                                                >
                                                                                     <Field
                                                                                         placeholder="0.0"
                                                                                         name={`pagoServicio.${time.name}`}
@@ -292,7 +354,14 @@ const AssumptionsFinancieras = () => {
                                                                 Meses de Stock
                                                             </h5>
                                                             <div>
-                                                                <FormItem className=" w-[60%]">
+                                                                <FormItem
+                                                                    className={`${
+                                                                        media ===
+                                                                        'mobile'
+                                                                            ? 'w-[60%]'
+                                                                            : 'w-[60%]'
+                                                                    } `}
+                                                                >
                                                                     <Field
                                                                         placeholder="0.0"
                                                                         name="stock"
@@ -327,13 +396,25 @@ const AssumptionsFinancieras = () => {
                                                                                 key={
                                                                                     index
                                                                                 }
-                                                                                className={`flex justify-between items-center ${
+                                                                                className={`${
+                                                                                    media ===
+                                                                                    'mobile'
+                                                                                        ? 'flex items-center mb-1'
+                                                                                        : 'flex justify-between items-center mb-1 '
+                                                                                } ${
                                                                                     time.name ===
                                                                                         'IVA' &&
                                                                                     'border border-transparent border-t-gray-300 pt-2'
                                                                                 }`}
                                                                             >
-                                                                                <p className="mt-[-30px] w-[40%]">
+                                                                                <p
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'mt-[-30px] w-[30%]'
+                                                                                            : 'mt-[-30px] w-[40%]'
+                                                                                    }`}
+                                                                                >
                                                                                     {time.name ===
                                                                                     'IVA'
                                                                                         ? 'IVA CF (costo)'
@@ -342,7 +423,14 @@ const AssumptionsFinancieras = () => {
                                                                                         ? 'Imponible sobre costo'
                                                                                         : time.label}
                                                                                 </p>
-                                                                                <FormItem className=" w-[60%] ">
+                                                                                <FormItem
+                                                                                    className={`${
+                                                                                        media ===
+                                                                                        'mobile'
+                                                                                            ? 'w-[60%]'
+                                                                                            : 'w-[60%]'
+                                                                                    } `}
+                                                                                >
                                                                                     <Field
                                                                                         placeholder="0.0"
                                                                                         name={`inversion.${time.name}`}

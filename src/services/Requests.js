@@ -1,7 +1,14 @@
-const idUser = '64040284d9a91413da049e67'
-const URL_API = 'http://localhost:4000'
+import store from '../store/index'
 
-export const getUser = async (id) => {
+const app = store.getState()
+
+const ls = JSON.parse(window.localStorage.getItem('admin'))
+const auth = JSON.parse(ls.auth)
+
+const URL_API = 'http://localhost:4000'
+const idUser = app.auth.user.id ? app.auth.user.id : auth.user.id
+
+export const getUser = async () => {
     try {
         const resp = await fetch(URL_API + '/api/users/' + idUser)
         const data = await resp.json()
@@ -12,12 +19,17 @@ export const getUser = async (id) => {
     }
 }
 
-export const editBusinessInfo = async (businessModel, currency) => {
+export const editBusinessInfo = async (
+    businessName,
+    businessModel,
+    currency
+) => {
     try {
         const response = await fetch(URL_API + '/api/users/' + idUser, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                businessName: businessName,
                 businessInfo: [
                     { businessModel: businessModel, currency: currency },
                 ],
@@ -61,7 +73,6 @@ export const createSignUp = async (body) => {
                 ],
             }),
         })
-        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.errors[0])
@@ -76,7 +87,6 @@ export const createSignUp = async (body) => {
 }
 export const signIn = async (body) => {
     const { email, password } = body
-    console.log(body)
 
     if (!email || !password) {
         throw new Error('Todos los campos son obligatorios')
@@ -94,14 +104,13 @@ export const signIn = async (body) => {
             }),
         })
 
-        console.log(resp)
         if (!resp.ok) {
             const error = await resp.json()
             throw new Error(error.response)
         }
 
         const data = await resp.json()
-        return data.response
+        return data
     } catch (error) {
         console.error(`Error calling ${URL_API}/api/sigin: ${error.message}`)
         throw error
