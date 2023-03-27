@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react'
 import {
+
     Alert,
     Input,
     Button,
-    Select,
-    FormItem,
     FormContainer,
+    FormItem,
+    Select,
     Upload,
 } from 'components/ui'
 import { Field, Form, Formik } from 'formik'
-import * as Yup from 'yup'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { editBusinessInfo, getUser } from 'services/Requests'
+
 import { useMedia } from 'utils/hooks/useMedia'
+import * as Yup from 'yup'
 
 const optionsBusiness = [
     { value: 'marketplace', label: 'Marketplace' },
