@@ -4,14 +4,15 @@
         "singleMenuItem": "Single menu item",
         "financialPlan": "Financial Plan",
         "collapseMenu": {
-            "collapseMenu": "Financial Plan"
+            "collapseMenu": "Financial Plan",
+            "collapseGeneral": {
+                "collapseGeneral": "Assumptions General",
+                "item1": "Assumptions General",
+                "item2": "Research"
+            },
+            "collapsePlanCuentas": "Plan de Cuentas"
         },
-        "collapseGeneral": {
-            "collapseGeneral": "Assumptions General",
-            "item1": "Assumptions General",
-            "item2": "Research"
-        },
-        "collapsePlanCuentas": "Plan de Cuentas",
+
         "collapsePlanVentas": {
             "collapsePlanVentas": "Assumptions Ventas",
             "item1": "Assumptions Ventas",

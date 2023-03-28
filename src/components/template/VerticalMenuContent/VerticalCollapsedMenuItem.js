@@ -1,9 +1,8 @@
-import React from 'react'
-import { Menu, Dropdown } from 'components/ui'
+import { AuthorityCheck } from 'components/shared'
+import { Dropdown, Menu } from 'components/ui'
+import { Trans } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import VerticalMenuIcon from './VerticalMenuIcon'
-import { Trans } from 'react-i18next'
-import { AuthorityCheck } from 'components/shared'
 
 const { MenuItem, MenuCollapse } = Menu
 

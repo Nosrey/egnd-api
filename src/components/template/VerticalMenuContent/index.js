@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { Menu } from 'components/ui'
-import VerticalSingleMenuItem from './VerticalSingleMenuItem'
-import VerticalCollapsedMenuItem from './VerticalCollapsedMenuItem'
 import { themeConfig } from 'configs/theme.config'
 import {
-    NAV_ITEM_TYPE_TITLE,
     NAV_ITEM_TYPE_COLLAPSE,
     NAV_ITEM_TYPE_ITEM,
+    NAV_ITEM_TYPE_TITLE,
 } from 'constants/navigation.constant'
-import useMenuActive from 'utils/hooks/useMenuActive'
+import PropTypes from 'prop-types'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import useMenuActive from 'utils/hooks/useMenuActive'
+import VerticalCollapsedMenuItem from './VerticalCollapsedMenuItem'
+import VerticalSingleMenuItem from './VerticalSingleMenuItem'
 
 const { MenuGroup } = Menu
 
@@ -39,6 +39,7 @@ const VerticalMenuContent = (props) => {
     }, [activedRoute?.parentKey])
 
     const handleLinkClick = () => {
+        console.log(onMenuItemClick, 'click')
         onMenuItemClick?.()
     }
 
@@ -57,6 +58,7 @@ const VerticalMenuContent = (props) => {
         }
 
         if (nav.subMenu.length > 0 && nav.type === NAV_ITEM_TYPE_COLLAPSE) {
+            console.log('si', nav.subMenu)
             return (
                 <VerticalCollapsedMenuItem
                     key={nav.key}

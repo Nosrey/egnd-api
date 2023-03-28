@@ -1,15 +1,14 @@
-import React from 'react'
-import navigationConfig from 'configs/navigation.config'
-import { Dropdown } from 'components/ui'
 import { AuthorityCheck } from 'components/shared'
-import HorizontalMenuItem from './HorizontalMenuItem'
-import HorizontalMenuDropdownItem from './HorizontalMenuDropdownItem'
+import { Dropdown } from 'components/ui'
+import navigationConfig from 'configs/navigation.config'
 import {
-    NAV_ITEM_TYPE_TITLE,
     NAV_ITEM_TYPE_COLLAPSE,
     NAV_ITEM_TYPE_ITEM,
+    NAV_ITEM_TYPE_TITLE,
 } from 'constants/navigation.constant'
 import { useTranslation } from 'react-i18next'
+import HorizontalMenuDropdownItem from './HorizontalMenuDropdownItem'
+import HorizontalMenuItem from './HorizontalMenuItem'
 
 const HorizontalMenuContent = ({ manuVariant, userAuthority = [] }) => {
     const { t } = useTranslation()
