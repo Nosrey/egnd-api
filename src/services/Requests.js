@@ -22,19 +22,38 @@ export const getUser = async () => {
 export const editBusinessInfo = async (
     businessName,
     businessModel,
-    currency
+    currency,
+    imagePath
 ) => {
     try {
+        // const response = await fetch(URL_API + '/api/users/' + idUser, {
+        //     method: 'PUT',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         businessName: businessName,
+        //         businessInfo: [
+        //             { businessModel: businessModel, currency: currency },
+        //         ],
+        //         imagePath: imagePath,
+        //     }),
+        // })
+        // const data = await response.json()
+        // return data
+
+        const formData = new FormData()
+        formData.append('businessName', businessName)
+        formData.append(
+            'businessInfo',
+            JSON.stringify([{ businessModel, currency }])
+        )
+        formData.append('imagePath', imagePath)
+
         const response = await fetch(URL_API + '/api/users/' + idUser, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                businessName: businessName,
-                businessInfo: [
-                    { businessModel: businessModel, currency: currency },
-                ],
-            }),
+            headers: { 'Content-Type': 'multipart/form-data' },
+            body: formData,
         })
+
         const data = await response.json()
         return data
     } catch (error) {
