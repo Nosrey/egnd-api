@@ -46,11 +46,10 @@ export const editBusinessInfo = async (
             'businessInfo',
             JSON.stringify([{ businessModel, currency }])
         )
-        formData.append('imagePath', imagePath)
+        formData.append('image', imagePath)
 
         const response = await fetch(URL_API + '/api/users/' + idUser, {
             method: 'PUT',
-            headers: { 'Content-Type': 'multipart/form-data' },
             body: formData,
         })
 
