@@ -1,5 +1,4 @@
 import {
-
     Alert,
     Input,
     Button,
@@ -127,7 +126,8 @@ const AssumptionGeneral = () => {
                                 editBusinessInfo(
                                     values?.nombreEmpresa,
                                     values?.modeloNegorcio,
-                                    values?.moneda
+                                    values?.moneda,
+                                    values?.upload[0]
                                 )
                                     .then((data) => {
                                         console.log(data)
