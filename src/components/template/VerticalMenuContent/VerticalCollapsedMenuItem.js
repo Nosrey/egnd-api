@@ -103,6 +103,7 @@ const CollapsedItem = ({ nav, onLinkClick, userAuthority, direction }) => {
                                     }
                                     to={subNav.path}
                                 >
+                                    {console.log(subNav)}
                                     <span>
                                         <Trans
                                             i18nKey={subNav.translateKey}
@@ -127,6 +128,7 @@ const CollapsedItem = ({ nav, onLinkClick, userAuthority, direction }) => {
 }
 
 const VerticalCollapsedMenuItem = ({ sideCollapsed, ...rest }) => {
+    console.log(sideCollapsed)
     return sideCollapsed ? (
         <CollapsedItem {...rest} />
     ) : (
