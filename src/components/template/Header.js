@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import { HEADER_HEIGHT_CLASS } from 'constants/theme.constant'
+import { useSelector, useDispatch } from 'react-redux'
+import { setFalse } from 'store/icon/iconSlice'
 
 const Header = (props) => {
     const { headerStart, headerEnd, headerMiddle, className, container } = props
+
+    const isTrue = useSelector((state) => state.icon)
+    const dispatch = useDispatch()
+    const handleClick = () => {
+        dispatch(setFalse())
+    }
+
+    useEffect(() => {
+        console.log(isTrue)
+    }, [isTrue])
 
     return (
         <header className={classNames('header', className)}>
@@ -15,7 +27,10 @@ const Header = (props) => {
                     container && 'container mx-auto'
                 )}
             >
-                <div className="header-action header-action-start">
+                <div
+                    className="header-action header-action-start"
+                    onClick={handleClick}
+                >
                     {headerStart}
                 </div>
                 {headerMiddle && (

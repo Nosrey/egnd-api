@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { MenuContextProvider } from './context/menuContext'
 import { useConfig } from '../ConfigProvider'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 const Menu = React.forwardRef((props, ref) => {
     const {
@@ -30,8 +31,14 @@ const Menu = React.forwardRef((props, ref) => {
 
     const menuClass = classNames(menuDefaultClass, menuColor(), className)
 
+    const isTrue = useSelector((state) => state.icon)
+
     return (
-        <nav ref={ref} className={menuClass} {...rest}>
+        <nav
+            ref={ref}
+            className={`${menuClass} ${isTrue ? '' : 'mt-[4.5rem]'}`}
+            {...rest}
+        >
             <MenuContextProvider
                 value={{
                     onSelect,
