@@ -69,9 +69,7 @@ const AssumptionsFinancieras = () => {
                 setDataFinanciera(d.assumpFinancierasData[0])
             }
         })
-    }, [])
-
-    console.log(dataFinanciera)
+    }, [setDataFinanciera])
 
     const submit = (values) => {
         const { cobranzas, inversion, pagoProducto, pagoServicio, stock } =
@@ -92,6 +90,20 @@ const AssumptionsFinancieras = () => {
                 console.error(error, '[ERROR]')
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             })
+    }
+
+    const setFormValues = (index, campo, value) => {
+        if (index !== 'stock') {
+            const input = tiempos[index].name
+            const state = dataFinanciera.input
+            const newData = { ...dataFinanciera[campo], [input]: value }
+            setDataFinanciera({
+                ...dataFinanciera,
+                [campo]: newData,
+            })
+        } else {
+            setDataFinanciera({ ...dataFinanciera, [index]: value })
+        }
     }
 
     return (
@@ -115,8 +127,7 @@ const AssumptionsFinancieras = () => {
                             inversion: dataFinanciera.inversion,
                         }}
                         onSubmit={(values, { resetForm, setSubmitting }) => {
-                            submit(values)
-                            console.log('values', values)
+                            submit(dataFinanciera)
                         }}
                     >
                         {({ values, touched, errors, resetForm }) => {
@@ -187,11 +198,29 @@ const AssumptionsFinancieras = () => {
                                                                                     <Field
                                                                                         placeholder="0.0"
                                                                                         name={`cobranzas.${time.name}`}
+                                                                                        value={
+                                                                                            dataFinanciera
+                                                                                                .cobranzas[
+                                                                                                time
+                                                                                                    .name
+                                                                                            ]
+                                                                                        }
                                                                                         type="text"
                                                                                         size="sm"
                                                                                         suffix="%"
                                                                                         component={
                                                                                             Input
+                                                                                        }
+                                                                                        onChange={(
+                                                                                            e
+                                                                                        ) =>
+                                                                                            setFormValues(
+                                                                                                index,
+                                                                                                'cobranzas',
+                                                                                                e
+                                                                                                    .target
+                                                                                                    .value
+                                                                                            )
                                                                                         }
                                                                                     />
                                                                                 </FormItem>
@@ -260,12 +289,29 @@ const AssumptionsFinancieras = () => {
                                                                                 >
                                                                                     <Field
                                                                                         placeholder="0.0"
-                                                                                        name={`pagoProducto.${time.name}`}
+                                                                                        value={
+                                                                                            dataFinanciera
+                                                                                                .pagoProducto[
+                                                                                                time
+                                                                                                    .name
+                                                                                            ]
+                                                                                        }
                                                                                         type="number"
                                                                                         size="sm"
                                                                                         suffix="%"
                                                                                         component={
                                                                                             Input
+                                                                                        }
+                                                                                        onChange={(
+                                                                                            e
+                                                                                        ) =>
+                                                                                            setFormValues(
+                                                                                                index,
+                                                                                                'pagoProducto',
+                                                                                                e
+                                                                                                    .target
+                                                                                                    .value
+                                                                                            )
                                                                                         }
                                                                                     />
                                                                                 </FormItem>
@@ -334,12 +380,29 @@ const AssumptionsFinancieras = () => {
                                                                                 >
                                                                                     <Field
                                                                                         placeholder="0.0"
-                                                                                        name={`pagoServicio.${time.name}`}
+                                                                                        value={
+                                                                                            dataFinanciera
+                                                                                                .pagoServicio[
+                                                                                                time
+                                                                                                    .name
+                                                                                            ]
+                                                                                        }
                                                                                         type="number"
                                                                                         size="sm"
                                                                                         suffix="%"
                                                                                         component={
                                                                                             Input
+                                                                                        }
+                                                                                        onChange={(
+                                                                                            e
+                                                                                        ) =>
+                                                                                            setFormValues(
+                                                                                                index,
+                                                                                                'pagoServicio',
+                                                                                                e
+                                                                                                    .target
+                                                                                                    .value
+                                                                                            )
                                                                                         }
                                                                                     />
                                                                                 </FormItem>
@@ -364,12 +427,25 @@ const AssumptionsFinancieras = () => {
                                                                 >
                                                                     <Field
                                                                         placeholder="0.0"
-                                                                        name="stock"
+                                                                        value={
+                                                                            dataFinanciera.stock
+                                                                        }
                                                                         type="number"
                                                                         size="sm"
                                                                         suffix="%"
                                                                         component={
                                                                             Input
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            setFormValues(
+                                                                                'stock',
+                                                                                'pagoProducto',
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
                                                                         }
                                                                     />
                                                                 </FormItem>
@@ -433,12 +509,29 @@ const AssumptionsFinancieras = () => {
                                                                                 >
                                                                                     <Field
                                                                                         placeholder="0.0"
-                                                                                        name={`inversion.${time.name}`}
+                                                                                        value={
+                                                                                            dataFinanciera
+                                                                                                .inversion[
+                                                                                                time
+                                                                                                    .name
+                                                                                            ]
+                                                                                        }
                                                                                         type="number"
                                                                                         size="sm"
                                                                                         suffix="%"
                                                                                         component={
                                                                                             Input
+                                                                                        }
+                                                                                        onChange={(
+                                                                                            e
+                                                                                        ) =>
+                                                                                            setFormValues(
+                                                                                                index,
+                                                                                                'inversion',
+                                                                                                e
+                                                                                                    .target
+                                                                                                    .value
+                                                                                            )
                                                                                         }
                                                                                     />
                                                                                 </FormItem>
