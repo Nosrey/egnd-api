@@ -273,3 +273,33 @@ export const createPuestosv = async (body) => {
         throw error
     }
 }
+
+export const createAssumpFinanciera = async (
+    cobranzas,
+    pagoProducto,
+    pagoServicio,
+    stock,
+    inversion
+) => {
+    try {
+        const response = await fetch(URL_API + '/api/assumpfinanciera', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cobranzas,
+                pagoProducto,
+                pagoServicio,
+                stock,
+                inversion,
+                idUser: idUser,
+            }),
+        })
+        const data = await response.json()
+        return data
+    } catch (error) {
+        console.error('Error', error.message)
+        throw error
+    }
+}
