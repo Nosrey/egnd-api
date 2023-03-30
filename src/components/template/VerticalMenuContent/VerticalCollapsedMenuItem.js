@@ -84,44 +84,7 @@ const CollapsedItem = ({ nav, onLinkClick, userAuthority, direction }) => {
                     direction === 'rtl' ? 'middle-end-top' : 'middle-start-top'
                 }
             >
-                {nav.subMenu.map((subNav) => (
-                    <AuthorityCheck
-                        userAuthority={userAuthority}
-                        authority={subNav.authority}
-                        key={subNav.key}
-                    >
-                        <Dropdown.Item eventKey={subNav.key}>
-                            {subNav.path ? (
-                                <Link
-                                    className="h-full w-full flex items-center"
-                                    onClick={() =>
-                                        onLinkClick?.({
-                                            key: subNav.key,
-                                            title: subNav.title,
-                                            path: subNav.path,
-                                        })
-                                    }
-                                    to={subNav.path}
-                                >
-                                    {console.log(subNav)}
-                                    <span>
-                                        <Trans
-                                            i18nKey={subNav.translateKey}
-                                            defaults={subNav.title}
-                                        />
-                                    </span>
-                                </Link>
-                            ) : (
-                                <span>
-                                    <Trans
-                                        i18nKey={subNav.translateKey}
-                                        defaults={subNav.title}
-                                    />
-                                </span>
-                            )}
-                        </Dropdown.Item>
-                    </AuthorityCheck>
-                ))}
+                {nav.subMenu.map((subNav) => console.log(subNav))}
             </Dropdown>
         </AuthorityCheck>
     )

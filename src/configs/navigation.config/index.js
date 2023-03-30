@@ -17,27 +17,28 @@ const navigationConfig = [
                 key: 'collapseGeneral',
                 path: '',
                 title: 'Collapse General',
-                translateKey:
-                    'nav.collapseMenu.collapseGeneral.collapseGeneral',
+                translateKey: 'collapseGeneral',
                 icon: '',
                 type: NAV_ITEM_TYPE_COLLAPSE,
                 authority: [],
                 subMenu: [
                     {
-                        key: 'nav.collapseMenu.collapseGeneral.item1',
+                        key: 'collapseGeneral.item1',
                         path: '/assumptiongeneral',
                         title: 'Assumption General',
-                        translateKey: 'nav.collapseMenu.collapseGeneral.item1',
+                        translateKey:
+                            'nav.financialPlan.collapseMenu.collapseGeneral.item1',
                         icon: '',
                         type: NAV_ITEM_TYPE_ITEM,
                         authority: [],
                         subMenu: [],
                     },
                     {
-                        key: 'nav.collapseMenu.collapseGeneral.item2',
+                        key: 'collapseGeneral.item2',
                         path: '/research',
                         title: 'Research',
-                        translateKey: 'nav.collapseMenu.collapseGeneral.item2',
+                        translateKey:
+                            'nav.financialPlan.collapseMenu.collapseGeneral.item2',
                         icon: '',
                         type: NAV_ITEM_TYPE_ITEM,
                         authority: [],
