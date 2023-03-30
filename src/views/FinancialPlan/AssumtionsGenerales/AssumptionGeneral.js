@@ -54,7 +54,6 @@ const AssumptionGeneral = () => {
         getUser()
             .then((data) => {
                 setInfo(data)
-                console.log(data)
             })
             .catch((error) => console.error(error))
     }, [])
@@ -124,7 +123,6 @@ const AssumptionGeneral = () => {
                                 values,
                                 { resetForm, setSubmitting }
                             ) => {
-                                console.log(values?.upload[0])
                                 editBusinessInfo(
                                     values?.nombreEmpresa,
                                     values?.modeloNegorcio,

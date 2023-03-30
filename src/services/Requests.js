@@ -26,20 +26,6 @@ export const editBusinessInfo = async (
     imagePath
 ) => {
     try {
-        // const response = await fetch(URL_API + '/api/users/' + idUser, {
-        //     method: 'PUT',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         businessName: businessName,
-        //         businessInfo: [
-        //             { businessModel: businessModel, currency: currency },
-        //         ],
-        //         imagePath: imagePath,
-        //     }),
-        // })
-        // const data = await response.json()
-        // return data
-
         const formData = new FormData()
         formData.append('businessName', businessName)
         formData.append(
