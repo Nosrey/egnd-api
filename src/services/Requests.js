@@ -22,19 +22,23 @@ export const getUser = async () => {
 export const editBusinessInfo = async (
     businessName,
     businessModel,
-    currency
+    currency,
+    imagePath
 ) => {
     try {
+        const formData = new FormData()
+        formData.append('businessName', businessName)
+        formData.append(
+            'businessInfo',
+            JSON.stringify([{ businessModel, currency }])
+        )
+        formData.append('image', imagePath)
+
         const response = await fetch(URL_API + '/api/users/' + idUser, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                businessName: businessName,
-                businessInfo: [
-                    { businessModel: businessModel, currency: currency },
-                ],
-            }),
+            body: formData,
         })
+
         const data = await response.json()
         return data
     } catch (error) {
@@ -259,6 +263,36 @@ export const createPuestosv = async (body) => {
             },
             body: JSON.stringify({
                 puestosv: body,
+                idUser: idUser,
+            }),
+        })
+        const data = await response.json()
+        return data
+    } catch (error) {
+        console.error('Error', error.message)
+        throw error
+    }
+}
+
+export const createAssumpFinanciera = async (
+    cobranzas,
+    pagoProducto,
+    pagoServicio,
+    stock,
+    inversion
+) => {
+    try {
+        const response = await fetch(URL_API + '/api/assumpfinanciera', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cobranzas,
+                pagoProducto,
+                pagoServicio,
+                stock,
+                inversion,
                 idUser: idUser,
             }),
         })

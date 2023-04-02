@@ -74,6 +74,8 @@ const SideNav = () => {
         />
     )
 
+    const isTrue = useSelector((state) => state.icon)
+
     return (
         <>
             {larger.md && (
@@ -87,17 +89,19 @@ const SideNav = () => {
                         !sideNavCollapse && 'side-nav-expand'
                     )}
                 >
-                    <div className="side-nav-header">
-                        <Logo
-                            mode={logoMode()}
-                            type={sideNavCollapse ? 'streamline' : 'full'}
-                            gutter={
-                                sideNavCollapse
-                                    ? SIDE_NAV_CONTENT_GUTTER
-                                    : LOGO_X_GUTTER
-                            }
-                        />
-                    </div>
+                    {isTrue ? (
+                        <div className="side-nav-header">
+                            <Logo
+                                mode={logoMode()}
+                                type={sideNavCollapse ? 'streamline' : 'full'}
+                                gutter={
+                                    sideNavCollapse
+                                        ? SIDE_NAV_CONTENT_GUTTER
+                                        : LOGO_X_GUTTER
+                                }
+                            />
+                        </div>
+                    ) : null}
                     {sideNavCollapse ? (
                         menuContent
                     ) : (
