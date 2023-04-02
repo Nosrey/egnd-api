@@ -1,12 +1,16 @@
 import { AuthorityCheck } from 'components/shared'
 import { Dropdown, Menu } from 'components/ui'
 import { Trans } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import VerticalMenuIcon from './VerticalMenuIcon'
 
 const { MenuItem, MenuCollapse } = Menu
 
 const DefaultItem = ({ nav, onLinkClick, userAuthority }) => {
+    const routeActive = useSelector(
+        (state) => state.base.common.currentRouteKey
+    )
     return (
         <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
             <MenuCollapse
@@ -32,7 +36,10 @@ const DefaultItem = ({ nav, onLinkClick, userAuthority }) => {
                         authority={subNav.authority}
                         key={subNav.key}
                     >
-                        <MenuItem eventKey={subNav.key}>
+                        <MenuItem
+                            eventKey={subNav.key}
+                            isActive={subNav.path === `/${routeActive}`}
+                        >
                             {subNav.path ? (
                                 <Link
                                     className="h-full w-full flex items-center"
