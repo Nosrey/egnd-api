@@ -1,21 +1,20 @@
-import React from 'react'
 import classNames from 'classnames'
+import Logo from 'components/template/Logo'
+import VerticalMenuContent from 'components/template/VerticalMenuContent'
 import { ScrollBar } from 'components/ui'
-import PropTypes from 'prop-types'
+import navigationConfig from 'configs/navigation.config'
 import {
-    SIDE_NAV_WIDTH,
-    SIDE_NAV_COLLAPSED_WIDTH,
+    LOGO_X_GUTTER,
     NAV_MODE_DARK,
     NAV_MODE_THEMED,
     NAV_MODE_TRANSPARENT,
+    SIDE_NAV_COLLAPSED_WIDTH,
     SIDE_NAV_CONTENT_GUTTER,
-    LOGO_X_GUTTER,
+    SIDE_NAV_WIDTH,
 } from 'constants/theme.constant'
-import Logo from 'components/template/Logo'
-import navigationConfig from 'configs/navigation.config'
-import VerticalMenuContent from 'components/template/VerticalMenuContent'
-import useResponsive from 'utils/hooks/useResponsive'
+import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
+import useResponsive from 'utils/hooks/useResponsive'
 
 const sideNavStyle = {
     width: SIDE_NAV_WIDTH,

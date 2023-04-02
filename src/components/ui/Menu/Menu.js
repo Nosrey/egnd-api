@@ -1,8 +1,8 @@
-import React from 'react'
 import classNames from 'classnames'
-import { MenuContextProvider } from './context/menuContext'
-import { useConfig } from '../ConfigProvider'
 import PropTypes from 'prop-types'
+import React from 'react'
+import { useConfig } from '../ConfigProvider'
+import { MenuContextProvider } from './context/menuContext'
 
 const Menu = React.forwardRef((props, ref) => {
     const {

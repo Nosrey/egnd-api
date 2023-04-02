@@ -24,7 +24,7 @@ const DefaultItem = ({ nav, onLinkClick, userAuthority }) => {
                 key={nav.key}
                 eventKey={nav.key}
                 expanded={false}
-                className="mb-2"
+                className=""
             >
                 {nav.subMenu.map((subNav) => (
                     <AuthorityCheck
@@ -91,7 +91,6 @@ const CollapsedItem = ({ nav, onLinkClick, userAuthority, direction }) => {
 }
 
 const VerticalCollapsedMenuItem = ({ sideCollapsed, ...rest }) => {
-    console.log(sideCollapsed)
     return sideCollapsed ? (
         <CollapsedItem {...rest} />
     ) : (

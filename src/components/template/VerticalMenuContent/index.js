@@ -1,4 +1,5 @@
 import { Menu } from 'components/ui'
+import MenuCollapse from 'components/ui/Menu/MenuCollapse'
 import { themeConfig } from 'configs/theme.config'
 import {
     NAV_ITEM_TYPE_COLLAPSE,
@@ -7,9 +8,10 @@ import {
 } from 'constants/navigation.constant'
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import useMenuActive from 'utils/hooks/useMenuActive'
 import VerticalCollapsedMenuItem from './VerticalCollapsedMenuItem'
+import VerticalMenuIcon from './VerticalMenuIcon'
 import VerticalSingleMenuItem from './VerticalSingleMenuItem'
 
 const { MenuGroup } = Menu
@@ -73,9 +75,25 @@ const VerticalMenuContent = (props) => {
         if (nav.type === NAV_ITEM_TYPE_TITLE) {
             if (nav.subMenu.length > 0) {
                 return (
-                    <MenuGroup
+                    <MenuCollapse
+                        label={
+                            <>
+                                <VerticalMenuIcon icon={nav.icon} />
+                                <span>
+                                    <Trans
+                                        i18nKey={
+                                            t(nav.translateKey) || nav.title
+                                        }
+                                        defaults={nav.title}
+                                    />
+                                </span>
+                            </>
+                        }
                         key={nav.key}
-                        label={t(nav.translateKey) || nav.title}
+                        eventKey={nav.key}
+                        expanded={false}
+                        className="mb-2"
+                        last={true}
                     >
                         {nav.subMenu.map((subNav) =>
                             subNav.subMenu.length > 0 ? (
@@ -98,7 +116,7 @@ const VerticalMenuContent = (props) => {
                                 />
                             )
                         )}
-                    </MenuGroup>
+                    </MenuCollapse>
                 )
             } else {
                 ;<MenuGroup label={nav.title} />
@@ -108,7 +126,7 @@ const VerticalMenuContent = (props) => {
 
     return (
         <Menu
-            className="px-4 pb-4"
+            className="px-4 pb-4 "
             variant={navMode}
             sideCollapsed={collapsed}
             defaultActiveKeys={activedRoute?.key ? [activedRoute.key] : []}
