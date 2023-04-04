@@ -11,7 +11,7 @@ import { PasswordInput, ActionLink } from 'components/shared'
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import { createSignUp } from 'services/Requests'
+import { createSignUp } from 'services/AuthService'
 import { useNavigate } from 'react-router-dom'
 
 const businessOptions = [

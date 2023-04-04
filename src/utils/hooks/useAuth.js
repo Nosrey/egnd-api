@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { apiSignOut, apiSignUp } from 'services/AuthService'
 import { onSignInSuccess, onSignOutSuccess } from 'store/auth/sessionSlice'
 import { initialState, setUser } from 'store/auth/userSlice'
-import { signIn as apiSignIn } from '../../services/Requests'
+import { signIn as apiSignIn } from '../../services/AuthService'
 import useQuery from './useQuery'
 
 function useAuth() {
