@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
-import PropTypes from 'prop-types'
-import { useConfig } from '../ConfigProvider'
-import { CollapseContextProvider } from './context/collapseContext'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
-import MenuContext from './context/menuContext'
+import PropTypes from 'prop-types'
+import { useContext, useEffect, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
+import { useConfig } from '../ConfigProvider'
+import { CollapseContextProvider } from './context/collapseContext'
+import MenuContext from './context/menuContext'
 
 const MenuCollapse = (props) => {
-    const { children, className, eventKey, expanded, label, onToggle } = props
+    const { children, className, eventKey, expanded, label, onToggle, last } =
+        props
 
     const [isExpanded, setIsExpanded] = useState(expanded)
 
@@ -41,6 +42,10 @@ const MenuCollapse = (props) => {
         }
         if (isExpanded && children && !children.length) {
             height = menuItemHeight
+        }
+
+        if (last) {
+            return height + 900
         }
         return height
     }

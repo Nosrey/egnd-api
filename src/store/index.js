@@ -1,8 +1,8 @@
-import { PERSIST_STORE_NAME } from 'constants/app.constant'
-import rootReducer from './rootReducer'
 import { configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
+import { PERSIST_STORE_NAME } from 'constants/app.constant'
+import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import rootReducer from './rootReducer'
 
 const middlewares = []
 
@@ -10,7 +10,7 @@ const persistConfig = {
     key: PERSIST_STORE_NAME,
     keyPrefix: '',
     storage,
-    whitelist: ['auth', 'locale'],
+    whitelist: ['auth', 'locale', 'sideNav'],
 }
 
 const store = configureStore({
