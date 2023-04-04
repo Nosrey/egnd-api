@@ -1,4 +1,5 @@
 import {
+    Alert,
     Button,
     Card,
     FormContainer,
@@ -60,6 +61,8 @@ const tiempos = [
 const AssumptionsFinancieras = () => {
     const media = useMedia()
     const [userData, setUserData] = useState()
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const [showErrorAlert, setShowErrorAlert] = useState(false)
 
     const [dataFinanciera, setDataFinanciera] = useState(defaultState)
     useEffect(() => {
@@ -85,10 +88,26 @@ const AssumptionsFinancieras = () => {
             .then((data) => {
                 console.log(data, 'response')
                 window.scrollTo({ top: 0, behavior: 'smooth' })
+
+                if (data.error) {
+                    setShowErrorAlert(true)
+                    setTimeout(() => {
+                        setShowErrorAlert(false)
+                    }, 5000)
+                } else {
+                    setShowSuccessAlert(true)
+                    setTimeout(() => {
+                        setShowSuccessAlert(false)
+                    }, 5000)
+                }
             })
             .catch((error) => {
                 console.error(error, '[ERROR]')
                 window.scrollTo({ top: 0, behavior: 'smooth' })
+                setShowErrorAlert(true)
+                setTimeout(() => {
+                    setShowErrorAlert(false)
+                }, 5000)
             })
     }
 
@@ -108,6 +127,16 @@ const AssumptionsFinancieras = () => {
 
     return (
         <div>
+            {showSuccessAlert && (
+                <Alert className="mb-4" type="success" showIcon>
+                    Los datos se guardaron satisfactoriamente.
+                </Alert>
+            )}
+            {showErrorAlert && (
+                <Alert className="mb-4" type="danger" showIcon>
+                    No se pudieron guardar los datos.
+                </Alert>
+            )}
             <div className="border-b-2 mb-8 pb-1">
                 <h4>Assumption Financieras</h4>
                 <span>Financial Plan</span>
