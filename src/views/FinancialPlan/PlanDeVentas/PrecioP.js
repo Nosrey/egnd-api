@@ -23,13 +23,14 @@ function PrecioP() {
         if(info && info[0]) {
             for (let i = 0; i < info[0]?.paises.length; i++) {
                 let productos =[]
-                const realProds = info[0]?.productos.filter((prod)=> prod.type !== "servicio")
+                const realProds = info[0]?.productos
                 for (let x = 0; x < realProds.length; x++) {
                     let prod = {}
                     prod["id"] = realProds[x].id
                     prod["volInicial"] = 0
                     prod["precioInicial"] = 0
                     prod["tasa"] = 0
+                    prod["name"] = realProds[x].name
                     prod["inicioMes"] = 1
                     prod["fecha"] = ""
                     prod["años"]=[...AÑOS]
@@ -302,7 +303,7 @@ function PrecioP() {
                         <TabList>
                             {infoForm && Object.keys(infoForm).map((pais, index)=> (
                                     <TabNav key={index} value={pais}>
-                                        <div>{pais}</div>
+                                        <div className='capitalize'>{pais}</div>
                                     </TabNav>
                                 ))}
                         </TabList>
@@ -342,24 +343,25 @@ function PrecioP() {
                                                                     </div>
                                                                     <div>
                                                                         <div >
-                                                                            <div className="titleRowEmpty"></div>
-                                                                            <div className="titleRowEmpty2"></div>
+                                                                           
                                                                             {canal.productos.map((producto) => {
                                                                                         return (
                                                                                             <div
                                                                                                 className="flex items-center gap-x-3 gap-y-3  mb-6 "
                                                                                                 key={producto.id}>
-                                                                                                <Avatar className="mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                                                                                                {producto.id}
+                                                        
+                                                                                                <Avatar className="w-[50px] mt-[66px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
+                                                                                                {producto.id.toString()}
                                                                                                 </Avatar>
-                                                                                                <FormItem className=" mb-1">
+                                                                                                <FormItem className=" mb-1 w-[210px] mt-[66px]">
                                                                                                     <Input
                                                                                                         disabled={true}
                                                                                                         type="text"
+                                                                                                        className="capitalize"
                                                                                                         value={producto.name}
                                                                                                     />
                                                                                                 </FormItem>
-                                                                                                <FormItem className=" mb-0">
+                                                                                                <FormItem className=" mb-0 w-[95px] mt-[66px]">
                                                                                                     <Tooltip
                                                                                                         placement="top-end"
                                                                                                         title="Precio Inicial"
@@ -381,7 +383,29 @@ function PrecioP() {
                                                                                                         />
                                                                                                     </Tooltip>
                                                                                                 </FormItem>
-                                                                                                <FormItem className=" mb-0">
+                                                                                                <FormItem className="mb-0 w-[55px] mt-[66px]">
+                                                                                                    <Tooltip
+                                                                                                        placement="left"
+                                                                                                        title="Crecimiento Mensual"
+                                                                                                    >
+                                                                                                        <Input
+                                                                                                            placeholder="Crecimiento Mensual"
+                                                                                                            type="number"
+                                                                                                            name="tasa"
+                                                                                                            suffix="%"
+                                                                                                            value={producto.tasa}
+                                                                                                            onChange={(e) =>
+                                                                                                                handleOnChangeTasa(
+                                                                                                                    pais,
+                                                                                                                    canal.canalName,
+                                                                                                                    producto.id,
+                                                                                                                    e.target.value
+                                                                                                                )
+                                                                                                            }
+                                                                                                        />
+                                                                                                    </Tooltip>
+                                                                                                </FormItem>
+                                                                                                <FormItem className=" mb-0 w-[55px] mt-[66px]">
                                                                                                     <Tooltip
                                                                                                         placement="top-end"
                                                                                                         title="Fecha Inicial"
@@ -406,30 +430,7 @@ function PrecioP() {
                                                                                                         />
                                                                                                     </Tooltip>
                                                                                                 </FormItem>
-                                                                                                <FormItem className="mb-0">
-                                                                                                    <Tooltip
-                                                                                                        placement="left"
-                                                                                                        title="Crecimiento Mensual"
-                                                                                                    >
-                                                                                                        <Input
-                                                                                                            placeholder="Crecimiento Mensual"
-                                                                                                            type="number"
-                                                                                                            name="tasa"
-                                                                                                            suffix="%"
-                                                                                                            value={producto.tasa}
-                                                                                                            onChange={(e) =>
-                                                                                                                handleOnChangeTasa(
-                                                                                                                    pais,
-                                                                                                                    canal.canalName,
-                                                                                                                    producto.id,
-                                                                                                                    e.target.value
-                                                                                                                )
-                                                                                                            }
-                                                                                                        />
-                                                                                                    </Tooltip>
-                                                                                                </FormItem>
-
-                                                                                                {console.log(producto.años)}
+                                                    
                                                                                                 { producto.años.map((año, indexYear) => (
                                                                                                         <div
                                                                                                             className="flex flex-col"
@@ -445,55 +446,29 @@ function PrecioP() {
                                                                                                                     {visibleItems.includes(indexYear) ? <FiMinus/> : <FiPlus/>}
                                                                                                                 </div>
                                                                                                             </div>
-                                                                                                            <div className='titleMonths gap-x-3 gap-y-3 mb-[18px] '>
-                                                                                                                {visibleItems.includes(indexYear) &&
-                                                                                                                    <div className='titleMonths gap-x-3'>
-                                                                                                                        <p className='month w-[90px]'>Enero</p>
-                                                                                                                        <p className='month w-[90px]'>Febrero</p>
-                                                                                                                        <p className='month w-[90px]'>Marzo</p>
-                                                                                                                        <p className='month w-[90px]'>Abril</p>
-                                                                                                                        <p className='month w-[90px]'>Mayo</p>
-                                                                                                                        <p className='month w-[90px]'>Junio</p>
-                                                                                                                        <p className='month w-[90px]'>Julio</p>
-                                                                                                                        <p className='month w-[90px]'>Agosto</p>
-                                                                                                                        <p className='month w-[90px]'>Septiembre</p>
-                                                                                                                        <p className='month w-[90px]'>Octubre</p>
-                                                                                                                        <p className='month w-[90px]'>Noviembre</p>
-                                                                                                                        <p className='month w-[90px]'>Diciembre</p>
-                                                                                                                    </div>
-                                                                                                                }
+                                                                                                            <div className='titleMonths gap-x-3 gap-y-3 mb-[18px] flex flex-col'>
+                                                                                                            <div className='titleMonths gap-x-3 flex'>
+                                                                                                                {visibleItems.includes(indexYear) && año && Object.keys(año.volMeses).map((mes, indexMes) => (
+                                                                                                               
+                                                                                                                        <p className='month w-[90px] capitalize'>{Object.keys(año.volMeses)[indexMes]}</p>
+                                                                                                                ))}
+                                                                                                                  </div>
+                                                                                                                    <div className="flex gap-x-3 gap-y-3">
+                                                                                                                {visibleItems.includes(indexYear) && año && Object.keys(año.volMeses).map((mes, indexMes) => (
+                                                                                                                    
                                                                                                                 
-
+                                                                                                                     <FormItem className="mb-0">
+                                                                                                                             <Input
+                                                                                                                                className="w-[90px]"
+                                                                                                                                type="number"
+                                                                                                                                prefix="$"
+                                                                                                                                value={año.volMeses[Object.keys(año.volMeses)[indexMes]]}
+                                                                                                                                name="month" />
+                                                                                                                        </FormItem>
+                                                                                                                ))}
+                                                                                                                      </div>
                                                                                                             </div>
-                                                                                                            <div className="flex">
-                                                                                                                <FormItem className="mb-0" >
-                                                                                                                    <Input
-                                                                                                                        className="w-[90px]"
-                                                                                                                        type="number"
-                                                                                                                        prefix="$"
-                                                                                                                        value={año.volMeses.enero}
-                                                                                                                        name="month"
-                                                                                                                    />
-                                                                                                                </FormItem>
-                                                                                                                <FormItem className="mb-0" >
-                                                                                                                    <Input
-                                                                                                                        className="w-[90px]"
-                                                                                                                        type="number"
-                                                                                                                        prefix="$"
-                                                                                                                        value={año.volMeses.febrero}
-                                                                                                                        name="month"
-                                                                                                                    />
-                                                                                                                </FormItem>
-                                                                                                                <FormItem className="mb-0" >
-                                                                                                                    <Input
-                                                                                                                        className="w-[90px]"
-                                                                                                                        type="number"
-                                                                                                                        prefix="$"
-                                                                                                                        value={año.volMeses.marzo}
-                                                                                                                        name="month"
-                                                                                                                    />
-                                                                                                                </FormItem>
-                                                                                                            </div>
+                                                                                                            
                                                                                                     </div>
                                                                                                 )
                                                                                                 )}
