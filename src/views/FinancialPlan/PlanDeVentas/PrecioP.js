@@ -383,7 +383,7 @@ function PrecioP() {
                                                                                                         />
                                                                                                     </Tooltip>
                                                                                                 </FormItem>
-                                                                                                <FormItem className="mb-0 w-[55px] mt-[66px]">
+                                                                                                <FormItem className="mb-0 w-[65px] mt-[66px]">
                                                                                                     <Tooltip
                                                                                                         placement="left"
                                                                                                         title="Crecimiento Mensual"
