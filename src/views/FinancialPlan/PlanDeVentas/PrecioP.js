@@ -1,18 +1,31 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { getUser } from 'services/Requests'
-import { Tabs, Input, Tooltip, DatePicker } from 'components/ui'
 import {
     Button,
     FormItem,
     FormContainer,
     Avatar,
+    Select ,Tabs, Input, Tooltip
 } from 'components/ui'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { FiMinus, FiPlus } from 'react-icons/fi'
-import { AÑOS, MONTHS, MESES } from 'constants/forms.constants'
+import { AÑOS } from 'constants/forms.constants'
 const { TabNav, TabList, TabContent } = Tabs
 
-
+const optionsMonths = [
+    { value: 1, label: 'Enero' },
+    { value: 2, label: 'Febrero' },
+    { value: 3, label: 'Marzo' },
+    { value: 4, label: 'Abril' },
+    { value: 5, label: 'Mayo' },
+    { value: 6, label: 'Junio' },
+    { value: 7, label: 'Julio' },
+    { value: 8, label: 'Agosto' },
+    { value: 9, label: 'Septiembre' },
+    { value: 10, label: 'Octubre' },
+    { value: 11, label: 'Noviembre' },
+    { value: 12, label: 'Diciembre' },
+]
 function PrecioP() {
     const [info, setInfo] = useState(null)
     const [defaultCountry, setDefaultCountry] = useState('')
@@ -221,7 +234,7 @@ function PrecioP() {
        })
     }
         
-    const fillMonthsPrices = (producto, yearIndex, productoIndex, startMonth) => {
+    const fillMonthsPrices = (producto, yearIndex, productoIndex) => {
         let newAños = [...producto.años];
         let precioActual = producto.precioInicial;
         let currentMonth = 1;
@@ -229,7 +242,7 @@ function PrecioP() {
         for (let i = yearIndex >= 0 ? yearIndex : 0; i < newAños.length; i++) {
           const newMeses = { ...newAños[i].volMeses };
           for (let mes in newMeses) {
-            if (currentMonth >= startMonth) {
+            if (currentMonth >= producto.inicioMes) {
               newMeses[mes] = precioActual;
             } else {
               newMeses[mes] = 0;
@@ -243,47 +256,36 @@ function PrecioP() {
         return newAños;
       };
 
-    const handleOnChangeInitialValue = (pais, canalName, productoId, newValue) => {
+      const handleOnChangeInitialValue = (pais, canalName, productoId, newValue, key) => {
         const newData = { ...infoForm };
-        const productoIndex = newData[pais][0].productos.findIndex(
-          (producto) => producto.id === productoId
+
+      const channelIndex = newData[pais].findIndex((canal) => canal.canalName === canalName)
+      const productoIndex = newData[pais][channelIndex].productos.findIndex(
+        (producto) => producto.id === productoId.id
         );
-        const producto = newData[pais][0].productos[productoIndex];
-        producto.precioInicial = newValue;
-        console.log(`new precioInicial for productoId ${productoId}:`, producto.precioInicial);
-        const yearIndex = -1;
-        const newAños = fillMonthsPrices(producto, yearIndex, productoIndex, producto.inicioMes);
-        newData[pais][0].productos[productoIndex].años = newAños;
-        setInfoForm(newData);
+        
+      const yearIndex = -1;
+
+      let producto = {...newData[pais][channelIndex].productos[productoIndex]};
+      switch (key) {
+        case 'precioInicial':
+          producto.precioInicial = newValue;
+          break;
+          case 'tasa':
+            producto.tasa = newValue;
+          break;
+          case 'mesInicial':
+            producto.inicioMes = newValue;
+          break;
+        default:
+          break;
+      }
+      producto.años=  fillMonthsPrices(producto, yearIndex, productoIndex, producto.inicioMes);
+      
+      newData[pais][channelIndex].productos[productoIndex] = producto;
+      setInfoForm(newData);
       };
 
-      const handleOnChangeTasa = (pais, canalName, productoId, newValue) => {
-        const newData = { ...infoForm };
-        const productoIndex = newData[pais][0].productos.findIndex(
-          (producto) => producto.id === productoId
-        );
-        const producto = newData[pais][0].productos[productoIndex];
-        producto.tasa = newValue;
-        console.log(`new tasa for productoId ${productoId}:`, producto.tasa);
-        const yearIndex = -1;
-        const newAños = fillMonthsPrices(producto, yearIndex, productoIndex, producto.inicioMes);
-        newData[pais][0].productos[productoIndex].años = newAños;
-        setInfoForm(newData);
-      };
-  
-      const handleOnChangeStartMonth = (pais, canalName, productoId, newValue) => {
-        const newData = { ...infoForm };
-        const productoIndex = newData[pais][0].productos.findIndex(
-          (producto) => producto.id === productoId
-        );
-        const producto = newData[pais][0].productos[productoIndex];
-        producto.inicioMes = newValue;
-        console.log(`new inicioMes for productoId ${productoId}:`, producto.inicioMes);
-        const yearIndex = -1;
-        const newAños = fillMonthsPrices(producto, yearIndex, productoIndex, producto.inicioMes);
-        newData[pais][0].productos[productoIndex].años = newAños;
-        setInfoForm(newData);
-      };
 
     return (
         <div>
@@ -373,12 +375,13 @@ function PrecioP() {
                                                                                                             prefix="$"
                                                                                                             value={producto.precioInicial}
                                                                                                             onChange={(e) =>
-                                                                                                              handleOnChangeInitialValue(
-                                                                                                                pais,
-                                                                                                                canal.canalName,
-                                                                                                                producto.id,
-                                                                                                                e.target.value
-                                                                                                              )
+                                                                                                                handleOnChangeInitialValue(
+                                                                                                                    pais,
+                                                                                                                    canal.canalName,
+                                                                                                                    producto,
+                                                                                                                    e.target.value,
+                                                                                                                    "precioInicial"
+                                                                                                                  )
                                                                                                             }
                                                                                                         />
                                                                                                     </Tooltip>
@@ -395,37 +398,40 @@ function PrecioP() {
                                                                                                             suffix="%"
                                                                                                             value={producto.tasa}
                                                                                                             onChange={(e) =>
-                                                                                                                handleOnChangeTasa(
+                                                                                                                handleOnChangeInitialValue(
                                                                                                                     pais,
                                                                                                                     canal.canalName,
-                                                                                                                    producto.id,
-                                                                                                                    e.target.value
-                                                                                                                )
+                                                                                                                    producto,
+                                                                                                                    e.target.value,
+                                                                                                                    "tasa"
+                                                                                                                  )
                                                                                                             }
                                                                                                         />
                                                                                                     </Tooltip>
                                                                                                 </FormItem>
-                                                                                                <FormItem className=" mb-0 w-[55px] mt-[66px]">
+                                                                                                <FormItem className=" mb-0 w-[85px] mt-[66px]">
                                                                                                     <Tooltip
                                                                                                         placement="top-end"
                                                                                                         title="Fecha Inicial"
                                                                                                     >
-                                                                                                        {/* <DatePicker
-                                                                                                            inputFormat="DD, MMM, YYYY"
-                                                                                                            placeholder="Fecha Inicial"
-                                                                                                        /> */}
-                                                                                                         <Input
-                                                                                                            type="number"
-                                                                                                            name="inicioMes"
-                                                                                                            placeholder="Mes inicial"
-                                                                                                            value={producto.inicioMes}
+                                                                                                        <Select
+                                                                                                            placeholder="Inicio de Actividades"
+                                                                                                            options={
+                                                                                                                optionsMonths
+                                                                                                            }
+                                                                                                            value={optionsMonths.filter(
+                                                                                                                (option) =>
+                                                                                                                    option.value ===
+                                                                                                                    producto.inicioMes
+                                                                                                            )}
                                                                                                             onChange={(e) =>
-                                                                                                              handleOnChangeStartMonth(
-                                                                                                                pais,
-                                                                                                                canal.canalName,
-                                                                                                                producto.id,
-                                                                                                                e.target.value
-                                                                                                              )
+                                                                                                                handleOnChangeInitialValue(
+                                                                                                                    pais,
+                                                                                                                    canal.canalName,
+                                                                                                                    producto,
+                                                                                                                    e.value,
+                                                                                                                    "mesInicial"
+                                                                                                                  )
                                                                                                             }
                                                                                                         />
                                                                                                     </Tooltip>
@@ -434,7 +440,7 @@ function PrecioP() {
                                                                                                 { producto.años.map((año, indexYear) => (
                                                                                                         <div
                                                                                                             className="flex flex-col"
-                                                                                                            key={año.año}
+                                                                                                            key={indexYear}
                                                                                                         >
                                                                                                             <div className="titleRow min-w-[62px]">
                                                                                                                 <p>
@@ -450,14 +456,14 @@ function PrecioP() {
                                                                                                             <div className='titleMonths gap-x-3 flex'>
                                                                                                                 {visibleItems.includes(indexYear) && año && Object.keys(año.volMeses).map((mes, indexMes) => (
                                                                                                                
-                                                                                                                        <p className='month w-[90px] capitalize'>{Object.keys(año.volMeses)[indexMes]}</p>
+                                                                                                                        <p key={indexMes} className='month w-[90px] capitalize'>{Object.keys(año.volMeses)[indexMes]}</p>
                                                                                                                 ))}
                                                                                                                   </div>
                                                                                                                     <div className="flex gap-x-3 gap-y-3">
                                                                                                                 {visibleItems.includes(indexYear) && año && Object.keys(año.volMeses).map((mes, indexMes) => (
                                                                                                                     
                                                                                                                 
-                                                                                                                     <FormItem className="mb-0">
+                                                                                                                     <FormItem className="mb-0" key={indexMes}>
                                                                                                                              <Input
                                                                                                                                 className="w-[90px]"
                                                                                                                                 type="number"
