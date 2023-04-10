@@ -31,7 +31,7 @@ export const protectedRoutes = [
     {
         key: 'preciop',
         path: '/preciop',
-        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/PrecioP')),
+        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP')),
         authority: [],
     },
     {

@@ -1,34 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getUser } from 'services/Requests'
 import {
-    Button,
-    FormItem,
     FormContainer,
-    Avatar,
-    Select ,Tabs, Input, Tooltip, Alert,
+    Tabs,
+    Alert,
 } from 'components/ui'
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
-import { FiMinus, FiPlus } from 'react-icons/fi'
 import { AÑOS } from 'constants/forms.constants'
-import { createPrecio } from 'services/Requests'
 import ContainerScrollable from 'components/shared/ContainerScrollable'
 import TablePrecio from './TablePrecio'
-const { TabNav, TabList, TabContent } = Tabs
+const { TabNav, TabList } = Tabs
 
-const optionsMonths = [
-    { value: 1, label: 'Enero' },
-    { value: 2, label: 'Febrero' },
-    { value: 3, label: 'Marzo' },
-    { value: 4, label: 'Abril' },
-    { value: 5, label: 'Mayo' },
-    { value: 6, label: 'Junio' },
-    { value: 7, label: 'Julio' },
-    { value: 8, label: 'Agosto' },
-    { value: 9, label: 'Septiembre' },
-    { value: 10, label: 'Octubre' },
-    { value: 11, label: 'Noviembre' },
-    { value: 12, label: 'Diciembre' },
-]
+
 function PrecioP() {
     const [info, setInfo] = useState(null);
     const [defaultCountry, setDefaultCountry] = useState('');
