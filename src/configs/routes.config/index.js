@@ -13,31 +13,45 @@ export const protectedRoutes = [
     {
         key: 'assumptiongeneral',
         path: '/assumptiongeneral',
-        component: React.lazy(() => import('views/FinancialPlan/AssumtionsGenerales/AssumptionGeneral')),
+        component: React.lazy(() =>
+            import('views/FinancialPlan/AssumtionsGenerales/AssumptionGeneral')
+        ),
         authority: [],
     },
     {
         key: 'assumptionventas',
         path: '/assumptionventas',
-        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/AssumptionVentas')),
+        component: React.lazy(() =>
+            import(
+                'views/FinancialPlan/PlanDeVentas/Assumption Ventas/AssumptionVentas'
+            )
+        ),
         authority: [],
     },
     {
         key: 'volumenq',
         path: '/volumenq',
-        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/VolumenQ')),
+        component: React.lazy(() =>
+            import('views/FinancialPlan/PlanDeVentas/VolumenQ')
+        ),
         authority: [],
     },
     {
         key: 'preciop',
         path: '/preciop',
-        component: React.lazy(() => import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP')),
+        component: React.lazy(() =>
+            import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP')
+        ),
         authority: [],
     },
     {
         key: 'assumptionfinancieras',
         path: '/assumptionfinancieras',
-        component: React.lazy(() => import('views/FinancialPlan/FinancialPlanItem/AssumptionFinancieras.js')),
+        component: React.lazy(() =>
+            import(
+                'views/FinancialPlan/FinancialPlanItem/AssumptionFinancieras.js'
+            )
+        ),
         authority: [],
     },
 ]
