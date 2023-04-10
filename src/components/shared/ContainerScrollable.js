@@ -1,5 +1,6 @@
 import React, {useState, useRef } from 'react'
 import { BsChevronRight, BsChevronLeft } from 'react-icons/bs'
+import { useMedia } from 'utils/hooks/useMedia'
 
 
 function ContainerScrollable(props) {
@@ -7,6 +8,7 @@ function ContainerScrollable(props) {
     const containerTableRef = useRef(null)
     const btnLeftRef = useRef(null)
     const btnRightRef = useRef(null)
+    const media = useMedia()
 
     const [activeDrag, setActiveDrag] = useState(false)
 
@@ -71,21 +73,22 @@ function ContainerScrollable(props) {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >
+          {
+                media !== 'mobile' && (
+                    <><div className='fixed top-[55vh] z-50 cursor-pointer bg-[#f2f2f2] shadow-lg shadow-gray-300 w-[40px] h-[40px] rounded-full flex items-center justify-center'>
+                        <BsChevronLeft
+                            onClick={handleLeftClick}
+                            className="text-2xl "
+                            ref={btnLeftRef} />
+                    </div><div className='fixed right-[5vw] top-[55vh] z-50 cursor-pointer bg-[#f2f2f2] shadow-lg shadow-gray-300 w-[40px] h-[40px] rounded-full flex items-center justify-center'>
+                            <BsChevronRight
+                                onClick={handleRightClick}
+                                className="text-2xl "
+                                ref={btnRightRef} />
+                        </div></>
+                )
+          }
           
-            <div className='fixed top-[55vh] z-50 cursor-pointer bg-[#f2f2f2] shadow-lg shadow-gray-300 w-[40px] h-[40px] rounded-full flex items-center justify-center'>
-                <BsChevronLeft
-                    onClick={handleLeftClick}
-                    className="text-2xl "
-                    ref={btnLeftRef}
-                />
-            </div>
-            <div className='fixed right-[5vw] top-[55vh] z-50 cursor-pointer bg-[#f2f2f2] shadow-lg shadow-gray-300 w-[40px] h-[40px] rounded-full flex items-center justify-center'>
-                <BsChevronRight
-                    onClick={handleRightClick}
-                    className="text-2xl "
-                    ref={btnRightRef}
-                />
-            </div>
          
 
             {props.contenido}
