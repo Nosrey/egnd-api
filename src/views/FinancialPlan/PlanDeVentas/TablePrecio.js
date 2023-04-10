@@ -100,7 +100,6 @@ function TablePrecio(props) {
     const submitInfoForm = () => {
         createPrecio(infoForm)
         .then((data) => {
-            console.log(data)
             window.scrollTo({ top: 0, behavior: 'smooth' })
             props.showAlertSuces(true)
             setTimeout(() => {
@@ -108,7 +107,6 @@ function TablePrecio(props) {
             }, 5000)
         })
         .catch((error) => {
-            console.error(error)
             window.scrollTo({ top: 0, behavior: 'smooth' })
             props.showAlertError(true)
             setTimeout(() => {
