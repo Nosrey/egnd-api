@@ -49,7 +49,6 @@ function PrecioP() {
             setInfoForm( () => {
                 return {...estructura}
             })
-            // console.log(estructura)
         }
        
     }, [info])

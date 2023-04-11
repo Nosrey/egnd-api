@@ -27,6 +27,9 @@ const optionsMonths = [
     { value: 11, label: 'Noviembre' },
     { value: 12, label: 'Diciembre' },
 ]
+
+const moneda = "$";
+
 function TablePrecio(props) {
     const [infoForm, setInfoForm] = useState(props.data)
     const [visibleItems, setVisibleItems] = useState([0])
@@ -122,8 +125,29 @@ function TablePrecio(props) {
     }
 
     const submitInfoForm = () => {
-        createPrecio(infoForm)
-            .then((data) => {
+        const copyData={...infoForm}
+        const countryArray = [];
+        
+        for (const countryName in copyData) {
+            const statsArray = copyData[countryName];
+            const countryObject = { countryName: countryName, stats: [] };
+            
+            for (let i = 0; i < statsArray.length; i++) {
+                countryObject.stats.push(statsArray[i]);
+            }
+            
+            countryArray.push(countryObject);
+        }
+        
+        for (let i = 0; i < countryArray.length; i++) {
+            postPrecioData(countryArray[i]);
+        }
+        
+    }
+
+    const postPrecioData = (data) => {
+        createPrecio(data)
+            .then(() => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
                 props.showAlertSuces(true)
                 setTimeout(() => {
@@ -138,6 +162,7 @@ function TablePrecio(props) {
                 }, 5000)
             })
     }
+
 
     return (
         <>
@@ -187,7 +212,7 @@ function TablePrecio(props) {
                                                                             placeholder="Precio inicial"
                                                                             type="number"
                                                                             name="precioInicial"
-                                                                            prefix="$"
+                                                                            prefix={moneda}
                                                                             value={
                                                                                 producto.precioInicial
                                                                             }
@@ -359,7 +384,7 @@ function TablePrecio(props) {
                                                                                             <Input
                                                                                                 className="w-[90px]"
                                                                                                 type="number"
-                                                                                                prefix="$"
+                                                                                                prefix={moneda}
                                                                                                 value={
                                                                                                     año
                                                                                                         .volMeses[

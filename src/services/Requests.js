@@ -150,13 +150,14 @@ export const createGastos = async (body) => {
     }
 }
 
-export const createPrecio = async (body) => {
+export const createPrecio = async ({countryName, stats}) => {
     try {
         const response = await fetch(URL_API + `/api/precio`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                precio: body,
+                countryName,
+                stats,
                 idUser: idUser,
             }),
         })
