@@ -9,6 +9,7 @@ import {
 } from 'components/ui'
 import { MdDelete } from 'react-icons/md'
 import CreatableSelect from 'react-select/creatable'
+import { useMedia } from 'utils/hooks/useMedia'
 
 const optionsModel = [
     { value: 'oneShot', label: 'One Shot' },
@@ -57,6 +58,7 @@ function TableAssumptionVentas({
 }) {
     const [showRemoveProd, setShowRemoveProd] = useState(false)
     const [showRemoveChannel, setShowRemoveChannel] = useState(false)
+    const media = useMedia()
 
     return (
         <div className="px-4 py-5">
@@ -65,7 +67,11 @@ function TableAssumptionVentas({
                     {/*****************************************************************************************************/}
                     {/**************************      P R O D U C T O S      *********************************************/}
                     {/*****************************************************************************************************/}
-                    <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
+                    <div
+                        className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max ${
+                            media === 'mobile' ? 'w-[600px]' : ''
+                        }`}
+                    >
                         <span className=" ">ID</span>
                         <span className="col-start-2 col-end-6">
                             Producto / Servicio
@@ -80,7 +86,11 @@ function TableAssumptionVentas({
                             productos.map((prod, index) => {
                                 return (
                                     <div
-                                        className="grid grid-cols-12 items-center gap-x-3 mb-6 auto-cols-max"
+                                        className={`grid grid-cols-12 items-center gap-x-3 mb-6 auto-cols-max ${
+                                            media === 'mobile'
+                                                ? 'w-[600px]'
+                                                : ''
+                                        }`}
                                         key={index}
                                     >
                                         <Avatar className="col-start-1 col-end-2  row-start-2 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
@@ -194,7 +204,17 @@ function TableAssumptionVentas({
                         )}
                         <div>
                             <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                <FormItem className=" col-start-10 col-end-13 mb-0">
+                                <FormItem
+                                    className={`mb-0 ${
+                                        media === 'mobile'
+                                            ? 'col-start-4 col-end-13'
+                                            : media === 'tablet'
+                                            ? 'col-start-9 col-end-13'
+                                            : media === 'desktop'
+                                            ? 'col-start-8 col-end-13'
+                                            : 'col-start-10 col-end-13'
+                                    }`}
+                                >
                                     <div className="flex justify-between gap-x-2">
                                         {productos.length > 0 ? (
                                             <Button
@@ -253,13 +273,29 @@ function TableAssumptionVentas({
                     {/**************************        P A I S E S       ***********************************************/}
                     {/*****************************************************************************************************/}
                     <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                        <span className="col-start-1 col-end-6 font-bold">
+                        <span
+                            className={`font-bold ${
+                                media === 'mobile'
+                                    ? 'col-start-1 col-end-13'
+                                    : 'col-start-1 col-end-6'
+                            }`}
+                        >
                             Pais
                         </span>
                     </div>
 
-                    <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max mb-[30px]">
-                        <FormItem className="col-start-1 col-end-5 row-start-1 mb-0">
+                    <div
+                        className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max mb-[30px] ${
+                            media === 'mobile' ? 'w-[600px]' : ''
+                        }`}
+                    >
+                        <FormItem
+                            className={`row-start-1 mb-0 ${
+                                media === 'mobile'
+                                    ? 'col-start-1 col-end-7'
+                                    : 'col-start-1 col-end-6'
+                            }`}
+                        >
                             <Select
                                 placeholder="País"
                                 componentAs={CreatableSelect}
@@ -277,16 +313,46 @@ function TableAssumptionVentas({
                     {/**************************        C A N A L E S       ***********************************************/}
                     {/*****************************************************************************************************/}
 
-                    <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max  ">
-                        <span className=" col-start-1  col-end-6 font-bold">
+                    <div
+                        className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max ${
+                            media === 'mobile' ? 'w-[600px]' : ''
+                        }`}
+                    >
+                        <span
+                            className={`font-bold ${
+                                media === 'mobile'
+                                    ? 'col-start-1 col-end-3'
+                                    : 'col-start-1 col-end-6'
+                            }`}
+                        >
                             Canal
                         </span>
                         {channels.length !== 0 && (
                             <>
-                                <span className=" col-start-6  col-end-8">
+                                <span
+                                    className={` ${
+                                        media === 'mobile'
+                                            ? 'col-start-3 col-end-7'
+                                            : media === 'tablet'
+                                            ? 'col-start-6 col-end-9'
+                                            : media === 'desktop'
+                                            ? 'col-start-6 col-end-9'
+                                            : 'col-start-6 col-end-8'
+                                    }`}
+                                >
                                     Volumen por cliente
                                 </span>
-                                <span className=" col-start-9  col-end-13">
+                                <span
+                                    className={` ${
+                                        media === 'mobile'
+                                            ? 'col-start-7 col-end-12 text-center'
+                                            : media === 'tablet'
+                                            ? 'col-start-9 col-end-13 text-center'
+                                            : media === 'desktop'
+                                            ? 'col-start-9 col-end-13 text-center'
+                                            : 'col-start-9 col-end-13'
+                                    }`}
+                                >
                                     ¿Son las ventas de productos a un mismo
                                     cliente?
                                 </span>
@@ -299,11 +365,23 @@ function TableAssumptionVentas({
                             ? channels.map((channel, index) => {
                                   return (
                                       <div
-                                          className="grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max"
+                                          className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max ${
+                                              media === 'mobile'
+                                                  ? 'w-[600px]'
+                                                  : ''
+                                          }`}
                                           key={index}
                                       >
                                           <FormItem
-                                              className="col-start-1 col-end-8 row-start-1 mb-0"
+                                              className={`row-start-1 mb-0 ${
+                                                  media === 'mobile'
+                                                      ? 'col-start-1 col-end-7'
+                                                      : media === 'tablet'
+                                                      ? 'col-start-1 col-end-9'
+                                                      : media === 'desktop'
+                                                      ? 'col-start-1 col-end-9'
+                                                      : 'col-start-1 col-end-8'
+                                              }`}
                                               invalid={false}
                                               errorMessage={'prueba'}
                                           >
@@ -324,7 +402,15 @@ function TableAssumptionVentas({
                                               />
                                           </FormItem>
                                           <FormItem
-                                              className="col-start-9 col-end-11 row-start-1 mb-0"
+                                              className={` row-start-1 mb-0 ${
+                                                  media === 'mobile'
+                                                      ? 'col-start-7 col-end-12'
+                                                      : media === 'tablet'
+                                                      ? 'col-start-9 col-end-13'
+                                                      : media === 'desktop'
+                                                      ? 'col-start-9 col-end-13'
+                                                      : 'col-start-9 col-end-11'
+                                              }`}
                                               invalid={false}
                                               errorMessage={'prueba'}
                                           >
@@ -371,10 +457,17 @@ function TableAssumptionVentas({
                                               ? productos.map((prod, index) => {
                                                     return (
                                                         <div
-                                                            className="grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max"
+                                                            className={`grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max`}
                                                             key={index}
                                                         >
-                                                            <FormItem className="col-start-1  col-end-6  mb-0">
+                                                            <FormItem
+                                                                className={`mb-0 ${
+                                                                    media ===
+                                                                    'mobile'
+                                                                        ? 'col-start-1 col-end-3'
+                                                                        : 'col-start-1 col-end-6'
+                                                                }`}
+                                                            >
                                                                 <Input
                                                                     disabled
                                                                     value={
@@ -384,7 +477,18 @@ function TableAssumptionVentas({
                                                                 />
                                                             </FormItem>
                                                             <FormItem
-                                                                className="col-start-6 col-end-8   mb-0"
+                                                                className={`mb-0 ${
+                                                                    media ===
+                                                                    'mobile'
+                                                                        ? 'col-start-3 col-end-7'
+                                                                        : media ===
+                                                                          'tablet'
+                                                                        ? 'col-start-6 col-end-9'
+                                                                        : media ===
+                                                                          'desktop'
+                                                                        ? 'col-start-6 col-end-9'
+                                                                        : 'col-start-6 col-end-8'
+                                                                }`}
                                                                 invalid={false}
                                                                 errorMessage={
                                                                     'prueba'
@@ -462,7 +566,17 @@ function TableAssumptionVentas({
 
                         <div>
                             <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
-                                <FormItem className=" col-start-10 col-end-13 mb-0">
+                                <FormItem
+                                    className={`mb-0 ${
+                                        media === 'mobile'
+                                            ? 'col-start-4 col-end-13'
+                                            : media === 'tablet'
+                                            ? 'col-start-9 col-end-13'
+                                            : media === 'desktop'
+                                            ? 'col-start-8 col-end-13'
+                                            : 'col-start-10 col-end-13'
+                                    }`}
+                                >
                                     <div className="flex justify-between gap-x-2">
                                         {channels.length > 0 ? (
                                             <Button
@@ -517,12 +631,32 @@ function TableAssumptionVentas({
                     {/*****************************************************************************************************/}
                     {/**************************          C H U R N         ***********************************************/}
                     {/*****************************************************************************************************/}
-                    <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max  ">
-                        <span className=" col-start-1  col-end-6 font-bold">
+                    <div
+                        className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max ${
+                            media === 'mobile' ? 'w-[600px]' : ''
+                        }`}
+                    >
+                        <span
+                            className={`font-bold ${
+                                media === 'mobile'
+                                    ? 'col-start-1 col-end-3'
+                                    : 'col-start-1 col-end-6'
+                            }`}
+                        >
                             Churns
                         </span>
                         {channels.length !== 0 && (
-                            <span className=" col-start-6  col-end-8">
+                            <span
+                                className={` ${
+                                    media === 'mobile'
+                                        ? 'col-start-3 col-end-7'
+                                        : media === 'tablet'
+                                        ? 'col-start-6 col-end-9'
+                                        : media === 'desktop'
+                                        ? 'col-start-6 col-end-9'
+                                        : 'col-start-6  col-end-8'
+                                }`}
+                            >
                                 % Churn mensual
                             </span>
                         )}
@@ -532,11 +666,23 @@ function TableAssumptionVentas({
                             ? channels.map((channel, index) => {
                                   return (
                                       <div
-                                          className="grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max"
+                                          className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max ${
+                                              media === 'mobile'
+                                                  ? 'w-[600px]'
+                                                  : ''
+                                          }`}
                                           key={index}
                                       >
                                           <FormItem
-                                              className="col-start-1 col-end-8 row-start-1 mb-0"
+                                              className={`row-start-1 mb-0 ${
+                                                  media === 'mobile'
+                                                      ? 'col-start-1 col-end-7'
+                                                      : media === 'tablet'
+                                                      ? 'col-start-1 col-end-9'
+                                                      : media === 'desktop'
+                                                      ? 'col-start-1 col-end-9'
+                                                      : 'col-start-1 col-end-8'
+                                              }`}
                                               invalid={false}
                                               errorMessage={'prueba'}
                                           >
@@ -556,7 +702,14 @@ function TableAssumptionVentas({
                                                             className="grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max"
                                                             key={index}
                                                         >
-                                                            <FormItem className="col-start-1  col-end-6  mb-0">
+                                                            <FormItem
+                                                                className={`mb-0 ${
+                                                                    media ===
+                                                                    'mobile'
+                                                                        ? 'col-start-1 col-end-3'
+                                                                        : 'col-start-1 col-end-6'
+                                                                }`}
+                                                            >
                                                                 <Input
                                                                     disabled
                                                                     value={
@@ -566,7 +719,18 @@ function TableAssumptionVentas({
                                                                 />
                                                             </FormItem>
                                                             <FormItem
-                                                                className="col-start-6 col-end-8   mb-0"
+                                                                className={`mb-0 ${
+                                                                    media ===
+                                                                    'mobile'
+                                                                        ? 'col-start-3 col-end-7'
+                                                                        : media ===
+                                                                          'tablet'
+                                                                        ? 'col-start-6 col-end-9'
+                                                                        : media ===
+                                                                          'desktop'
+                                                                        ? 'col-start-6 col-end-9'
+                                                                        : 'col-start-6  col-end-8'
+                                                                }`}
                                                                 invalid={false}
                                                                 errorMessage={
                                                                     'prueba'
