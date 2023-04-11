@@ -62,7 +62,7 @@ function TableAssumptionVentas({
 
     return (
         <div className="px-4 py-5">
-            <FormContainer>
+            <FormContainer >
                 <div className="flex flex-col gap-y-6">
                     {/*****************************************************************************************************/}
                     {/**************************      P R O D U C T O S      *********************************************/}
@@ -203,11 +203,13 @@ function TableAssumptionVentas({
                             </div>
                         )}
                         <div>
-                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
+                            <div className={`grid grid-cols-12 items-center gap-x-3 gap-y-4  auto-cols-max
+                               ${ media === 'mobile' ? 'w-[600px]': ''}
+                            `}>
                                 <FormItem
                                     className={`mb-0 ${
                                         media === 'mobile'
-                                            ? 'col-start-4 col-end-13'
+                                            ? 'col-start-5 col-end-12'
                                             : media === 'tablet'
                                             ? 'col-start-9 col-end-13'
                                             : media === 'desktop'
@@ -464,7 +466,7 @@ function TableAssumptionVentas({
                                                                 className={`mb-0 ${
                                                                     media ===
                                                                     'mobile'
-                                                                        ? 'col-start-1 col-end-3'
+                                                                        ? 'col-start-1 col-end-5'
                                                                         : 'col-start-1 col-end-6'
                                                                 }`}
                                                             >
@@ -480,7 +482,7 @@ function TableAssumptionVentas({
                                                                 className={`mb-0 ${
                                                                     media ===
                                                                     'mobile'
-                                                                        ? 'col-start-3 col-end-7'
+                                                                        ? 'col-start-5 col-end-9'
                                                                         : media ===
                                                                           'tablet'
                                                                         ? 'col-start-6 col-end-9'
@@ -565,11 +567,13 @@ function TableAssumptionVentas({
                         )}
 
                         <div>
-                            <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
+                            <div className={`grid grid-cols-12 items-center gap-x-3 gap-y-4  auto-cols-max
+                               ${ media === 'mobile' ? 'w-[600px]': ''}
+                            `}>
                                 <FormItem
                                     className={`mb-0 ${
                                         media === 'mobile'
-                                            ? 'col-start-4 col-end-13'
+                                            ? 'col-start-5 col-end-12'
                                             : media === 'tablet'
                                             ? 'col-start-9 col-end-13'
                                             : media === 'desktop'
@@ -639,7 +643,7 @@ function TableAssumptionVentas({
                         <span
                             className={`font-bold ${
                                 media === 'mobile'
-                                    ? 'col-start-1 col-end-3'
+                                    ? 'col-start-1 col-end-5'
                                     : 'col-start-1 col-end-6'
                             }`}
                         >
@@ -649,7 +653,7 @@ function TableAssumptionVentas({
                             <span
                                 className={` ${
                                     media === 'mobile'
-                                        ? 'col-start-3 col-end-7'
+                                        ? 'col-start-5 col-end-9'
                                         : media === 'tablet'
                                         ? 'col-start-6 col-end-9'
                                         : media === 'desktop'
@@ -808,7 +812,7 @@ function TableAssumptionVentas({
                         )}
                     </div>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end ">
                     <Button
                         className="mr-2 mb-2  "
                         variant="solid"
