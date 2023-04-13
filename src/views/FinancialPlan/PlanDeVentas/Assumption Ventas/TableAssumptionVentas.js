@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
 import {
-    Input,
-    Button,
-    FormItem,
-    FormContainer,
-    Select,
     Avatar,
+    Button,
+    FormContainer,
+    FormItem,
+    Input,
+    Select,
 } from 'components/ui'
+import { useState } from 'react'
 import { MdDelete } from 'react-icons/md'
 import CreatableSelect from 'react-select/creatable'
 import { useMedia } from 'utils/hooks/useMedia'
@@ -55,14 +55,26 @@ function TableAssumptionVentas({
     onSubmit,
     setCountries,
     countries,
+    activeButton,
 }) {
     const [showRemoveProd, setShowRemoveProd] = useState(false)
+
     const [showRemoveChannel, setShowRemoveChannel] = useState(false)
     const media = useMedia()
 
+    const validateId = (campo, id) => {
+        const existeId = campo.find((c) => c.id === id)
+
+        if (existeId) {
+            return validateId(campo, id + 1)
+        } else {
+            return id
+        }
+    }
+
     return (
         <div className="px-4 py-5">
-            <FormContainer >
+            <FormContainer>
                 <div className="flex flex-col gap-y-6">
                     {/*****************************************************************************************************/}
                     {/**************************      P R O D U C T O S      *********************************************/}
@@ -100,6 +112,7 @@ function TableAssumptionVentas({
                                             <Input
                                                 placeholder="Nombre"
                                                 name="name"
+                                                value={prod.name}
                                                 type="text"
                                                 onChange={(e) =>
                                                     handleEditProduct(
@@ -124,13 +137,7 @@ function TableAssumptionVentas({
                                                 value={optionsModel.filter(
                                                     (option) =>
                                                         option.value ===
-                                                        productos[
-                                                            productos.findIndex(
-                                                                (p) =>
-                                                                    p.id ===
-                                                                    prod.id
-                                                            )
-                                                        ].model
+                                                        prod.model
                                                 )}
                                                 onChange={(e) =>
                                                     handleEditProduct(
@@ -155,13 +162,7 @@ function TableAssumptionVentas({
                                                 value={optionsType.filter(
                                                     (option) =>
                                                         option.value ===
-                                                        productos[
-                                                            productos.findIndex(
-                                                                (p) =>
-                                                                    p.id ===
-                                                                    prod.id
-                                                            )
-                                                        ].type
+                                                        prod.type
                                                 )}
                                                 onChange={(e) =>
                                                     handleEditProduct(
@@ -203,9 +204,11 @@ function TableAssumptionVentas({
                             </div>
                         )}
                         <div>
-                            <div className={`grid grid-cols-12 items-center gap-x-3 gap-y-4  auto-cols-max
-                               ${ media === 'mobile' ? 'w-[600px]': ''}
-                            `}>
+                            <div
+                                className={`grid grid-cols-12 items-center gap-x-3 gap-y-4  auto-cols-max
+                               ${media === 'mobile' ? 'w-[600px]' : ''}
+                            `}
+                            >
                                 <FormItem
                                     className={`mb-0 ${
                                         media === 'mobile'
@@ -257,7 +260,10 @@ function TableAssumptionVentas({
                                             type="button"
                                             onClick={() => {
                                                 addProduct({
-                                                    id: productos.length + 1,
+                                                    id: validateId(
+                                                        productos,
+                                                        productos.length + 1
+                                                    ),
                                                     name: '',
                                                     model: '',
                                                     type: '',
@@ -300,10 +306,11 @@ function TableAssumptionVentas({
                         >
                             <Select
                                 placeholder="País"
+                                name="countries"
                                 componentAs={CreatableSelect}
                                 isMulti
                                 options={optionsCountry}
-                                values={countries}
+                                value={countries}
                                 onChange={(option) => {
                                     setCountries(() => [...option])
                                 }}
@@ -567,9 +574,11 @@ function TableAssumptionVentas({
                         )}
 
                         <div>
-                            <div className={`grid grid-cols-12 items-center gap-x-3 gap-y-4  auto-cols-max
-                               ${ media === 'mobile' ? 'w-[600px]': ''}
-                            `}>
+                            <div
+                                className={`grid grid-cols-12 items-center gap-x-3 gap-y-4  auto-cols-max
+                               ${media === 'mobile' ? 'w-[600px]' : ''}
+                            `}
+                            >
                                 <FormItem
                                     className={`mb-0 ${
                                         media === 'mobile'
@@ -616,13 +625,13 @@ function TableAssumptionVentas({
                                             className=" flex justify-center items-center"
                                             variant="twoTone"
                                             type="button"
-                                            onClick={() => {
+                                            onClick={() =>
                                                 addChannel({
                                                     name: '',
                                                     sameClient: '',
                                                     items: [],
                                                 })
-                                            }}
+                                            }
                                         >
                                             Agregar Canal
                                         </Button>
@@ -818,6 +827,7 @@ function TableAssumptionVentas({
                         variant="solid"
                         size="lg"
                         color="blue-600"
+                        disabled={activeButton}
                         onClick={onSubmit}
                     >
                         Guardar

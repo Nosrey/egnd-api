@@ -1,23 +1,19 @@
-import React, { useState } from 'react'
-import { Alert } from 'components/ui'
-import { createAssumpVenta } from 'services/Requests'
 import ContainerScrollable from 'components/shared/ContainerScrollable'
+import { Alert } from 'components/ui'
+import { useEffect, useState } from 'react'
+import { createAssumpVenta, getUser } from 'services/Requests'
 import TableAssumptionVentas from './TableAssumptionVentas'
 
 const AssumptionVentas = () => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showErrorAlert, setShowErrorAlert] = useState(false)
+    const [activeButton, setActiveButton] = useState(true)
     const [errors, setErrors] = useState({})
+    const [errorMessage, setErrorMessage] = useState('')
 
-    const [productos, setProductos] = useState([
-        {
-            id: 1,
-            name: '',
-            model: '',
-            type: '',
-        },
-    ])
+    const [productos, setProductos] = useState([])
     const [countries, setCountries] = useState([])
+
     const [channels, setChannels] = useState([
         {
             name: '',
@@ -33,21 +29,50 @@ const AssumptionVentas = () => {
     ])
 
     const addProduct = (newProduct) => {
-        setProductos([...productos, newProduct])
+        if (productos.length === 10) {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            setErrorMessage('Se puede agregar 10 productos maximo')
+            setShowErrorAlert(true)
+            setTimeout(() => {
+                setShowErrorAlert(false)
+            }, 5000)
+        } else {
+            setProductos([...productos, newProduct])
+            buttonSaveStatus()
+        }
     }
     const addChurn = (newChurn) => {
         setChurn([...churn, newChurn])
     }
     const addChannel = (newChannel) => {
-        setChannels([...channels, newChannel])
-        addChurn({
-            channel: '',
-            items: [],
-        })
+        if (channels.length === 5) {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            setErrorMessage('Se puede agregar 5 canales maximo')
+            setShowErrorAlert(true)
+            setTimeout(() => {
+                setShowErrorAlert(false)
+            }, 5000)
+        } else {
+            setChannels([...channels, newChannel])
+            addChurn({
+                channel: newChannel.name,
+                items: [],
+            })
+        }
     }
 
+    useEffect(() => {
+        getUser().then((d) => {
+            setProductos(d.assumptionData && d.assumptionData[0].productos)
+            setCountries(() => d.assumptionData && d.assumptionData[0].paises)
+            setChannels(d.assumptionData && d.assumptionData[0].canales)
+            setChurn(d.assumptionData && d.assumptionData[0].churns)
+        })
+    }, [])
+
     const removeProd = (id) => {
-        setProductos([...productos.filter((item) => id !== item.id)])
+        setProductos(productos.filter((item) => id !== item.id))
+        buttonSaveStatus()
     }
     const removeChannel = (channelName) => {
         setChannels([...channels.filter((item) => channelName !== item.name)])
@@ -65,6 +90,7 @@ const AssumptionVentas = () => {
         const copyChannels = [...channels]
         const copyChurn = [...churn]
 
+        buttonSaveStatus()
         if (prodId) {
             const item = {
                 prodId: prodId,
@@ -125,10 +151,17 @@ const AssumptionVentas = () => {
         }
     }
 
+    const buttonSaveStatus = () => {
+        if (productos.length > 0 && channels[0].name !== '') {
+            setActiveButton(false)
+        } else {
+            setActiveButton(true)
+        }
+    }
+
     const onSubmit = () => {
         createAssumpVenta(channels, churn, countries, productos)
             .then((data) => {
-                console.log(data)
                 window.scrollTo({ top: 0, behavior: 'smooth' })
                 setShowSuccessAlert(true)
                 setTimeout(() => {
@@ -136,8 +169,8 @@ const AssumptionVentas = () => {
                 }, 5000)
             })
             .catch((error) => {
-                console.error(error)
                 window.scrollTo({ top: 0, behavior: 'smooth' })
+                setErrorMessage('No se pudieron guardar los datos.')
                 setShowErrorAlert(true)
                 setTimeout(() => {
                     setShowErrorAlert(false)
@@ -153,7 +186,7 @@ const AssumptionVentas = () => {
             )}
             {showErrorAlert && (
                 <Alert className="mb-4" type="danger" showIcon>
-                    No se pudieron guardar los datos.
+                    {errorMessage}
                 </Alert>
             )}
             <div className="border-b-2 mb-8 pb-1">
@@ -190,6 +223,7 @@ const AssumptionVentas = () => {
                             showAlertError={(boolean) =>
                                 setShowErrorAlert(boolean)
                             }
+                            activeButton={activeButton}
                         />
                     }
                 />

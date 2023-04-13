@@ -86,7 +86,6 @@ const AssumptionsFinancieras = () => {
             inversion
         )
             .then((data) => {
-                console.log(data, 'response')
                 window.scrollTo({ top: 0, behavior: 'smooth' })
 
                 if (data.error) {
