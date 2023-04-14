@@ -1,58 +1,53 @@
 import React, { useEffect, useState } from 'react'
 import { getUser } from 'services/Requests'
-import {
-    FormContainer,
-    Tabs,
-    Alert,
-} from 'components/ui'
+import { FormContainer, Tabs, Alert } from 'components/ui'
 import { AÑOS } from 'constants/forms.constants'
 import ContainerScrollable from 'components/shared/ContainerScrollable'
 import TablePrecio from './TablePrecio'
+import { useSelector } from 'react-redux'
+
 const { TabNav, TabList } = Tabs
 
-
 function PrecioP() {
-    const [info, setInfo] = useState(null);
-    const [defaultCountry, setDefaultCountry] = useState('');
-    const [infoForm, setInfoForm] = useState();
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [info, setInfo] = useState(null)
+    const [defaultCountry, setDefaultCountry] = useState('')
+    const [infoForm, setInfoForm] = useState()
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const [showErrorAlert, setShowErrorAlert] = useState(false)
+    const currency = useSelector((state) => state.auth.user.currency)
 
     useEffect(() => {
         let estructura = {}
-        if(info && info[0]) {
+        if (info && info[0]) {
             for (let i = 0; i < info[0]?.paises.length; i++) {
-                let productos =[]
+                let productos = []
                 const realProds = info[0]?.productos
                 for (let x = 0; x < realProds.length; x++) {
                     let prod = {}
-                    prod["id"] = realProds[x].id
-                    prod["volInicial"] = 0
-                    prod["precioInicial"] = 0
-                    prod["tasa"] = 0
-                    prod["name"] = realProds[x].name
-                    prod["inicioMes"] = 1
-                    prod["fecha"] = ""
-                    prod["años"]=[...AÑOS]
+                    prod['id'] = realProds[x].id
+                    prod['volInicial'] = 0
+                    prod['precioInicial'] = 0
+                    prod['tasa'] = 0
+                    prod['name'] = realProds[x].name
+                    prod['inicioMes'] = 1
+                    prod['fecha'] = ''
+                    prod['años'] = [...AÑOS]
                     productos.push(prod)
                 }
-                let canales =[]
+                let canales = []
                 for (let x = 0; x < info[0]?.canales.length; x++) {
                     let canal = {}
-                    canal["canalName"] = info[0]?.canales[x].name
-                    canal["productos"] = [...productos]
+                    canal['canalName'] = info[0]?.canales[x].name
+                    canal['productos'] = [...productos]
                     canales.push(canal)
                 }
                 estructura[info[0]?.paises[i].value] = [...canales]
-               
             }
-            setInfoForm( () => {
-                return {...estructura}
+            setInfoForm(() => {
+                return { ...estructura }
             })
         }
-       
     }, [info])
-
 
     useEffect(() => {
         getUser()
@@ -62,7 +57,6 @@ function PrecioP() {
             })
             .catch((error) => console.error(error))
     }, [])
-
 
     return (
         <div>
@@ -88,26 +82,33 @@ function PrecioP() {
                 {info && (
                     <Tabs defaultValue={defaultCountry}>
                         <TabList>
-                            {infoForm && Object.keys(infoForm).map((pais, index)=> (
+                            {infoForm &&
+                                Object.keys(infoForm).map((pais, index) => (
                                     <TabNav key={index} value={pais}>
-                                        <div className='capitalize'>{pais}</div>
+                                        <div className="capitalize">{pais}</div>
                                     </TabNav>
                                 ))}
                         </TabList>
                         {infoForm && (
                             <div className="container-countries">
-                            <FormContainer className="cont-countries">
-                            <ContainerScrollable contenido={
-                                <TablePrecio 
-                                 data ={infoForm}
-                                 showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
-                                 showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                                 />}  />
-                            </FormContainer>
-                        </div>
+                                <FormContainer className="cont-countries">
+                                    <ContainerScrollable
+                                        contenido={
+                                            <TablePrecio
+                                                data={infoForm}
+                                                showAlertSuces={(boolean) =>
+                                                    setShowSuccessAlert(boolean)
+                                                }
+                                                showAlertError={(boolean) =>
+                                                    setShowErrorAlert(boolean)
+                                                }
+                                                currency={currency}
+                                            />
+                                        }
+                                    />
+                                </FormContainer>
+                            </div>
                         )}
-                        
-                       
                     </Tabs>
                 )}
             </div>

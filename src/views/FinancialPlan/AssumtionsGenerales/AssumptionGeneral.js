@@ -9,8 +9,10 @@ import {
 } from 'components/ui'
 import { Field, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { editBusinessInfo, getUser } from 'services/Requests'
+import { setUser } from 'store/auth/userSlice'
 
 import { useMedia } from 'utils/hooks/useMedia'
 import * as Yup from 'yup'
@@ -25,9 +27,9 @@ const optionsBusiness = [
 ]
 
 const optionsMoney = [
-    { value: 'ars', label: 'ARS' },
-    { value: 'usd', label: 'USD' },
-    { value: 'eur', label: 'EUR' },
+    { value: '$', label: 'ARS' },
+    { value: 'US$', label: 'USD' },
+    { value: '€', label: 'EUR' },
 ]
 
 const MIN_UPLOAD = 1
@@ -48,8 +50,19 @@ const AssumptionGeneral = () => {
     const media = useMedia()
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showErrorAlert, setShowErrorAlert] = useState(false)
-
     const [info, setInfo] = useState()
+
+    const dispatch = useDispatch()
+    const currentState = useSelector((state) => state.auth.user)
+
+    const onChangeCurrency = (option) => {
+        const newState = {
+            ...currentState,
+            currency: option,
+        }
+        dispatch(setUser(newState))
+    }
+
     useEffect(() => {
         getUser()
             .then((data) => {
@@ -266,12 +279,15 @@ const AssumptionGeneral = () => {
                                                                 option.value ===
                                                                 values.moneda
                                                         )}
-                                                        onChange={(option) =>
+                                                        onChange={(option) => {
                                                             form.setFieldValue(
                                                                 field.name,
                                                                 option.value
                                                             )
-                                                        }
+                                                            onChangeCurrency(
+                                                                option.value
+                                                            )
+                                                        }}
                                                     />
                                                 )}
                                             </Field>

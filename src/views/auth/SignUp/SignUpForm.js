@@ -24,9 +24,9 @@ const businessOptions = [
 ]
 
 const currencyOptions = [
-    { value: 'ars', label: 'ARS' },
-    { value: 'usd', label: 'USD' },
-    { value: 'eur', label: 'EUR' },
+    { value: '$', label: 'ARS' },
+    { value: 'US$', label: 'USD' },
+    { value: '€', label: 'EUR' },
 ]
 
 const validationSchema = Yup.object().shape({
