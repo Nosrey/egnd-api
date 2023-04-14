@@ -5,6 +5,7 @@ import { AÑOS } from 'constants/forms.constants'
 import ContainerScrollable from 'components/shared/ContainerScrollable'
 import TablePrecio from './TablePrecio'
 import { useSelector } from 'react-redux'
+
 const { TabNav, TabList } = Tabs
 
 function PrecioP() {
@@ -13,7 +14,7 @@ function PrecioP() {
     const [infoForm, setInfoForm] = useState()
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showErrorAlert, setShowErrorAlert] = useState(false)
-    const moneda = useSelector((state) => state.auth.user)
+    const currency = useSelector((state) => state.auth.user.currency)
 
     useEffect(() => {
         let estructura = {}
@@ -101,6 +102,7 @@ function PrecioP() {
                                                 showAlertError={(boolean) =>
                                                     setShowErrorAlert(boolean)
                                                 }
+                                                currency={currency}
                                             />
                                         }
                                     />
