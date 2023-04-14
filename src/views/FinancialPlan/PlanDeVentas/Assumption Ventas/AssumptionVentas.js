@@ -3,6 +3,7 @@ import { Alert } from 'components/ui'
 import { useEffect, useState } from 'react'
 import { createAssumpVenta, getUser } from 'services/Requests'
 import TableAssumptionVentas from './TableAssumptionVentas'
+import { useMedia } from 'utils/hooks/useMedia'
 
 const AssumptionVentas = () => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
@@ -10,7 +11,7 @@ const AssumptionVentas = () => {
     const [activeButton, setActiveButton] = useState(true)
     const [errors, setErrors] = useState({})
     const [errorMessage, setErrorMessage] = useState('')
-
+    const media = useMedia()
     const [productos, setProductos] = useState([])
     const [countries, setCountries] = useState([])
 
@@ -31,7 +32,7 @@ const AssumptionVentas = () => {
     const addProduct = (newProduct) => {
         if (productos.length === 10) {
             window.scrollTo({ top: 0, behavior: 'smooth' })
-            setErrorMessage('Se puede agregar 10 productos maximo')
+            setErrorMessage('Se llegó al límite de 10 productos')
             setShowErrorAlert(true)
             setTimeout(() => {
                 setShowErrorAlert(false)
@@ -47,7 +48,7 @@ const AssumptionVentas = () => {
     const addChannel = (newChannel) => {
         if (channels.length === 5) {
             window.scrollTo({ top: 0, behavior: 'smooth' })
-            setErrorMessage('Se puede agregar 5 canales maximo')
+            setErrorMessage('Se llegó al límite de 5 canales')
             setShowErrorAlert(true)
             setTimeout(() => {
                 setShowErrorAlert(false)
@@ -197,8 +198,9 @@ const AssumptionVentas = () => {
                 <div className="border-b-2 px-4 py-1">
                     <h6>Carga de productos / servicios</h6>
                 </div>
-
-                <ContainerScrollable
+                {
+                    media === 'mobile'  ?
+                    <ContainerScrollable
                     contenido={
                         <TableAssumptionVentas
                             countries={countries}
@@ -227,6 +229,35 @@ const AssumptionVentas = () => {
                         />
                     }
                 />
+
+                : 
+                <TableAssumptionVentas
+                    countries={countries}
+                    setCountries={setCountries}
+                    productos={productos}
+                    errors={errors}
+                    removeProd={removeProd}
+                    removeChannel={removeChannel}
+                    addProduct={addProduct}
+                    addChannel={addChannel}
+                    channels={channels}
+                    handleEditProduct={handleEditProduct}
+                    handleEditChannel={handleEditChannel}
+                    handleKeyPressVolumen={handleKeyPressVolumen}
+                    churn={churn}
+                    handleEditChurn={handleEditChurn}
+                    handleKeyPressChurn={handleKeyPressChurn}
+                    onSubmit={onSubmit}
+                    showAlertSuces={(boolean) =>
+                        setShowSuccessAlert(boolean)
+                    }
+                    showAlertError={(boolean) =>
+                        setShowErrorAlert(boolean)
+                    }
+                    activeButton={activeButton}
+                />
+                }
+                
             </div>
         </div>
     )
