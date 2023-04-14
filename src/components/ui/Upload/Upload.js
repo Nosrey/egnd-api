@@ -123,7 +123,7 @@ const Upload = React.forwardRef((props, ref) => {
         }
 
         if (draggable && !children) {
-            return <span>Choose a file or drag and drop here</span>
+            return <span>Elija un archivo o arrastre y suelte aquí</span>
         }
 
         return children

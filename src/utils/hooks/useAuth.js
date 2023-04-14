@@ -1,10 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { setUser, initialState } from 'store/auth/userSlice'
-import { apiSignIn, apiSignOut, apiSignUp } from 'services/AuthService'
-import { onSignInSuccess, onSignOutSuccess } from 'store/auth/sessionSlice'
 import appConfig from 'configs/app.config'
 import { REDIRECT_URL_KEY } from 'constants/app.constant'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { apiSignOut, apiSignUp } from 'services/AuthService'
+import { onSignInSuccess, onSignOutSuccess } from 'store/auth/sessionSlice'
+import { initialState, setUser } from 'store/auth/userSlice'
+import { signIn as apiSignIn } from '../../services/AuthService'
 import useQuery from './useQuery'
 
 function useAuth() {
@@ -19,21 +20,21 @@ function useAuth() {
     const signIn = async (values) => {
         try {
             const resp = await apiSignIn(values)
-            if (resp.data) {
-                const { token } = resp.data
+            if (resp.success) {
+                const { response } = resp
+                const { id, token, mail } = response
                 dispatch(onSignInSuccess(token))
-                if (resp.data.user) {
-                    dispatch(
-                        setUser(
-                            resp.data.user || {
-                                avatar: '',
-                                userName: 'Anonymous',
-                                authority: ['USER'],
-                                email: '',
-                            }
-                        )
-                    )
-                }
+                console.log(id)
+                dispatch(
+                    setUser({
+                        id,
+                        avatar: '',
+                        userName: 'Anonymous',
+                        authority: ['USER'],
+                        email: mail,
+                    })
+                )
+
                 const redirectUrl = query.get(REDIRECT_URL_KEY)
                 navigate(
                     redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath
@@ -41,6 +42,13 @@ function useAuth() {
                 return {
                     status: 'success',
                     message: '',
+                    error: false,
+                }
+            } else {
+                return {
+                    status: 'success',
+                    message: resp.response,
+                    error: true,
                 }
             }
         } catch (errors) {
@@ -90,6 +98,7 @@ function useAuth() {
         dispatch(onSignOutSuccess())
         dispatch(setUser(initialState))
         navigate(appConfig.unAuthenticatedEntryPath)
+        localStorage.removeItem('userId')
     }
 
     const signOut = async () => {

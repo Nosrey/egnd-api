@@ -2,11 +2,34 @@
     "nav": {
         "home": "Home",
         "singleMenuItem": "Single menu item",
+        "financialPlan": "Financial Plan",
         "collapseMenu": {
             "collapseMenu": "Financial Plan",
-            "item1": "Assumption General",
-            "item2": "Assumption Ventas",
-            "item4": "Assumption Financieras"
+            "collapseGeneral": {
+                "collapseGeneral": "Assumptions General",
+                "item1": "Assumptions General",
+                "item2": "Research"
+            },
+            "collapsePlanCuentas": "Plan de Cuentas"
+        },
+
+        "collapsePlanVentas": {
+            "collapsePlanVentas": "Assumptions Ventas",
+            "item1": "Assumptions Ventas",
+            "item2": "GMV y Take Rate",
+            "item3": "Volumen (Q)",
+            "item4": "Precio (P)",
+            "item5": "Ventas",
+            "item6": "Clientes - Alta",
+            "item7": "Clientes - Churn",
+            "item8": "Clientes - Clientes Totales",
+            "item9": "Dashboard Venta"
+        },
+        "collapseFinancialPlan": {
+            "collapseFinancialPlan": "Financial Plan",
+            "item1": "Precio de bienes",
+            "item2": "Inversión",
+            "item3": "Assumption Financieras"
         }
     }
 }

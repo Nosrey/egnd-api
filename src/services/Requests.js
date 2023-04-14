@@ -1,7 +1,17 @@
-export const getUser = async (id) => {
+import store from '../store/index'
+
+const app = store.getState()
+
+const ls = JSON.parse(window.localStorage.getItem('admin'))
+const auth = JSON.parse(ls.auth)
+
+const URL_API = 'http://localhost:4000'
+const idUser = app.auth.user.id ? app.auth.user.id : auth.user.id
+
+export const getUser = async () => {
     try {
-        const res = await fetch(URL_API + '/api/users/' + idUser)
-        const data = await res.json()
+        const resp = await fetch(URL_API + '/api/users/' + idUser)
+        const data = await resp.json()
         return data.response
     } catch (error) {
         console.error('Error:', error)
@@ -9,15 +19,26 @@ export const getUser = async (id) => {
     }
 }
 
-export const signUp = async (body) => {
+export const editBusinessInfo = async (
+    businessName,
+    businessModel,
+    currency,
+    imagePath
+) => {
     try {
-        const response = await fetch(`/signup`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const formData = new FormData()
+        formData.append('businessName', businessName)
+        formData.append(
+            'businessInfo',
+            JSON.stringify([{ businessModel, currency }])
+        )
+        formData.append('image', imagePath)
+
+        const response = await fetch(URL_API + '/api/users/' + idUser, {
+            method: 'PUT',
+            body: formData,
         })
+
         const data = await response.json()
         return data
     } catch (error) {
@@ -34,14 +55,9 @@ export const signUp = async (body) => {
     }
 }
 
-export const createAssumpVenta = async ({
-    canales,
-    churns,
-    paises,
-    productos,
-}) => {
+export const createAssumpVenta = async (canales, churns, paises, productos) => {
     try {
-        const response = await fetch('/assumpventa', {
+        const response = await fetch(URL_API + '/api/assumpventa', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -134,13 +150,14 @@ export const createGastos = async (body) => {
     }
 }
 
-export const createPrecio = async (body) => {
+export const createPrecio = async ({countryName, stats}) => {
     try {
-        const response = await fetch(`/precio`, {
+        const response = await fetch(URL_API + `/api/precio`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                precio: body,
+                countryName,
+                stats,
                 idUser: idUser,
             }),
         })
@@ -181,6 +198,36 @@ export const createPuestosv = async (body) => {
             },
             body: JSON.stringify({
                 puestosv: body,
+                idUser: idUser,
+            }),
+        })
+        const data = await response.json()
+        return data
+    } catch (error) {
+        console.error('Error', error.message)
+        throw error
+    }
+}
+
+export const createAssumpFinanciera = async (
+    cobranzas,
+    pagoProducto,
+    pagoServicio,
+    stock,
+    inversion
+) => {
+    try {
+        const response = await fetch(URL_API + '/api/assumpfinanciera', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cobranzas,
+                pagoProducto,
+                pagoServicio,
+                stock,
+                inversion,
                 idUser: idUser,
             }),
         })

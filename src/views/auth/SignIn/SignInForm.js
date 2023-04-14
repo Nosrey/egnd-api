@@ -1,21 +1,22 @@
-import React from 'react'
+import { ActionLink, PasswordInput } from 'components/shared'
 import {
-    Input,
+    Alert,
     Button,
     Checkbox,
-    FormItem,
     FormContainer,
-    Alert,
+    FormItem,
+    Input,
 } from 'components/ui'
-import { PasswordInput, ActionLink } from 'components/shared'
-import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
-import * as Yup from 'yup'
 import useAuth from 'utils/hooks/useAuth'
+import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
+import * as Yup from 'yup'
 
 const validationSchema = Yup.object().shape({
-    userName: Yup.string().required('Please enter your user name'),
-    password: Yup.string().required('Please enter your password'),
+    email: Yup.string()
+        .email('Correo electrónico invalido')
+        .required('Por favor introduzca su correo electrónico'),
+    password: Yup.string().required('Por favor introduzca su contraseña'),
     rememberMe: Yup.bool(),
 })
 
@@ -28,14 +29,17 @@ const SignInForm = (props) => {
     } = props
 
     const [message, setMessage] = useTimeOutMessage()
-
     const { signIn } = useAuth()
 
     const onSignIn = async (values, setSubmitting) => {
-        const { userName, password } = values
+        const { email, password } = values
         setSubmitting(true)
 
-        const result = await signIn({ userName, password })
+        const result = await signIn({ email, password })
+
+        if (result.error) {
+            setMessage(result.message)
+        }
 
         if (result.status === 'failed') {
             setMessage(result.message)
@@ -54,9 +58,9 @@ const SignInForm = (props) => {
             <Formik
                 // Remove this initial value
                 initialValues={{
-                    userName: 'admin',
-                    password: '123Qwe',
-                    rememberMe: true,
+                    email: '',
+                    password: '',
+                    rememberMe: false,
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
@@ -71,27 +75,27 @@ const SignInForm = (props) => {
                     <Form>
                         <FormContainer>
                             <FormItem
-                                label="User Name"
-                                invalid={errors.userName && touched.userName}
-                                errorMessage={errors.userName}
+                                label="Correo electronico"
+                                invalid={errors.email && touched.email}
+                                errorMessage={errors.email}
                             >
                                 <Field
-                                    type="text"
+                                    type="email"
                                     autoComplete="off"
-                                    name="userName"
-                                    placeholder="User Name"
+                                    name="email"
+                                    placeholder="Correo electronico"
                                     component={Input}
                                 />
                             </FormItem>
                             <FormItem
-                                label="Password"
+                                label="Contraseña"
                                 invalid={errors.password && touched.password}
                                 errorMessage={errors.password}
                             >
                                 <Field
                                     autoComplete="off"
                                     name="password"
-                                    placeholder="Password"
+                                    placeholder="Contraseña"
                                     component={PasswordInput}
                                 />
                             </FormItem>
@@ -100,10 +104,10 @@ const SignInForm = (props) => {
                                     className="mb-0"
                                     name="rememberMe"
                                     component={Checkbox}
-                                    children="Remember Me"
+                                    children="Recordarme"
                                 />
                                 <ActionLink to={forgotPasswordUrl}>
-                                    Forgot Password?
+                                    Olvidaste la constraseña?
                                 </ActionLink>
                             </div>
                             <Button
@@ -112,11 +116,15 @@ const SignInForm = (props) => {
                                 variant="solid"
                                 type="submit"
                             >
-                                {isSubmitting ? 'Signing in...' : 'Sign In'}
+                                {isSubmitting
+                                    ? 'Iniciando sesión...'
+                                    : 'Iniciar sesión'}
                             </Button>
                             <div className="mt-4 text-center">
-                                <span>Don't have an account yet? </span>
-                                <ActionLink to={signUpUrl}>Sign up</ActionLink>
+                                <span>No tienes cuenta? </span>
+                                <ActionLink to={signUpUrl}>
+                                    Crear cuenta
+                                </ActionLink>
                             </div>
                         </FormContainer>
                     </Form>

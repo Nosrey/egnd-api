@@ -1,14 +1,14 @@
-import React from 'react'
+import Layout from 'components/layout'
+import Theme from 'components/template/Theme'
+import appConfig from 'configs/app.config'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
-import store, { persistor } from './store'
-import Theme from 'components/template/Theme'
-import Layout from 'components/layout'
+import '../src/app.css'
 import history from './history'
-import mockServer from './mock'
-import appConfig from 'configs/app.config'
 import './locales'
+import mockServer from './mock'
+import store, { persistor } from './store'
 
 const environment = process.env.NODE_ENV
 
