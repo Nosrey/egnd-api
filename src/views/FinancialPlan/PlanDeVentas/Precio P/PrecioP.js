@@ -43,6 +43,7 @@ function PrecioP() {
                 }
                 estructura[info[0]?.paises[i].value] = [...canales]
             }
+            console.log("ASI", estructura)
             setInfoForm(() => {
                 return { ...estructura }
             })
@@ -52,7 +53,20 @@ function PrecioP() {
     useEffect(() => {
         getUser()
             .then((data) => {
-                setInfo(data?.assumptionData)
+              
+                console.log(data?.precioData.length)
+                if (data?.precioData.length !== 0) {
+                    const datosPrecargados = {};
+                    for (let i = 0; i < data?.precioData.length; i++) {
+                    datosPrecargados[data?.precioData[i].countryName] = data?.precioData[i].stats;
+                    }
+                    console.log(datosPrecargados)
+                    setInfoForm(() => {
+                        return { ...datosPrecargados }
+                    })
+                } else {
+                    setInfo(data?.assumptionData)
+                }
                 setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value)
             })
             .catch((error) => console.error(error))
@@ -79,7 +93,7 @@ function PrecioP() {
                 <div className="border-b-2 px-4 py-1">
                     <h6>Carga de productos / servicios</h6>
                 </div>
-                {info && (
+                {infoForm && (
                     <Tabs defaultValue={defaultCountry}>
                         <TabList>
                             {infoForm &&
