@@ -93,7 +93,7 @@ function PrecioP() {
                 <div className="border-b-2 px-4 py-1">
                     <h6>Carga de productos / servicios</h6>
                 </div>
-                {infoForm && (
+                {infoForm ? 
                     <Tabs defaultValue={defaultCountry}>
                         <TabList>
                             {infoForm &&
@@ -124,7 +124,13 @@ function PrecioP() {
                             </div>
                         )}
                     </Tabs>
-                )}
+                    :    
+                    <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                    <span>
+                        Para acceder a este formulario primero debe completar el formulario de Assumptions Ventas.
+                    </span>
+                </div>
+                }
             </div>
         </div>
     )
