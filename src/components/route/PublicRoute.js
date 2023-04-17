@@ -5,10 +5,10 @@ import useAuth from 'utils/hooks/useAuth'
 
 const { authenticatedEntryPath } = appConfig
 
-const PublicRoute = () => {
-    const { authenticated } = useAuth()
+function PublicRoute() {
+  const { authenticated } = useAuth()
 
-    return authenticated ? <Navigate to={authenticatedEntryPath} /> : <Outlet />
+  return authenticated ? <Navigate to={authenticatedEntryPath} /> : <Outlet />
 }
 
 export default PublicRoute

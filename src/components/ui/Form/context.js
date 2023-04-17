@@ -7,7 +7,7 @@ export const FormContextProvider = FormContext.Provider
 export const FormContextConsumer = FormContext.Consumer
 
 export function useForm() {
-    return useContext(FormContext)
+  return useContext(FormContext)
 }
 
 export default FormContext

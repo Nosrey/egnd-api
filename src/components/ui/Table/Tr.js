@@ -3,23 +3,23 @@ import classNames from 'classnames'
 import PropTypes from 'prop-types'
 
 const Tr = React.forwardRef((props, ref) => {
-    const { children, asElement: Component, className, ...rest } = props
+  const { children, asElement: Component, className, ...rest } = props
 
-    const trClass = classNames(Component !== 'tr' && 'tr', className)
+  const trClass = classNames(Component !== 'tr' && 'tr', className)
 
-    return (
-        <Component className={trClass} ref={ref} {...rest}>
-            {children}
-        </Component>
-    )
+  return (
+    <Component className={trClass} ref={ref} {...rest}>
+      {children}
+    </Component>
+  )
 })
 
 Tr.propTypes = {
-    asElement: PropTypes.string,
+  asElement: PropTypes.string,
 }
 
 Tr.defaultProps = {
-    asElement: 'tr',
+  asElement: 'tr',
 }
 
 export default Tr
