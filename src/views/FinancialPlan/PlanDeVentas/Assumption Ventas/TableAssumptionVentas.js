@@ -6,7 +6,6 @@ import {
     Input,
     Select,
 } from 'components/ui'
-import { useState } from 'react'
 import { MdDelete } from 'react-icons/md'
 import CreatableSelect from 'react-select/creatable'
 import { useMedia } from 'utils/hooks/useMedia'
@@ -56,10 +55,11 @@ function TableAssumptionVentas({
     setCountries,
     countries,
     activeButton,
+    showRemoveProd,
+    setShowRemoveProd,
+    showRemoveChannel,
+    setShowRemoveChannel,
 }) {
-    const [showRemoveProd, setShowRemoveProd] = useState(false)
-
-    const [showRemoveChannel, setShowRemoveChannel] = useState(false)
     const media = useMedia()
 
     const validateId = (campo, id) => {

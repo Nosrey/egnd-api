@@ -2,10 +2,13 @@ import ContainerScrollable from 'components/shared/ContainerScrollable'
 import { Alert } from 'components/ui'
 import { useEffect, useState } from 'react'
 import { createAssumpVenta, getUser } from 'services/Requests'
-import TableAssumptionVentas from './TableAssumptionVentas'
 import { useMedia } from 'utils/hooks/useMedia'
+import TableAssumptionVentas from './TableAssumptionVentas'
 
 const AssumptionVentas = () => {
+    const [showRemoveProd, setShowRemoveProd] = useState(false)
+    const [inputEmpty, setImputEmpty] = useState(false)
+    const [showRemoveChannel, setShowRemoveChannel] = useState(false)
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showErrorAlert, setShowErrorAlert] = useState(false)
     const [activeButton, setActiveButton] = useState(true)
@@ -15,19 +18,8 @@ const AssumptionVentas = () => {
     const [productos, setProductos] = useState([])
     const [countries, setCountries] = useState([])
 
-    const [channels, setChannels] = useState([
-        {
-            name: '',
-            sameClient: '',
-            items: [],
-        },
-    ])
-    const [churn, setChurn] = useState([
-        {
-            channel: channels[0].name,
-            items: [],
-        },
-    ])
+    const [channels, setChannels] = useState([])
+    const [churn, setChurn] = useState([])
 
     const addProduct = (newProduct) => {
         if (productos.length === 10) {
@@ -71,10 +63,25 @@ const AssumptionVentas = () => {
         })
     }, [])
 
+    console.log(productos, channels)
     const removeProd = (id) => {
         setProductos(productos.filter((item) => id !== item.id))
         buttonSaveStatus()
+        channels.forEach(
+            (channel) =>
+                (channel.items = channels[0].items.filter(
+                    (item) => item.prodId !== id
+                ))
+        )
+
+        churn.forEach(
+            (channel) =>
+                (channel.items = churn[0].items.filter(
+                    (item) => item.prodId !== id
+                ))
+        )
     }
+
     const removeChannel = (channelName) => {
         setChannels([...channels.filter((item) => channelName !== item.name)])
     }
@@ -160,23 +167,53 @@ const AssumptionVentas = () => {
         }
     }
 
+    const validateEmptyInputs = () => {
+        let isEmpty = false
+        productos.forEach((p) => {
+            if (p.name === '' || p.model === '' || p.type === '') {
+                isEmpty = true
+            }
+        })
+
+        channels.forEach((c) => {
+            if (c.name === '' || c.sameClient === '') {
+                isEmpty = true
+            }
+        })
+
+        setImputEmpty(isEmpty)
+    }
+
     const onSubmit = () => {
-        createAssumpVenta(channels, churn, countries, productos)
-            .then((data) => {
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-                setShowSuccessAlert(true)
-                setTimeout(() => {
-                    setShowSuccessAlert(false)
-                }, 5000)
-            })
-            .catch((error) => {
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-                setErrorMessage('No se pudieron guardar los datos.')
-                setShowErrorAlert(true)
-                setTimeout(() => {
-                    setShowErrorAlert(false)
-                }, 5000)
-            })
+        validateEmptyInputs()
+
+        if (inputEmpty) {
+            createAssumpVenta(channels, churn, countries, productos)
+                .then((data) => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    setShowSuccessAlert(true)
+                    setTimeout(() => {
+                        setShowSuccessAlert(false)
+                    }, 5000)
+                })
+                .catch((error) => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    setErrorMessage('No se pudieron guardar los datos.')
+                    setShowErrorAlert(true)
+                    setTimeout(() => {
+                        setShowErrorAlert(false)
+                    }, 5000)
+                })
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            setErrorMessage('Completa los campos vacios')
+            setShowErrorAlert(true)
+            setTimeout(() => {
+                setShowErrorAlert(false)
+            }, 5000)
+        }
+        setShowRemoveChannel(false)
+        setShowRemoveProd(false)
     }
     return (
         <div>
@@ -198,66 +235,69 @@ const AssumptionVentas = () => {
                 <div className="border-b-2 px-4 py-1">
                     <h6>Carga de productos / servicios</h6>
                 </div>
-                {
-                    media === 'mobile'  ?
+                {media === 'mobile' ? (
                     <ContainerScrollable
-                    contenido={
-                        <TableAssumptionVentas
-                            countries={countries}
-                            setCountries={setCountries}
-                            productos={productos}
-                            errors={errors}
-                            removeProd={removeProd}
-                            removeChannel={removeChannel}
-                            addProduct={addProduct}
-                            addChannel={addChannel}
-                            channels={channels}
-                            handleEditProduct={handleEditProduct}
-                            handleEditChannel={handleEditChannel}
-                            handleKeyPressVolumen={handleKeyPressVolumen}
-                            churn={churn}
-                            handleEditChurn={handleEditChurn}
-                            handleKeyPressChurn={handleKeyPressChurn}
-                            onSubmit={onSubmit}
-                            showAlertSuces={(boolean) =>
-                                setShowSuccessAlert(boolean)
-                            }
-                            showAlertError={(boolean) =>
-                                setShowErrorAlert(boolean)
-                            }
-                            activeButton={activeButton}
-                        />
-                    }
-                />
-
-                : 
-                <TableAssumptionVentas
-                    countries={countries}
-                    setCountries={setCountries}
-                    productos={productos}
-                    errors={errors}
-                    removeProd={removeProd}
-                    removeChannel={removeChannel}
-                    addProduct={addProduct}
-                    addChannel={addChannel}
-                    channels={channels}
-                    handleEditProduct={handleEditProduct}
-                    handleEditChannel={handleEditChannel}
-                    handleKeyPressVolumen={handleKeyPressVolumen}
-                    churn={churn}
-                    handleEditChurn={handleEditChurn}
-                    handleKeyPressChurn={handleKeyPressChurn}
-                    onSubmit={onSubmit}
-                    showAlertSuces={(boolean) =>
-                        setShowSuccessAlert(boolean)
-                    }
-                    showAlertError={(boolean) =>
-                        setShowErrorAlert(boolean)
-                    }
-                    activeButton={activeButton}
-                />
-                }
-                
+                        contenido={
+                            <TableAssumptionVentas
+                                countries={countries}
+                                setCountries={setCountries}
+                                productos={productos}
+                                errors={errors}
+                                removeProd={removeProd}
+                                removeChannel={removeChannel}
+                                addProduct={addProduct}
+                                addChannel={addChannel}
+                                channels={channels}
+                                handleEditProduct={handleEditProduct}
+                                handleEditChannel={handleEditChannel}
+                                handleKeyPressVolumen={handleKeyPressVolumen}
+                                churn={churn}
+                                handleEditChurn={handleEditChurn}
+                                handleKeyPressChurn={handleKeyPressChurn}
+                                onSubmit={onSubmit}
+                                showAlertSuces={(boolean) =>
+                                    setShowSuccessAlert(boolean)
+                                }
+                                showAlertError={(boolean) =>
+                                    setShowErrorAlert(boolean)
+                                }
+                                activeButton={activeButton}
+                                showRemoveProd={showRemoveProd}
+                                setShowRemoveProd={setShowRemoveProd}
+                                showRemoveChannel={showRemoveChannel}
+                                setShowRemoveChannel={setShowRemoveChannel}
+                            />
+                        }
+                    />
+                ) : (
+                    <TableAssumptionVentas
+                        countries={countries}
+                        setCountries={setCountries}
+                        productos={productos}
+                        errors={errors}
+                        removeProd={removeProd}
+                        removeChannel={removeChannel}
+                        addProduct={addProduct}
+                        addChannel={addChannel}
+                        channels={channels}
+                        handleEditProduct={handleEditProduct}
+                        handleEditChannel={handleEditChannel}
+                        handleKeyPressVolumen={handleKeyPressVolumen}
+                        churn={churn}
+                        handleEditChurn={handleEditChurn}
+                        handleKeyPressChurn={handleKeyPressChurn}
+                        onSubmit={onSubmit}
+                        showAlertSuces={(boolean) =>
+                            setShowSuccessAlert(boolean)
+                        }
+                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                        activeButton={activeButton}
+                        showRemoveProd={showRemoveProd}
+                        setShowRemoveProd={setShowRemoveProd}
+                        showRemoveChannel={showRemoveChannel}
+                        setShowRemoveChannel={setShowRemoveChannel}
+                    />
+                )}
             </div>
         </div>
     )
