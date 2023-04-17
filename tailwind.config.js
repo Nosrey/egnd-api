@@ -1,7 +1,7 @@
 const flattenColorPalette =
-  require('tailwindcss/lib/util/flattenColorPalette').default
+  require('tailwindcss/lib/util/flattenColorPalette').default;
 
-const safeListFile = 'safelist.txt'
+const safeListFile = 'safelist.txt';
 module.exports = {
   mode: 'jit',
   content: [
@@ -77,18 +77,18 @@ module.exports = {
   },
   plugins: [
     ({ addUtilities, e, theme, variants }) => {
-      const colors = flattenColorPalette(theme('borderColor'))
-      delete colors.default
+      const colors = flattenColorPalette(theme('borderColor'));
+      delete colors.default;
 
       const colorMap = Object.keys(colors).map((color) => ({
         [`.border-t-${color}`]: { borderTopColor: colors[color] },
         [`.border-r-${color}`]: { borderRightColor: colors[color] },
         [`.border-b-${color}`]: { borderBottomColor: colors[color] },
         [`.border-l-${color}`]: { borderLeftColor: colors[color] },
-      }))
-      const utilities = Object.assign({}, ...colorMap)
+      }));
+      const utilities = Object.assign({}, ...colorMap);
 
-      addUtilities(utilities, variants('borderColor'))
+      addUtilities(utilities, variants('borderColor'));
     },
     // If your application does not require multiple theme selection,
     // you can replace {color} to your theme color value
@@ -120,4 +120,4 @@ module.exports = {
     }),
     require('@tailwindcss/typography'),
   ],
-}
+};
