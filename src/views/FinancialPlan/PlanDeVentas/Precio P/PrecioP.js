@@ -5,6 +5,7 @@ import { AÑOS } from 'constants/forms.constants'
 import ContainerScrollable from 'components/shared/ContainerScrollable'
 import TablePrecio from './TablePrecio'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const { TabNav, TabList } = Tabs
 
@@ -43,7 +44,7 @@ function PrecioP() {
                 }
                 estructura[info[0]?.paises[i].value] = [...canales]
             }
-            console.log("ASI", estructura)
+            console.log('ASI', estructura)
             setInfoForm(() => {
                 return { ...estructura }
             })
@@ -53,12 +54,12 @@ function PrecioP() {
     useEffect(() => {
         getUser()
             .then((data) => {
-              
                 console.log(data?.precioData.length)
                 if (data?.precioData.length !== 0) {
-                    const datosPrecargados = {};
+                    const datosPrecargados = {}
                     for (let i = 0; i < data?.precioData.length; i++) {
-                    datosPrecargados[data?.precioData[i].countryName] = data?.precioData[i].stats;
+                        datosPrecargados[data?.precioData[i].countryName] =
+                            data?.precioData[i].stats
                     }
                     console.log(datosPrecargados)
                     setInfoForm(() => {
@@ -93,7 +94,7 @@ function PrecioP() {
                 <div className="border-b-2 px-4 py-1">
                     <h6>Carga de productos / servicios</h6>
                 </div>
-                {infoForm ? 
+                {infoForm ? (
                     <Tabs defaultValue={defaultCountry}>
                         <TabList>
                             {infoForm &&
@@ -124,13 +125,21 @@ function PrecioP() {
                             </div>
                         )}
                     </Tabs>
-                    :    
+                ) : (
                     <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-                    <span>
-                        Para acceder a este formulario primero debe completar el formulario de Assumptions Ventas.
-                    </span>
-                </div>
-                }
+                        <span className="text-center">
+                            <Link
+                                className="text-[#3E35C4] leading-8"
+                                to="/assumptionventas"
+                            >
+                                Para acceder a este formulario primero debe
+                                completar el formulario de Assumptions Ventas.
+                                <br />
+                                Click aquí.
+                            </Link>
+                        </span>
+                    </div>
+                )}
             </div>
         </div>
     )

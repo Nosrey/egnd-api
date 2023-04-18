@@ -43,7 +43,6 @@ const validationSchema = Yup.object().shape({
         'Por favor seleccione un modelo de negocio'
     ),
     moneda: Yup.string().required('Por favor seleccione una moneda'),
-    upload: Yup.array().min(MIN_UPLOAD, '¡Al menos un archivo subido!'),
 })
 
 const AssumptionGeneral = () => {
@@ -98,6 +97,7 @@ const AssumptionGeneral = () => {
         return valid
     }
 
+    console.log(info?.businessInfo[0])
     return (
         <div>
             {showSuccessAlert && (
@@ -126,9 +126,7 @@ const AssumptionGeneral = () => {
                                 modeloNegorcio:
                                     info?.businessInfo[0]?.businessModel.toLowerCase() ||
                                     '',
-                                moneda:
-                                    info?.businessInfo[0]?.currency.toLowerCase() ||
-                                    '',
+                                moneda: info?.businessInfo[0]?.currency || '',
                                 upload: [],
                             }}
                             validationSchema={validationSchema}
