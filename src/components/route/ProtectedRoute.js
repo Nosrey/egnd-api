@@ -6,21 +6,21 @@ import useAuth from 'utils/hooks/useAuth'
 
 const { unAuthenticatedEntryPath } = appConfig
 
-const ProtectedRoute = () => {
-    const { authenticated } = useAuth()
+function ProtectedRoute() {
+  const { authenticated } = useAuth()
 
-    const location = useLocation()
+  const location = useLocation()
 
-    if (!authenticated) {
-        return (
-            <Navigate
-                to={`${unAuthenticatedEntryPath}?${REDIRECT_URL_KEY}=${location.pathname}`}
-                replace
-            />
-        )
-    }
+  if (!authenticated) {
+    return (
+      <Navigate
+        to={`${unAuthenticatedEntryPath}?${REDIRECT_URL_KEY}=${location.pathname}`}
+        replace
+      />
+    )
+  }
 
-    return <Outlet />
+  return <Outlet />
 }
 
 export default ProtectedRoute

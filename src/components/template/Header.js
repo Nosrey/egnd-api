@@ -5,13 +5,18 @@ import { HEADER_HEIGHT_CLASS } from 'constants/theme.constant'
 import { useDispatch } from 'react-redux'
 import { setFalse } from 'store/icon/iconSlice'
 
-const Header = (props) => {
+function Header(props) {
     const { headerStart, headerEnd, headerMiddle, className, container } = props
 
+    const isTrue = useSelector((state) => state.icon)
     const dispatch = useDispatch()
     const handleClick = () => {
         dispatch(setFalse())
     }
+
+    useEffect(() => {
+        console.log(isTrue)
+    }, [isTrue])
 
     return (
         <header className={classNames('header', className)}>
