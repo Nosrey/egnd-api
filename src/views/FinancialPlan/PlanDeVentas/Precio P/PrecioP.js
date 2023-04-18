@@ -1,72 +1,73 @@
-import React, { useEffect, useState } from 'react'
-import { getUser } from 'services/Requests'
-import { FormContainer, Tabs, Alert } from 'components/ui'
-import { AÑOS } from 'constants/forms.constants'
-import ContainerScrollable from 'components/shared/ContainerScrollable'
-import { useSelector } from 'react-redux'
-import TablePrecio from './TablePrecio'
+import ContainerScrollable from 'components/shared/ContainerScrollable';
+import { Alert, FormContainer, Tabs } from 'components/ui';
+import { AÑOS } from 'constants/forms.constants';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getUser } from 'services/Requests';
+import TablePrecio from './TablePrecio';
 
-const { TabNav, TabList } = Tabs
+const { TabNav, TabList } = Tabs;
 
 function PrecioP() {
-  const [info, setInfo] = useState(null)
-  const [defaultCountry, setDefaultCountry] = useState('')
-  const [infoForm, setInfoForm] = useState()
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
-  const currency = useSelector((state) => state.auth.user.currency)
+  const [info, setInfo] = useState(null);
+  const [defaultCountry, setDefaultCountry] = useState('');
+  const [infoForm, setInfoForm] = useState();
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const currency = useSelector((state) => state.auth.user.currency);
+  const currentState = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    const estructura = {}
+    const estructura = {};
     if (info && info[0]) {
       for (let i = 0; i < info[0]?.paises.length; i++) {
-        const productos = []
-        const realProds = info[0]?.productos
+        const productos = [];
+        const realProds = info[0]?.productos;
         for (let x = 0; x < realProds.length; x++) {
-          const prod = {}
-          prod.id = realProds[x].id
-          prod.volInicial = 0
-          prod.precioInicial = 0
-          prod.tasa = 0
-          prod.name = realProds[x].name
-          prod.inicioMes = 1
-          prod.fecha = ''
-          prod['años'] = [...AÑOS]
-          productos.push(prod)
+          const prod = {};
+          prod.id = realProds[x].id;
+          prod.volInicial = 0;
+          prod.precioInicial = 0;
+          prod.tasa = 0;
+          prod.name = realProds[x].name;
+          prod.inicioMes = 1;
+          prod.fecha = '';
+          prod['años'] = [...AÑOS];
+          productos.push(prod);
         }
-        const canales = []
+        const canales = [];
         for (let x = 0; x < info[0]?.canales.length; x++) {
-          const canal = {}
-          canal.canalName = info[0]?.canales[x].name
-          canal.productos = [...productos]
-          canales.push(canal)
+          const canal = {};
+          canal.canalName = info[0]?.canales[x].name;
+          canal.productos = [...productos];
+          canales.push(canal);
         }
-        estructura[info[0]?.paises[i].value] = [...canales]
+        estructura[info[0]?.paises[i].value] = [...canales];
       }
-      console.log('ASI', estructura)
-      setInfoForm(() => ({ ...estructura }))
+      console.log('ASI', estructura);
+      setInfoForm(() => ({ ...estructura }));
     }
-  }, [info])
+  }, [info]);
 
   useEffect(() => {
-    getUser()
+    getUser(currentState.id)
       .then((data) => {
-        console.log(data?.precioData.length)
+        console.log(data?.precioData.length);
         if (data?.precioData.length !== 0) {
-          const datosPrecargados = {}
+          const datosPrecargados = {};
           for (let i = 0; i < data?.precioData.length; i++) {
             datosPrecargados[data?.precioData[i].countryName] =
-              data?.precioData[i].stats
+              data?.precioData[i].stats;
           }
-          console.log(datosPrecargados)
-          setInfoForm(() => ({ ...datosPrecargados }))
+          console.log(datosPrecargados);
+          setInfoForm(() => ({ ...datosPrecargados }));
         } else {
-          setInfo(data?.assumptionData)
+          setInfo(data?.assumptionData);
         }
-        setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value)
+        setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
       })
-      .catch((error) => console.error(error))
-  }, [])
+      .catch((error) => console.error(error));
+  }, []);
 
   return (
     <div>
@@ -128,7 +129,7 @@ function PrecioP() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default PrecioP
+export default PrecioP;

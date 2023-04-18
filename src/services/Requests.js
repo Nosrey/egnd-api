@@ -1,59 +1,60 @@
-import store from '../store/index'
+import store from '../store/index';
 
-const app = store.getState()
+const app = store.getState();
 
-const ls = JSON.parse(window.localStorage.getItem('admin'))
-const auth = JSON.parse(ls.auth)
+// const ls = JSON.parse(window.localStorage.getItem('admin'));
+// const auth = JSON.parse(ls.auth);
 
-const URL_API = 'http://localhost:4000'
-const idUser = app.auth.user.id ? app.auth.user.id : auth.user.id
+const URL_API = 'http://localhost:4000';
+const idUser = app.auth.user.id && app.auth.user.id;
 
-export const getUser = async () => {
+export const getUser = async (id = idUser) => {
   try {
-    const resp = await fetch(`${URL_API}/api/users/${idUser}`)
-    const data = await resp.json()
-    return data.response
+    console.log('[ID]', id, app);
+    const resp = await fetch(`${URL_API}/api/users/${id}`);
+    const data = await resp.json();
+    return data.response;
   } catch (error) {
-    console.error('Error:', error)
-    throw new Error('No se pudo obtener los datos del usuario.')
+    console.error('Error:', error);
+    throw new Error('No se pudo obtener los datos del usuario.');
   }
-}
+};
 
 export const editBusinessInfo = async (
   businessName,
   businessModel,
   currency,
-  imagePath
+  imagePath,
 ) => {
   try {
-    const formData = new FormData()
-    formData.append('businessName', businessName)
+    const formData = new FormData();
+    formData.append('businessName', businessName);
     formData.append(
       'businessInfo',
-      JSON.stringify([{ businessModel, currency }])
-    )
-    formData.append('image', imagePath)
+      JSON.stringify([{ businessModel, currency }]),
+    );
+    formData.append('image', imagePath);
 
     const response = await fetch(`${URL_API}/api/users/${idUser}`, {
       method: 'PUT',
       body: formData,
-    })
+    });
 
-    const data = await response.json()
-    return data
+    const data = await response.json();
+    return data;
   } catch (error) {
     if (error.response) {
-      console.error(error.response.data)
-      console.error(error.response.status)
-      console.error(error.response.headers)
+      console.error(error.response.data);
+      console.error(error.response.status);
+      console.error(error.response.headers);
     } else if (error.request) {
-      console.error(error.request)
+      console.error(error.request);
     } else {
-      console.error('Error', error.message)
+      console.error('Error', error.message);
     }
-    throw error
+    throw error;
   }
-}
+};
 
 export const createAssumpVenta = async (canales, churns, paises, productos) => {
   try {
@@ -69,14 +70,14 @@ export const createAssumpVenta = async (canales, churns, paises, productos) => {
         productos,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error.message)
-    throw error
+    console.error('Error', error.message);
+    throw error;
   }
-}
+};
 
 export const createVolumen = async (body) => {
   try {
@@ -87,14 +88,14 @@ export const createVolumen = async (body) => {
         volumen: body,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error)
-    throw error
+    console.error('Error', error);
+    throw error;
   }
-}
+};
 
 export const createBienes = async (body) => {
   try {
@@ -105,14 +106,14 @@ export const createBienes = async (body) => {
         bienes: body,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error)
-    throw error
+    console.error('Error', error);
+    throw error;
   }
-}
+};
 
 export const createCosto = async (body) => {
   try {
@@ -123,14 +124,14 @@ export const createCosto = async (body) => {
         costo: body,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error)
-    throw error
+    console.error('Error', error);
+    throw error;
   }
-}
+};
 
 export const createGastos = async (body) => {
   try {
@@ -141,14 +142,14 @@ export const createGastos = async (body) => {
         gastos: body,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error)
-    throw error
+    console.error('Error', error);
+    throw error;
   }
-}
+};
 
 export const createPrecio = async ({ countryName, stats }) => {
   try {
@@ -160,14 +161,14 @@ export const createPrecio = async ({ countryName, stats }) => {
         stats,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error)
-    throw error
+    console.error('Error', error);
+    throw error;
   }
-}
+};
 
 export const createPuestosq = async (body) => {
   try {
@@ -180,14 +181,14 @@ export const createPuestosq = async (body) => {
         Puestosq: body,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error.message)
-    throw error
+    console.error('Error', error.message);
+    throw error;
   }
-}
+};
 
 export const createPuestosv = async (body) => {
   try {
@@ -200,21 +201,21 @@ export const createPuestosv = async (body) => {
         puestosv: body,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error.message)
-    throw error
+    console.error('Error', error.message);
+    throw error;
   }
-}
+};
 
 export const createAssumpFinanciera = async (
   cobranzas,
   pagoProducto,
   pagoServicio,
   stock,
-  inversion
+  inversion,
 ) => {
   try {
     const response = await fetch(`${URL_API}/api/assumpfinanciera`, {
@@ -230,11 +231,11 @@ export const createAssumpFinanciera = async (
         inversion,
         idUser,
       }),
-    })
-    const data = await response.json()
-    return data
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error', error.message)
-    throw error
+    console.error('Error', error.message);
+    throw error;
   }
-}
+};

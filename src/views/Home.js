@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getUser } from 'services/Requests'
-import { setUser } from 'store/auth/userSlice'
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from 'services/Requests';
+import { setUser } from 'store/auth/userSlice';
 
 function Home() {
-  const [currencyInfo, setCurrencyInfo] = useState()
-  const dispatch = useDispatch()
-  const currentState = useSelector((state) => state.auth.user)
+  const [currencyInfo, setCurrencyInfo] = useState();
+  const dispatch = useDispatch();
+  const currentState = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    getUser()
+    getUser(currentState.id)
       .then((data) => {
-        setCurrencyInfo(data?.businessInfo[0]?.currency)
+        setCurrencyInfo(data?.businessInfo[0]?.currency);
       })
-      .catch((error) => console.error(error))
-  }, [])
+      .catch((error) => console.error(error));
+  }, []);
 
   useEffect(() => {
     if (currencyInfo) {
       const newState = {
         ...currentState,
         currency: currencyInfo,
-      }
-      dispatch(setUser(newState))
+      };
+      dispatch(setUser(newState));
     }
-  }, [currencyInfo])
+  }, [currencyInfo]);
 
-  return <div>Home</div>
+  return <div>Home</div>;
 }
 
-export default Home
+export default Home;
