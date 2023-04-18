@@ -54,14 +54,6 @@ const AssumptionGeneral = () => {
     const dispatch = useDispatch()
     const currentState = useSelector((state) => state.auth.user)
 
-    const onChangeCurrency = (option) => {
-        const newState = {
-            ...currentState,
-            currency: option,
-        }
-        dispatch(setUser(newState))
-    }
-
     useEffect(() => {
         getUser()
             .then((data) => {
@@ -154,6 +146,11 @@ const AssumptionGeneral = () => {
                                             setSubmitting(false)
                                             resetForm()
                                         }, 400)
+                                        const newState = {
+                                            ...currentState,
+                                            currency: values?.moneda,
+                                        }
+                                        dispatch(setUser(newState))
                                     })
                                     .catch((error) => {
                                         console.error(
@@ -280,9 +277,6 @@ const AssumptionGeneral = () => {
                                                         onChange={(option) => {
                                                             form.setFieldValue(
                                                                 field.name,
-                                                                option.value
-                                                            )
-                                                            onChangeCurrency(
                                                                 option.value
                                                             )
                                                         }}

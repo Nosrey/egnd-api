@@ -18,14 +18,39 @@ const Header = (props) => {
 
     switch (currentCurrency) {
         case '$':
-            flagComponent = <img src="../../assets/image/flag-argentina.png" />
+            flagComponent = (
+                <>
+                    <span className="font-bold">$</span>
+                    <img
+                        className="w-8"
+                        src="https://img.icons8.com/color/256/argentina.png"
+                        alt="Argentina Flag"
+                    />
+                </>
+            )
             break
         case 'US$':
-            flagComponent = <img src="../../assets/image/flag-eeuu.png" />
+            flagComponent = (
+                <>
+                    <span className="font-bold">$</span>
+                    <img
+                        className="w-8"
+                        src="https://img.icons8.com/color/256/usa.png"
+                        alt="USA Flag"
+                    />
+                </>
+            )
             break
         case '€':
             flagComponent = (
-                <img src="../../assets/image/flag-union-europea.png" />
+                <>
+                    <span className="font-bold">€</span>
+                    <img
+                        className="w-8"
+                        src="https://img.icons8.com/color/256/flag-of-europe.png"
+                        alt="Euro Flag"
+                    />
+                </>
             )
             break
         default:
@@ -49,7 +74,9 @@ const Header = (props) => {
                     {headerStart}
                 </div>
                 <div className="flex items-center">
-                    <div>{flagComponent}</div>
+                    <div className="flex items-center gap-x-1.5">
+                        {flagComponent}
+                    </div>
                     {headerMiddle && (
                         <div className="header-action header-action-middle">
                             {headerMiddle}
