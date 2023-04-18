@@ -5,7 +5,6 @@ import { useConfig } from '../ConfigProvider'
 import { MenuContextProvider } from './context/menuContext'
 import { useSelector } from 'react-redux'
 
-
 const Menu = React.forwardRef((props, ref) => {
     const {
         children,
@@ -37,7 +36,7 @@ const Menu = React.forwardRef((props, ref) => {
     return (
         <nav
             ref={ref}
-            className={`${menuClass} ${isTrue ? '' : 'mt-[4.5rem]'}`}
+            className={`${menuClass} ${isTrue ? '' : 'hidden'}`}
             {...rest}
         >
             <MenuContextProvider
