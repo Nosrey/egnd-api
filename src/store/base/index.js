@@ -2,7 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 import common from './commonSlice'
 
 const reducer = combineReducers({
-    common,
+  common,
 })
 
 export default reducer

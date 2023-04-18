@@ -1,3 +1,3 @@
 export default function isLastChild(arr, index) {
-    return arr.length === index + 1
+  return arr.length === index + 1
 }
