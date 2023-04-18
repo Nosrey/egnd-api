@@ -1,4 +1,6 @@
+/* eslint-disable */
 import React from 'react'
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { APP_NAME } from 'constants/app.constant'
@@ -16,11 +18,13 @@ function Logo(props) {
         ...{ width: '10vw' },
       }}
     >
+      <Link to="/" className={classNames('logo', className, gutter)} style={{ ...style, ...{ width: '10vw' } }}>
       <img
         className={imgClass}
         src={`${LOGO_SRC_PATH}logo-${mode}-${type}.png`}
         alt={`${APP_NAME} logo`}
       />
+      </Link>
     </div>
   )
 }
@@ -40,3 +44,4 @@ Logo.propTypes = {
 }
 
 export default Logo
+/* eslint-enable */
