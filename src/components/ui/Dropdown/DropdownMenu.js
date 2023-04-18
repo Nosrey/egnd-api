@@ -1,76 +1,76 @@
 import React, { useCallback, useContext } from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import Menu from './Menu'
 import MenuContext from './context/menuContext'
 import DropdownItem from './DropdownItem'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
 
 const DropdownMenu = React.forwardRef((props, ref) => {
-    const { onToggle, eventKey, title, className, placement, ...rest } = props
+  const { onToggle, eventKey, title, className, placement, ...rest } = props
 
-    const parentMenu = useContext(MenuContext)
+  const parentMenu = useContext(MenuContext)
 
-    const handleToggleSubmenu = useCallback(
-        (_, e) => {
-            onToggle?.(eventKey, e)
-        },
-        [eventKey, onToggle]
-    )
+  const handleToggleSubmenu = useCallback(
+    (_, e) => {
+      onToggle?.(eventKey, e)
+    },
+    [eventKey, onToggle]
+  )
 
-    const dropdownMenuDefaultClass = `dropdown-menu`
-    const dropdownMenuPositionClass = placement
+  const dropdownMenuDefaultClass = `dropdown-menu`
+  const dropdownMenuPositionClass = placement
 
-    const dropdownMenuClass = classNames(
-        dropdownMenuDefaultClass,
-        dropdownMenuPositionClass,
-        className
-    )
+  const dropdownMenuClass = classNames(
+    dropdownMenuDefaultClass,
+    dropdownMenuPositionClass,
+    className
+  )
 
-    const dropdownSubmenuClass = classNames(
-        dropdownMenuDefaultClass,
-        'dropdown-submenu'
-    )
+  const dropdownSubmenuClass = classNames(
+    dropdownMenuDefaultClass,
+    'dropdown-submenu'
+  )
 
-    const dropdownSubmenu = (
-        <Menu
-            className={dropdownSubmenuClass}
-            ref={ref}
-            onToggle={handleToggleSubmenu}
-            placement={placement}
-            {...rest}
-        />
-    )
+  const dropdownSubmenu = (
+    <Menu
+      className={dropdownSubmenuClass}
+      ref={ref}
+      onToggle={handleToggleSubmenu}
+      placement={placement}
+      {...rest}
+    />
+  )
 
-    if (parentMenu) {
-        const { icon, trigger } = props
-        const itemClassName = classNames(className)
-
-        return (
-            <DropdownItem
-                icon={icon}
-                trigger={trigger}
-                className={itemClassName}
-                submenu={dropdownSubmenu}
-                eventKey={eventKey}
-            >
-                {title}
-            </DropdownItem>
-        )
-    }
+  if (parentMenu) {
+    const { icon, trigger } = props
+    const itemClassName = classNames(className)
 
     return (
-        <Menu
-            className={dropdownMenuClass}
-            placement={placement}
-            ref={ref}
-            {...rest}
-        />
+      <DropdownItem
+        icon={icon}
+        trigger={trigger}
+        className={itemClassName}
+        submenu={dropdownSubmenu}
+        eventKey={eventKey}
+      >
+        {title}
+      </DropdownItem>
     )
+  }
+
+  return (
+    <Menu
+      className={dropdownMenuClass}
+      placement={placement}
+      ref={ref}
+      {...rest}
+    />
+  )
 })
 
 DropdownMenu.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    eventKey: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  eventKey: PropTypes.string,
 }
 
 export default DropdownMenu
