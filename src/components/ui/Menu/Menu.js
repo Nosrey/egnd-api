@@ -4,6 +4,10 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useConfig } from '../ConfigProvider'
 import { MenuContextProvider } from './context/menuContext'
+<<<<<<< HEAD
+import { useSelector } from 'react-redux'
+=======
+>>>>>>> 76410efac2f81d3120b42768a2e40d39ffce4842
 
 const Menu = React.forwardRef((props, ref) => {
   const {
@@ -33,6 +37,28 @@ const Menu = React.forwardRef((props, ref) => {
 
   const isTrue = useSelector((state) => state.icon)
 
+<<<<<<< HEAD
+    return (
+        <nav
+            ref={ref}
+            className={`${menuClass} ${isTrue ? '' : 'hidden'}`}
+            {...rest}
+        >
+            <MenuContextProvider
+                value={{
+                    onSelect,
+                    menuItemHeight,
+                    variant,
+                    sideCollapsed,
+                    defaultExpandedKeys,
+                    defaultActiveKeys,
+                }}
+            >
+                {children}
+            </MenuContextProvider>
+        </nav>
+    )
+=======
   return (
     <nav
       ref={ref}
@@ -53,6 +79,7 @@ const Menu = React.forwardRef((props, ref) => {
       </MenuContextProvider>
     </nav>
   )
+>>>>>>> 76410efac2f81d3120b42768a2e40d39ffce4842
 })
 
 Menu.propTypes = {
