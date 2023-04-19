@@ -46,7 +46,6 @@ function PrecioP() {
         }
         estructura[info[0]?.paises[i].value] = [...canales];
       }
-      console.log('ASI', estructura);
       setInfoForm(() => ({ ...estructura }));
     }
   }, [info]);
@@ -54,14 +53,12 @@ function PrecioP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log(data?.precioData.length);
         if (data?.precioData.length !== 0) {
           const datosPrecargados = {};
           for (let i = 0; i < data?.precioData.length; i++) {
             datosPrecargados[data?.precioData[i].countryName] =
               data?.precioData[i].stats;
           }
-          console.log(datosPrecargados);
           setInfoForm(() => ({ ...datosPrecargados }));
         } else {
           setInfo(data?.assumptionData);
@@ -88,57 +85,6 @@ function PrecioP() {
         <span>Plan de ventas</span>
       </div>
 
-            <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-                <div className="border-b-2 px-4 py-1">
-                    <h6>Carga de productos / servicios</h6>
-                </div>
-                {infoForm ? (
-                    <Tabs defaultValue={defaultCountry}>
-                        <TabList>
-                            {infoForm &&
-                                Object.keys(infoForm).map((pais, index) => (
-                                    <TabNav key={index} value={pais}>
-                                        <div className="capitalize">{pais}</div>
-                                    </TabNav>
-                                ))}
-                        </TabList>
-                        {infoForm && (
-                            <div className="container-countries">
-                                <FormContainer className="cont-countries">
-                                    <ContainerScrollable
-                                        contenido={
-                                            <TablePrecio
-                                                data={infoForm}
-                                                showAlertSuces={(boolean) =>
-                                                    setShowSuccessAlert(boolean)
-                                                }
-                                                showAlertError={(boolean) =>
-                                                    setShowErrorAlert(boolean)
-                                                }
-                                                currency={currency}
-                                            />
-                                        }
-                                    />
-                                </FormContainer>
-                            </div>
-                        )}
-                    </Tabs>
-                ) : (
-                    <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-                        <span className="text-center">
-                            <Link
-                                className="text-[#3E35C4] leading-8"
-                                to="/assumptionventas"
-                            >
-                                Para acceder a este formulario primero debe
-                                completar el formulario de Assumptions Ventas.
-                                <br />
-                                Click aquí.
-                            </Link>
-                        </span>
-                    </div>
-                )}
-            </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
           <h6>Carga de productos / servicios</h6>

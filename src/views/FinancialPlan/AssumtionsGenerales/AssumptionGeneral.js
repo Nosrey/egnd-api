@@ -85,6 +85,7 @@ function AssumptionGeneral() {
       return `Solo puede cargar ${MAX_UPLOAD} file(s)`;
     }
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const f of file) {
       if (!allowedFileType.includes(f.type)) {
         valid = '¡Cargue un archivo .jpeg o .png!';
@@ -226,9 +227,10 @@ function AssumptionGeneral() {
                       Determina el modelo de negocio de tu compañía, si no lo
                       sabes puedes usar la guia donde te mostraremos varios
                       ejemplos.{' '}
-                      <Link className="underline decoration-solid text-blue-600">
+                      {/* <Link className="underline decoration-solid text-blue-600">
                         Ver guia.
-                      </Link>
+                      </Link> */}
+                      Ver guia.
                     </span>
 
 

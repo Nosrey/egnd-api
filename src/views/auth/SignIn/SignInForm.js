@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { ActionLink, PasswordInput } from 'components/shared'
 import {
   Alert,

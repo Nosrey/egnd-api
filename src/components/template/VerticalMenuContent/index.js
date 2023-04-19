@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/require-default-props */
 import { Menu } from 'components/ui'
 import MenuCollapse from 'components/ui/Menu/MenuCollapse'
 import { themeConfig } from 'configs/theme.config'

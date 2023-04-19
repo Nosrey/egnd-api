@@ -3,7 +3,7 @@ import { theme } from 'twin.macro'
 
 const twBreakpoint = theme`screens`
 
-const breakpointInt = (str = '') => parseInt(str.replace('px', ''))
+const breakpointInt = (str = '') => parseInt(str.replace('px', ''), 10)
 
 const breakpoint = {
   '2xl': breakpointInt(twBreakpoint['2xl']), // 1536

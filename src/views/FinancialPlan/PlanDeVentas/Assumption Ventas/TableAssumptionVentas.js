@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable spaced-comment */
 import {
     Avatar,
     Button,
@@ -67,9 +69,9 @@ function TableAssumptionVentas({
 
         if (existeId) {
             return validateId(campo, id + 1)
-        } else {
+        } 
             return id
-        }
+        
     }
 
     return (
@@ -78,7 +80,7 @@ function TableAssumptionVentas({
                 <div className="flex flex-col gap-y-6">
                     {/*****************************************************************************************************/}
                     {/**************************      P R O D U C T O S      *********************************************/}
-                    {/*****************************************************************************************************/}
+                    {/**************************************************************************************************** */}
                     <div
                         className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max ${
                             media === 'mobile' ? 'w-[600px]' : ''
@@ -95,8 +97,7 @@ function TableAssumptionVentas({
                     </div>
                     <div>
                         {productos && productos.length > 0 ? (
-                            productos.map((prod, index) => {
-                                return (
+                            productos.map((prod, index) => (
                                     <div
                                         className={`grid grid-cols-12 items-center gap-x-3 mb-6 auto-cols-max ${
                                             media === 'mobile'
@@ -193,8 +194,7 @@ function TableAssumptionVentas({
                                             />
                                         )}
                                     </div>
-                                )
-                            })
+                                ))
                         ) : (
                             <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
                                 <span>
@@ -247,7 +247,7 @@ function TableAssumptionVentas({
                                                     width: '47%',
                                                 }}
                                                 className=" flex justify-center items-center"
-                                            ></div>
+                                             />
                                         )}
 
                                         <Button
@@ -371,8 +371,7 @@ function TableAssumptionVentas({
 
                     <div>
                         {channels && channels.length > 0
-                            ? channels.map((channel, index) => {
-                                  return (
+                            ? channels.map((channel, index) => (
                                       <div
                                           className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max ${
                                               media === 'mobile'
@@ -392,7 +391,7 @@ function TableAssumptionVentas({
                                                       : 'col-start-1 col-end-8'
                                               }`}
                                               invalid={false}
-                                              errorMessage={'prueba'}
+                                              errorMessage="prueba"
                                           >
                                               <Input
                                                   invalid={false}
@@ -421,7 +420,7 @@ function TableAssumptionVentas({
                                                       : 'col-start-9 col-end-11'
                                               }`}
                                               invalid={false}
-                                              errorMessage={'prueba'}
+                                              errorMessage="prueba"
                                           >
                                               <Select
                                                   name={`channels[${index}].sameClient`}
@@ -463,10 +462,9 @@ function TableAssumptionVentas({
                                               />
                                           )}
                                           {productos && productos.length > 0
-                                              ? productos.map((prod, index) => {
-                                                    return (
+                                              ? productos.map((prod, index) => (
                                                         <div
-                                                            className={`grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max`}
+                                                            className="grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max"
                                                             key={index}
                                                         >
                                                             <FormItem
@@ -499,9 +497,7 @@ function TableAssumptionVentas({
                                                                         : 'col-start-6 col-end-8'
                                                                 }`}
                                                                 invalid={false}
-                                                                errorMessage={
-                                                                    'prueba'
-                                                                }
+                                                                errorMessage="prueba"
                                                             >
                                                                 <Input
                                                                     invalid={
@@ -557,12 +553,10 @@ function TableAssumptionVentas({
                                                                 />
                                                             </FormItem>
                                                         </div>
-                                                    )
-                                                })
+                                                    ))
                                               : null}
                                       </div>
-                                  )
-                              })
+                                  ))
                             : null}
                         {channels.length === 0 && (
                             <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
@@ -615,7 +609,7 @@ function TableAssumptionVentas({
                                                     width: '47%',
                                                 }}
                                                 className=" flex justify-center items-center"
-                                            ></div>
+                                             />
                                         )}
 
                                         <Button
@@ -676,8 +670,7 @@ function TableAssumptionVentas({
                     </div>
                     <div>
                         {channels && channels.length > 0
-                            ? channels.map((channel, index) => {
-                                  return (
+                            ? channels.map((channel, index) => (
                                       <div
                                           className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max ${
                                               media === 'mobile'
@@ -697,7 +690,7 @@ function TableAssumptionVentas({
                                                       : 'col-start-1 col-end-8'
                                               }`}
                                               invalid={false}
-                                              errorMessage={'prueba'}
+                                              errorMessage="prueba"
                                           >
                                               <Input
                                                   disabled
@@ -709,8 +702,7 @@ function TableAssumptionVentas({
                                               />
                                           </FormItem>
                                           {productos && productos.length > 0
-                                              ? productos.map((prod, index) => {
-                                                    return (
+                                              ? productos.map((prod, index) => (
                                                         <div
                                                             className="grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max"
                                                             key={index}
@@ -745,9 +737,7 @@ function TableAssumptionVentas({
                                                                         : 'col-start-6  col-end-8'
                                                                 }`}
                                                                 invalid={false}
-                                                                errorMessage={
-                                                                    'prueba'
-                                                                }
+                                                                errorMessage="prueba"
                                                             >
                                                                 <Input
                                                                     invalid={
@@ -804,12 +794,10 @@ function TableAssumptionVentas({
                                                                 />
                                                             </FormItem>
                                                         </div>
-                                                    )
-                                                })
+                                                    ))
                                               : null}
                                       </div>
-                                  )
-                              })
+                                  ))
                             : null}
                         {channels.length === 0 && (
                             <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">

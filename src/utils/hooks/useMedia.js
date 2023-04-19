@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+// eslint-disable-next-line import/extensions
 import { device } from '../device.js'
 
 export function useMediaQuery(query) {
