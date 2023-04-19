@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import Header from 'components/template/Header'
 import SidePanel from 'components/template/SidePanel'
@@ -19,7 +20,7 @@ function HeaderActionsStart() {
 function HeaderActionsEnd() {
   return (
     <>
-      <SidePanel />
+      {/* <SidePanel /> */}
       <UserDropdown hoverable={false} />
     </>
   )
@@ -44,3 +45,4 @@ function ModernLayout(props) {
 }
 
 export default ModernLayout
+/* eslint-enable */

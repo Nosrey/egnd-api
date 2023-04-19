@@ -1,10 +1,12 @@
-import ContainerScrollable from 'components/shared/ContainerScrollable';
-import { Alert, FormContainer, Tabs } from 'components/ui';
-import { AÑOS } from 'constants/forms.constants';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getUser } from 'services/Requests';
-import TablePrecio from './TablePrecio';
+
+import React, { useEffect, useState } from 'react'
+import { getUser } from 'services/Requests'
+import { FormContainer, Tabs, Alert } from 'components/ui'
+import { AÑOS } from 'constants/forms.constants'
+import ContainerScrollable from 'components/shared/ContainerScrollable'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import TablePrecio from './TablePrecio'
 
 const { TabNav, TabList } = Tabs;
 
@@ -86,9 +88,61 @@ function PrecioP() {
         <span>Plan de ventas</span>
       </div>
 
+            <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+                <div className="border-b-2 px-4 py-1">
+                    <h6>Carga de productos / servicios</h6>
+                </div>
+                {infoForm ? (
+                    <Tabs defaultValue={defaultCountry}>
+                        <TabList>
+                            {infoForm &&
+                                Object.keys(infoForm).map((pais, index) => (
+                                    <TabNav key={index} value={pais}>
+                                        <div className="capitalize">{pais}</div>
+                                    </TabNav>
+                                ))}
+                        </TabList>
+                        {infoForm && (
+                            <div className="container-countries">
+                                <FormContainer className="cont-countries">
+                                    <ContainerScrollable
+                                        contenido={
+                                            <TablePrecio
+                                                data={infoForm}
+                                                showAlertSuces={(boolean) =>
+                                                    setShowSuccessAlert(boolean)
+                                                }
+                                                showAlertError={(boolean) =>
+                                                    setShowErrorAlert(boolean)
+                                                }
+                                                currency={currency}
+                                            />
+                                        }
+                                    />
+                                </FormContainer>
+                            </div>
+                        )}
+                    </Tabs>
+                ) : (
+                    <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                        <span className="text-center">
+                            <Link
+                                className="text-[#3E35C4] leading-8"
+                                to="/assumptionventas"
+                            >
+                                Para acceder a este formulario primero debe
+                                completar el formulario de Assumptions Ventas.
+                                <br />
+                                Click aquí.
+                            </Link>
+                        </span>
+                    </div>
+                )}
+            </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
           <h6>Carga de productos / servicios</h6>
+
         </div>
         {infoForm ? (
           <Tabs defaultValue={defaultCountry}>

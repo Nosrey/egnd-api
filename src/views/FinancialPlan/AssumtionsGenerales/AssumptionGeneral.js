@@ -6,16 +6,16 @@ import {
   Input,
   Select,
   Upload,
-} from 'components/ui'
-import { Field, Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { editBusinessInfo, getUser } from 'services/Requests'
-import { setUser } from 'store/auth/userSlice'
+} from 'components/ui';
+import { Field, Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { editBusinessInfo, getUser } from 'services/Requests';
+import { setUser } from 'store/auth/userSlice';
 
-import { useMedia } from 'utils/hooks/useMedia'
-import * as Yup from 'yup'
+import { useMedia } from 'utils/hooks/useMedia';
+import * as Yup from 'yup';
 
 const optionsBusiness = [
   { value: 'marketplace', label: 'Marketplace' },
@@ -24,79 +24,79 @@ const optionsBusiness = [
   { value: 'transaccional', label: 'Transaccional' },
   { value: 'producto', label: 'Producto' },
   { value: 'suscripcion', label: 'Suscripcion' },
-]
+];
 
 const optionsMoney = [
   { value: '$', label: 'ARS' },
   { value: 'US$', label: 'USD' },
   { value: '€', label: 'EUR' },
-]
+];
 
-const MIN_UPLOAD = 1
-const MAX_UPLOAD = 1
+const MIN_UPLOAD = 1;
+const MAX_UPLOAD = 1;
 
 const validationSchema = Yup.object().shape({
   nombreEmpresa: Yup.string().required(
-    'Por favor ingrese su nombre de negocio'
+    'Por favor ingrese su nombre de negocio',
   ),
   modeloNegorcio: Yup.string().required(
-    'Por favor seleccione un modelo de negocio'
+    'Por favor seleccione un modelo de negocio',
   ),
   moneda: Yup.string().required('Por favor seleccione una moneda'),
-  upload: Yup.array().min(MIN_UPLOAD, '¡Al menos un archivo subido!'),
-})
+});
 
 function AssumptionGeneral() {
-  const media = useMedia()
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
-  const [info, setInfo] = useState()
+  const media = useMedia();
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [info, setInfo] = useState();
 
-  const dispatch = useDispatch()
-  const currentState = useSelector((state) => state.auth.user)
+  const dispatch = useDispatch();
+  const currentState = useSelector((state) => state.auth.user);
+
 
   const onChangeCurrency = (option) => {
     const newState = {
       ...currentState,
       currency: option,
-    }
-    dispatch(setUser(newState))
-  }
+    };
+    dispatch(setUser(newState));
+  };
 
   useEffect(() => {
     getUser()
       .then((data) => {
-        setInfo(data)
+        setInfo(data);
       })
-      .catch((error) => console.error(error))
-  }, [])
+      .catch((error) => console.error(error));
+  }, []);
 
   const onSetFormFile = (form, field, files) => {
-    form.setFieldValue(field.name, files)
-  }
+    form.setFieldValue(field.name, files);
+  };
 
   const beforeUpload = (file, fileList) => {
-    let valid = true
+    let valid = true;
 
-    const allowedFileType = ['image/jpeg', 'image/png']
-    const MAX_FILE_SIZE = 500000
+    const allowedFileType = ['image/jpeg', 'image/png'];
+    const MAX_FILE_SIZE = 500000;
 
     if (fileList.length >= MAX_UPLOAD) {
-      return `Solo puede cargar ${MAX_UPLOAD} file(s)`
+      return `Solo puede cargar ${MAX_UPLOAD} file(s)`;
     }
 
     for (const f of file) {
       if (!allowedFileType.includes(f.type)) {
-        valid = '¡Cargue un archivo .jpeg o .png!'
+        valid = '¡Cargue un archivo .jpeg o .png!';
       }
 
       if (f.size >= MAX_FILE_SIZE) {
-        valid = '¡La imagen no puede superar los 500kb!'
+        valid = '¡La imagen no puede superar los 500kb!';
       }
     }
 
-    return valid
-  }
+    return valid;
+  };
 
   return (
     <div>
@@ -125,7 +125,7 @@ function AssumptionGeneral() {
                 nombreEmpresa: info?.businessName || '',
                 modeloNegorcio:
                   info?.businessInfo[0]?.businessModel.toLowerCase() || '',
-                moneda: info?.businessInfo[0]?.currency.toLowerCase() || '',
+                moneda: info?.businessInfo[0]?.currency || '',
                 upload: [],
               }}
               validationSchema={validationSchema}
@@ -134,34 +134,34 @@ function AssumptionGeneral() {
                   values?.nombreEmpresa,
                   values?.modeloNegorcio,
                   values?.moneda,
-                  values?.upload[0]
+                  values?.upload[0],
                 )
                   .then((data) => {
-                    console.log(data)
+                    console.log(data);
                     setTimeout(() => {
                       window.scrollTo({
                         top: 0,
                         behavior: 'smooth',
-                      })
-                      setShowSuccessAlert(true)
+                      });
+                      setShowSuccessAlert(true);
                       setTimeout(() => {
-                        setShowSuccessAlert(false)
-                      }, 5000)
-                      setSubmitting(false)
-                      resetForm()
-                    }, 400)
+                        setShowSuccessAlert(false);
+                      }, 5000);
+                      setSubmitting(false);
+                      resetForm();
+                    }, 400);
                   })
                   .catch((error) => {
-                    console.error('Error de API:', error.response.data.message)
+                    console.error('Error de API:', error.response.data.message);
                     window.scrollTo({
                       top: 0,
                       behavior: 'smooth',
-                    })
-                    setShowErrorAlert(true)
+                    });
+                    setShowErrorAlert(true);
                     setTimeout(() => {
-                      setShowErrorAlert(false)
-                    }, 5000)
-                  })
+                      setShowErrorAlert(false);
+                    }, 5000);
+                  });
               }}
             >
               {({ values, touched, errors, resetForm }) => (
@@ -207,7 +207,8 @@ function AssumptionGeneral() {
                             form={form}
                             options={optionsBusiness}
                             value={optionsBusiness.filter(
-                              (option) => option.value === values.modeloNegorcio
+                              (option) =>
+                                option.value === values.modeloNegorcio,
                             )}
                             onChange={(option) =>
                               form.setFieldValue(field.name, option.value)
@@ -230,30 +231,38 @@ function AssumptionGeneral() {
                       </Link>
                     </span>
 
-                    <FormItem
-                      className="col-span-1 row-start-3"
-                      label="Moneda"
-                      invalid={errors.moneda && touched.moneda}
-                      errorMessage={errors.moneda}
-                    >
-                      <Field name="moneda">
-                        {({ field, form }) => (
-                          <Select
-                            placeholder="Selector de moneda"
-                            field={field}
-                            form={form}
-                            options={optionsMoney}
-                            value={optionsMoney.filter(
-                              (option) => option.value === values.moneda
-                            )}
-                            onChange={(option) => {
-                              form.setFieldValue(field.name, option.value)
-                              onChangeCurrency(option.value)
-                            }}
-                          />
-                        )}
-                      </Field>
-                    </FormItem>
+
+                                        <FormItem
+                                            className="col-span-1 row-start-3"
+                                            label="Moneda"
+                                            invalid={
+                                                errors.moneda && touched.moneda
+                                            }
+                                            errorMessage={errors.moneda}
+                                        >
+                                            <Field name="moneda">
+                                                {({ field, form }) => (
+                                                    <Select
+                                                        placeholder="Selector de moneda"
+                                                        field={field}
+                                                        form={form}
+                                                        options={optionsMoney}
+                                                        value={optionsMoney.filter(
+                                                            (option) =>
+                                                                option.value ===
+                                                                values.moneda
+                                                        )}
+                                                        onChange={(option) => {
+                                                            form.setFieldValue(
+                                                                field.name,
+                                                                option.value
+                                                            )
+                                                        }}
+                                                    />
+                                                )}
+                                            </Field>
+                                        </FormItem>
+
 
                     <span
                       className={`col-start-2 col-end-3 row-start-3 col-start-2 col-end-3 row-start-2 ${
@@ -310,7 +319,7 @@ function AssumptionGeneral() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AssumptionGeneral
+export default AssumptionGeneral;
