@@ -1,24 +1,24 @@
 import React from 'react'
-import { useConfig } from '../ConfigProvider'
 import { FaSort, FaSortUp, FaSortDown } from 'react-icons/fa'
+import { useConfig } from '../ConfigProvider'
 
-const Sorter = ({ sort }) => {
-    const { themeColor, primaryColorLevel } = useConfig()
+function Sorter({ sort }) {
+  const { themeColor, primaryColorLevel } = useConfig()
 
-    const color = `text-${themeColor}-${primaryColorLevel}`
+  const color = `text-${themeColor}-${primaryColorLevel}`
 
-    const renderSort = () => {
-        if (typeof sort !== 'boolean') {
-            return <FaSort />
-        }
-        return sort ? (
-            <FaSortDown className={color} />
-        ) : (
-            <FaSortUp className={color} />
-        )
+  const renderSort = () => {
+    if (typeof sort !== 'boolean') {
+      return <FaSort />
     }
+    return sort ? (
+      <FaSortDown className={color} />
+    ) : (
+      <FaSortUp className={color} />
+    )
+  }
 
-    return <div className="inline-flex">{renderSort()}</div>
+  return <div className="inline-flex">{renderSort()}</div>
 }
 
 export default Sorter

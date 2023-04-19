@@ -10,16 +10,16 @@ import useUniqueId from './useUniqueId'
 import useWindowSize from './useWindowSize'
 
 const hooks = {
-    useCallbackRef,
-    useColorLevel,
-    useControllableState,
-    useDidUpdate,
-    useMergeRef,
-    useRootClose,
-    useTimeout,
-    useUncertainRef,
-    useUniqueId,
-    useWindowSize,
+  useCallbackRef,
+  useColorLevel,
+  useControllableState,
+  useDidUpdate,
+  useMergeRef,
+  useRootClose,
+  useTimeout,
+  useUncertainRef,
+  useUniqueId,
+  useWindowSize,
 }
 
 export default hooks

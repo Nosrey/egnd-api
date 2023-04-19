@@ -8,101 +8,94 @@ import { useInputGroup } from '../InputGroup/context'
 import { useConfig } from '../ConfigProvider'
 
 const Segment = forwardRef((props, ref) => {
-    const {
-        value: valueProp,
-        defaultValue,
-        onChange = () => {},
-        children,
-        className,
+  const {
+    value: valueProp,
+    defaultValue,
+    onChange = () => {},
+    children,
+    className,
+    selectionType,
+    size,
+    ...rest
+  } = props
+
+  const formControl = useForm()
+  const inputGroupControl = useInputGroup()
+  const { controlSize } = useConfig()
+
+  const [value, setValue] = useControllableState({
+    prop: valueProp,
+    defaultProp: defaultValue,
+    onChange,
+    selectionType,
+  })
+
+  const onActive = useCallback(
+    (itemValue) => {
+      setValue(itemValue)
+    },
+    [setValue]
+  )
+
+  const onDeactivate = useCallback(
+    (itemValue) => {
+      if (selectionType === 'single') {
+        setValue('')
+      }
+
+      if (selectionType === 'multiple') {
+        setValue((prevValue = []) =>
+          prevValue.filter((value) => value !== itemValue)
+        )
+      }
+    },
+    [setValue, selectionType]
+  )
+
+  const segmentValue = useMemo(() => {
+    if (selectionType === 'single') {
+      if (value && typeof value === 'string') {
+        return [value]
+      }
+
+      if (value && Array.isArray(value)) {
+        return value
+      }
+
+      return []
+    }
+
+    if (selectionType === 'multiple') {
+      return value || []
+    }
+  }, [selectionType, value])
+
+  return (
+    <SegmentContextProvider
+      value={{
+        value: segmentValue,
+        onActive,
+        onDeactivate,
+        size:
+          size || inputGroupControl?.size || formControl?.size || controlSize,
         selectionType,
-        size,
-        ...rest
-    } = props
-
-    const formControl = useForm()
-    const inputGroupControl = useInputGroup()
-    const { controlSize } = useConfig()
-
-    const [value, setValue] = useControllableState({
-        prop: valueProp,
-        defaultProp: defaultValue,
-        onChange: onChange,
-        selectionType,
-    })
-
-    const onActive = useCallback(
-        (itemValue) => {
-            setValue(itemValue)
-        },
-        [setValue]
-    )
-
-    const onDeactivate = useCallback(
-        (itemValue) => {
-            if (selectionType === 'single') {
-                setValue('')
-            }
-
-            if (selectionType === 'multiple') {
-                setValue((prevValue = []) => {
-                    return prevValue.filter((value) => value !== itemValue)
-                })
-            }
-        },
-        [setValue, selectionType]
-    )
-
-    const segmentValue = useMemo(() => {
-        if (selectionType === 'single') {
-            if (value && typeof value === 'string') {
-                return [value]
-            }
-
-            if (value && Array.isArray(value)) {
-                return value
-            }
-
-            return []
-        }
-
-        if (selectionType === 'multiple') {
-            return value ? value : []
-        }
-    }, [selectionType, value])
-
-    return (
-        <SegmentContextProvider
-            value={{
-                value: segmentValue,
-                onActive: onActive,
-                onDeactivate: onDeactivate,
-                size:
-                    size ||
-                    inputGroupControl?.size ||
-                    formControl?.size ||
-                    controlSize,
-                selectionType,
-            }}
-        >
-            <div
-                ref={ref}
-                className={classNames('segment', className)}
-                {...rest}
-            >
-                {children}
-            </div>
-        </SegmentContextProvider>
-    )
+      }}
+    >
+      <div ref={ref} className={classNames('segment', className)} {...rest}>
+        {children}
+      </div>
+    </SegmentContextProvider>
+  )
 })
 
 Segment.defaultProps = {
-    selectionType: 'single',
+  selectionType: 'single',
 }
 
 Segment.propTypes = {
-    selectionType: PropTypes.oneOf(['single', 'multiple']),
-    value: PropTypes.arrayOf(PropTypes.string),
-    defaultValue: PropTypes.arrayOf(PropTypes.string),
+  selectionType: PropTypes.oneOf(['single', 'multiple']),
+  value: PropTypes.arrayOf(PropTypes.string),
+  defaultValue: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default Segment

@@ -5,14 +5,16 @@ import { HEADER_HEIGHT_CLASS } from 'constants/theme.constant'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFalse } from 'store/icon/iconSlice'
 
-const Header = (props) => {
+function Header(props) {
     const { headerStart, headerEnd, headerMiddle, className, container } = props
     const currentCurrency = useSelector((state) => state.auth.user.currency)
 
+    const isTrue = useSelector((state) => state.icon)
     const dispatch = useDispatch()
     const handleClick = () => {
         dispatch(setFalse())
     }
+
 
     let flagComponent
 
@@ -57,6 +59,7 @@ const Header = (props) => {
             flagComponent = null
             break
     }
+
 
     return (
         <header className={classNames('header', className)}>
