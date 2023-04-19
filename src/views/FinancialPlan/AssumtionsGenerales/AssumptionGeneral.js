@@ -54,6 +54,7 @@ function AssumptionGeneral() {
   const dispatch = useDispatch();
   const currentState = useSelector((state) => state.auth.user);
 
+
   const onChangeCurrency = (option) => {
     const newState = {
       ...currentState,
@@ -230,30 +231,38 @@ function AssumptionGeneral() {
                       </Link>
                     </span>
 
-                    <FormItem
-                      className="col-span-1 row-start-3"
-                      label="Moneda"
-                      invalid={errors.moneda && touched.moneda}
-                      errorMessage={errors.moneda}
-                    >
-                      <Field name="moneda">
-                        {({ field, form }) => (
-                          <Select
-                            placeholder="Selector de moneda"
-                            field={field}
-                            form={form}
-                            options={optionsMoney}
-                            value={optionsMoney.filter(
-                              (option) => option.value === values.moneda,
-                            )}
-                            onChange={(option) => {
-                              form.setFieldValue(field.name, option.value);
-                              onChangeCurrency(option.value);
-                            }}
-                          />
-                        )}
-                      </Field>
-                    </FormItem>
+
+                                        <FormItem
+                                            className="col-span-1 row-start-3"
+                                            label="Moneda"
+                                            invalid={
+                                                errors.moneda && touched.moneda
+                                            }
+                                            errorMessage={errors.moneda}
+                                        >
+                                            <Field name="moneda">
+                                                {({ field, form }) => (
+                                                    <Select
+                                                        placeholder="Selector de moneda"
+                                                        field={field}
+                                                        form={form}
+                                                        options={optionsMoney}
+                                                        value={optionsMoney.filter(
+                                                            (option) =>
+                                                                option.value ===
+                                                                values.moneda
+                                                        )}
+                                                        onChange={(option) => {
+                                                            form.setFieldValue(
+                                                                field.name,
+                                                                option.value
+                                                            )
+                                                        }}
+                                                    />
+                                                )}
+                                            </Field>
+                                        </FormItem>
+
 
                     <span
                       className={`col-start-2 col-end-3 row-start-3 col-start-2 col-end-3 row-start-2 ${
