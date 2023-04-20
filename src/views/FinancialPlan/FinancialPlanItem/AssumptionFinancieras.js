@@ -7,13 +7,14 @@ import {
   FormItem,
   Input,
   Table,
-} from 'components/ui'
-import { Field, Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
-import { createAssumpFinanciera, getUser } from 'services/Requests'
-import { useMedia } from 'utils/hooks/useMedia'
+} from 'components/ui';
+import { Field, Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { createAssumpFinanciera, getUser } from 'services/Requests';
+import { useMedia } from 'utils/hooks/useMedia';
 
-const { Tr, Td, TBody } = Table
+const { Tr, Td, TBody } = Table;
 
 const plazos = {
   contado: '',
@@ -31,7 +32,7 @@ const plazos = {
   ttreintaDias: '',
   IVA: '',
   imponible: '',
-}
+};
 
 const defaultState = {
   cobranzas: plazos,
@@ -39,7 +40,7 @@ const defaultState = {
   pagoServicio: plazos,
   stock: '',
   inversion: plazos,
-}
+};
 
 const tiempos = [
   { name: 'contado', label: 'Contado' },
@@ -57,72 +58,73 @@ const tiempos = [
   { name: 'ttreintaDias', label: '330 días' },
   { name: 'IVA', label: 'IVA' },
   { name: 'imponible', label: 'Imponible' },
-]
+];
 
 function AssumptionsFinancieras() {
-  const media = useMedia()
-  const [userData, setUserData] = useState()
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
+  const media = useMedia();
+  const currentState = useSelector((state) => state.auth.user);
+  const [userData, setUserData] = useState();
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
-  const [dataFinanciera, setDataFinanciera] = useState(defaultState)
+  const [dataFinanciera, setDataFinanciera] = useState(defaultState);
   useEffect(() => {
-    getUser().then((d) => {
-      setUserData(d)
+    getUser(currentState.id).then((d) => {
+      setUserData(d);
       if (d.assumpFinancierasData[0]) {
-        setDataFinanciera(d.assumpFinancierasData[0])
+        setDataFinanciera(d.assumpFinancierasData[0]);
       }
-    })
-  }, [setDataFinanciera])
+    });
+  }, [setDataFinanciera]);
 
   const submit = (values) => {
-    const { cobranzas, inversion, pagoProducto, pagoServicio, stock } = values
+    const { cobranzas, inversion, pagoProducto, pagoServicio, stock } = values;
 
     createAssumpFinanciera(
       cobranzas,
       pagoProducto,
       pagoServicio,
       stock,
-      inversion
+      inversion,
     )
       .then((data) => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         if (data.error) {
-          setShowErrorAlert(true)
+          setShowErrorAlert(true);
           setTimeout(() => {
-            setShowErrorAlert(false)
-          }, 5000)
+            setShowErrorAlert(false);
+          }, 5000);
         } else {
-          setShowSuccessAlert(true)
+          setShowSuccessAlert(true);
           setTimeout(() => {
-            setShowSuccessAlert(false)
-          }, 5000)
+            setShowSuccessAlert(false);
+          }, 5000);
         }
       })
       .catch((error) => {
-        console.error(error, '[ERROR]')
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        setShowErrorAlert(true)
+        console.error(error, '[ERROR]');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setShowErrorAlert(true);
         setTimeout(() => {
-          setShowErrorAlert(false)
-        }, 5000)
-      })
-  }
+          setShowErrorAlert(false);
+        }, 5000);
+      });
+  };
 
   const setFormValues = (index, campo, value) => {
     if (index !== 'stock') {
-      const input = tiempos[index].name
-      const state = dataFinanciera.input
-      const newData = { ...dataFinanciera[campo], [input]: value }
+      const input = tiempos[index].name;
+      const state = dataFinanciera.input;
+      const newData = { ...dataFinanciera[campo], [input]: value };
       setDataFinanciera({
         ...dataFinanciera,
         [campo]: newData,
-      })
+      });
     } else {
-      setDataFinanciera({ ...dataFinanciera, [index]: value })
+      setDataFinanciera({ ...dataFinanciera, [index]: value });
     }
-  }
+  };
 
   return (
     <div>
@@ -155,7 +157,7 @@ function AssumptionsFinancieras() {
               inversion: dataFinanciera.inversion,
             }}
             onSubmit={(values, { resetForm, setSubmitting }) => {
-              submit(dataFinanciera)
+              submit(dataFinanciera);
             }}
           >
             {({ values, touched, errors, resetForm }) => (
@@ -215,7 +217,7 @@ function AssumptionsFinancieras() {
                                         setFormValues(
                                           index,
                                           'cobranzas',
-                                          e.target.value
+                                          e.target.value,
                                         )
                                       }
                                     />
@@ -275,7 +277,7 @@ function AssumptionsFinancieras() {
                                         setFormValues(
                                           index,
                                           'pagoProducto',
-                                          e.target.value
+                                          e.target.value,
                                         )
                                       }
                                     />
@@ -335,7 +337,7 @@ function AssumptionsFinancieras() {
                                         setFormValues(
                                           index,
                                           'pagoServicio',
-                                          e.target.value
+                                          e.target.value,
                                         )
                                       }
                                     />
@@ -363,7 +365,7 @@ function AssumptionsFinancieras() {
                                     setFormValues(
                                       'stock',
                                       'pagoProducto',
-                                      e.target.value
+                                      e.target.value,
                                     )
                                   }
                                 />
@@ -419,7 +421,7 @@ function AssumptionsFinancieras() {
                                         setFormValues(
                                           index,
                                           'inversion',
-                                          e.target.value
+                                          e.target.value,
                                         )
                                       }
                                     />
@@ -449,7 +451,7 @@ function AssumptionsFinancieras() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AssumptionsFinancieras
+export default AssumptionsFinancieras;
