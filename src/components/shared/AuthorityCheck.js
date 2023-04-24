@@ -7,12 +7,18 @@ function AuthorityCheck(props) {
 
   const roleMatched = useAuthority(userAuthority, authority)
 
-  return roleMatched ? children : <></>
+  return roleMatched ? children : ""
 }
 
 AuthorityCheck.propTypes = {
-  userAuthority: PropTypes.array,
-  authority: PropTypes.array,
+  userAuthority: PropTypes.arrayOf(),
+  authority: PropTypes.arrayOf(),
 }
+
+AuthorityCheck.defaultProps = {
+  userAuthority: [],
+  authority: [],
+}
+
 
 export default AuthorityCheck

@@ -1,4 +1,4 @@
-/* eslint-disable react/no-children-prop */
+
 import { ActionLink, PasswordInput } from 'components/shared'
 import {
   Alert,
@@ -12,6 +12,7 @@ import { Field, Form, Formik } from 'formik'
 import useAuth from 'utils/hooks/useAuth'
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import * as Yup from 'yup'
+import PropTypes from 'prop-types';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -28,6 +29,20 @@ function SignInForm(props) {
     forgotPasswordUrl = '/forgot-password',
     signUpUrl = '/sign-up',
   } = props
+
+  SignInForm.defaultProps = {
+    disableSubmit: false,
+    className: '',
+    forgotPasswordUrl: '/forgot-password',
+    signUpUrl: '/sign-up',
+  }
+
+  SignInForm.propTypes = {
+    disableSubmit: PropTypes.bool,
+    className: PropTypes.string,
+    forgotPasswordUrl: PropTypes.string,
+    signUpUrl: PropTypes.string,
+  };
 
   const [message, setMessage] = useTimeOutMessage()
   const { signIn } = useAuth()
@@ -105,8 +120,10 @@ function SignInForm(props) {
                   className="mb-0"
                   name="rememberMe"
                   component={Checkbox}
-                  children="Recordarme"
-                />
+                  // children="Recordarme"
+                >
+                  Recordarme
+                </Field>
                 <ActionLink to={forgotPasswordUrl}>
                   Olvidaste la constraseña?
                 </ActionLink>

@@ -144,15 +144,17 @@ RegionMap.propTypes = {
         .isRequired,
     })
   ).isRequired,
-  mapSource: PropTypes.object,
+  mapSource: PropTypes.objectOf(),
   valueSuffix: PropTypes.string,
   valuePrefix: PropTypes.string,
 }
 
 RegionMap.defaultProps = {
-  data: [],
+  // data: [],
   mapSource: geoUrl,
   mapType: 'world',
+  valuePrefix: '',
+  valueSuffix: '',
 }
 
 export default RegionMap

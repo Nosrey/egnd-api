@@ -57,6 +57,10 @@ SegmentItemOption.propTypes = {
 }
 
 SegmentItemOption.defaultProps = {
+  active: false,
+  disabled: false,
+  hoverable: false,
+  customCheck: null,
   defaultGutter: true,
 }
 

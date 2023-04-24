@@ -38,6 +38,10 @@
         "extensions": [".js", ".jsx", ".ts", ".tsx"],
         "moduleDirectory": [".", "node_modules"]
       }
+    },
+    "react": {
+      "version": "detect",
+      "allowAsProps": true
     }
   }
 }

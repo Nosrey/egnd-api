@@ -107,20 +107,23 @@ function Chart(props) {
 }
 
 Chart.propTypes = {
-  customOptions: PropTypes.object,
+  customOptions: PropTypes.objectOf(),
   donutTitle: PropTypes.string,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  series: PropTypes.array.isRequired,
+  series: PropTypes.arrayOf().isRequired,
   type: PropTypes.oneOf(['line', 'bar', 'area', 'donut']),
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  xAxis: PropTypes.array,
+  xAxis: PropTypes.arrayOf(),
 }
 
 Chart.defaultProps = {
-  series: [],
+  // series: [],
+  customOptions: {},
+  donutTitle: '',
   height: 300,
   width: '100%',
   type: 'line',
+  xAxis: [],
 }
 
 export default Chart

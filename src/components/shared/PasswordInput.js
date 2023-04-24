@@ -22,6 +22,9 @@ function PasswordInput(props) {
         <span
           className="cursor-pointer text-xl"
           onClick={(e) => onPasswordVisibleClick(e)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') onPasswordVisibleClick(e)
+          }}
         >
           {pwInputType === 'password' ? <HiOutlineEyeOff /> : <HiOutlineEye />}
         </span>
