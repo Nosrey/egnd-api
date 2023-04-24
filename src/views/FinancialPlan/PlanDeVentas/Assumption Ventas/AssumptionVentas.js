@@ -185,7 +185,6 @@ function AssumptionVentas() {
   };
 
   const onSubmit = () => {
-    console.log(inputEmpty, 'input');
     validateEmptyInputs();
 
     if (!inputEmpty) {
