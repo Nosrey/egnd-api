@@ -185,9 +185,10 @@ function AssumptionVentas() {
   };
 
   const onSubmit = () => {
+    console.log(inputEmpty, 'input');
     validateEmptyInputs();
 
-    if (inputEmpty) {
+    if (!inputEmpty) {
       createAssumpVenta(channels, churn, countries, productos)
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
