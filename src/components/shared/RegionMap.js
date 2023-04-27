@@ -1,3 +1,4 @@
+/* eslint-disable react/default-props-match-prop-types */
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
