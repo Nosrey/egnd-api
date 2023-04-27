@@ -1,3 +1,5 @@
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable no-restricted-syntax */
 import React, { useRef, useState, useCallback, useEffect } from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'

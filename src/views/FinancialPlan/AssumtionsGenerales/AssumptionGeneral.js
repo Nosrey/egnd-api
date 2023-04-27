@@ -136,7 +136,6 @@ function AssumptionGeneral() {
                   values?.upload[0],
                 )
                   .then((data) => {
-                    console.log(data);
                     setTimeout(() => {
                       window.scrollTo({
                         top: 0,

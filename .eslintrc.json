@@ -30,7 +30,17 @@
     "react/destructuring-assignment": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "no-use-before-define": ["error", { "variables": false }]
+    "no-use-before-define": ["error", { "variables": false }],
+    "react/no-unstable-nested-components": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/no-static-element-interactions": "off",
+    "guard-for-in": "off",
+    "no-case-declarations":"off",
+    "no-param-reassign": "off",
+    "react/require-default-props": "off",
+    "react/button-has-type": "off",
+    "no-underscore-dangle":"off",
+    "import/prefer-default-export": "off"
   },
   "settings": {
     "import/resolver": {

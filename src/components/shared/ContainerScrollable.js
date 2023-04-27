@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useRef } from 'react'
 import { BsChevronRight, BsChevronLeft } from 'react-icons/bs'
 import { useMedia } from 'utils/hooks/useMedia'
