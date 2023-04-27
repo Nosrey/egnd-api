@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 import React from 'react'
 import authRoute from './authRoute'
@@ -30,18 +31,26 @@ export const protectedRoutes = [
     authority: [],
   },
   {
-    key: 'volumenq',
-    path: '/volumenq',
-    component: React.lazy(() =>
-      import('views/FinancialPlan/PlanDeVentas/VolumenQ')
-    ),
-    authority: [],
-  },
-  {
     key: 'preciop',
     path: '/preciop',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP')
+    ),
+    authority: [],
+  },
+  {
+    key: 'volumenq',
+    path: '/volumenq',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeVentas/VolumenQ/VolumenQ')
+    ),
+    authority: [],
+  },
+  {
+    key: 'ventas',
+    path: '/ventas',
+    component: React.lazy(() =>
+        import('views/FinancialPlan/PlanDeVentas/Ventas/Ventas')
     ),
     authority: [],
   },

@@ -79,15 +79,16 @@ export const createAssumpVenta = async (canales, churns, paises, productos) => {
   }
 };
 
-export const createVolumen = async (body) => {
-  try {
-    const response = await fetch(`/volumen`, {
+export const createVolumen = async ({countryName, stats}) => {
+    try {
+    const response = await fetch(`${URL_API }/api/volumen`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        volumen: body,
+        countryName,
+        stats,
         idUser,
-      }),
+    }),
     });
     const data = await response.json();
     return data;

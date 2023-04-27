@@ -53,14 +53,14 @@ function PrecioP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.precioData.length !== 0) {
+        if (data?.precioData.length !== 0) {// tengo info precargada
           const datosPrecargados = {};
           for (let i = 0; i < data?.precioData.length; i++) {
             datosPrecargados[data?.precioData[i].countryName] =
               data?.precioData[i].stats;
           }
           setInfoForm(() => ({ ...datosPrecargados }));
-        } else {
+        } else { // no tengo info precargada
           setInfo(data?.assumptionData);
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);

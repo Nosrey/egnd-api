@@ -43,7 +43,7 @@ input[type=number] { -moz-appearance:textfield; }
   position: sticky;
   left: 80%;
 }
-.titleRow {
+.titleRow, .titleRowR  {
   border-radius: 4px;
   color: rgb(41, 40, 40);
   font-family: Inter,ui-sans-serif,system-ui;
@@ -52,6 +52,11 @@ input[type=number] { -moz-appearance:textfield; }
   justify-content: center;
   align-items: center;
   position: relative;
+}
+.titleRowR {
+  background-color: #fff;
+border: 1px solid rgb(217, 214, 214) !important;
+  margin-bottom: 22px;
 }
 .iconYear{
   width: 22px;

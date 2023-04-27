@@ -815,7 +815,7 @@ function TableAssumptionVentas({
                         variant="solid"
                         size="lg"
                         color="blue-600"
-                        disabled={activeButton}
+                        // disabled={activeButton}
                         onClick={onSubmit}
                     >
                         Guardar
