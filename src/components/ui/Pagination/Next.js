@@ -22,6 +22,7 @@ function Next(props) {
   )
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <span className={pagerNextClass} onClick={onNextClick}>
       <HiChevronRight />
     </span>

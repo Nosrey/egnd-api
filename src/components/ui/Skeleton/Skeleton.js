@@ -35,6 +35,7 @@ const Skeleton = React.forwardRef((props, ref) => {
 Skeleton.defaultProps = {
   asElement: 'span',
   variant: 'block',
+  // eslint-disable-next-line react/default-props-match-prop-types
   animation: true,
 }
 

@@ -63,12 +63,14 @@ const Group = React.forwardRef((props, ref) => {
 
 Group.defaultProps = {
   vertical: false,
+  // eslint-disable-next-line react/default-props-match-prop-types
   radioGutter: 3,
 }
 
 Group.propTypes = {
   vertical: PropTypes.bool,
   color: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
   value: PropTypes.any,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,

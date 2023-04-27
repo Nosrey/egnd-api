@@ -60,6 +60,7 @@ Badge.propTypes = {
   innerClass: PropTypes.string,
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   maxCount: PropTypes.number,
+  // eslint-disable-next-line react/forbid-prop-types
   badgeStyle: PropTypes.object,
 }
 

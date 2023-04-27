@@ -51,7 +51,7 @@ function Dialog(props) {
 
     if (
       currentSize.width <=
-      parseInt(theme`screens.sm`.split(/ /)[0].replace(/[^\d]/g, ''))
+      parseInt(theme`screens.sm`.split(/ /)[0].replace(/[^\d]/g, ''), 10)
     ) {
       contentStyle.content.width = 'auto'
     }

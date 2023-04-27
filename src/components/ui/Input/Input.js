@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-return-assign */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'

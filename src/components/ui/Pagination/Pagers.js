@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import {
@@ -12,6 +14,7 @@ function NextMore({ className, onArrow }) {
   const [quickNextArrowIcon, setQuickNextArrowIcon] = useState(false)
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <li
       className={className}
       onMouseEnter={() => {

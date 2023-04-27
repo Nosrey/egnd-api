@@ -197,6 +197,7 @@ const DropdownItem = React.forwardRef((props, ref) => {
 })
 
 DropdownItem.defaultProps = {
+  // eslint-disable-next-line react/default-props-match-prop-types
   asElement: 'li',
   variant: DEFAULT,
 }

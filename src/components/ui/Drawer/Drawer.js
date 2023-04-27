@@ -136,6 +136,7 @@ Drawer.defaultProps = {
   closable: true,
   width: 400,
   height: 400,
+  // eslint-disable-next-line react/default-props-match-prop-types
   closeTimeoutMS: 300,
   placement: 'right',
   showBackdrop: true,

@@ -100,6 +100,7 @@ Notification.defaultProps = {
   duration: 3000,
   width: 350,
   closable: false,
+  // eslint-disable-next-line react/default-props-match-prop-types
   triggerByToast: false,
 }
 

@@ -79,6 +79,7 @@ const Switcher = forwardRef((props, ref) => {
   )
 
   return (
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label ref={labelRef} className={switcherClass}>
       <input
         ref={ref}

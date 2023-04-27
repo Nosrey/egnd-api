@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import useControllableState from '../hooks/useControllableState'
