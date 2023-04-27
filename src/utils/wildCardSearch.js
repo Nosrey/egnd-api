@@ -1,7 +1,9 @@
 export default function wildCardSearch(list, input, specifyKey) {
   const searchText = (item) => {
+    // eslint-disable-next-line no-restricted-syntax
     for (const key in item) {
       if (item[specifyKey || key] == null) {
+        // eslint-disable-next-line no-continue
         continue
       }
       if (

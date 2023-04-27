@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { useEffect, useRef, useCallback } from 'react'
 
 function useTimeout(fn, ms = 0, open = true) {
