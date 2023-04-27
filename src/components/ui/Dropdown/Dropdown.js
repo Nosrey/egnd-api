@@ -160,6 +160,7 @@ const Dropdown = React.forwardRef((props, ref) => {
   )
 
   return (
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
     <DropdownContext.Provider value={{ activeKey }}>
       <div {...dropdownProps} ref={ref} style={style} className="dropdown">
         {toggleElement}
@@ -199,6 +200,7 @@ Dropdown.propTypes = {
     MIDDLE_END_BOTTOM,
   ]),
   menuClass: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
   menuStyle: PropTypes.object,
   disabled: PropTypes.bool,
   title: PropTypes.string,

@@ -19,7 +19,7 @@ function StickyFooter(props) {
 
     observer.observe(cachedRef)
 
-    return function () {
+    return  () => {
       observer.unobserve(cachedRef)
     }
   }, [])
@@ -41,6 +41,9 @@ function StickyFooter(props) {
 
 StickyFooter.propTypes = {
   stickyClass: PropTypes.string,
+}
+StickyFooter.defaultProps = {
+  stickyClass: '',
 }
 
 export default StickyFooter

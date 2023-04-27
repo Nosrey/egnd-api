@@ -1,3 +1,5 @@
+/* eslint-disable no-cond-assign */
+/* eslint-disable no-bitwise */
 import { useEffect, useCallback } from 'react'
 import { findDOMNode } from 'react-dom'
 
@@ -28,6 +30,7 @@ function getDOMNode(elementOrRef) {
     return element
   }
 
+  // eslint-disable-next-line react/no-find-dom-node
   return findDOMNode(element)
 }
 

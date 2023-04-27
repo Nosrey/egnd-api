@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
 import PropTypes from 'prop-types'

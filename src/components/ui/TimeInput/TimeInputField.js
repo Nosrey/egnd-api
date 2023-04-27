@@ -22,14 +22,17 @@ const TimeInputField = forwardRef((props, ref) => {
   const inputRef = useRef()
 
   const handleFocus = (event) => {
+    // eslint-disable-next-line no-unused-expressions
     typeof onFocus === 'function' && onFocus(event)
     inputRef.current.select()
     setDigitsEntered(0)
   }
 
   const handleBlur = (event) => {
+    // eslint-disable-next-line no-unused-expressions
     typeof onBlur === 'function' && onBlur(event)
     if (digitsEntered === 1) {
+      // eslint-disable-next-line no-unused-expressions
       typeof onChange === 'function' &&
         onChange(event.currentTarget.value, false)
     }

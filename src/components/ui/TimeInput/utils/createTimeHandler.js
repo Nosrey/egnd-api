@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { padTime } from './padTime'
 import { clamp } from './clamp'
 

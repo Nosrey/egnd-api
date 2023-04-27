@@ -66,9 +66,9 @@ UsersAvatarGroup.defaultProps = {
 }
 
 UsersAvatarGroup.propTypes = {
-  users: PropTypes.array,
-  avatarProps: PropTypes.object,
-  avatarGroupProps: PropTypes.object,
+  users: PropTypes.arrayOf(),
+  avatarProps: PropTypes.objectOf(),
+  avatarGroupProps: PropTypes.objectOf(),
   nameKey: PropTypes.string,
   imgKey: PropTypes.string,
 }

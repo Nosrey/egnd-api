@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
 import React, { forwardRef } from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'

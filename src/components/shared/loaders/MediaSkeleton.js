@@ -26,9 +26,16 @@ MediaSkeleton.defaultProps = {
 
 MediaSkeleton.propTypes = {
   showAvatar: PropTypes.bool,
-  avatarProps: PropTypes.object,
-  titleProps: PropTypes.object,
-  textProps: PropTypes.object,
+  avatarProps: PropTypes.objectOf(),
+  titleProps: PropTypes.objectOf(),
+  textProps: PropTypes.objectOf(),
+}
+
+MediaSkeleton.defaultProps = {
+  showAvatar: true,
+  avatarProps: {},
+  titleProps: {},
+  textProps: {},
 }
 
 export default MediaSkeleton

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, forwardRef } from 'react'
 import { HiOutlineClock } from 'react-icons/hi'
 import useUniqueId from '../hooks/useUniqueId'
@@ -43,7 +44,9 @@ const TimeInputRange = forwardRef((props, ref) => {
   const [_value, setValue] = useState(value ?? defaultValue)
 
   useDidUpdate(() => {
-    typeof onChange === 'function' && onChange(_value)
+    if (typeof onChange === 'function'){
+      onChange(_value)
+    }
   }, [_value])
 
   useDidUpdate(() => {
@@ -60,8 +63,7 @@ const TimeInputRange = forwardRef((props, ref) => {
     fromTimeRef.current?.focus()
   }
 
-  const suffixSlot =
-    clearable && _value ? <CloseButton onClick={handleClear} /> : <>{suffix}</>
+  const suffixSlot = ( clearable && _value) ? <CloseButton onClick={handleClear} /> : <>{suffix}</>
 
   const forwardProps = {
     amPmPlaceholder,

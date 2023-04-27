@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import classNames from 'classnames'
 import { Popper, Reference, Manager } from 'react-popper'

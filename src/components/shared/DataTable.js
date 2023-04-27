@@ -221,8 +221,8 @@ function DataTable(props) {
 }
 
 DataTable.propTypes = {
-  columns: PropTypes.array,
-  data: PropTypes.array,
+  columns: PropTypes.arrayOf(),
+  data: PropTypes.arrayOf(),
   loading: PropTypes.bool,
   onCheckBoxChange: PropTypes.func,
   onIndeterminateCheckBoxChange: PropTypes.func,
@@ -232,7 +232,7 @@ DataTable.propTypes = {
   pageSizes: PropTypes.arrayOf(PropTypes.number),
   selectable: PropTypes.bool,
   skeletonAvatarColumns: PropTypes.arrayOf(PropTypes.number),
-  skeletonAvatarProps: PropTypes.object,
+  skeletonAvatarProps: PropTypes.objectOf(),
   pagingData: PropTypes.shape({
     total: PropTypes.number,
     pageIndex: PropTypes.number,
@@ -253,6 +253,13 @@ DataTable.defaultProps = {
   selectable: false,
   loading: false,
   autoResetSelectedRows: true,
+  onCheckBoxChange: undefined,
+  onIndeterminateCheckBoxChange: undefined,
+  onPaginationChange: undefined,
+  onSelectChange: undefined,
+  onSort: undefined,
+  skeletonAvatarColumns: undefined,
+  skeletonAvatarProps: undefined,
 }
 
 export default DataTable

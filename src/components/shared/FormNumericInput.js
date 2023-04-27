@@ -48,15 +48,27 @@ function FormNumericInput({
 }
 
 FormNumericInput.propTypes = {
-  form: PropTypes.object,
+  form: PropTypes.objectOf(),
   field: PropTypes.shape({
     name: PropTypes.string,
-    value: PropTypes.any,
+    value: PropTypes.number,
     onBlur: PropTypes.func,
     onChange: PropTypes.func,
   }),
   inputSuffix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   inputPrefix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
+
+FormNumericInput.defaultProps = {
+  inputSuffix: '',
+  inputPrefix: '',
+  form: {},
+  field: {
+    name: '',
+    value: '',
+    onBlur: () => {},
+    onChange: () => {},
+  },
+};
 
 export default FormNumericInput

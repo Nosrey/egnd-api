@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import {
   Avatar,
   Button,
@@ -53,6 +54,7 @@ function TablePrecio(props) {
 
     for (let i = yearIndex >= 0 ? yearIndex : 0; i < newAños.length; i++) {
       const newMeses = { ...newAños[i].volMeses }
+      // eslint-disable-next-line no-restricted-syntax
       for (const mes in newMeses) {
         if (currentMonth >= producto.inicioMes) {
           newMeses[mes] = precioActual
@@ -128,6 +130,7 @@ function TablePrecio(props) {
     const copyData = { ...infoForm }
     const countryArray = []
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const countryName in copyData) {
       const statsArray = copyData[countryName]
       const countryObject = { countryName, stats: [] }

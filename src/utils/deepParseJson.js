@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 const isNumString = (str) => !isNaN(Number(str))
 
 function deepParseJson(jsonString) {

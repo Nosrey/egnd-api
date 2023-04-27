@@ -112,6 +112,7 @@ const Checkbox = React.forwardRef((props, ref) => {
   )
 
   return (
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label ref={labelRef} className={labelClass}>
       <input
         ref={ref}
