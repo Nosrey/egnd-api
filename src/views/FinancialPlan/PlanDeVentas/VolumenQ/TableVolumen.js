@@ -92,7 +92,6 @@ function TableVolumen(props) {
       if (props.productos) {
         setInfoProducts(()=> [...props.productos])
       }
-      console.log("data uqe lelga a la tbale", props)
       if(props.data) setInfoForm(props.data)
     }, [props])
     

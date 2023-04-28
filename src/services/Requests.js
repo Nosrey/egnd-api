@@ -56,7 +56,7 @@ export const editBusinessInfo = async (
   }
 };
 
-export const createAssumpVenta = async (canales, churns, paises, productos) => {
+export const createAssumpVenta = async (canales, churns, paises, productos, id) => {
   try {
     const response = await fetch(`${URL_API}/api/assumpventa`, {
       method: 'POST',
@@ -68,7 +68,7 @@ export const createAssumpVenta = async (canales, churns, paises, productos) => {
         churns,
         paises,
         productos,
-        idUser,
+        idUser: id,
       }),
     });
     const data = await response.json();

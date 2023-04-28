@@ -188,7 +188,7 @@ function AssumptionVentas() {
     validateEmptyInputs();
 
     if (!inputEmpty) {
-      createAssumpVenta(channels, churn, countries, productos)
+      createAssumpVenta(channels, churn, countries, productos, currentState.id)
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setShowSuccessAlert(true);
