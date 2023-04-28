@@ -117,6 +117,16 @@ const navigationConfig = [
           },
           {
             key: 'collapsePlanVentas.item6',
+            path: '/costo',
+            title: 'Costo',
+            translateKey: 'nav.collapsePlanVentas.item6',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
+          {
+            key: 'collapsePlanVentas.item7',
             path: '/clientesalta',
             title: 'Clientes Alta',
             translateKey: 'nav.collapsePlanVentas.item6',
@@ -126,7 +136,7 @@ const navigationConfig = [
             subMenu: [],
           },
           {
-            key: 'collapsePlanVentas.item7',
+            key: 'collapsePlanVentas.item8',
             path: '/clienteschurn',
             title: 'Clientes Churn',
             translateKey: 'nav.collapsePlanVentas.item7',
@@ -136,7 +146,7 @@ const navigationConfig = [
             subMenu: [],
           },
           {
-            key: 'collapsePlanVentas.item8',
+            key: 'collapsePlanVentas.item9',
             path: '/clientestotaltes',
             title: 'Clientes Totales',
             translateKey: 'nav.collapsePlanVentas.item8',
@@ -146,7 +156,7 @@ const navigationConfig = [
             subMenu: [],
           },
           {
-            key: 'collapsePlanVentas.item9',
+            key: 'collapsePlanVentas.item10',
             path: '/dashboardventa',
             title: 'Dashboard Venta',
             translateKey: 'nav.collapsePlanVentas.item9',

@@ -116,13 +116,14 @@ export const createBienes = async (body) => {
   }
 };
 
-export const createCosto = async (body) => {
+export const createCosto = async ({ countryName, stats }) => {
   try {
-    const response = await fetch(`/costo`, {
+    const response = await fetch(`${URL_API}/api/costo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        costo: body,
+        countryName,
+        stats,
         idUser,
       }),
     });

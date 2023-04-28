@@ -20,10 +20,11 @@
             "item3": "Volumen (Q)",
             "item4": "Precio (P)",
             "item5": "Ventas",
-            "item6": "Clientes - Alta",
-            "item7": "Clientes - Churn",
-            "item8": "Clientes - Clientes Totales",
-            "item9": "Dashboard Venta"
+            "item6": "Costo",
+            "item7": "Clientes - Alta",
+            "item8": "Clientes - Churn",
+            "item9": "Clientes - Clientes Totales",
+            "item10": "Dashboard Venta"
         },
         "collapseFinancialPlan": {
             "collapseFinancialPlan": "Financial Plan",
