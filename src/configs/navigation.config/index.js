@@ -17,7 +17,7 @@ const navigationConfig = [
       {
         key: 'collapseGeneral',
         path: '',
-        title: 'Collapse General',
+        title: 'Assumptions Generales',
         translateKey: 'nav.collapseGeneral.collapseGeneral',
         icon: '',
         type: NAV_ITEM_TYPE_COLLAPSE,
@@ -115,16 +115,7 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
-          {
-            key: 'collapsePlanVentas.item6',
-            path: '/costo',
-            title: 'Costo',
-            translateKey: 'nav.collapsePlanVentas.item6',
-            icon: '',
-            type: NAV_ITEM_TYPE_ITEM,
-            authority: [],
-            subMenu: [],
-          },
+          
           {
             key: 'collapsePlanVentas.item7',
             path: '/clientesalta',
@@ -208,6 +199,29 @@ const navigationConfig = [
           },
         ],
       },
+      {
+        key: 'collapseCostosDirectos',
+        path: '',
+        title: 'Collapse Costos Directos',
+        translateKey: 'nav.collapseCostosDirectos.collapseCostosDirectos',
+        icon: '',
+        type: NAV_ITEM_TYPE_COLLAPSE,
+        authority: [],
+        subMenu: [
+          {
+            key: 'collapseCostosDirectos.item1',
+            path: '/costo',
+            title: 'Costo',
+            translateKey: 'nav.collapseCostosDirectos.item1',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
+        ],
+      },
+
+     
     ],
   },
 ]
