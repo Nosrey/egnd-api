@@ -165,7 +165,7 @@ function AssumptionVentas() {
   };
 
   const buttonSaveStatus = () => {
-    if (productos.length > 0 && channels[0].name !== '') {
+    if (productos?.length > 0 && channels[0]?.name !== '') {
       setActiveButton(false);
     } else {
       setActiveButton(true);
