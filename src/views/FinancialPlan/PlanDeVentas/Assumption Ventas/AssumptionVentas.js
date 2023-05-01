@@ -62,8 +62,12 @@ function AssumptionVentas() {
       setChannels(d.assumptionData && d.assumptionData[0].canales);
       setChurn(d.assumptionData && d.assumptionData[0].churns);
     });
-    buttonSaveStatus();
   }, []);
+
+  useEffect(() => {
+    buttonSaveStatus();
+  }, [productos, channels]);
+
   const removeProd = (id) => {
     setProductos(productos.filter((item) => id !== item.id));
     buttonSaveStatus();
@@ -90,6 +94,7 @@ function AssumptionVentas() {
     const position = productos.findIndex((prod) => prod.id === idProd);
     const copyProd = [...productos];
     copyProd[position][campo] = value;
+    buttonSaveStatus();
     setProductos(() => [...copyProd]);
   };
 
@@ -161,9 +166,9 @@ function AssumptionVentas() {
 
   const buttonSaveStatus = () => {
     if (productos.length > 0 && channels[0].name !== '') {
-      setActiveButton(true);
-    } else {
       setActiveButton(false);
+    } else {
+      setActiveButton(true);
     }
   };
 
@@ -187,7 +192,7 @@ function AssumptionVentas() {
   const onSubmit = () => {
     validateEmptyInputs();
 
-    if (!inputEmpty) {
+    if (inputEmpty) {
       createAssumpVenta(channels, churn, countries, productos, currentState.id)
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
