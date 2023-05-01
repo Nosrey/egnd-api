@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
 import {
     Avatar,
@@ -240,6 +241,9 @@ function TableVentas(props) {
 
                     <br/>
                     <br/>
+                    <br/>
+                    <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] '>VENTA CANAL 'B2B': {moneda}3433</p>                                   
+                    <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] '>VENTA CANAL "B2C": {moneda}3433</p>                                   
                     <br/>
                     <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VENTA TOTAL: {moneda}{volTotal}</p>                                   
 
