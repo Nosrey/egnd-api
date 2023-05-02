@@ -201,7 +201,9 @@ function TableVolumen(props) {
         }
         
         for (let i = 0; i < countryArray.length; i++) {
-            postVolumenData(countryArray[i]);
+            setTimeout(() => {
+                postVolumenData(countryArray[i]);
+            }, (i+1)*200);
         }
         
     }
@@ -446,7 +448,7 @@ function TableVolumen(props) {
                     <br/>
                     <br/>
                     {totalesCanales.map((canal,i) => (
-                        <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ' key={i}>VENTA CANAL '{canal.name}': {canal.sum}</p>                                   
+                        <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ' key={i}>VOLUMEN CANAL '{canal.name}': {canal.sum}</p>                                   
                     ))}
 
                     <br/>

@@ -55,9 +55,11 @@ function PrecioP() {
       .then((data) => {
         if (data?.precioData.length !== 0) {// tengo info precargada
           const datosPrecargados = {};
-          for (let i = 0; i < data?.precioData.length; i++) {
-            datosPrecargados[data?.precioData[i].countryName] =
-              data?.precioData[i].stats;
+          let pcioDataOrdenada = data?.precioData.sort((a, b) => a.countryName.localeCompare(b.countryName))
+
+          for (let i = 0; i < pcioDataOrdenada.length; i++) {
+            datosPrecargados[pcioDataOrdenada[i].countryName] =
+              pcioDataOrdenada[i].stats;
           }
           setInfoForm(() => ({ ...datosPrecargados }));
         } else { // no tengo info precargada

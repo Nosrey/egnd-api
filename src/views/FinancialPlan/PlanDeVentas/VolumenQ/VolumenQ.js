@@ -61,8 +61,9 @@ function VolumenQ() {
             .then((data) => {
                 if (data?.volumenData.length !== 0) { // tengo info precargada
                     const datosPrecargados = {};
-                    for (let i = 0; i < data?.volumenData.length; i++) {
-                    datosPrecargados[data?.volumenData[i].countryName] = data?.volumenData[i].stats;
+                    let volDataOrdenada = data?.volumenData.sort((a, b) => a.countryName.localeCompare(b.countryName))
+                    for (let i = 0; i < volDataOrdenada.length; i++) {
+                    datosPrecargados[volDataOrdenada[i].countryName] = volDataOrdenada[i].stats;
                     }
                     setInfoForm(() => ({ ...datosPrecargados}))
                     setProducts(data?.assumptionData[0].productos)

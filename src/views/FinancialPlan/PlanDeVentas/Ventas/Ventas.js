@@ -56,7 +56,7 @@ function Ventas() {
             .then((data) => {
                 if (data?.volumenData.length !== 0  && data?.precioData.length !== 0) { // tengo info vol y precio precargada
                     const datosPrecargados = {};
-                    let dataVentas = showMultiplicacionPxQ(data?.volumenData, data?.precioData)
+                    let dataVentas = showMultiplicacionPxQ(data?.volumenData.sort((a, b) => a.countryName.localeCompare(b.countryName)), data?.precioData.sort((a, b) => a.countryName.localeCompare(b.countryName)))
                     for (let i = 0; i < dataVentas.length; i++) {
                     datosPrecargados[dataVentas[i].countryName] = dataVentas[i].stats;
                     }
