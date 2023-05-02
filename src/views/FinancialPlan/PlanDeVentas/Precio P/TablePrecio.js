@@ -143,9 +143,7 @@ function TablePrecio(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      setTimeout(() => {
-        postPrecioData(countryArray[i])
-      }, (i+1)*200);
+      postPrecioData(countryArray[i])
     }
   }
 

@@ -201,9 +201,7 @@ function TableVolumen(props) {
         }
         
         for (let i = 0; i < countryArray.length; i++) {
-            setTimeout(() => {
-                postVolumenData(countryArray[i]);
-            }, (i+1)*200);
+            postVolumenData(countryArray[i]);
         }
         
     }
