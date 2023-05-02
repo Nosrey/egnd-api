@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
@@ -26,7 +27,8 @@ function TableVolumen(props) {
     const [infoProducts, setInfoProducts] = useState()
     const [visibleItems, setVisibleItems] = useState([0])
     const [volTotal, setVolTotal] = useState(0)
-    
+    const [totalesCanales, setTotalesCanales] = useState([])
+
     // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de 
     // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias 
     // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las 
@@ -35,9 +37,13 @@ function TableVolumen(props) {
         if(infoForm && props.country && infoProducts){
             const pais = [...infoForm[props.country]] 
             const arrayP =[]
+            const arrayCanales=[] 
             for (let i = 0; i < pais.length; i++) {// cada canal
                 const canal = pais[i]
-    
+                let canalInfo = {
+                    name: canal.canalName,
+                    sum: 0
+                }
                 for (let x = 0; x < props.productos.length; x++) {// cada prod
                     const idProd = props.productos[x].id
                     let myProd = canal.productos.find(prod => prod.id === idProd)
@@ -48,9 +54,11 @@ function TableVolumen(props) {
                             arrayvalores.push(parseInt(valor, 10))                        
                         }
                     }
+                    canalInfo.sum +=  arrayvalores.reduce((acumulador, valorActual) => acumulador + valorActual, 0)
                     arrayP.push({...myProd, sum: arrayvalores})
                 }
-    
+                arrayCanales.push(canalInfo);
+
                 const agrupados = arrayP.reduce((resultado, objeto) => {
                 if (!resultado[objeto.id]) {
                     resultado[objeto.id] = [];
@@ -85,6 +93,7 @@ function TableVolumen(props) {
                 }
                 setInfoProducts(()=>[...copy]) 
             }
+            setTotalesCanales(()=>[...arrayCanales])
         }
     }, [infoForm, props])    
 
@@ -435,6 +444,11 @@ function TableVolumen(props) {
 
                     <br/>
                     <br/>
+                    <br/>
+                    {totalesCanales.map((canal,i) => (
+                        <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ' key={i}>VENTA CANAL '{canal.name}': {canal.sum}</p>                                   
+                    ))}
+
                     <br/>
                     <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VOLUMEN TOTAL: {volTotal}</p>                                   
 

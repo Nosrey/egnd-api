@@ -167,7 +167,7 @@ function AssumptionVentas() {
   };
 
   const buttonSaveStatus = () => {
-    if (productos.length > 0 && channels[0].name !== '') {
+    if (productos?.length > 0 && channels[0]?.name !== '') {
       setActiveButton(false);
     } else {
       setActiveButton(true);
@@ -196,6 +196,7 @@ function AssumptionVentas() {
 
     if (!isEmpty) {
       createAssumpVenta(channels, churn, countries, productos, currentState.id)
+
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setShowSuccessAlert(true);

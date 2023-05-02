@@ -136,8 +136,8 @@ function Costo() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             {!volumenPrecio ? (
               <span>
-                Para acceder a este formulario primero debe completar el
-                formulario de volumen y el formulario de precio.
+                Para acceder a este formulario primero debe completar los
+                formularios de Volumen y Precio.
               </span>
             ) : (
               <span>

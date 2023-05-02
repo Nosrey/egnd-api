@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
 import {
     Avatar,
@@ -17,6 +18,7 @@ function TableVentas(props) {
     const [infoProducts, setInfoProducts] = useState(props.productos)
     const [visibleItems, setVisibleItems] = useState([0])
     const [volTotal, setVolTotal] = useState(0)
+    const [totalesCanales, setTotalesCanales] = useState([])
     const moneda = props.currency
 
     // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de 
@@ -27,9 +29,13 @@ function TableVentas(props) {
         if(infoForm && props.country){
             const pais = [...infoForm[props.country]] 
             const arrayP =[]
+            const arrayCanales=[] 
             for (let i = 0; i < pais.length; i++) {// cada canal
                 const canal = pais[i]
-    
+                let canalInfo = {
+                    name: canal.canalName,
+                    sum: 0
+                }
                 for (let x = 0; x < props.productos.length; x++) {// cada prod
                     const idProd = props.productos[x].id
                     let myProd = canal.productos.find(prod => prod.id === idProd)
@@ -40,9 +46,10 @@ function TableVentas(props) {
                             arrayvalores.push(parseInt(valor, 10))                        
                         }
                     }
+                    canalInfo.sum +=  arrayvalores.reduce((acumulador, valorActual) => acumulador + valorActual, 0)
                     arrayP.push({...myProd, sum: arrayvalores})
                 }
-    
+                arrayCanales.push(canalInfo);
                 const agrupados = arrayP.reduce((resultado, objeto) => {
                 if (!resultado[objeto.id]) {
                     resultado[objeto.id] = [];
@@ -77,6 +84,7 @@ function TableVentas(props) {
                 }
                 setInfoProducts(()=>[...copy]) 
             }
+            setTotalesCanales(()=>[...arrayCanales])
         }
        
     }, [infoForm, props])    
@@ -240,6 +248,11 @@ function TableVentas(props) {
 
                     <br/>
                     <br/>
+                    <br/>
+                    {totalesCanales.map((canal,i) => (
+                        <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ' key={i}>VENTA CANAL '{canal.name}': {moneda}{canal.sum}</p>                                   
+                    ))}
+
                     <br/>
                     <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VENTA TOTAL: {moneda}{volTotal}</p>                                   
 
