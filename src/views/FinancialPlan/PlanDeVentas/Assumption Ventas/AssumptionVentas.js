@@ -65,7 +65,9 @@ function AssumptionVentas() {
   }, []);
 
   useEffect(() => {
-    buttonSaveStatus();
+    if (productos.length !== 0 && channels.length !== 0) {
+      buttonSaveStatus();
+    }
   }, [productos, channels]);
 
   const removeProd = (id) => {
@@ -94,8 +96,8 @@ function AssumptionVentas() {
     const position = productos.findIndex((prod) => prod.id === idProd);
     const copyProd = [...productos];
     copyProd[position][campo] = value;
-    buttonSaveStatus();
     setProductos(() => [...copyProd]);
+    buttonSaveStatus();
   };
 
   const handleEditChannel = (nameChannel, campo, value, prodId) => {
@@ -186,13 +188,13 @@ function AssumptionVentas() {
       }
     });
 
-    setImputEmpty(isEmpty);
+    return isEmpty;
   };
 
   const onSubmit = () => {
-    validateEmptyInputs();
+    const isEmpty = validateEmptyInputs();
 
-    if (inputEmpty) {
+    if (!isEmpty) {
       createAssumpVenta(channels, churn, countries, productos, currentState.id)
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
