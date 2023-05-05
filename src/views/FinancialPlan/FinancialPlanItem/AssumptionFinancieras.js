@@ -117,8 +117,11 @@ function AssumptionsFinancieras() {
           contenido={
             <TableFinancieras
               setFormValues={setFormValues}
-              // submit={submit}
               media={media}
+              dataFinanciera={dataFinanciera}
+              setShowErrorAlert={setShowErrorAlert}
+              setShowSuccessAlert={setShowSuccessAlert}
+              tiempos={tiempos}
             />
           }
         />

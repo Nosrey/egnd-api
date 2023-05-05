@@ -8,8 +8,16 @@ import {
   Table,
 } from 'components/ui';
 import { Field, Form, Formik } from 'formik';
+import { createAssumpFinanciera } from 'services/Requests';
 
-function TableFinancieras({ setFormValues, media }) {
+function TableFinancieras({
+  setFormValues,
+  media,
+  dataFinanciera,
+  setShowErrorAlert,
+  setShowSuccessAlert,
+  tiempos,
+}) {
   const { Tr, Td, TBody } = Table;
 
   const submit = (values) => {
@@ -45,6 +53,16 @@ function TableFinancieras({ setFormValues, media }) {
           setShowErrorAlert(false);
         }, 5000);
       });
+  };
+
+  const timeNames = {
+    IVA: 'IVA DF (venta)',
+    imponible: 'Imponible sobre venta',
+  };
+
+  const timeNamesCosto = {
+    IVA: 'IVA CF (costo)',
+    imponible: 'Imponible sobre costo',
   };
 
   return (
@@ -86,7 +104,7 @@ function TableFinancieras({ setFormValues, media }) {
                                 'border border-transparent border-t-gray-300 pt-2'
                               }`}
                             >
-                              <p
+                              {/* <p
                                 className={`${
                                   media === 'mobile'
                                     ? 'mt-[-30px] w-[30%]'
@@ -98,7 +116,16 @@ function TableFinancieras({ setFormValues, media }) {
                                   : time.name === 'imponible'
                                   ? 'Imponible sobre venta'
                                   : time.label}
-                              </p>{' '}
+                              </p> */}
+                              <p
+                                className={`${
+                                  media === 'mobile'
+                                    ? 'mt-[-30px] w-[30%]'
+                                    : 'mt-[-30px] w-[40%]'
+                                }`}
+                              >
+                                {timeNames[time.name] || time.label}
+                              </p>
                               <FormItem
                                 className={`${
                                   media === 'mobile' ? 'w-[50%]' : 'w-[60%]'
@@ -143,7 +170,7 @@ function TableFinancieras({ setFormValues, media }) {
                                 'border border-transparent border-t-gray-300 pt-2'
                               }`}
                             >
-                              <p
+                              {/* <p
                                 className={`${
                                   media === 'mobile'
                                     ? 'mt-[-30px] w-[30%]'
@@ -155,6 +182,15 @@ function TableFinancieras({ setFormValues, media }) {
                                   : time.name === 'imponible'
                                   ? 'Imponible sobre costo'
                                   : time.label}
+                              </p> */}
+                              <p
+                                className={`${
+                                  media === 'mobile'
+                                    ? 'mt-[-30px] w-[30%]'
+                                    : 'mt-[-30px] w-[40%]'
+                                }`}
+                              >
+                                {timeNamesCosto[time.name] || time.label}
                               </p>
                               <FormItem
                                 className={`${
@@ -201,7 +237,7 @@ function TableFinancieras({ setFormValues, media }) {
                                 'border border-transparent border-t-gray-300 pt-2'
                               }`}
                             >
-                              <p
+                              {/* <p
                                 className={`${
                                   media === 'mobile'
                                     ? 'mt-[-30px] w-[30%]'
@@ -213,6 +249,15 @@ function TableFinancieras({ setFormValues, media }) {
                                   : time.name === 'imponible'
                                   ? 'Imponible sobre costo'
                                   : time.label}
+                              </p> */}
+                              <p
+                                className={`${
+                                  media === 'mobile'
+                                    ? 'mt-[-30px] w-[30%]'
+                                    : 'mt-[-30px] w-[40%]'
+                                }`}
+                              >
+                                {timeNamesCosto[time.name] || time.label}
                               </p>
                               <FormItem
                                 className={`${
@@ -283,7 +328,7 @@ function TableFinancieras({ setFormValues, media }) {
                                 'border border-transparent border-t-gray-300 pt-2'
                               }`}
                             >
-                              <p
+                              {/* <p
                                 className={`${
                                   media === 'mobile'
                                     ? 'mt-[-30px] w-[30%]'
@@ -295,6 +340,15 @@ function TableFinancieras({ setFormValues, media }) {
                                   : time.name === 'imponible'
                                   ? 'Imponible sobre costo'
                                   : time.label}
+                              </p> */}
+                              <p
+                                className={`${
+                                  media === 'mobile'
+                                    ? 'mt-[-30px] w-[30%]'
+                                    : 'mt-[-30px] w-[40%]'
+                                }`}
+                              >
+                                {timeNamesCosto[time.name] || time.label}
                               </p>
                               <FormItem
                                 className={`${
