@@ -59,7 +59,6 @@ function TableFinancieras({
     IVA: 'IVA DF (venta)',
     imponible: 'Imponible sobre venta',
   };
-
   const timeNamesCosto = {
     IVA: 'IVA CF (costo)',
     imponible: 'Imponible sobre costo',
@@ -82,211 +81,88 @@ function TableFinancieras({
         {({ values, touched, errors, resetForm }) => (
           <Form>
             <FormContainer>
-              <Table>
-                <TBody>
-                  <Tr className="w-[1900px]">
-                    <Td className="w-[1900px] grid grid-cols-10  gap-x-3 ">
-                      <Card className="col-start-1 col-end-3 row-start-1">
-                        <h5 className="mb-[18px]">Plazo de cobranzas</h5>
-                        <div className="flex justify-end mb-3">
-                          <p className="w-[60%] ">% Sobre Total</p>
+              <div className="w-[1900px]">
+                <div className="w-[1900px] grid grid-cols-10  gap-x-3 ">
+                  <Card className="col-start-1 col-end-3 row-start-1">
+                    <h5 className="mb-[18px]">Plazo de cobranzas</h5>
+                    <div className="flex justify-end mb-3">
+                      <p className="w-[60%] ">% Sobre Total</p>
+                    </div>
+                    <div>
+                      {tiempos.map((time, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            media === 'mobile'
+                              ? 'flex items-center mb-1'
+                              : 'flex justify-between items-center mb-1 '
+                          }${
+                            time.name === 'IVA' &&
+                            'border border-transparent border-t-gray-300 pt-2'
+                          }`}
+                        >
+                          <p
+                            className={`${
+                              media === 'mobile'
+                                ? 'mt-[-30px] w-[30%]'
+                                : 'mt-[-30px] w-[40%]'
+                            }`}
+                          >
+                            {timeNames[time.name] || time.label}
+                          </p>
+                          <FormItem
+                            className={`${
+                              media === 'mobile' ? 'w-[50%]' : 'w-[60%]'
+                            } `}
+                          >
+                            <Field
+                              placeholder="0.0"
+                              name={`cobranzas.${time.name}`}
+                              value={dataFinanciera.cobranzas[time.name]}
+                              type="text"
+                              size="sm"
+                              suffix="%"
+                              component={Input}
+                              onChange={(e) =>
+                                setFormValues(
+                                  index,
+                                  'cobranzas',
+                                  e.target.value,
+                                )
+                              }
+                            />
+                          </FormItem>
                         </div>
-                        <div>
-                          {tiempos.map((time, index) => (
-                            <div
-                              key={index}
-                              className={`${
-                                media === 'mobile'
-                                  ? 'flex items-center mb-1'
-                                  : 'flex justify-between items-center mb-1 '
-                              }${
-                                time.name === 'IVA' &&
-                                'border border-transparent border-t-gray-300 pt-2'
-                              }`}
-                            >
-                              {/* <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {time.name === 'IVA'
-                                  ? 'IVA DF (venta)'
-                                  : time.name === 'imponible'
-                                  ? 'Imponible sobre venta'
-                                  : time.label}
-                              </p> */}
-                              <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {timeNames[time.name] || time.label}
-                              </p>
-                              <FormItem
-                                className={`${
-                                  media === 'mobile' ? 'w-[50%]' : 'w-[60%]'
-                                } `}
-                              >
-                                <Field
-                                  placeholder="0.0"
-                                  name={`cobranzas.${time.name}`}
-                                  value={dataFinanciera.cobranzas[time.name]}
-                                  type="text"
-                                  size="sm"
-                                  suffix="%"
-                                  component={Input}
-                                  onChange={(e) =>
-                                    setFormValues(
-                                      index,
-                                      'cobranzas',
-                                      e.target.value,
-                                    )
-                                  }
-                                />
-                              </FormItem>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      <Card className="col-start-3 col-end-5 row-start-1">
-                        <h5 className="mb-[18px]">Plazo de pago - Productos</h5>
-                        <div className="flex justify-end mb-3">
-                          <p className="w-[60%] ">% Sobre Total</p>
-                        </div>
-                        <div>
-                          {tiempos.map((time, index) => (
-                            <div
-                              key={index}
-                              className={`${
-                                media === 'mobile'
-                                  ? 'flex items-center mb-1'
-                                  : 'flex justify-between items-center mb-1 '
-                              }${
-                                time.name === 'IVA' &&
-                                'border border-transparent border-t-gray-300 pt-2'
-                              }`}
-                            >
-                              {/* <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {time.name === 'IVA'
-                                  ? 'IVA CF (costo)'
-                                  : time.name === 'imponible'
-                                  ? 'Imponible sobre costo'
-                                  : time.label}
-                              </p> */}
-                              <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {timeNamesCosto[time.name] || time.label}
-                              </p>
-                              <FormItem
-                                className={`${
-                                  media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
-                                } `}
-                              >
-                                <Field
-                                  placeholder="0.0"
-                                  value={dataFinanciera.pagoProducto[time.name]}
-                                  type="number"
-                                  size="sm"
-                                  suffix="%"
-                                  component={Input}
-                                  onChange={(e) =>
-                                    setFormValues(
-                                      index,
-                                      'pagoProducto',
-                                      e.target.value,
-                                    )
-                                  }
-                                />
-                              </FormItem>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      <Card className="col-start-5 col-end-7 row-start-1">
-                        <h5 className="mb-[18px]">
-                          Plazo de pago - Servicios/Gasto
-                        </h5>
-                        <div className="flex justify-end mb-3">
-                          <p className="w-[60%] ">% Sobre Total</p>
-                        </div>
-                        <div>
-                          {tiempos.map((time, index) => (
-                            <div
-                              key={index}
-                              className={`${
-                                media === 'mobile'
-                                  ? 'flex items-center mb-1'
-                                  : 'flex justify-between items-center mb-1 '
-                              }${
-                                time.name === 'IVA' &&
-                                'border border-transparent border-t-gray-300 pt-2'
-                              }`}
-                            >
-                              {/* <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {time.name === 'IVA'
-                                  ? 'IVA CF (costo)'
-                                  : time.name === 'imponible'
-                                  ? 'Imponible sobre costo'
-                                  : time.label}
-                              </p> */}
-                              <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {timeNamesCosto[time.name] || time.label}
-                              </p>
-                              <FormItem
-                                className={`${
-                                  media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
-                                } `}
-                              >
-                                <Field
-                                  placeholder="0.0"
-                                  value={dataFinanciera.pagoServicio[time.name]}
-                                  type="number"
-                                  size="sm"
-                                  suffix="%"
-                                  component={Input}
-                                  onChange={(e) =>
-                                    setFormValues(
-                                      index,
-                                      'pagoServicio',
-                                      e.target.value,
-                                    )
-                                  }
-                                />
-                              </FormItem>
-                            </div>
-                          ))}
-                        </div>
-                      </Card>
-                      <Card className="col-start-7 col-end-9 row-start-1">
-                        <h5 className="mb-[18px]">Meses de Stock</h5>
-                        <div>
+                      ))}
+                    </div>
+                  </Card>
+                  <Card className="col-start-3 col-end-5 row-start-1">
+                    <h5 className="mb-[18px]">Plazo de pago - Productos</h5>
+                    <div className="flex justify-end mb-3">
+                      <p className="w-[60%] ">% Sobre Total</p>
+                    </div>
+                    <div>
+                      {tiempos.map((time, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            media === 'mobile'
+                              ? 'flex items-center mb-1'
+                              : 'flex justify-between items-center mb-1 '
+                          }${
+                            time.name === 'IVA' &&
+                            'border border-transparent border-t-gray-300 pt-2'
+                          }`}
+                        >
+                          <p
+                            className={`${
+                              media === 'mobile'
+                                ? 'mt-[-30px] w-[30%]'
+                                : 'mt-[-30px] w-[40%]'
+                            }`}
+                          >
+                            {timeNamesCosto[time.name] || time.label}
+                          </p>
                           <FormItem
                             className={`${
                               media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
@@ -294,14 +170,14 @@ function TableFinancieras({
                           >
                             <Field
                               placeholder="0.0"
-                              value={dataFinanciera.stock}
+                              value={dataFinanciera.pagoProducto[time.name]}
                               type="number"
                               size="sm"
                               suffix="%"
                               component={Input}
                               onChange={(e) =>
                                 setFormValues(
-                                  'stock',
+                                  index,
                                   'pagoProducto',
                                   e.target.value,
                                 )
@@ -309,76 +185,143 @@ function TableFinancieras({
                             />
                           </FormItem>
                         </div>
-                      </Card>
-                      <Card className="col-start-9 col-end-11 row-start-1">
-                        <h5 className="mb-[18px]">Inversión</h5>
-                        <div className="flex justify-end mb-3">
-                          <p className="w-[60%] ">% Sobre Total</p>
+                      ))}
+                    </div>
+                  </Card>
+                  <Card className="col-start-5 col-end-7 row-start-1">
+                    <h5 className="mb-[18px]">
+                      Plazo de pago - Servicios/Gasto
+                    </h5>
+                    <div className="flex justify-end mb-3">
+                      <p className="w-[60%] ">% Sobre Total</p>
+                    </div>
+                    <div>
+                      {tiempos.map((time, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            media === 'mobile'
+                              ? 'flex items-center mb-1'
+                              : 'flex justify-between items-center mb-1 '
+                          }${
+                            time.name === 'IVA' &&
+                            'border border-transparent border-t-gray-300 pt-2'
+                          }`}
+                        >
+                          <p
+                            className={`${
+                              media === 'mobile'
+                                ? 'mt-[-30px] w-[30%]'
+                                : 'mt-[-30px] w-[40%]'
+                            }`}
+                          >
+                            {timeNamesCosto[time.name] || time.label}
+                          </p>
+                          <FormItem
+                            className={`${
+                              media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
+                            } `}
+                          >
+                            <Field
+                              placeholder="0.0"
+                              value={dataFinanciera.pagoServicio[time.name]}
+                              type="number"
+                              size="sm"
+                              suffix="%"
+                              component={Input}
+                              onChange={(e) =>
+                                setFormValues(
+                                  index,
+                                  'pagoServicio',
+                                  e.target.value,
+                                )
+                              }
+                            />
+                          </FormItem>
                         </div>
-                        <div>
-                          {tiempos.map((time, index) => (
-                            <div
-                              key={index}
-                              className={`${
-                                media === 'mobile'
-                                  ? 'flex items-center mb-1'
-                                  : 'flex justify-between items-center mb-1 '
-                              } ${
-                                time.name === 'IVA' &&
-                                'border border-transparent border-t-gray-300 pt-2'
-                              }`}
-                            >
-                              {/* <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {time.name === 'IVA'
-                                  ? 'IVA CF (costo)'
-                                  : time.name === 'imponible'
-                                  ? 'Imponible sobre costo'
-                                  : time.label}
-                              </p> */}
-                              <p
-                                className={`${
-                                  media === 'mobile'
-                                    ? 'mt-[-30px] w-[30%]'
-                                    : 'mt-[-30px] w-[40%]'
-                                }`}
-                              >
-                                {timeNamesCosto[time.name] || time.label}
-                              </p>
-                              <FormItem
-                                className={`${
-                                  media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
-                                } `}
-                              >
-                                <Field
-                                  placeholder="0.0"
-                                  value={dataFinanciera.inversion[time.name]}
-                                  type="number"
-                                  size="sm"
-                                  suffix="%"
-                                  component={Input}
-                                  onChange={(e) =>
-                                    setFormValues(
-                                      index,
-                                      'inversion',
-                                      e.target.value,
-                                    )
-                                  }
-                                />
-                              </FormItem>
-                            </div>
-                          ))}
+                      ))}
+                    </div>
+                  </Card>
+                  <Card className="col-start-7 col-end-9 row-start-1">
+                    <h5 className="mb-[18px]">Meses de Stock</h5>
+                    <div>
+                      <FormItem
+                        className={`${
+                          media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
+                        } `}
+                      >
+                        <Field
+                          placeholder="0.0"
+                          value={dataFinanciera.stock}
+                          type="number"
+                          size="sm"
+                          suffix="%"
+                          component={Input}
+                          onChange={(e) =>
+                            setFormValues(
+                              'stock',
+                              'pagoProducto',
+                              e.target.value,
+                            )
+                          }
+                        />
+                      </FormItem>
+                    </div>
+                  </Card>
+                  <Card className="col-start-9 col-end-11 row-start-1">
+                    <h5 className="mb-[18px]">Inversión</h5>
+                    <div className="flex justify-end mb-3">
+                      <p className="w-[60%] ">% Sobre Total</p>
+                    </div>
+                    <div>
+                      {tiempos.map((time, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            media === 'mobile'
+                              ? 'flex items-center mb-1'
+                              : 'flex justify-between items-center mb-1 '
+                          } ${
+                            time.name === 'IVA' &&
+                            'border border-transparent border-t-gray-300 pt-2'
+                          }`}
+                        >
+                          <p
+                            className={`${
+                              media === 'mobile'
+                                ? 'mt-[-30px] w-[30%]'
+                                : 'mt-[-30px] w-[40%]'
+                            }`}
+                          >
+                            {timeNamesCosto[time.name] || time.label}
+                          </p>
+                          <FormItem
+                            className={`${
+                              media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
+                            } `}
+                          >
+                            <Field
+                              placeholder="0.0"
+                              value={dataFinanciera.inversion[time.name]}
+                              type="number"
+                              size="sm"
+                              suffix="%"
+                              component={Input}
+                              onChange={(e) =>
+                                setFormValues(
+                                  index,
+                                  'inversion',
+                                  e.target.value,
+                                )
+                              }
+                            />
+                          </FormItem>
                         </div>
-                      </Card>
-                    </Td>
-                  </Tr>
-                </TBody>
-              </Table>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
+              </div>
 
               <div className="flex justify-end">
                 <Button
