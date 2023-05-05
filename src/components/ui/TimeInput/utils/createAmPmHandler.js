@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 export function createAmPmHandler({ amLabel, pmLabel, onChange, nextRef }) {
   return (value, triggerShift) => {
     const testRegex = new RegExp(`(^(${amLabel}|${pmLabel})?$)`)

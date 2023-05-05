@@ -1,7 +1,9 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState, useRef, useEffect } from 'react'
 import classNames from 'classnames'
 import withHeaderItem from 'utils/hoc/withHeaderItem'
 import { Dialog, Button } from 'components/ui'
+// eslint-disable-next-line import/no-unresolved
 import { apiGetSearchResult } from 'services/CommonService'
 import useThemeClass from 'utils/hooks/useThemeClass'
 import navigationIcon from 'configs/navigation-icon.config'
@@ -106,7 +108,6 @@ export function Search({ className }) {
     }
   }
 
-  const debounceFn = debounce(handleDebounceFn, 200)
 
   async function handleDebounceFn(query) {
     if (!query) {
@@ -125,6 +126,7 @@ export function Search({ className }) {
       setSearchResult(respond.data)
     }
   }
+  const debounceFn = debounce(handleDebounceFn, 200)
 
   const handleSearch = (e) => {
     debounceFn(e.target.value)

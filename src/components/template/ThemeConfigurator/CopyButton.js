@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react'
 import { Button, toast, Notification } from 'components/ui'
 import { themeConfig } from 'configs/theme.config'

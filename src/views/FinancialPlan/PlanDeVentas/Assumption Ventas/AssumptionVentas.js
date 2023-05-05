@@ -62,8 +62,14 @@ function AssumptionVentas() {
       setChannels(d.assumptionData && d.assumptionData[0].canales);
       setChurn(d.assumptionData && d.assumptionData[0].churns);
     });
-    buttonSaveStatus();
   }, []);
+
+  useEffect(() => {
+    if (productos.length !== 0 && channels.length !== 0) {
+      buttonSaveStatus();
+    }
+  }, [productos, channels]);
+
   const removeProd = (id) => {
     setProductos(productos.filter((item) => id !== item.id));
     buttonSaveStatus();
@@ -91,6 +97,7 @@ function AssumptionVentas() {
     const copyProd = [...productos];
     copyProd[position][campo] = value;
     setProductos(() => [...copyProd]);
+    buttonSaveStatus();
   };
 
   const handleEditChannel = (nameChannel, campo, value, prodId) => {
@@ -160,10 +167,10 @@ function AssumptionVentas() {
   };
 
   const buttonSaveStatus = () => {
-    if (productos.length > 0 && channels[0].name !== '') {
-      setActiveButton(true);
-    } else {
+    if (productos?.length > 0 && channels[0]?.name !== '') {
       setActiveButton(false);
+    } else {
+      setActiveButton(true);
     }
   };
 
@@ -181,14 +188,15 @@ function AssumptionVentas() {
       }
     });
 
-    setImputEmpty(isEmpty);
+    return isEmpty;
   };
 
   const onSubmit = () => {
-    validateEmptyInputs();
+    const isEmpty = validateEmptyInputs();
 
-    if (!inputEmpty) {
-      createAssumpVenta(channels, churn, countries, productos)
+    if (!isEmpty) {
+      createAssumpVenta(channels, churn, countries.sort((a, b) => a.value.localeCompare(b.value)), productos, currentState.id)
+
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setShowSuccessAlert(true);

@@ -73,6 +73,11 @@ function Header(props) {
                 <div
                     className="header-action header-action-start"
                     onClick={handleClick}
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          handleClick();
+                        }
+                      }}
                 >
                     {headerStart}
                 </div>

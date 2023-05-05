@@ -1,18 +1,19 @@
-
-import React, { useEffect, useState } from 'react'
-import { getUser } from 'services/Requests'
-import { FormContainer, Tabs, Alert } from 'components/ui'
-import { AÑOS } from 'constants/forms.constants'
-import ContainerScrollable from 'components/shared/ContainerScrollable'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import TablePrecio from './TablePrecio'
+import ContainerScrollable from 'components/shared/ContainerScrollable';
+import { Alert, FormContainer, Tabs } from 'components/ui';
+import { AÑOS } from 'constants/forms.constants';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getUser } from 'services/Requests';
+import TableCosto from './TableCosto';
 
 const { TabNav, TabList } = Tabs;
 
-function PrecioP() {
+function Costo() {
   const [info, setInfo] = useState(null);
   const [defaultCountry, setDefaultCountry] = useState('');
+  const [volumenPrecio, setVolumenPrecio] = useState(false);
+  const [volumenData, setVolumenData] = useState();
+  const [precioData, setPrecioData] = useState();
   const [infoForm, setInfoForm] = useState();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
@@ -29,6 +30,9 @@ function PrecioP() {
           const prod = {};
           prod.id = realProds[x].id;
           prod.volInicial = 0;
+          prod.comision = 0;
+          prod.impuesto = 0;
+          prod.cargos = 0;
           prod.precioInicial = 0;
           prod.tasa = 0;
           prod.name = realProds[x].name;
@@ -53,17 +57,23 @@ function PrecioP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.precioData.length !== 0) {// tengo info precargada
+        if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
+          setVolumenData(data?.volumenData);
+          setPrecioData(data?.precioData);
+          setVolumenPrecio(true);
           const datosPrecargados = {};
-          let pcioDataOrdenada = data?.precioData.sort((a, b) => a.countryName.localeCompare(b.countryName))
-
-          for (let i = 0; i < pcioDataOrdenada.length; i++) {
-            datosPrecargados[pcioDataOrdenada[i].countryName] =
-              pcioDataOrdenada[i].stats;
+          if (data?.costoData.length !== 0) {
+            for (let i = 0; i < data?.costoData.length; i++) {
+              datosPrecargados[data?.costoData[i].countryName] =
+                data?.costoData[i].stats;
+            }
+            setInfoForm(() => ({ ...datosPrecargados }));
+          } else {
+            setInfo(data?.assumptionData);
           }
-          setInfoForm(() => ({ ...datosPrecargados }));
-        } else { // no tengo info precargada
+        } else {
           setInfo(data?.assumptionData);
+          setVolumenPrecio(false);
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
       })
@@ -83,14 +93,13 @@ function PrecioP() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Precio (P)</h4>
-        <span>Plan de ventas</span>
+        <h4>Costos</h4>
+        <span>Plan de costos</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
           <h6>Carga de productos / servicios</h6>
-
         </div>
         {infoForm ? (
           <Tabs defaultValue={defaultCountry}>
@@ -107,8 +116,10 @@ function PrecioP() {
                 <FormContainer className="cont-countries">
                   <ContainerScrollable
                     contenido={
-                      <TablePrecio
+                      <TableCosto
                         data={infoForm}
+                        volumenData={volumenData}
+                        precioData={precioData}
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }
@@ -123,10 +134,17 @@ function PrecioP() {
           </Tabs>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
-              Para acceder a este formulario primero debe completar el
-              formulario de Assumptions Ventas.
-            </span>
+            {!volumenPrecio ? (
+              <span>
+                Para acceder a este formulario primero debe completar los
+                formularios de Volumen y Precio.
+              </span>
+            ) : (
+              <span>
+                Para acceder a este formulario primero debe completar el
+                formulario de Assumptions Ventas.
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -134,4 +152,4 @@ function PrecioP() {
   );
 }
 
-export default PrecioP;
+export default Costo;

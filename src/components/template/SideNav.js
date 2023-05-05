@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import classNames from 'classnames'
 import Logo from 'components/template/Logo'
 import VerticalMenuContent from 'components/template/VerticalMenuContent'

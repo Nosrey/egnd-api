@@ -42,4 +42,9 @@ GrowShrinkTag.propTypes = {
   suffix: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
+GrowShrinkTag.defaultProps = {
+  prefix: "",
+  suffix: "",
+};
+
 export default GrowShrinkTag

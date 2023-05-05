@@ -29,6 +29,7 @@ function Pagination(props) {
       const internalPageCount = getInternalPageCount
       let resetValue
       if (!internalPageCount) {
+        // eslint-disable-next-line no-restricted-globals
         if (isNaN(value) || value < 1) {
           resetValue = 1
         }
@@ -41,6 +42,7 @@ function Pagination(props) {
         }
       }
 
+      // eslint-disable-next-line no-restricted-globals
       if ((resetValue === undefined && isNaN(value)) || resetValue === 0) {
         resetValue = 1
       }

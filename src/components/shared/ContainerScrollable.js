@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useRef } from 'react'
 import { BsChevronRight, BsChevronLeft } from 'react-icons/bs'
 import { useMedia } from 'utils/hooks/useMedia'
@@ -21,16 +22,33 @@ function ContainerScrollable(props) {
     const contentWidth = containerTable.scrollWidth
 
     if (scrollLeftValue === 0) {
-      btnLeft && (btnLeft.style.display = 'none')
-    } else {
-      btnLeft && (btnLeft.style.display = 'block')
-    }
-
+      if (btnLeft) {
+        btnLeft.style.display = 'none';
+      }
+    } else if (btnLeft) {
+        btnLeft.style.display = 'block';
+      }
+    
     if (contentWidth - tableWidth <= scrollLeftValue) {
-      btnRight && (btnRight.style.display = 'none')
-    } else {
-      btnRight && (btnRight.style.display = 'block')
-    }
+      if (btnRight) {
+        btnRight.style.display = 'none';
+      }
+    } else if (btnRight) {
+        btnRight.style.display = 'block';
+      }
+    
+
+    // if (scrollLeftValue === 0) {
+    //   btnLeft && (btnLeft.style.display = 'none');
+    // } else {
+    //   btnLeft && (btnLeft.style.display = 'block');
+    // }
+
+    // if (contentWidth - tableWidth <= scrollLeftValue) {
+    //   btnRight && (btnRight.style.display = 'none');
+    // } else {
+    //   btnRight && (btnRight.style.display = 'block');
+    // }
   }
 
   const handleRightClick = () => {

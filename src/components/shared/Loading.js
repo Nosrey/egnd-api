@@ -21,13 +21,13 @@ function DefaultLoading(props) {
       )}
     >
       {customLoader ? (
-        <>{customLoader}</>
+        {customLoader}
       ) : (
         <Spinner className={spinnerClass} size={40} />
       )}
     </Component>
   ) : (
-    <>{children}</>
+    {children}
   )
 }
 
@@ -50,7 +50,7 @@ function CoveredLoading(props) {
       {loading && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
           {customLoader ? (
-            <>{customLoader}</>
+            {customLoader}
           ) : (
             <Spinner className={spinnerClass} size={40} />
           )}
@@ -75,6 +75,8 @@ Loading.defaultProps = {
   loading: false,
   type: 'default',
   asElement: 'div',
+  spinnerClass: '',
+  customLoader: null,
 }
 
 Loading.propTypes = {
@@ -82,6 +84,7 @@ Loading.propTypes = {
   spinnerClass: PropTypes.string,
   type: PropTypes.oneOf(['default', 'cover']),
   customLoader: PropTypes.node,
+  asElement: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
 }
 
 export default Loading

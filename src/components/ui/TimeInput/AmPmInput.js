@@ -29,6 +29,7 @@ const AmPmInput = forwardRef((props, ref) => {
   }
 
   const handleFocus = (event) => {
+    // eslint-disable-next-line no-unused-expressions
     typeof onFocus === 'function' && onFocus(event)
     inputRef.current.select()
   }

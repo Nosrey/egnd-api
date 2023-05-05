@@ -42,6 +42,7 @@ ActionLink.propTypes = {
 
 ActionLink.defaultProps = {
   themeColor: true,
+  to: '#'
 }
 
 export default ActionLink

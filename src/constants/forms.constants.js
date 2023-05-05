@@ -79,3 +79,80 @@ export const AÑOS = [
     volTotal: 0,
   },
 ]
+export const optionsMonths = [
+  { value: 1, label: 'Enero' },
+  { value: 2, label: 'Febrero' },
+  { value: 3, label: 'Marzo' },
+  { value: 4, label: 'Abril' },
+  { value: 5, label: 'Mayo' },
+  { value: 6, label: 'Junio' },
+  { value: 7, label: 'Julio' },
+  { value: 8, label: 'Agosto' },
+  { value: 9, label: 'Septiembre' },
+  { value: 10, label: 'Octubre' },
+  { value: 11, label: 'Noviembre' },
+  { value: 12, label: 'Diciembre' },
+]
+
+export const AÑOS_COSTO = [
+  {
+    año: 1,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 2,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 3,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 4,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 5,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 6,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 7,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 8,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 9,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 10,
+    volMeses: { ...MESES },
+    volMesesCosto: { ...MESES },
+    volTotal: 0,
+  },
+];

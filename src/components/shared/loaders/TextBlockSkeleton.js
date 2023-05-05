@@ -26,6 +26,8 @@ TextBlockSkeleton.defaultProps = {
   lastChildWidth: '60%',
   titleWidth: '40%',
   title: true,
+  height: 100,
+
 }
 
 TextBlockSkeleton.propTypes = {

@@ -50,6 +50,13 @@ function AdaptableCard(props) {
     </Card>
   )
 }
+AdaptableCard.defaultProps = {
+  leftSideBorder: false,
+  rightSideBorder: false,
+  divider: false,
+  shadow: false,
+  isLastChild: false,
+};
 
 AdaptableCard.propTypes = {
   leftSideBorder: PropTypes.bool,

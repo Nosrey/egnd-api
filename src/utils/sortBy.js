@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 const sortBy = (field, reverse, primer) => {
   const key = primer
     ? function (x) {

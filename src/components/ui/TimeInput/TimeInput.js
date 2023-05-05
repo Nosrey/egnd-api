@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React, { useState, useRef, forwardRef } from 'react'
 import { HiOutlineClock } from 'react-icons/hi'
 import useUniqueId from '../hooks/useUniqueId'
@@ -99,6 +100,7 @@ const TimeInput = forwardRef((props, ref) => {
     },
     min: 0,
     max: 59,
+    // eslint-disable-next-line no-nested-ternary
     nextRef: showSeconds ? secondsRef : format === '12' ? amPmRef : nextRef,
     nextMax: showSeconds ? 59 : undefined,
   })

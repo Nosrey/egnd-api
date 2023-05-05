@@ -56,7 +56,7 @@ export const editBusinessInfo = async (
   }
 };
 
-export const createAssumpVenta = async (canales, churns, paises, productos) => {
+export const createAssumpVenta = async (canales, churns, paises, productos, id) => {
   try {
     const response = await fetch(`${URL_API}/api/assumpventa`, {
       method: 'POST',
@@ -68,7 +68,7 @@ export const createAssumpVenta = async (canales, churns, paises, productos) => {
         churns,
         paises,
         productos,
-        idUser,
+        idUser: id,
       }),
     });
     const data = await response.json();
@@ -79,15 +79,16 @@ export const createAssumpVenta = async (canales, churns, paises, productos) => {
   }
 };
 
-export const createVolumen = async (body) => {
-  try {
-    const response = await fetch(`/volumen`, {
+export const createVolumen = async ({countryName, stats}) => {
+    try {
+    const response = await fetch(`${URL_API }/api/volumen`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        volumen: body,
+        countryName,
+        stats,
         idUser,
-      }),
+    }),
     });
     const data = await response.json();
     return data;
@@ -115,13 +116,14 @@ export const createBienes = async (body) => {
   }
 };
 
-export const createCosto = async (body) => {
+export const createCosto = async ({ countryName, stats }) => {
   try {
-    const response = await fetch(`/costo`, {
+    const response = await fetch(`${URL_API}/api/costo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        costo: body,
+        countryName,
+        stats,
         idUser,
       }),
     });

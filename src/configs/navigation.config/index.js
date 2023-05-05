@@ -17,7 +17,7 @@ const navigationConfig = [
       {
         key: 'collapseGeneral',
         path: '',
-        title: 'Collapse General',
+        title: 'Assumptions Generales',
         translateKey: 'nav.collapseGeneral.collapseGeneral',
         icon: '',
         type: NAV_ITEM_TYPE_COLLAPSE,
@@ -115,8 +115,9 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
+          
           {
-            key: 'collapsePlanVentas.item6',
+            key: 'collapsePlanVentas.item7',
             path: '/clientesalta',
             title: 'Clientes Alta',
             translateKey: 'nav.collapsePlanVentas.item6',
@@ -126,7 +127,7 @@ const navigationConfig = [
             subMenu: [],
           },
           {
-            key: 'collapsePlanVentas.item7',
+            key: 'collapsePlanVentas.item8',
             path: '/clienteschurn',
             title: 'Clientes Churn',
             translateKey: 'nav.collapsePlanVentas.item7',
@@ -136,7 +137,7 @@ const navigationConfig = [
             subMenu: [],
           },
           {
-            key: 'collapsePlanVentas.item8',
+            key: 'collapsePlanVentas.item9',
             path: '/clientestotaltes',
             title: 'Clientes Totales',
             translateKey: 'nav.collapsePlanVentas.item8',
@@ -146,7 +147,7 @@ const navigationConfig = [
             subMenu: [],
           },
           {
-            key: 'collapsePlanVentas.item9',
+            key: 'collapsePlanVentas.item10',
             path: '/dashboardventa',
             title: 'Dashboard Venta',
             translateKey: 'nav.collapsePlanVentas.item9',
@@ -198,6 +199,29 @@ const navigationConfig = [
           },
         ],
       },
+      {
+        key: 'collapseCostosDirectos',
+        path: '',
+        title: 'Collapse Costos Directos',
+        translateKey: 'nav.collapseCostosDirectos.collapseCostosDirectos',
+        icon: '',
+        type: NAV_ITEM_TYPE_COLLAPSE,
+        authority: [],
+        subMenu: [
+          {
+            key: 'collapseCostosDirectos.item1',
+            path: '/costo',
+            title: 'Costo',
+            translateKey: 'nav.collapseCostosDirectos.item1',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
+        ],
+      },
+
+     
     ],
   },
 ]

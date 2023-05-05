@@ -46,6 +46,7 @@ const RangeCalendar = forwardRef((props, ref) => {
   }
 
   const handleMouseLeave = (event) => {
+    // eslint-disable-next-line no-unused-expressions
     typeof onMouseLeave === 'function' && onMouseLeave(event)
     setHoveredDay(null)
   }

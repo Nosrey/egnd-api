@@ -7,29 +7,34 @@
             "collapseMenu": "Financial Plan",
             "collapseGeneral": {
                 "collapseGeneral": "Assumptions General",
-                "item1": "Assumptions General",
+                "item1": "Assumptions Generales",
                 "item2": "Research"
             },
             "collapsePlanCuentas": "Plan de Cuentas"
         },
 
         "collapsePlanVentas": {
-            "collapsePlanVentas": "Assumptions Ventas",
+            "collapsePlanVentas": "Plan de Ventas",
             "item1": "Assumptions Ventas",
             "item2": "GMV y Take Rate",
             "item3": "Volumen (Q)",
             "item4": "Precio (P)",
             "item5": "Ventas",
-            "item6": "Clientes - Alta",
-            "item7": "Clientes - Churn",
-            "item8": "Clientes - Clientes Totales",
-            "item9": "Dashboard Venta"
+            "item7": "Clientes - Alta",
+            "item8": "Clientes - Churn",
+            "item9": "Clientes - Clientes Totales",
+            "item10": "Dashboard Venta"
         },
         "collapseFinancialPlan": {
             "collapseFinancialPlan": "Financial Plan",
             "item1": "Precio de bienes",
             "item2": "Inversión",
             "item3": "Assumption Financieras"
+        },
+        "collapseCostosDirectos": {
+            "collapseCostosDirectos": "Costos Directos",
+            "item1": "Costos Directos",
+            "item2": "Costos - Precio Unitario"
         }
     }
 }

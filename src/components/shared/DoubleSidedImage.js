@@ -17,4 +17,8 @@ DoubleSidedImage.propTypes = {
   darkModeSrc: PropTypes.string,
 }
 
+DoubleSidedImage.defaultProps = {
+  darkModeSrc: ''
+}
+
 export default DoubleSidedImage

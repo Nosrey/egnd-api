@@ -19,5 +19,8 @@ IconText.propTypes = {
   asElement: PropTypes.string,
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
+IconText.defaultProps = {
+  icon: null,
+};
 
 export default IconText

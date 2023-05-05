@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, {
   useState,
   useMemo,
@@ -135,6 +136,7 @@ Radio.propTypes = {
   color: PropTypes.string,
   onChange: PropTypes.func,
   labelRef: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
   value: PropTypes.any,
   vertical: PropTypes.bool,
 }

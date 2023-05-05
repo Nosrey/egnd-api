@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { useMemo } from 'react'
 import isPlainObject from 'lodash/isPlainObject'
 
@@ -10,6 +11,7 @@ const getRouteInfo = (navTree, key) => {
   for (const p in navTree) {
     if (
       p !== 'icon' &&
+      // eslint-disable-next-line no-prototype-builtins
       navTree.hasOwnProperty(p) &&
       typeof navTree[p] === 'object'
     ) {

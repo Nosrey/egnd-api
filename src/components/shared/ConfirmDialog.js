@@ -117,6 +117,8 @@ function ConfirmDialog(props) {
 
 ConfirmDialog.propTypes = {
   type: PropTypes.oneOf(['info', 'success', 'warning', 'danger']),
+  cancelText: PropTypes.string,
+  confirmText: PropTypes.string,
 }
 
 ConfirmDialog.defaultProps = {

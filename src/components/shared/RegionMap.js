@@ -1,3 +1,4 @@
+/* eslint-disable react/default-props-match-prop-types */
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
@@ -144,15 +145,17 @@ RegionMap.propTypes = {
         .isRequired,
     })
   ).isRequired,
-  mapSource: PropTypes.object,
+  mapSource: PropTypes.objectOf(),
   valueSuffix: PropTypes.string,
   valuePrefix: PropTypes.string,
 }
 
 RegionMap.defaultProps = {
-  data: [],
+  // data: [],
   mapSource: geoUrl,
   mapType: 'world',
+  valuePrefix: '',
+  valueSuffix: '',
 }
 
 export default RegionMap
