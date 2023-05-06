@@ -8,12 +8,12 @@ import {
   Select,
   Tabs,
   Tooltip,
-} from 'components/ui'
-import { useState } from 'react'
-import { FiMinus, FiPlus } from 'react-icons/fi'
-import { createPrecio } from 'services/Requests'
+} from 'components/ui';
+import { useState } from 'react';
+import { FiMinus, FiPlus } from 'react-icons/fi';
+import { createPrecio } from 'services/Requests';
 
-const { TabContent } = Tabs
+const { TabContent } = Tabs;
 
 const optionsMonths = [
   { value: 1, label: 'Enero' },
@@ -28,56 +28,56 @@ const optionsMonths = [
   { value: 10, label: 'Octubre' },
   { value: 11, label: 'Noviembre' },
   { value: 12, label: 'Diciembre' },
-]
+];
 
 function TablePrecio(props) {
-  const [infoForm, setInfoForm] = useState(props.data)
-  const [visibleItems, setVisibleItems] = useState([0])
+  const [infoForm, setInfoForm] = useState(props.data);
+  const [visibleItems, setVisibleItems] = useState([0]);
 
-  const moneda = props.currency
+  const moneda = props.currency;
 
   const hideYear = (index) => {
     setVisibleItems((prevItems) => {
       if (prevItems.includes(index)) {
         // Si el elemento ya está en la lista, lo eliminamos para ocultarlo
-        return prevItems.filter((id) => id !== index)
+        return prevItems.filter((id) => id !== index);
       }
       // Si el elemento no está en la lista, lo agregamos para mostrarlo
-      return [...prevItems, index]
-    })
-  }
+      return [...prevItems, index];
+    });
+  };
 
   const fillMonthsPrices = (producto, yearIndex) => {
-    const newAños = [...producto.años]
-    let precioActual = producto.precioInicial
-    let currentMonth = 1
+    const newAños = [...producto.años];
+    let precioActual = producto.precioInicial;
+    let currentMonth = 1;
 
     for (let i = yearIndex >= 0 ? yearIndex : 0; i < newAños.length; i++) {
-      const newMeses = { ...newAños[i].volMeses }
+      const newMeses = { ...newAños[i].volMeses };
       // eslint-disable-next-line no-restricted-syntax
       for (const mes in newMeses) {
         if (currentMonth >= producto.inicioMes) {
-          newMeses[mes] = precioActual
-          precioActual *= 1 + producto.tasa / 100
+          newMeses[mes] = precioActual;
+          precioActual *= 1 + producto.tasa / 100;
         } else {
-          newMeses[mes] = 0
+          newMeses[mes] = 0;
         }
-        currentMonth++
+        currentMonth++;
       }
-      newAños[i] = { ...newAños[i], volMeses: newMeses }
+      newAños[i] = { ...newAños[i], volMeses: newMeses };
     }
 
-    return newAños
-  }
+    return newAños;
+  };
 
   const replaceMonth = (producto, indexYear, mes, value) => {
-    const newAños = [...producto.años]
-    const newMeses = { ...newAños[indexYear].volMeses }
-    newMeses[mes] = value
-    newAños[indexYear] = { ...newAños[indexYear], volMeses: newMeses }
+    const newAños = [...producto.años];
+    const newMeses = { ...newAños[indexYear].volMeses };
+    newMeses[mes] = value;
+    newAños[indexYear] = { ...newAños[indexYear], volMeses: newMeses };
 
-    return newAños
-  }
+    return newAños;
+  };
 
   const handleOnChangeInitialValue = (
     pais,
@@ -86,84 +86,84 @@ function TablePrecio(props) {
     newValue,
     key,
     mes,
-    indexYear
+    indexYear,
   ) => {
-    const newData = { ...infoForm }
+    const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
-      (canal) => canal.canalName === canalName
-    )
+      (canal) => canal.canalName === canalName,
+    );
     const productoIndex = newData[pais][channelIndex].productos.findIndex(
-      (producto) => producto.id === prod.id
-    )
+      (producto) => producto.id === prod.id,
+    );
 
     const producto = {
       ...newData[pais][channelIndex].productos[productoIndex],
-    }
+    };
     switch (key) {
       case 'precioInicial':
-        producto.precioInicial = newValue
-        producto.años = fillMonthsPrices(producto, -1)
-        break
+        producto.precioInicial = newValue;
+        producto.años = fillMonthsPrices(producto, -1);
+        break;
 
       case 'tasa':
-        producto.tasa = newValue
-        producto.años = fillMonthsPrices(producto, -1)
-        break
+        producto.tasa = newValue;
+        producto.años = fillMonthsPrices(producto, -1);
+        break;
 
       case 'mesInicial':
-        producto.inicioMes = newValue
-        producto.años = fillMonthsPrices(producto, -1)
-        break
+        producto.inicioMes = newValue;
+        producto.años = fillMonthsPrices(producto, -1);
+        break;
 
       case 'mes':
-        producto.años = replaceMonth(producto, indexYear, mes, newValue)
-        break
+        producto.años = replaceMonth(producto, indexYear, mes, newValue);
+        break;
       default:
-        break
+        break;
     }
 
-    newData[pais][channelIndex].productos[productoIndex] = producto
-    setInfoForm(newData)
-  }
+    newData[pais][channelIndex].productos[productoIndex] = producto;
+    setInfoForm(newData);
+  };
 
   const submitInfoForm = () => {
-    const copyData = { ...infoForm }
-    const countryArray = []
+    const copyData = { ...infoForm };
+    const countryArray = [];
 
     // eslint-disable-next-line no-restricted-syntax
     for (const countryName in copyData) {
-      const statsArray = copyData[countryName]
-      const countryObject = { countryName, stats: [] }
+      const statsArray = copyData[countryName];
+      const countryObject = { countryName, stats: [] };
 
       for (let i = 0; i < statsArray.length; i++) {
-        countryObject.stats.push(statsArray[i])
+        countryObject.stats.push(statsArray[i]);
       }
 
-      countryArray.push(countryObject)
+      countryArray.push(countryObject);
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      postPrecioData(countryArray[i])
+      postPrecioData(countryArray[i]);
     }
-  }
+  };
 
   const postPrecioData = (data) => {
     createPrecio(data)
       .then(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        props.showAlertSuces(true)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        props.showAlertSuces(true);
         setTimeout(() => {
-          props.showAlertSuces(false)
-        }, 5000)
+          props.showAlertSuces(false);
+        }, 5000);
       })
       .catch((error) => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        props.showAlertError(true)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        props.showAlertError(true);
         setTimeout(() => {
-          props.showAlertError(false)
-        }, 5000)
-      })
-  }
+          props.showAlertError(false);
+        }, 5000);
+      });
+  };
 
   return (
     <>
@@ -213,7 +213,7 @@ function TablePrecio(props) {
                                         canal.canalName,
                                         producto,
                                         e.target.value,
-                                        'precioInicial'
+                                        'precioInicial',
                                       )
                                     }
                                   />
@@ -236,7 +236,7 @@ function TablePrecio(props) {
                                         canal.canalName,
                                         producto,
                                         e.target.value,
-                                        'tasa'
+                                        'tasa',
                                       )
                                     }
                                   />
@@ -255,7 +255,7 @@ function TablePrecio(props) {
                                   options={optionsMonths}
                                   value={optionsMonths.filter(
                                     (option) =>
-                                      option.value === producto.inicioMes
+                                      option.value === producto.inicioMes,
                                   )}
                                   onChange={(e) =>
                                     handleOnChangeInitialValue(
@@ -263,7 +263,7 @@ function TablePrecio(props) {
                                       canal.canalName,
                                       producto,
                                       e.value,
-                                      'mesInicial'
+                                      'mesInicial',
                                     )
                                   }
                                 />
@@ -298,7 +298,7 @@ function TablePrecio(props) {
                                         >
                                           {Object.keys(año.volMeses)[indexMes]}
                                         </p>
-                                      )
+                                      ),
                                     )}
                                 </div>
                                 <div className="flex gap-x-3 gap-y-3">
@@ -329,13 +329,13 @@ function TablePrecio(props) {
                                                 e.target.value,
                                                 'mes',
                                                 mes,
-                                                indexYear
-                                              )
+                                                indexYear,
+                                              );
                                             }}
                                             name="month"
                                           />
                                         </FormItem>
-                                      )
+                                      ),
                                     )}
                                 </div>
                               </div>
@@ -359,7 +359,7 @@ function TablePrecio(props) {
         Guardar
       </Button>
     </>
-  )
+  );
 }
 
-export default TablePrecio
+export default TablePrecio;

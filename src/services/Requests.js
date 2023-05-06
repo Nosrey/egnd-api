@@ -56,7 +56,13 @@ export const editBusinessInfo = async (
   }
 };
 
-export const createAssumpVenta = async (canales, churns, paises, productos, id) => {
+export const createAssumpVenta = async (
+  canales,
+  churns,
+  paises,
+  productos,
+  id,
+) => {
   try {
     const response = await fetch(`${URL_API}/api/assumpventa`, {
       method: 'POST',
@@ -79,16 +85,16 @@ export const createAssumpVenta = async (canales, churns, paises, productos, id) 
   }
 };
 
-export const createVolumen = async ({countryName, stats}) => {
-    try {
-    const response = await fetch(`${URL_API }/api/volumen`, {
+export const createVolumen = async ({ countryName, stats }) => {
+  try {
+    const response = await fetch(`${URL_API}/api/volumen`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         countryName,
         stats,
         idUser,
-    }),
+      }),
     });
     const data = await response.json();
     return data;
@@ -238,6 +244,28 @@ export const createAssumpFinanciera = async (
     return data;
   } catch (error) {
     console.error('Error', error.message);
+    throw error;
+  }
+};
+
+export const createGastosGeneral = async ({
+  centroDeGastos,
+  cargasSociales,
+}) => {
+  try {
+    const response = await fetch(`${URL_API}/api/gastosgeneral`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        centroDeGastos,
+        cargasSociales,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error);
     throw error;
   }
 };

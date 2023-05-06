@@ -2,7 +2,7 @@ import {
   NAV_ITEM_TYPE_COLLAPSE,
   NAV_ITEM_TYPE_ITEM,
   NAV_ITEM_TYPE_TITLE,
-} from 'constants/navigation.constant'
+} from 'constants/navigation.constant';
 
 const navigationConfig = [
   {
@@ -115,7 +115,7 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
-          
+
           {
             key: 'collapsePlanVentas.item7',
             path: '/clientesalta',
@@ -220,10 +220,30 @@ const navigationConfig = [
           },
         ],
       },
-
-     
+      {
+        key: 'collapseGastosDeEstructura',
+        path: '',
+        title: 'Collapse Gastos de Estructura',
+        translateKey:
+          'nav.collapseGastosDeEstructura.collapseGastosDeEstructura',
+        icon: '',
+        type: NAV_ITEM_TYPE_COLLAPSE,
+        authority: [],
+        subMenu: [
+          {
+            key: 'collapseGastosDeEstructura.item1',
+            path: '/gastos',
+            title: 'Gastos',
+            translateKey: 'nav.collapseGastosDeEstructura.item1',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
+        ],
+      },
     ],
   },
-]
+];
 
-export default navigationConfig
+export default navigationConfig;
