@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Notification, toast, Button, Input, Alert } from 'components/ui';
+import { Button, Input, Alert } from 'components/ui';
 import { createGastosGeneral, getUser } from 'services/Requests';
 import { useSelector } from 'react-redux';
+import { object } from 'prop-types';
 
 function Gastos() {
   const currentState = useSelector((state) => state.auth.user);
+  const [showWarningEmpty, setShowWarningEmpty] = useState(false);
+  const [showWarningLimit, setShowWarningLimit] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [showEmptyAlert, setShowEmptyAlert] = useState(false);
@@ -25,7 +28,9 @@ function Gastos() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        setInitialValues(data?.gastosGeneralData[0]);
+        if (data?.gastosGeneralData.length !== 0) {
+          setInitialValues(data?.gastosGeneralData[0]);
+        }
       })
       .catch(console.log('error'));
   }, []);
@@ -39,32 +44,10 @@ function Gastos() {
     }
     return false;
   };
-
   useEffect(() => {
-    if (numCreatedCheckboxes === 3) setInputDisabled(true);
+    if (Object.keys(initialValues.centroDeGastos).length === 8)
+      setInputDisabled(true);
   }, [numCreatedCheckboxes]);
-
-  const openNotification = (type) => {
-    toast.push(
-      <Notification
-        title={type.charAt(0).toUpperCase() + type.slice(1)}
-        type={type}
-      >
-        No se pueden crear más de tres centros de costos.
-      </Notification>,
-    );
-  };
-
-  const openEmptyNotification = (type) => {
-    toast.push(
-      <Notification
-        title={type.charAt(0).toUpperCase() + type.slice(1)}
-        type={type}
-      >
-        No puede estar vacío el campo.
-      </Notification>,
-    );
-  };
 
   const handleCheckboxChange = (checkbox, checked) => {
     setInitialValues({
@@ -85,7 +68,7 @@ function Gastos() {
 
   const handleCreateCheckbox = (e) => {
     e.preventDefault();
-    if (numCreatedCheckboxes < 3) {
+    if (Object.keys(initialValues.centroDeGastos).length < 8) {
       if (newNameCheckbox.trim() !== '') {
         setInitialValues({
           ...initialValues,
@@ -97,10 +80,18 @@ function Gastos() {
         setNewNameCheckbox('');
         setNumCreatedCheckboxes(numCreatedCheckboxes + 1);
       } else {
-        openEmptyNotification('warning');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setShowWarningEmpty(true);
+        setTimeout(() => {
+          setShowWarningEmpty(false);
+        }, 5000);
       }
     } else {
-      openNotification('warning');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setShowWarningLimit(true);
+      setTimeout(() => {
+        setShowWarningLimit(false);
+      }, 5000);
     }
   };
 
@@ -147,6 +138,16 @@ function Gastos() {
       {showEmptyAlert && (
         <Alert className="mb-4" type="danger" showIcon>
           Por lo menos tienes que seleccionar un checkbox.
+        </Alert>
+      )}
+      {showWarningEmpty && (
+        <Alert className="mb-4" showIcon>
+          No se puede crear un nuevo centro de costos sin nombre.
+        </Alert>
+      )}
+      {showWarningLimit && (
+        <Alert className="mb-4" showIcon>
+          No se pueden crear más de tres centros de costos.
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
@@ -210,7 +211,7 @@ function Gastos() {
                 </div>
                 <span>
                   *Es el aumento sobre el sueldo en concepto de cargas sociales
-                  para determinar el costo empresar de cada recurso
+                  para determinar el costo empresa de cada recurso
                 </span>
               </div>
             </div>
