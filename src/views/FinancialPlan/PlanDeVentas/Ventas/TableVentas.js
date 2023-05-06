@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
 import {
@@ -25,7 +26,7 @@ function TableVentas(props) {
     // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias 
     // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las 
     // ventas de cada producto teniendo en cuenta todos los canales.
-    useEffect(() => {
+    const initialConfig = () => {
         if(infoForm && props.country){
             const pais = [...infoForm[props.country]] 
             const arrayP =[]
@@ -86,8 +87,13 @@ function TableVentas(props) {
             }
             setTotalesCanales(()=>[...arrayCanales])
         }
-       
-    }, [infoForm, props])    
+    }
+    useEffect(() => {
+       initialConfig();
+    }, [infoForm]) 
+    useEffect(() => {
+        initialConfig();      
+    }, [props])    
 
     const hideYear = (index) => {
         setVisibleItems((prevItems) => {

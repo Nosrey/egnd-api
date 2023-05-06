@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
@@ -33,7 +34,7 @@ function TableVolumen(props) {
     // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias 
     // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las 
     // cantidades de cada producto teniendo en cuenta todo los canales.
-    useEffect(() => {
+    const initialConfig = () => {
         if(infoForm && props.country && infoProducts){
             const pais = [...infoForm[props.country]] 
             const arrayP =[]
@@ -51,12 +52,13 @@ function TableVolumen(props) {
                     for (let j = 0; j < myProd.años.length; j++) { // año
                         for (let s = 0; s < MONTHS.length; s++) {
                             const valor = myProd.años[j].volMeses[MONTHS[s]]
-                            arrayvalores.push(parseInt(valor, 10))                        
+                            arrayvalores.push(parseInt(valor, 10))
                         }
                     }
                     canalInfo.sum +=  arrayvalores.reduce((acumulador, valorActual) => acumulador + valorActual, 0)
                     arrayP.push({...myProd, sum: arrayvalores})
                 }
+
                 arrayCanales.push(canalInfo);
 
                 const agrupados = arrayP.reduce((resultado, objeto) => {
@@ -95,13 +97,18 @@ function TableVolumen(props) {
             }
             setTotalesCanales(()=>[...arrayCanales])
         }
-    }, [infoForm, props])    
+    }
+    
+    useEffect(() => {
+        initialConfig();
+    }, [infoForm])    
 
     useEffect(() => {
       if (props.productos) {
         setInfoProducts(()=> [...props.productos])
       }
       if(props.data) setInfoForm(props.data)
+      initialConfig();
     }, [props])
     
     const hideYear = (index) => {

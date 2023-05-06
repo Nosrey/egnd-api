@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Button, Input, Alert } from 'components/ui';
 import { createGastosGeneral, getUser } from 'services/Requests';
