@@ -11,7 +11,7 @@ export const MESES = {
   octubre: 0,
   noviembre: 0,
   diciembre: 0,
-}
+};
 export const MONTHS = [
   'enero',
   'febrero',
@@ -25,7 +25,7 @@ export const MONTHS = [
   'octubre',
   'noviembre',
   'diciembre',
-]
+];
 
 export const AÑOS = [
   {
@@ -78,7 +78,7 @@ export const AÑOS = [
     volMeses: { ...MESES },
     volTotal: 0,
   },
-]
+];
 export const optionsMonths = [
   { value: 1, label: 'Enero' },
   { value: 2, label: 'Febrero' },
@@ -92,7 +92,7 @@ export const optionsMonths = [
   { value: 10, label: 'Octubre' },
   { value: 11, label: 'Noviembre' },
   { value: 12, label: 'Diciembre' },
-]
+];
 
 export const AÑOS_COSTO = [
   {
@@ -154,5 +154,20 @@ export const AÑOS_COSTO = [
     volMeses: { ...MESES },
     volMesesCosto: { ...MESES },
     volTotal: 0,
+  },
+];
+
+export const EMPTY_YEARS = [
+  {
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+    7: [],
+    8: [],
+    9: [],
   },
 ];

@@ -1,9 +1,9 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
-import React from 'react'
-import authRoute from './authRoute'
+import React from 'react';
+import authRoute from './authRoute';
 
-export const publicRoutes = [...authRoute]
+export const publicRoutes = [...authRoute];
 
 export const protectedRoutes = [
   {
@@ -16,7 +16,7 @@ export const protectedRoutes = [
     key: 'assumptiongeneral',
     path: '/assumptiongeneral',
     component: React.lazy(() =>
-      import('views/FinancialPlan/AssumtionsGenerales/AssumptionGeneral')
+      import('views/FinancialPlan/AssumtionsGenerales/AssumptionGeneral'),
     ),
     authority: [],
   },
@@ -26,7 +26,7 @@ export const protectedRoutes = [
     component: React.lazy(() =>
       import(
         'views/FinancialPlan/PlanDeVentas/Assumption Ventas/AssumptionVentas'
-      )
+      ),
     ),
     authority: [],
   },
@@ -34,7 +34,7 @@ export const protectedRoutes = [
     key: 'preciop',
     path: '/preciop',
     component: React.lazy(() =>
-      import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP')
+      import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP'),
     ),
     authority: [],
   },
@@ -42,7 +42,7 @@ export const protectedRoutes = [
     key: 'volumenq',
     path: '/volumenq',
     component: React.lazy(() =>
-      import('views/FinancialPlan/PlanDeVentas/VolumenQ/VolumenQ')
+      import('views/FinancialPlan/PlanDeVentas/VolumenQ/VolumenQ'),
     ),
     authority: [],
   },
@@ -50,7 +50,7 @@ export const protectedRoutes = [
     key: 'ventas',
     path: '/ventas',
     component: React.lazy(() =>
-        import('views/FinancialPlan/PlanDeVentas/Ventas/Ventas')
+      import('views/FinancialPlan/PlanDeVentas/Ventas/Ventas'),
     ),
     authority: [],
   },
@@ -63,11 +63,19 @@ export const protectedRoutes = [
     authority: [],
   },
   {
-    key: 'assumptionfinancieras',
-    path: '/assumptionfinancieras',
+    key: 'costopxq',
+    path: '/costopxq',
     component: React.lazy(() =>
-      import('views/FinancialPlan/FinancialPlanItem/AssumptionFinancieras.js')
+      import('views/FinancialPlan/PlanDeVentas/Costo PxQ/Costo'),
     ),
     authority: [],
   },
-]
+  {
+    key: 'assumptionfinancieras',
+    path: '/assumptionfinancieras',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/FinancialPlanItem/AssumptionFinancieras.js'),
+    ),
+    authority: [],
+  },
+];
