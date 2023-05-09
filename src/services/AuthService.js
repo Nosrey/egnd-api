@@ -1,13 +1,13 @@
-import ApiService from './ApiService'
+import ApiService from './ApiService';
 
-const URL_API = 'http://localhost:4000'
+const URL_API = 'http://localhost:4000';
 
 export async function apiSignIn(data) {
   return ApiService.fetchData({
     url: '/sign-in',
     method: 'post',
     data,
-  })
+  });
 }
 
 export async function apiSignUp(data) {
@@ -15,7 +15,7 @@ export async function apiSignUp(data) {
     url: '/sign-up',
     method: 'post',
     data,
-  })
+  });
 }
 
 export async function apiSignOut(data) {
@@ -23,7 +23,7 @@ export async function apiSignOut(data) {
     url: '/sign-out',
     method: 'post',
     data,
-  })
+  });
 }
 
 export async function apiForgotPassword(data) {
@@ -31,7 +31,7 @@ export async function apiForgotPassword(data) {
     url: '/forgot-password',
     method: 'post',
     data,
-  })
+  });
 }
 
 export async function apiResetPassword(data) {
@@ -39,14 +39,14 @@ export async function apiResetPassword(data) {
     url: '/reset-password',
     method: 'post',
     data,
-  })
+  });
 }
 
 export const createSignUp = async (body) => {
-  const { email, password, businessName, modeloNegocio, moneda } = body
+  const { email, password, businessName, modeloNegocio, moneda } = body;
 
   if (!email || !password || !businessName || !modeloNegocio || !moneda) {
-    throw new Error('Todos los campos son obligatorios')
+    throw new Error('Todos los campos son obligatorios');
   }
 
   try {
@@ -61,25 +61,28 @@ export const createSignUp = async (body) => {
         businessName,
         businessInfo: [{ businessModel: modeloNegocio, currency: moneda }],
       }),
-    })
+    });
+
+    const data = await resp.json();
+
     if (!resp.ok) {
-      const error = await resp.json()
-      throw new Error(error.errors[0])
+      throw new Error(data.errors[0]);
+    } else if (!data.success && data.errors.includes('El usuario ya existe')) {
+      throw new Error('El usuario ya existe');
     }
 
-    const data = await resp.json()
-    return data.response
+    return data.response;
   } catch (error) {
-    console.error(`Error calling ${URL_API}/api/signup: ${error.message}`)
-    throw error
+    console.error(`Error calling ${URL_API}/api/signup: ${error.message}`);
+    throw error;
   }
-}
+};
 
 export const signIn = async (body) => {
-  const { email, password } = body
+  const { email, password } = body;
 
   if (!email || !password) {
-    throw new Error('Todos los campos son obligatorios')
+    throw new Error('Todos los campos son obligatorios');
   }
 
   try {
@@ -92,17 +95,17 @@ export const signIn = async (body) => {
         mail: email,
         password,
       }),
-    })
+    });
 
     if (!resp.ok) {
-      const error = await resp.json()
-      throw new Error(error.response)
+      const error = await resp.json();
+      throw new Error(error.response);
     }
 
-    const data = await resp.json()
-    return data
+    const data = await resp.json();
+    return data;
   } catch (error) {
-    console.error(`Error calling ${URL_API}/api/sigin: ${error.message}`)
-    throw error
+    console.error(`Error calling ${URL_API}/api/sigin: ${error.message}`);
+    throw error;
   }
-}
+};

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   Input,
   Button,
@@ -6,13 +6,13 @@ import {
   FormContainer,
   Alert,
   Select,
-} from 'components/ui'
-import { PasswordInput, ActionLink } from 'components/shared'
-import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
-import { Field, Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import { createSignUp } from 'services/AuthService'
-import { useNavigate } from 'react-router-dom'
+} from 'components/ui';
+import { PasswordInput, ActionLink } from 'components/shared';
+import useTimeOutMessage from 'utils/hooks/useTimeOutMessage';
+import { Field, Form, Formik } from 'formik';
+import * as Yup from 'yup';
+import { createSignUp } from 'services/AuthService';
+import { useNavigate } from 'react-router-dom';
 
 const businessOptions = [
   { value: 'marketplace', label: 'Marketplace' },
@@ -21,13 +21,13 @@ const businessOptions = [
   { value: 'transaccional', label: 'Transaccional' },
   { value: 'producto', label: 'Producto' },
   { value: 'suscripcion', label: 'Suscripcion' },
-]
+];
 
 const currencyOptions = [
   { value: '$', label: 'ARS' },
   { value: 'US$', label: 'USD' },
   { value: '€', label: 'EUR' },
-]
+];
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -36,20 +36,20 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Por favor introduzca su contraseña'),
   confirmPassword: Yup.string().oneOf(
     [Yup.ref('password'), null],
-    'Tus contraseñas no coinciden'
+    'Tus contraseñas no coinciden',
   ),
   businessName: Yup.string().required('Por favor ingrese su nombre de negocio'),
   modeloNegocio: Yup.string().required(
-    'Por favor seleccione un modelo de negocio'
+    'Por favor seleccione un modelo de negocio',
   ),
   moneda: Yup.string().required('Por favor seleccione una moneda'),
-})
+});
 
 function SignUpForm(props) {
-  const { className, signInUrl = '/sign-in' } = props
-  const navigate = useNavigate()
+  const { className, signInUrl = '/sign-in' } = props;
+  const navigate = useNavigate();
 
-  const [message, setMessage] = useTimeOutMessage()
+  const [message, setMessage] = useTimeOutMessage();
 
   return (
     <div className={className}>
@@ -71,17 +71,15 @@ function SignUpForm(props) {
         onSubmit={(values, { setSubmitting }) => {
           createSignUp(values)
             .then((resp) => {
-              console.log('registro exitoso')
-              localStorage.setItem('userId', resp.id)
-              setSubmitting(false)
-              navigate('/sign-in')
+              localStorage.setItem('userId', resp.id);
+              setSubmitting(false);
+              navigate('/sign-in');
             })
             .catch((error) => {
-              if (error.stack.includes('usuario ya existe'))
-                setMessage('Este email ya está registrado')
-
-              console.error('Error de API:', error)
-            })
+              console.error('Error de API:', error);
+              setMessage('Este correo electrónico ya fue utilizado.');
+              setSubmitting(false);
+            });
         }}
       >
         {({ values, touched, errors, isSubmitting }) => (
@@ -150,7 +148,7 @@ function SignUpForm(props) {
                       form={form}
                       options={businessOptions}
                       value={businessOptions.filter(
-                        (option) => option.value === values.modeloNegocio
+                        (option) => option.value === values.modeloNegocio,
                       )}
                       onChange={(option) =>
                         form.setFieldValue(field.name, option.value)
@@ -173,7 +171,7 @@ function SignUpForm(props) {
                       form={form}
                       options={currencyOptions}
                       value={currencyOptions.filter(
-                        (option) => option.value === values.moneda
+                        (option) => option.value === values.moneda,
                       )}
                       onChange={(option) =>
                         form.setFieldValue(field.name, option.value)
@@ -200,7 +198,7 @@ function SignUpForm(props) {
         )}
       </Formik>
     </div>
-  )
+  );
 }
 
-export default SignUpForm
+export default SignUpForm;
