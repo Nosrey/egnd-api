@@ -34,7 +34,8 @@
     "collapseCostosDirectos": {
       "collapseCostosDirectos": "Costos Directos",
       "item1": "Costos Directos",
-      "item2": "Costos - Precio Unitario"
+      "item2": "Costos - Precio Unitario",
+      "item3":"Margen Bruto"
     },
     "collapseGastosDeEstructura": {
       "collapseGastosDeEstructura": "Gastos de Estructura",

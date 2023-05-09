@@ -218,6 +218,16 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
+          {
+            key: 'collapseCostosDirectos.item1',
+            path: '/margenbruto',
+            title: 'Margen Bruto',
+            translateKey: 'nav.collapseCostosDirectos.item3',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
         ],
       },
       {
