@@ -22,6 +22,7 @@
     "no-unused-vars": "off",
     "consistent-return": "off",
     "no-plusplus": "off",
+    "array-callback-return": "off",
     "prefer-const": "off",
     "react/react-in-jsx-scope": "off",
     "react/no-array-index-key": "off",
