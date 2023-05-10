@@ -1,567 +1,271 @@
-/* eslint-disable no-restricted-syntax */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-return-assign */
 import {
-    Avatar,
-    Button,
-    FormContainer,
-    FormItem,
-    Input,
-    Select,
-    Tabs,
-    Tooltip,
-  } from 'components/ui';
-  import { MONTHS } from 'constants/forms.constants';
-  import { useState } from 'react';
-  import { FiMinus, FiPlus } from 'react-icons/fi';
-  import { createCosto } from 'services/Requests';
-  
-  const { TabContent } = Tabs;
-  
-  const optionsMonths = [
-    { value: 1, label: 'Enero' },
-    { value: 2, label: 'Febrero' },
-    { value: 3, label: 'Marzo' },
-    { value: 4, label: 'Abril' },
-    { value: 5, label: 'Mayo' },
-    { value: 6, label: 'Junio' },
-    { value: 7, label: 'Julio' },
-    { value: 8, label: 'Agosto' },
-    { value: 9, label: 'Septiembre' },
-    { value: 10, label: 'Octubre' },
-    { value: 11, label: 'Noviembre' },
-    { value: 12, label: 'Diciembre' },
-  ];
-  
-  function TableMargen(props) {
-    const [infoForm, setInfoForm] = useState(props.data);
-    const [visibleItems, setVisibleItems] = useState([0]);
-  
-    const moneda = props.currency;
-  
-    const hideYear = (index) => {
-      setVisibleItems((prevItems) => {
-        if (prevItems.includes(index)) {
-          // Si el elemento ya está en la lista, lo eliminamos para ocultarlo
-          return prevItems.filter((id) => id !== index);
+  Avatar,
+  FormContainer,
+  FormItem,
+  Input,
+  Tabs,
+} from 'components/ui'
+import { MONTHS } from 'constants/forms.constants'
+import { useState, useEffect } from 'react'
+import { FiMinus, FiPlus } from 'react-icons/fi'
+
+const { TabContent } = Tabs
+
+function TableMargen(props) {
+  const [infoForm] = useState(props.data)
+  const [infoProducts, setInfoProducts] = useState(props.productos)
+  const [visibleItems, setVisibleItems] = useState([0])
+  const [volTotal, setVolTotal] = useState(0)
+  const [totalesCanales, setTotalesCanales] = useState([])
+  const moneda = props.currency
+
+  // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de 
+  // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias 
+  // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las 
+  // ventas de cada producto teniendo en cuenta todos los canales.
+  const initialConfig = () => {
+    if (infoForm && props.country) {
+      const pais = [...infoForm[props.country]]
+      const arrayP = []
+      const arrayCanales = []
+      for (let i = 0; i < pais.length; i++) {// cada canal
+        const canal = pais[i]
+        let canalInfo = {
+          name: canal.canalName,
+          sum: 0
         }
-        // Si el elemento no está en la lista, lo agregamos para mostrarlo
-        return [...prevItems, index];
-      });
-    };
-  
-    const resolveResul = (vol, precio, div) => {
-      let value = 0;
-  
-      if (div !== 0) {
-        const mult = vol * precio;
-        value = (div * mult) / 100;
-        value = value.toFixed(1);
-      }
-      return value;
-    };
-  
-    const submitInfoForm = () => {
-      const copyData = { ...infoForm };
-      const countryArray = [];
-  
-      for (const countryName in copyData) {
-        const statsArray = copyData[countryName];
-        const countryObject = { countryName, stats: [] };
-  
-        for (let i = 0; i < statsArray.length; i++) {
-          countryObject.stats.push(statsArray[i]);
-        }
-  
-        countryArray.push(countryObject);
-      }
-  
-      for (let i = 0; i < countryArray.length; i++) {
-        postCostoData(countryArray[i]);
-      }
-    };
-  
-    const postCostoData = (data) => {
-      createCosto(data)
-        .then(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          props.showAlertSuces(true);
-          setTimeout(() => {
-            props.showAlertSuces(false);
-          }, 5000);
-        })
-        .catch((error) => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          props.showAlertError(true);
-          setTimeout(() => {
-            props.showAlertError(false);
-          }, 5000);
-        });
-    };
-    const fillMonthsPrices = (producto, yearIndex) => {
-      const newAños = [...producto.años];
-      let precioActual = producto.precioInicial;
-      let currentMonth = 1;
-  
-      for (let i = yearIndex >= 0 ? yearIndex : 0; i < newAños.length; i++) {
-        const newMeses = { ...newAños[i].volMeses };
-        for (const mes in newMeses) {
-          if (currentMonth >= producto.inicioMes) {
-            newMeses[mes] = precioActual;
-            precioActual *= 1 + producto.tasa / 100;
-          } else {
-            newMeses[mes] = 0;
+        for (let x = 0; x < props.productos.length; x++) {// cada prod
+          const idProd = props.productos[x].id
+          let myProd = canal.productos.find(prod => prod.id === idProd)
+          let arrayvalores = []
+          for (let j = 0; j < myProd.años.length; j++) { // año
+            for (let s = 0; s < MONTHS.length; s++) {
+              const valor = myProd.años[j].volMeses[MONTHS[s]]
+              arrayvalores.push(parseInt(valor, 10))
+            }
           }
-          currentMonth++;
+          canalInfo.sum += arrayvalores.reduce((acumulador, valorActual) => acumulador + valorActual, 0)
+          arrayP.push({ ...myProd, sum: arrayvalores })
         }
-        newAños[i] = { ...newAños[i], volMeses: newMeses };
+        arrayCanales.push(canalInfo);
+        const agrupados = arrayP.reduce((resultado, objeto) => {
+          if (!resultado[objeto.id]) {
+            resultado[objeto.id] = [];
+          }
+          resultado[objeto.id].push(objeto);
+          return resultado;
+        }, {});
+
+        const arrayProdAgrupados = [] // este es mi array de arrays prod 1 , prod2,etc
+        for (let x = 0; x < props.productos.length; x++) {
+          arrayProdAgrupados.push(agrupados[props.productos[x].id])
+        }
+        const copy = [...infoProducts]
+        let volumenTotal = 0
+        arrayProdAgrupados.map((prod) => {
+          let index = copy.findIndex((el) => el.id === prod[0].id)
+          const data = prod;
+          const totalSum = data.reduce((accumulator, currentValue) => currentValue.sum.map((value, index) => value + accumulator[index]), Array(data[0].sum.length).fill(0));
+
+          volumenTotal += totalSum.reduce((accumulator, currentValue) => accumulator + currentValue);
+          return copy[index] = { ...copy[index], sum: totalSum }
+        })
+        setVolTotal(volumenTotal)
+        for (let x = 0; x < copy.length; x++) {
+          const objetos = [];
+          for (let i = 0; i < 10; i++) {
+            const numerosDelObjeto = copy[x].sum.slice(i * 12, i * 12 + 12);
+            const objeto = { numeros: numerosDelObjeto };
+            objetos.push(objeto);
+          }
+          copy[x].sum = objetos
+        }
+        setInfoProducts(() => [...copy])
       }
-  
-      return newAños;
-    };
-  
-    const replaceMonth = (producto, indexYear, mes, value) => {
-      const newAños = [...producto.años];
-      const newMeses = { ...newAños[indexYear].volMeses };
-      newMeses[mes] = value;
-      newAños[indexYear] = { ...newAños[indexYear], volMeses: newMeses };
-  
-      return newAños;
-    };
-  
-    const handleOnChangeInitialValue = (
-      pais,
-      canalName,
-      prod,
-      newValue,
-      key,
-      mes,
-      indexYear,
-    ) => {
-      const newData = { ...infoForm };
-      const channelIndex = newData[pais].findIndex(
-        (canal) => canal.canalName === canalName,
-      );
-      const productoIndex = newData[pais][channelIndex].productos.findIndex(
-        (producto) => producto.id === prod.id,
-      );
-  
-      const producto = {
-        ...newData[pais][channelIndex].productos[productoIndex],
-      };
-      switch (key) {
-        case 'precioInicial':
-          producto.precioInicial = newValue;
-          producto.años = fillMonthsPrices(producto, -1);
-          break;
-  
-        case 'tasa':
-          producto.tasa = newValue;
-          producto.años = fillMonthsPrices(producto, -1);
-          break;
-  
-        case 'mesInicial':
-          producto.inicioMes = newValue;
-          producto.años = fillMonthsPrices(producto, -1);
-          break;
-        case 'comision':
-          producto.comision = newValue;
-          break;
-  
-        case 'impuesto':
-          producto.impuesto = newValue;
-          break;
-  
-        case 'cargos':
-          producto.cargos = newValue;
-          break;
-  
-        case 'mes':
-          producto.años = replaceMonth(producto, indexYear, mes, newValue);
-          break;
-        default:
-          break;
-      }
-  
-      newData[pais][channelIndex].productos[productoIndex] = producto;
-      setInfoForm(newData);
-    };
-    return (
-      <>
-        {infoForm &&
-          Object.keys(infoForm).map((pais, indexPais) => (
-            <TabContent value={pais} className="mb-[20px]" key={pais}>
-              <FormContainer>
-                {infoForm[pais].map((canal, indexCanal) => (
-                  <section key={canal.canalName} className="contenedor">
-                    <div className="titleChannel">
-                      <p className="canal">{canal.canalName}</p>
-                    </div>
-                    <div>
-                      <div>
-                        {canal.productos.map((producto, indexProd) => (
-                          <div
-                            className="flex  gap-x-3 gap-y-3  mb-6 "
-                            key={producto.id}
-                          >
-                            <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                              {producto.id.toString()}
-                            </Avatar>
-                            <FormItem className=" mb-1 w-[210px] mt-[81px]">
-                              <Input
-                                disabled
-                                type="text"
-                                className="capitalize"
-                                value={producto.name}
-                              />
-                              <p className="mt-20">Comisiones</p>
-                              <p className="mt-8">Impuestos Comerciales</p>
-                              <p className="mt-8">Cargos por pasarela cobro</p>
-                            </FormItem>
-                            <div className="flex flex-col w-[240px] mt-[81px]">
-                              <div className="flex w-[240px]  gap-x-2">
-                                <FormItem className=" mb-0 w-[130px] ">
-                                  <Tooltip
-                                    placement="top-end"
-                                    title="Precio Inicial"
-                                  >
-                                    <Input
-                                      placeholder="Precio inicial"
-                                      type="number"
-                                      name="precioInicial"
-                                      prefix={moneda}
-                                      value={producto.precioInicial}
-                                      onChange={(e) =>
-                                        handleOnChangeInitialValue(
-                                          pais,
-                                          canal.canalName,
-                                          producto,
-                                          e.target.value,
-                                          'precioInicial',
-                                        )
-                                      }
-                                    />
-                                  </Tooltip>
-                                </FormItem>
-                                <FormItem className="mb-0 w-[90px]">
-                                  <Tooltip
-                                    placement="top-end"
-                                    title="Crecimiento Mensual"
-                                  >
-                                    <Input
-                                      placeholder="Crecimiento Mensual"
-                                      type="number"
-                                      name="tasa"
-                                      suffix="%"
-                                      value={producto.tasa}
-                                      onChange={(e) =>
-                                        handleOnChangeInitialValue(
-                                          pais,
-                                          canal.canalName,
-                                          producto,
-                                          e.target.value,
-                                          'tasa',
-                                        )
-                                      }
-                                    />
-                                  </Tooltip>
-                                </FormItem>
-                              </div>
-  
-                              <FormItem className=" mb-0 w-[230px] mt-[12px]">
-                                <Tooltip
-                                  placement="top-end"
-                                  title="Fecha Inicial"
-                                >
-                                  <Select
-                                    className="w-[230px] "
-                                    placeholder="Inicio de Actividades"
-                                    options={optionsMonths}
-                                    value={optionsMonths.filter(
-                                      (option) =>
-                                        option.value === producto.inicioMes,
-                                    )}
-                                    onChange={(e) =>
-                                      handleOnChangeInitialValue(
-                                        pais,
-                                        canal.canalName,
-                                        producto,
-                                        e.value,
-                                        'mesInicial',
-                                      )
-                                    }
-                                  />
-                                </Tooltip>
-                              </FormItem>
-  
-                              <FormItem className="mb-0 mt-2 w-[90px]">
-                                <Input
-                                  type="number"
-                                  name="comision"
-                                  suffix="%"
-                                  value={producto.comision}
-                                  onChange={(e) =>
-                                    handleOnChangeInitialValue(
-                                      pais,
-                                      canal.canalName,
-                                      producto,
-                                      e.target.value,
-                                      'comision',
-                                    )
-                                  }
-                                />
-                              </FormItem>
-  
-                              <FormItem className="mb-0 mt-4 w-[90px]">
-                                <Input
-                                  type="number"
-                                  name="impuesto"
-                                  suffix="%"
-                                  value={producto.impuesto}
-                                  onChange={(e) =>
-                                    handleOnChangeInitialValue(
-                                      pais,
-                                      canal.canalName,
-                                      producto,
-                                      e.target.value,
-                                      'impuesto',
-                                    )
-                                  }
-                                />
-                              </FormItem>
-  
-                              <FormItem className="mb-0 mt-2 w-[90px]">
-                                <Input
-                                  type="number"
-                                  name="cargos"
-                                  suffix="%"
-                                  value={producto.cargos}
-                                  onChange={(e) =>
-                                    handleOnChangeInitialValue(
-                                      pais,
-                                      canal.canalName,
-                                      producto,
-                                      e.target.value,
-                                      'cargos',
-                                    )
-                                  }
-                                />
-                              </FormItem>
-                            </div>
-  
-                            {producto.años.map((año, indexYear) => (
-                              <div className="flex flex-col" key={indexYear}>
-                                <div className="titleRow min-w-[62px]">
-                                  <p> Año {año.año}</p>
-                                  <div
-                                    className="iconYear"
-                                    onClick={() => hideYear(indexYear)}
-                                  >
-                                    {visibleItems.includes(indexYear) ? (
-                                      <FiMinus />
-                                    ) : (
-                                      <FiPlus />
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="titleMonths gap-x-3 gap-y-3 mb-[18px] flex flex-col">
-                                  <div className="titleMonths gap-x-3 flex">
-                                    {visibleItems.includes(indexYear) &&
-                                      año &&
-                                      Object.keys(año.volMeses).map(
-                                        (mes, indexMes) => (
-                                          <p
-                                            key={indexMes}
-                                            className="month w-[90px] capitalize"
-                                          >
-                                            {Object.keys(año.volMeses)[indexMes]}
-                                          </p>
-                                        ),
-                                      )}
-                                  </div>
-                                  <div className="flex gap-x-3 gap-y-3">
-                                    {visibleItems.includes(indexYear) &&
-                                      año &&
-                                      Object.keys(año.volMeses).map(
-                                        (mes, indexMes) => (
-                                          <FormItem
-                                            className="mb-0"
-                                            key={indexMes}
-                                          >
-                                            <Input
-                                              className="w-[90px]"
-                                              type="number"
-                                              prefix={moneda}
-                                              value={
-                                                año.volMeses[
-                                                  Object.keys(año.volMeses)[
-                                                    indexMes
-                                                  ]
-                                                ]
-                                              }
-                                              onChange={(e) => {
-                                                handleOnChangeInitialValue(
-                                                  pais,
-                                                  canal.canalName,
-                                                  producto,
-                                                  e.target.value,
-                                                  'mes',
-                                                  mes,
-                                                  indexYear,
-                                                );
-                                              }}
-                                              name="month"
-                                            />
-                                          </FormItem>
-                                        ),
-                                      )}
-                                  </div>
-  
-                                  <div className="flex gap-x-3 gap-y-3 mt-12">
-                                    {visibleItems.includes(indexYear) &&
-                                      año &&
-                                      Object.keys(año.volMeses).map(
-                                        (mes, indexMes) => (
-                                          <FormItem
-                                            className="mb-0"
-                                            key={indexMes}
-                                          >
-                                            <Input
-                                              className="w-[90px]"
-                                              type="number"
-                                              disabled
-                                              prefix={moneda}
-                                              value={resolveResul(
-                                                props.volumenData[indexPais]
-                                                  .stats[indexCanal].productos[
-                                                  indexProd
-                                                ].años[indexYear].volMeses[
-                                                  MONTHS[indexMes]
-                                                ],
-                                                props.precioData[indexPais].stats[
-                                                  indexCanal
-                                                ].productos[indexProd].años[
-                                                  indexYear
-                                                ].volMeses[MONTHS[indexMes]],
-                                                producto.comision,
-                                              )}
-                                            />
-                                          </FormItem>
-                                        ),
-                                      )}
-                                  </div>
-  
-                                  <div className="flex gap-x-3 gap-y-3">
-                                    {visibleItems.includes(indexYear) &&
-                                      año &&
-                                      Object.keys(año.volMeses).map(
-                                        (mes, indexMes) => (
-                                          <FormItem
-                                            className="mb-0"
-                                            key={indexMes}
-                                          >
-                                            <Input
-                                              className="w-[90px]"
-                                              type="number"
-                                              disabled
-                                              prefix={moneda}
-                                              value={resolveResul(
-                                                props.volumenData[indexPais]
-                                                  .stats[indexCanal].productos[
-                                                  indexProd
-                                                ].años[indexYear].volMeses[
-                                                  MONTHS[indexMes]
-                                                ],
-                                                props.precioData[indexPais].stats[
-                                                  indexCanal
-                                                ].productos[indexProd].años[
-                                                  indexYear
-                                                ].volMeses[MONTHS[indexMes]],
-                                                producto.impuesto,
-                                              )}
-                                              onChange={(e) => {
-                                                props.handleOnChangeInitialValue(
-                                                  pais,
-                                                  canal.canalName,
-                                                  producto,
-                                                  e.target.value,
-                                                  'mes',
-                                                  mes,
-                                                  indexYear,
-                                                );
-                                              }}
-                                              name="month"
-                                            />
-                                          </FormItem>
-                                        ),
-                                      )}
-                                  </div>
-  
-                                  <div className="flex gap-x-3 gap-y-3">
-                                    {visibleItems.includes(indexYear) &&
-                                      año &&
-                                      Object.keys(año.volMeses).map(
-                                        (mes, indexMes) => (
-                                          <FormItem
-                                            className="mb-0"
-                                            key={indexMes}
-                                          >
-                                            <Input
-                                              className="w-[90px]"
-                                              type="number"
-                                              disabled
-                                              prefix={moneda}
-                                              value={resolveResul(
-                                                props.volumenData[indexPais]
-                                                  .stats[indexCanal].productos[
-                                                  indexProd
-                                                ].años[indexYear].volMeses[
-                                                  MONTHS[indexMes]
-                                                ],
-                                                props.precioData[indexPais].stats[
-                                                  indexCanal
-                                                ].productos[indexProd].años[
-                                                  indexYear
-                                                ].volMeses[MONTHS[indexMes]],
-                                                producto.cargos,
-                                              )}
-                                              onChange={(e) => {
-                                                props.handleOnChangeInitialValue(
-                                                  pais,
-                                                  canal.canalName,
-                                                  producto,
-                                                  e.target.value,
-                                                  'mes',
-                                                  mes,
-                                                  indexYear,
-                                                );
-                                              }}
-                                              name="month"
-                                            />
-                                          </FormItem>
-                                        ),
-                                      )}
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </section>
-                ))}
-              </FormContainer>
-            </TabContent>
-          ))}
-        <Button
-          className="border mt-6b btnSubmitTable mt-[40px]"
-          variant="solid"
-          type="submit"
-          onClick={submitInfoForm}
-        >
-          Guardar
-        </Button>
-      </>
-    );
+      setTotalesCanales(() => [...arrayCanales])
+    }
   }
-  
-  export default TableMargen;
+  useEffect(() => {
+    initialConfig();
+  }, [infoForm])
+  useEffect(() => {
+    initialConfig();
+  }, [props])
+
+  const hideYear = (index) => {
+    setVisibleItems((prevItems) => {
+      if (prevItems.includes(index)) {// Si el elemento ya está en la lista, lo eliminamos para ocultarlo
+        return prevItems.filter((id) => id !== index)
+      } // Si el elemento no está en la lista, lo agregamos para mostrarlo
+      return [...prevItems, index]
+
+    })
+  }
+
+
+  return (
+    <>
+      {infoForm &&
+        Object.keys(infoForm).map((pais) => (
+          <TabContent value={pais} className="mb-[20px]" key={pais}>
+            <FormContainer>
+              {infoForm[pais].map((canal) => (
+                <section
+                  key={canal.canalName}
+                  className="contenedor"
+                >
+                  <div className="titleChannel">
+                    <p className="canal">
+                      {canal.canalName}
+                    </p>
+                  </div>
+                  <div>
+                    <div>
+                      {canal.productos.map((producto) => (
+                        <div
+                          className="flex  gap-x-3 gap-y-3  mb-6 "
+                          key={producto.id}
+                        >
+                          <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
+                            {producto.id.toString()}
+                          </Avatar>
+                          <FormItem className=" mb-1 w-[210px] mt-[81px]">
+                            <Input
+                              disabled
+                              type="text"
+                              className="capitalize"
+                              value={producto.name}
+                            />
+                          </FormItem>
+                          {producto.años.map((año, indexYear) => (
+                            <div className="flex flex-col" key={indexYear}>
+                              <div className="titleRow min-w-[62px]">
+                                <p>{' '}Año{' '}{año.año}</p>
+                                <div className="iconYear"
+                                  onClick={() => hideYear(indexYear)}
+                                >
+                                  {visibleItems.includes(indexYear) ? (<FiMinus />) : (<FiPlus />)}
+                                </div>
+                              </div>
+                              <div className="titleMonths gap-x-3 gap-y-3 mb-[18px] flex flex-col">
+                                <div className="titleMonths gap-x-3 flex">
+                                  {visibleItems.includes(indexYear) && año &&
+                                    Object.keys(año.volMeses).map(
+                                      (mes, indexMes) => (
+                                        <p key={indexMes} className="month w-[90px] capitalize">
+                                          {Object.keys(año.volMeses)[indexMes]}
+                                        </p>)
+                                    )
+                                  }
+
+                                  <p className='month w-[90px]'>Total</p>
+                                </div>
+                                <div className="flex gap-x-3 gap-y-3">
+                                  {visibleItems.includes(indexYear) && año &&
+                                    Object.keys(año.volMeses).map((mes, indexMes) => (
+                                      <FormItem className="mb-0" key={indexMes}>
+                                        <Input
+                                          className="w-[90px]"
+                                          type="number"
+                                          value={año.volMeses[Object.keys(año.volMeses)[indexMes]]}
+                                          disabled
+                                          prefix={moneda}
+                                          name="month"
+                                        />
+                                      </FormItem>
+                                    )
+                                    )}
+
+                                  <FormItem className="mb-0" >
+                                    <Input
+                                      className="w-[90px]"
+                                      type="number"
+                                      disabled
+                                      value={año.ventasTotal}
+                                      prefix={moneda}
+                                    />
+                                  </FormItem>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              ))}
+            </FormContainer>
+          </TabContent>
+        ))}
+
+      {
+        infoProducts &&
+        <div className='bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]'>
+          <div className='flex items-center'>
+            <p className=' text-[#707470] font-bold mb-3 text-left w-[260px] '>Venta por producto</p>
+          </div>
+          <div className='w-fit pt-3 border border-neutral-600 border-x-0 border-b-0'>
+            {infoProducts.length > 0 && infoProducts.map((prod, index) => (
+              <div key={index} className='flex gap-x-3 w-fit pt-3 '>
+                <p className={`w-[260px]  pl-[45px] capitalize self-center ${index === 0 ? 'mt-[62px]' : ''}`}>{prod.name}</p>
+
+                {prod.sum?.map((año, indexYear) => (
+                  <div className="flex flex-col" key={indexYear}>
+                    {index === 0 &&
+                      <div className="titleRowR min-w-[62px]">
+                        <p>{' '}Año{' '}{indexYear + 1}</p>
+                        <div className="iconYear"
+                          onClick={() => hideYear(indexYear)}
+                        >
+                          {visibleItems.includes(indexYear) ? (<FiMinus />) : (<FiPlus />)}
+                        </div>
+                      </div>
+                    }
+
+                    <div className="titleMonths gap-x-3 flex mb-3">
+                      {visibleItems.includes(indexYear) && año && index === 0 &&
+                        MONTHS.map(
+                          (mes, indexMes) => (
+                            <p key={indexMes} className="month w-[90px] capitalize">
+                              {mes}
+                            </p>
+                          )
+                        )}
+                      {index === 0 && <p className='month w-[90px]'>Total</p>}
+                      {index !== 0 && <p className='month w-[90px]' />}
+                    </div>
+                    <div className="flex gap-x-3 gap-y-3">
+                      {visibleItems.includes(indexYear) && año &&
+                        año.numeros?.map((valor, index) => (<p className="w-[90px] text-center">{moneda}{valor}</p>))
+                      }
+                      <p className="w-[90px] text-center font-bold">{año.numeros.reduce((total, current) => total + current)}</p>
+                    </div>
+                  </div>
+                ))
+                }
+              </div>
+            ))}
+          </div>
+
+          <br />
+          <br />
+          <br />
+          {totalesCanales.map((canal, i) => (
+            <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ' key={i}>VENTA CANAL '{canal.name}': {moneda}{canal.sum}</p>
+          ))}
+
+          <br />
+          <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VENTA TOTAL: {moneda}{volTotal}</p>
+
+        </div>
+      }
+    </>
+  )
+}
+
+export default TableMargen
