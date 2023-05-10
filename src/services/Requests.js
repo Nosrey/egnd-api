@@ -186,7 +186,7 @@ export const createPuestosq = async (body) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        Puestosq: body,
+        puestosq: body,
         idUser,
       }),
     });

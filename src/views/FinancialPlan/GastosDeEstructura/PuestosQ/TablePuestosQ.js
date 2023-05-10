@@ -144,10 +144,11 @@ function TablePuestosQ(props) {
     });
 
     if (submit) {
-      props.postPuestoQData(infoForm);
+      props.postPuestoQData([infoForm]);
     }
   };
 
+  console.log('[INFO]', infoForm);
   return (
     <>
       {infoForm &&

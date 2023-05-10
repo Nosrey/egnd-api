@@ -91,17 +91,22 @@ function PuestosQ() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
+        let def;
         console.log('[DATA]', data);
-        if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
+        if (data?.puestosQData[0].puestosq[0].length !== 0) {
+          setPuestosQ(data?.puestosQData[0].puestosq[0]);
+          setInfoForm(data?.puestosQData[0].puestosq[0]);
+          def = Object.keys(data?.puestosQData[0].puestosq[0]).find(
+            (p) => data?.puestosQData[0].puestosq[0][p],
+          );
+        } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
           setInfo(data?.gastosGeneralData[0].centroDeGastos);
-        } else {
-          setInfo(data?.gastosGeneralData[0].centroDeGastos);
+          def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
+            (p) => data?.gastosGeneralData[0].centroDeGastos[p],
+          );
         }
 
-        const def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
-          (p) => data?.gastosGeneralData[0].centroDeGastos[p],
-        );
         setDefaultCountry(def);
         setCountry(def);
       })
@@ -133,13 +138,19 @@ function PuestosQ() {
           <Tabs defaultValue={country}>
             <TabList>
               {puestosQ &&
-                Object.keys(puestosQ).map((cc, index) => (
-                  <TabNav key={index} value={cc}>
-                    <div className="capitalize" onClick={() => setCountry(cc)}>
-                      {puestosQ[cc] && cc}
-                    </div>
-                  </TabNav>
-                ))}
+                Object.keys(puestosQ).map(
+                  (cc, index) =>
+                    puestosQ[cc].visible && (
+                      <TabNav key={index} value={cc}>
+                        <div
+                          className="capitalize"
+                          onClick={() => setCountry(cc)}
+                        >
+                          {cc}
+                        </div>
+                      </TabNav>
+                    ),
+                )}
             </TabList>
             {infoForm && (
               <div className="container-countries">
