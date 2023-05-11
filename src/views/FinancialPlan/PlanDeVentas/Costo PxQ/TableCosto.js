@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { Avatar, FormContainer, FormItem, Input, Tabs } from 'components/ui';
-import { EMPTY_YEARS, MONTHS } from 'constants/forms.constants';
+import { MONTHS, OPTIONS_COUNTRY } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 
@@ -9,18 +9,33 @@ const { TabContent } = Tabs;
 function TableCosto(props) {
   const [infoForm, setInfoForm] = useState(props.data);
   const [visibleItems, setVisibleItems] = useState([0]);
-  const [infoProducts, setInfoProducts] = useState();
-  const [values, setValues] = useState({
-    comision: { ...EMPTY_YEARS },
-    impuesto: { ...EMPTY_YEARS },
-    cargos: { ...EMPTY_YEARS },
-  });
+  const [infoProducts, setInfoProducts] = useState([]);
   const [volTotal, setVolTotal] = useState(0);
   const [totalesCanales, setTotalesCanales] = useState([]);
+  const [viewTotals, setViewTotals] = useState([]);
+  let totals = [];
+
+  const configIncial = () => {
+    if (infoForm) {
+      Object.keys(infoForm).map((pais, indexPais) => (totals[pais] = {}));
+
+      OPTIONS_COUNTRY.map(
+        (o) =>
+          infoForm[o.value] &&
+          infoForm[o.value].map((i) => (totals[o.value] = {})),
+      );
+
+      OPTIONS_COUNTRY.map(
+        (o) =>
+          infoForm[o.value] &&
+          infoForm[o.value].map((i) =>
+            i.productos.map((p) => (totals[o.value][p.name] = [])),
+          ),
+      );
+    }
+  };
 
   const moneda = props.currency;
-
-  useEffect(() => {}, []);
 
   const hideYear = (index) => {
     setVisibleItems((prevItems) => {
@@ -33,24 +48,29 @@ function TableCosto(props) {
     });
   };
 
-  const valueDocument = (indexYear, index, recargo) => {
-    if (document.getElementById(`${indexYear}-${MONTHS[index]}-${recargo}`)) {
-      return parseInt(
-        document.getElementById(`${indexYear}-${MONTHS[index]}-${recargo}`)
-          .value,
-      );
+  const resolveResul = (vol, precio, div) => {
+    div = parseInt(div);
+    vol = parseInt(vol);
+    precio = parseInt(precio);
+
+    let value = 0;
+    const mult = vol * precio;
+
+    if (div !== 0) {
+      value = (div * mult) / 100;
+      value = value.toFixed(1);
     }
+    return parseInt(value);
   };
 
-  const resolveResul = (vol, precio, div, entry, indexYear) => {
-    console.log(indexYear);
+  const resolveResulPlane = (vol, precio, div) => {
     let value = 0;
     if (div !== 0) {
       const mult = vol * precio;
       value = (div * mult) / 100;
       value = value.toFixed(1);
     }
-    values[entry][0][indexYear].push(parseInt(value));
+
     return parseInt(value);
   };
 
@@ -69,28 +89,120 @@ function TableCosto(props) {
     return totalparcial;
   };
 
-  // const resolveTotalYearPercent = (
-  //   indexPais,
-  //   indexCanal,
-  //   indexProd,
-  //   indexYear,
-  //   dividendo,
-  // ) => {
-  //   let totalparcial = 0;
+  const resolveTotalYearPercent = (
+    indexPais,
+    indexCanal,
+    indexProd,
+    indexYear,
+    dividendo,
+  ) => {
+    let totalparcial = 0;
 
-  //   for (let i = 0; i <= 11; i++) {
-  //     totalparcial += resolveResul(
-  //       props.volumenData[indexPais].stats[indexCanal].productos[indexProd]
-  //         .años[indexYear].volMeses[MONTHS[i]],
-  //       props.precioData[indexPais].stats[indexCanal].productos[indexProd].años[
-  //         indexYear
-  //       ].volMeses[MONTHS[i]],
-  //       dividendo,
-  //     );
-  //   }
+    for (let i = 0; i <= 11; i++) {
+      totalparcial += resolveResulPlane(
+        props.volumenData[indexPais].stats[indexCanal].productos[indexProd]
+          .años[indexYear].volMeses[MONTHS[i]],
+        props.precioData[indexPais].stats[indexCanal].productos[indexProd].años[
+          indexYear
+        ].volMeses[MONTHS[i]],
+        dividendo,
+      );
+    }
 
-  //   return totalparcial;
-  // };
+    return totalparcial;
+  };
+
+  const calcTotales = () => {
+    if (infoProducts.length !== 0 && infoProducts[0].sum !== 0) {
+      props.precioData.map((p, indexInicial) =>
+        p.stats.map((s, indexStats) =>
+          s.productos.map((o, indexP) =>
+            o.años.map((a, indexYear) =>
+              MONTHS.forEach((m, indexMonth) => {
+                if (!totals[p.countryName][o.name][indexYear]) {
+                  totals[p.countryName][o.name].push([
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                  ]);
+                  totals[p.countryName][o.name][indexYear][indexMonth] +=
+                    resolveResul(
+                      a.volMeses[m],
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m],
+
+                      props.costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].comision,
+                    ) +
+                    resolveResul(
+                      a.volMeses[m],
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m],
+
+                      props.costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].impuesto,
+                    ) +
+                    resolveResul(
+                      a.volMeses[m],
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m],
+
+                      props.costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].cargos,
+                    ) +
+                    parseInt(
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m] *
+                        props.costoData[indexInicial].stats[indexStats]
+                          .productos[indexP].años[indexYear].volMeses[m],
+                    );
+                } else {
+                  totals[p.countryName][o.name][indexYear][indexMonth] +=
+                    resolveResul(
+                      a.volMeses[m],
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m],
+
+                      props.costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].comision,
+                    ) +
+                    resolveResul(
+                      a.volMeses[m],
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m],
+
+                      props.costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].impuesto,
+                    ) +
+                    resolveResul(
+                      a.volMeses[m],
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m],
+
+                      props.costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].cargos,
+                    ) +
+                    parseInt(
+                      props.volumenData[indexInicial].stats[indexStats]
+                        .productos[indexP].años[indexYear].volMeses[m] *
+                        props.costoData[indexInicial].stats[indexStats]
+                          .productos[indexP].años[indexYear].volMeses[m],
+                    );
+                }
+              }),
+            ),
+          ),
+        ),
+      );
+      setViewTotals({ ...totals });
+    }
+  };
+
+  console.log('view', viewTotals);
 
   useEffect(() => {
     if (infoForm && props.country && infoProducts) {
@@ -173,15 +285,19 @@ function TableCosto(props) {
         setInfoProducts(() => [...copy]);
       }
       setTotalesCanales(() => [...arrayCanales]);
+      configIncial();
+      calcTotales();
     }
-  }, [infoForm, props]);
+  }, [infoForm]);
 
   useEffect(() => {
     if (props.productos) {
       setInfoProducts(() => [...props.productos]);
     }
     if (props.data) setInfoForm(props.data);
-  }, [props]);
+    configIncial();
+    calcTotales();
+  }, [props, infoForm]);
 
   return (
     <>
@@ -352,8 +468,6 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.comision,
-                                              'comision',
-                                              indexYear,
                                             )}
                                           />
                                         </FormItem>
@@ -364,13 +478,13 @@ function TableCosto(props) {
                                       className="w-[90px]"
                                       type="number"
                                       disabled
-                                      // value={resolveTotalYearPercent(
-                                      //   indexPais,
-                                      //   indexCanal,
-                                      //   indexProd,
-                                      //   indexYear,
-                                      //   producto.comision,
-                                      // )}
+                                      value={resolveTotalYearPercent(
+                                        indexPais,
+                                        indexCanal,
+                                        indexProd,
+                                        indexYear,
+                                        producto.comision,
+                                      )}
                                     />
                                   </FormItem>
                                 </div>
@@ -388,7 +502,6 @@ function TableCosto(props) {
                                             className="w-[90px]"
                                             type="number"
                                             disabled
-                                            id={`${indexYear}-${MONTHS[indexMes]}-impuesto`}
                                             prefix={moneda}
                                             value={resolveResul(
                                               props.volumenData[indexPais]
@@ -403,8 +516,6 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.impuesto,
-                                              'impuesto',
-                                              indexYear,
                                             )}
                                           />
                                         </FormItem>
@@ -415,13 +526,13 @@ function TableCosto(props) {
                                       className="w-[90px]"
                                       type="number"
                                       disabled
-                                      // value={resolveTotalYearPercent(
-                                      //   indexPais,
-                                      //   indexCanal,
-                                      //   indexProd,
-                                      //   indexYear,
-                                      //   producto.impuesto,
-                                      // )}
+                                      value={resolveTotalYearPercent(
+                                        indexPais,
+                                        indexCanal,
+                                        indexProd,
+                                        indexYear,
+                                        producto.impuesto,
+                                      )}
                                     />
                                   </FormItem>
                                 </div>
@@ -454,8 +565,6 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.cargos,
-                                              'cargos',
-                                              indexYear,
                                             )}
                                           />
                                         </FormItem>
@@ -466,13 +575,13 @@ function TableCosto(props) {
                                       className="w-[90px]"
                                       type="number"
                                       disabled
-                                      // value={resolveTotalYearPercent(
-                                      //   indexPais,
-                                      //   indexCanal,
-                                      //   indexProd,
-                                      //   indexYear,
-                                      //   producto.cargos,
-                                      // )}
+                                      value={resolveTotalYearPercent(
+                                        indexPais,
+                                        indexCanal,
+                                        indexProd,
+                                        indexYear,
+                                        producto.cargos,
+                                      )}
                                     />
                                   </FormItem>
                                 </div>
@@ -496,7 +605,7 @@ function TableCosto(props) {
             </p>
           </div>
           <div className="w-fit pt-3 border border-neutral-600 border-x-0 border-b-0">
-            {infoProducts.length > 0 &&
+            {infoProducts &&
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
@@ -507,63 +616,68 @@ function TableCosto(props) {
                     {prod.name}
                   </p>
 
-                  {prod.sum?.map((año, indexYear) => (
-                    <div className="flex flex-col" key={indexYear}>
-                      {index === 0 && (
-                        <div
-                          className="titleRowR min-w-[62px]"
-                          key={indexYear * 1000}
-                        >
-                          <p> Año {indexYear + 1}</p>
-                          <div
-                            className="iconYear"
-                            onClick={() => hideYear(indexYear)}
-                          >
-                            {visibleItems.includes(indexYear) ? (
-                              <FiMinus />
-                            ) : (
-                              <FiPlus />
+                  {viewTotals.length !== 0 &&
+                    viewTotals[props.country][prod.name].map(
+                      (año, indexYear) => (
+                        <div className="flex flex-col" key={indexYear}>
+                          {index === 0 && (
+                            <div
+                              className="titleRowR min-w-[62px]"
+                              key={indexYear * 1000}
+                            >
+                              <p> Año {indexYear + 1}</p>
+                              <div
+                                className="iconYear"
+                                onClick={() => hideYear(indexYear)}
+                              >
+                                {visibleItems.includes(indexYear) ? (
+                                  <FiMinus />
+                                ) : (
+                                  <FiPlus />
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="titleMonths gap-x-3 flex mb-3">
+                            {visibleItems.includes(indexYear) &&
+                              año &&
+                              index === 0 &&
+                              MONTHS.map((mes, indexMes) => (
+                                <p
+                                  key={indexMes}
+                                  className="month w-[90px] capitalize"
+                                >
+                                  {mes}
+                                </p>
+                              ))}
+                            {index === 0 && (
+                              <p className="month w-[90px]">Total</p>
                             )}
+                            {index !== 0 && <p className="month w-[90px]" />}
+                          </div>
+                          <div className="flex gap-x-3 gap-y-3">
+                            {visibleItems.includes(indexYear) &&
+                              año &&
+                              MONTHS.map((valor, indexNum) => (
+                                <p className="w-[90px] text-center">
+                                  {
+                                    viewTotals[props.country][prod.name][
+                                      indexYear
+                                    ][indexNum]
+                                  }
+                                </p>
+                              ))}
+                            <p className="w-[90px] text-center font-bold">
+                              {año.reduce(
+                                (total, current) =>
+                                  parseInt(total) + parseInt(current),
+                              )}
+                            </p>
                           </div>
                         </div>
-                      )}
-
-                      <div className="titleMonths gap-x-3 flex mb-3">
-                        {visibleItems.includes(indexYear) &&
-                          año &&
-                          index === 0 &&
-                          MONTHS.map((mes, indexMes) => (
-                            <p
-                              key={indexMes}
-                              className="month w-[90px] capitalize"
-                            >
-                              {mes}
-                            </p>
-                          ))}
-                        {index === 0 && <p className="month w-[90px]">Total</p>}
-                        {index !== 0 && <p className="month w-[90px]" />}
-                      </div>
-                      <div className="flex gap-x-3 gap-y-3">
-                        {visibleItems.includes(indexYear) &&
-                          año &&
-                          año.numeros?.map((valor, index) => (
-                            <p className="w-[90px] text-center">
-                              {/* {valor +
-                                values.cargos[index * indexYear] +
-                                values.comision[index * indexYear] +
-                                values.impuesto[index * indexYear]} */}
-                              {console.log('[VALUES]', values)}
-                            </p>
-                          ))}
-
-                        <p className="w-[90px] text-center font-bold">
-                          {año.numeros.reduce(
-                            (total, current) => total + current,
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                      ),
+                    )}
                 </div>
               ))}
           </div>

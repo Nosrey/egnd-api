@@ -77,10 +77,10 @@ function Costo() {
           data?.precioData.length !== 0 &&
           data?.costoData.length !== 0
         ) {
-          setVisibleData(true);
           setVolumenData(data?.volumenData);
           setPrecioData(data?.precioData);
           setCostoData(data?.costoData);
+          setVisibleData(true);
           const datosPrecargados = {};
           if (data?.costoData.length !== 0) {
             for (let i = 0; i < data?.costoData.length; i++) {
@@ -95,6 +95,7 @@ function Costo() {
           setInfo(data?.assumptionData);
           setVisibleData(false);
         }
+
         setProducts(data?.assumptionData[0].productos);
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
       })
