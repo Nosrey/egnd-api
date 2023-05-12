@@ -3,20 +3,29 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
-import { Button, FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import {
+  Button,
+  FormContainer,
+  FormItem,
+  Input,
+  Tabs,
+  Tooltip,
+} from 'components/ui';
 import { AÑOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { MdDelete } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 const { TabContent } = Tabs;
 
-function TablePuestosQ(props) {
+function TablePuestosPxQ(props) {
   const [infoForm, setInfoForm] = useState();
   const [showRemovePuesto, setShowRemovePuesto] = useState(false);
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
+  const currency = useSelector((state) => state.auth.user.currency);
 
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
@@ -120,6 +129,11 @@ function TablePuestosQ(props) {
             : newValue,
         );
         break;
+      case 'precioInicial':
+        puesto.precioInicial = newValue;
+        // producto.años = fillMonthsPrices(producto, -1);
+        break;
+
       default:
         break;
     }
@@ -130,27 +144,31 @@ function TablePuestosQ(props) {
 
   const submitInfoForm = () => {
     const copyData = { ...infoForm };
-    let submit = true;
-    copyData[head].puestos.map((p) => {
-      if (p.name === '') {
-        submit = false;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        props.errorMessage('Hay puestos sin nombre');
-        props.showAlertError(true);
-        setTimeout(() => {
-          props.showAlertError(false);
-        }, 5000);
-      }
-    });
+    console.log(copyData);
+    // let submit = true;
+    // copyData[head].puestos.map((p) => {
+    //   if (p.name === '') {
+    //     submit = false;
+    //     window.scrollTo({ top: 0, behavior: 'smooth' });
+    //     props.errorMessage('Hay puestos sin nombre');
+    //     props.showAlertError(true);
+    //     setTimeout(() => {
+    //       props.showAlertError(false);
+    //     }, 5000);
+    //   }
+    // });
 
-    if (submit) {
-      props.postPuestoQData([infoForm]);
-    }
+    // if (submit) {
+    //   props.postPuestoQData([infoForm]);
+    // }
   };
+
+  console.log('[INFFOOO]', infoForm);
+  console.log('[PQ]', props.puestosQ);
   return (
     <>
       {infoForm &&
-        Object.keys(infoForm).map((cc) => (
+        Object.keys(infoForm).map((cc, indice) => (
           <TabContent value={cc} className="mb-[20px]" key={cc}>
             <FormContainer>
               {infoForm[cc].visible && (
@@ -177,6 +195,7 @@ function TablePuestosQ(props) {
                                 }
                               />
                             )}
+
                           <FormItem
                             className={`${
                               index === 0 ? 'mt-12 w-[210px]' : 'mb-2 w-[210px]'
@@ -201,6 +220,111 @@ function TablePuestosQ(props) {
                               }
                             />
                           </FormItem>
+
+                          <div className="flex flex-col">
+                            {index === 0 && (
+                              <div className="titleRow min-w-[62px]">
+                                <p> Rem</p>
+                              </div>
+                            )}
+
+                            <FormItem
+                              className={`${
+                                index === 0
+                                  ? 'mt-[40px] w-[100px]'
+                                  : 'mt-[20px] w-[100px]'
+                              }`}
+                            >
+                              <Tooltip placement="top-end" title="Rem">
+                                <Input
+                                  placeholder="Precio inicial"
+                                  type="number"
+                                  name="precioInicial"
+                                  prefix={currency}
+                                  value={
+                                    infoForm[cc].puestos[head].precioInicial
+                                  }
+                                  onChange={(e) =>
+                                    handleOnChangeInitialValue(
+                                      cc,
+                                      infoForm[cc].puestos[head].id,
+                                      e.target.value,
+                                      'precioInicial',
+                                      null,
+                                      null,
+                                    )
+                                  }
+                                />
+                              </Tooltip>
+                            </FormItem>
+                          </div>
+
+                          <div className="flex flex-col">
+                            {index === 0 && (
+                              <div className="titleRow min-w-[62px]">
+                                <p> Cargas S.</p>
+                              </div>
+                            )}
+
+                            <FormItem
+                              className={`${
+                                index === 0
+                                  ? 'mt-[40px] w-[100px]'
+                                  : 'mt-[20px] w-[100px]'
+                              }`}
+                            >
+                              <Input
+                                placeholder="Precio inicial"
+                                type="number"
+                                disabled
+                                name="precioInicial"
+                                prefix={currency}
+                                value={
+                                  (infoForm[cc].puestos[head].precioInicial *
+                                    props.cargaSocial) /
+                                  100
+                                }
+                              />
+                            </FormItem>
+                          </div>
+
+                          <div className="flex flex-col">
+                            {index === 0 && (
+                              <div className="titleRow min-w-[62px]">
+                                <p>TOTAL</p>
+                              </div>
+                            )}
+
+                            <FormItem
+                              className={`${
+                                index === 0
+                                  ? 'mt-[40px] w-[100px]'
+                                  : 'mt-[20px] w-[100px]'
+                              }`}
+                            >
+                              <Tooltip
+                                placement="top-end"
+                                title="Precio Inicial"
+                              >
+                                <Input
+                                  placeholder="Precio inicial"
+                                  type="number"
+                                  name="total"
+                                  disabled
+                                  prefix={currency}
+                                  value={
+                                    Number(
+                                      infoForm[cc].puestos[head].precioInicial,
+                                    ) +
+                                    (infoForm[cc].puestos[head].precioInicial *
+                                      props.cargaSocial) /
+                                      100
+                                  }
+                                />
+                              </Tooltip>
+                            </FormItem>
+                          </div>
+
                           {infoForm[cc].puestos[head].años.map(
                             (año, indexYear) => (
                               <div className="flex flex-col" key={indexYear}>
@@ -255,27 +379,22 @@ function TablePuestosQ(props) {
                                             <Input
                                               className="w-[90px]"
                                               type="number"
-                                              disabled={
-                                                infoForm[cc].puestos[head]
-                                                  .name === ''
-                                              }
+                                              disabled
                                               value={
                                                 año.volMeses[
                                                   Object.keys(año.volMeses)[
                                                     indexMes
                                                   ]
-                                                ]
+                                                ] *
+                                                (Number(
+                                                  infoForm[cc].puestos[head]
+                                                    .precioInicial,
+                                                ) +
+                                                  (infoForm[cc].puestos[head]
+                                                    .precioInicial *
+                                                    props.cargaSocial) /
+                                                    100)
                                               }
-                                              onChange={(e) => {
-                                                handleOnChangeInitialValue(
-                                                  cc,
-                                                  infoForm[cc].puestos[head].id,
-                                                  e.target.value,
-                                                  'mes',
-                                                  MONTHS[indexMes],
-                                                  indexYear,
-                                                );
-                                              }}
                                               name="month"
                                             />
                                           </FormItem>
@@ -308,7 +427,7 @@ function TablePuestosQ(props) {
               infoForm[head].puestos.map((puesto, index) => (
                 <div
                   key={index}
-                  className="flex gap-x-3 w-fit pt-3 ml-[200px] "
+                  className="flex gap-x-3 w-fit pt-3 ml-[550px] "
                 >
                   {puesto.años.map((año, indexYear) => (
                     <div className="flex flex-col" key={indexYear}>
@@ -382,4 +501,4 @@ function TablePuestosQ(props) {
   );
 }
 
-export default TablePuestosQ;
+export default TablePuestosPxQ;
