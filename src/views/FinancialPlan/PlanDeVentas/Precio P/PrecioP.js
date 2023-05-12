@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useState } from 'react'
-import { getUser } from 'services/Requests'
-import { FormContainer, Tabs, Alert } from 'components/ui'
-import { AÑOS } from 'constants/forms.constants'
-import ContainerScrollable from 'components/shared/ContainerScrollable'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import TablePrecio from './TablePrecio'
+import React, { useEffect, useState } from 'react';
+import { getUser } from 'services/Requests';
+import { FormContainer, Tabs, Alert } from 'components/ui';
+import { AÑOS } from 'constants/forms.constants';
+import ContainerScrollable from 'components/shared/ContainerScrollable';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import TablePrecio from './TablePrecio';
 
 const { TabNav, TabList } = Tabs;
 
@@ -54,16 +54,20 @@ function PrecioP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.precioData.length !== 0) {// tengo info precargada
+        if (data?.precioData.length !== 0) {
+          // tengo info precargada
           const datosPrecargados = {};
-          let pcioDataOrdenada = data?.precioData.sort((a, b) => a.countryName.localeCompare(b.countryName))
+          let pcioDataOrdenada = data?.precioData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          );
 
           for (let i = 0; i < pcioDataOrdenada.length; i++) {
             datosPrecargados[pcioDataOrdenada[i].countryName] =
               pcioDataOrdenada[i].stats;
           }
           setInfoForm(() => ({ ...datosPrecargados }));
-        } else { // no tengo info precargada
+        } else {
+          // no tengo info precargada
           setInfo(data?.assumptionData);
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
@@ -91,7 +95,6 @@ function PrecioP() {
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
           <h6>Carga de productos / servicios</h6>
-
         </div>
         {infoForm ? (
           <Tabs defaultValue={defaultCountry}>
@@ -124,9 +127,16 @@ function PrecioP() {
           </Tabs>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario de Assumptions Ventas.
+              formulario de{' '}
+              <Link
+                className="text-indigo-700 underline"
+                to="/assumptionventas"
+              >
+                Assumptions Ventas
+              </Link>
+              .
             </span>
           </div>
         )}
