@@ -78,4 +78,12 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'puestosq',
+    path: '/puestosq',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/GastosDeEstructura/PuestosQ/PuestosQ'),
+    ),
+    authority: [],
+  },
 ];
