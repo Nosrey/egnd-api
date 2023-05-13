@@ -83,7 +83,7 @@ function SignUpForm(props) {
         }}
       >
         {({ values, touched, errors, isSubmitting }) => (
-          <Form>
+          <Form autoComplete='off'>
             <FormContainer>
               <FormItem
                 label="Correo electronico"

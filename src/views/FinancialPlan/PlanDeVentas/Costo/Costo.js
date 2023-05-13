@@ -62,6 +62,7 @@ function Costo() {
           setVolumenData(data?.volumenData);
           setPrecioData(data?.precioData);
           setVolumenPrecio(true);
+          console.log("ACAAAAAA");
           const datosPrecargados = {};
           if (data?.costoData.length !== 0) {
             for (let i = 0; i < data?.costoData.length; i++) {
@@ -74,6 +75,7 @@ function Costo() {
           }
         } else {
           setInfo(data?.assumptionData);
+          console.log("ACAAAAAA");
           setVolumenPrecio(false);
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
@@ -102,7 +104,7 @@ function Costo() {
         <div className="border-b-2 px-4 py-1">
           <h6>Carga de productos / servicios</h6>
         </div>
-        {infoForm ? (
+        {infoForm  && volumenPrecio ? (
           <Tabs defaultValue={defaultCountry}>
             <TabList>
               {infoForm &&
@@ -112,7 +114,7 @@ function Costo() {
                   </TabNav>
                 ))}
             </TabList>
-            {infoForm && (
+            {infoForm &&  (
               <div className="container-countries">
                 <FormContainer className="cont-countries">
                   <ContainerScrollable
