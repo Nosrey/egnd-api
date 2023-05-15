@@ -5,14 +5,14 @@ import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createPuestosq, getUser } from 'services/Requests';
-import { Link } from 'react-router-dom';
-import TablePuestosQ from './TablePuestosQ';
+import TablePuestosPxQ from './TablePuestosPxQ';
 
 const { TabNav, TabList } = Tabs;
 
-function PuestosQ() {
+function PuestosPxQ() {
   const [info, setInfo] = useState(null);
   const [puestosQ, setPuestosQ] = useState([]);
+  const [cargaSocial, setCargaSocial] = useState(0);
   const [defaultCountry, setDefaultCountry] = useState('');
   const [infoForm, setInfoForm] = useState();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -26,12 +26,13 @@ function PuestosQ() {
     if (info) {
       Object.keys(puestosQ).map((cc, index) => {
         let heads = [];
-        for (let i = 0; i < puestos[0][cc]?.length; i++) {
+        for (let i = 0; i < puestos[0][cc].length; i++) {
           let head = {};
           head.id = i;
           head['años'] = [...AÑOS];
           head.name = puestos[0][cc][i];
           head.isNew = false;
+          head.precioInicial = 0;
           heads.push(head);
           let h = {};
           h.visible = puestosQ[cc];
@@ -92,6 +93,7 @@ function PuestosQ() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
+        console.log('[DATA]', data);
         let def;
         if (data?.puestosQData[0]) {
           setPuestosQ(data?.puestosQData[0].puestosq[0]);
@@ -108,14 +110,13 @@ function PuestosQ() {
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
           );
         }
-
+        setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
         setDefaultCountry(def);
         setCountry(def);
       })
       .catch((error) => console.error(error));
   }, []);
 
-  console.log('c', country);
   return (
     <div>
       {showSuccessAlert && (
@@ -135,13 +136,13 @@ function PuestosQ() {
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Puestos (Q)</h6>
+          <h6>Puestos (PxQ)</h6>
         </div>
         {infoForm ? (
           <Tabs defaultValue={country}>
             <TabList>
               {puestosQ &&
-                Object.keys(puestosQ).map(
+                Object.keys(infoForm).map(
                   (cc, index) =>
                     infoForm[cc].visible && (
                       <TabNav key={index} value={cc}>
@@ -160,7 +161,7 @@ function PuestosQ() {
                 <FormContainer className="cont-countries">
                   <ContainerScrollable
                     contenido={
-                      <TablePuestosQ
+                      <TablePuestosPxQ
                         data={infoForm}
                         puestosQ={puestosQ}
                         showAlertSuces={(boolean) =>
@@ -172,6 +173,7 @@ function PuestosQ() {
                         showAlertError={(boolean) => setShowErrorAlert(boolean)}
                         errorMessage={(error) => setErrorMessage(error)}
                         head={country}
+                        cargaSocial={cargaSocial}
                         handleEditPuesto={handleEditPuesto}
                       />
                     }
@@ -184,10 +186,7 @@ function PuestosQ() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario de {' '}
-                <Link className="text-indigo-700 underline" to="/gastos">
-                  Gastos
-                </Link>{' '}.
+              formulario de Gastos.
             </span>
           </div>
         )}
@@ -196,4 +195,4 @@ function PuestosQ() {
   );
 }
 
-export default PuestosQ;
+export default PuestosPxQ;
