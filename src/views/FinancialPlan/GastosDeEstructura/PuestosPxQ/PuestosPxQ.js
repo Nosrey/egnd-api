@@ -33,6 +33,8 @@ function PuestosPxQ() {
           head.name = puestos[0][cc][i];
           head.isNew = false;
           head.precioInicial = 0;
+          head.cargaSocial = 0;
+          head.total = 0;
           heads.push(head);
           let h = {};
           h.visible = puestosQ[cc];
