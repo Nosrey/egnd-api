@@ -1,9 +1,9 @@
 export const puestos = [
   {
     Administración: [
-      'Analista Administracion y Finanzas',
+      'Analista Admin. y Finanzas',
       'Analista RRHH',
-      'Jefe Aministracion y Finanzas',
+      'Jefe Admin y Finanzas',
       'CFO',
       'CEO',
       'Country Manager',
