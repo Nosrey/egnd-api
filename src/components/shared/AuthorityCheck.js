@@ -11,7 +11,7 @@ function AuthorityCheck(props) {
 }
 
 AuthorityCheck.propTypes = {
-  userAuthority: PropTypes.arrayOf(),
+  userAuthority: PropTypes.arrayOf(PropTypes.any),
   authority: PropTypes.arrayOf(),
 }
 
