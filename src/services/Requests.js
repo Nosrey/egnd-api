@@ -198,6 +198,26 @@ export const createPuestosq = async (body) => {
   }
 };
 
+export const createPuestospxq = async (body) => {
+  try {
+    const response = await fetch(`${URL_API}/api/puestospxq`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        puestosPxQ: body,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error.message);
+    throw error;
+  }
+};
+
 export const createPuestosv = async (body) => {
   try {
     const response = await fetch('/puestosv', {
