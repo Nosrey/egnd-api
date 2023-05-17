@@ -312,7 +312,7 @@ function TablePuestosQ(props) {
                 >
                   {puesto.años.map((año, indexYear) => (
                     <div className="flex flex-col" key={indexYear}>
-                      {/* {index === 0 && (
+                      {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
                           <p> Año {indexYear + 1}</p>
                           <div
@@ -326,7 +326,7 @@ function TablePuestosQ(props) {
                             )}
                           </div>
                         </div>
-                      )} */}
+                      )}
                       <div className="flex gap-x-3 gap-y-3">
                         {index === 0 &&
                           visibleItems.includes(indexYear) &&

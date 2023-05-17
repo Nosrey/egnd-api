@@ -51,11 +51,13 @@ function TablePuestosPxQ(props) {
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
-            const valor = head.puestos[i].años[j].volMeses[MONTHS[s]];
+            const valor =
+              head.puestos[i].años[j].volMeses[MONTHS[s]] *
+                Number(head.puestos[i].total) || 0;
             if (arrayvalores[j].values[s] >= 0) {
-              arrayvalores[j].values[s] += parseInt(valor, 10);
+              arrayvalores[j].values[s] += valor;
             } else {
-              arrayvalores[j].values.push(parseInt(valor, 10));
+              arrayvalores[j].values.push(valor);
             }
           }
         }
@@ -100,6 +102,29 @@ function TablePuestosPxQ(props) {
     return newAños;
   };
 
+  const fillMonthsPrices = (producto, yearIndex) => {
+    let newAños = [...producto.años];
+    producto.cargaSocial = (producto.precioInicial * props.cargaSocial) / 100;
+    producto.total =
+      Number(producto.precioInicial) + Number(producto.cargaSocial);
+    for (let i = yearIndex >= 0 ? yearIndex : 0; i < newAños.length; i++) {
+      const newMeses = { ...newAños[i].volMeses };
+      let vT = 0;
+      for (let mes in newMeses) {
+        newMeses[mes] = newAños[i].volMeses[mes];
+        vT += parseInt(newAños[i].volMeses[mes], 10);
+
+        volTotal[i].values[MONTHS.indexOf(mes)] += newAños[i].volMeses[mes];
+      }
+      newAños[i] = {
+        ...newAños[i],
+        volMeses: newMeses,
+        volTotal: vT * Number(producto.total),
+      };
+    }
+    return newAños;
+  };
+
   const handleOnChangeInitialValue = (
     cc,
     idPuesto,
@@ -131,7 +156,7 @@ function TablePuestosPxQ(props) {
         break;
       case 'precioInicial':
         puesto.precioInicial = newValue;
-        // producto.años = fillMonthsPrices(producto, -1);
+        puesto.años = fillMonthsPrices(puesto, -1);
         break;
 
       default:
@@ -144,27 +169,12 @@ function TablePuestosPxQ(props) {
 
   const submitInfoForm = () => {
     const copyData = { ...infoForm };
-    console.log(copyData);
-    // let submit = true;
-    // copyData[head].puestos.map((p) => {
-    //   if (p.name === '') {
-    //     submit = false;
-    //     window.scrollTo({ top: 0, behavior: 'smooth' });
-    //     props.errorMessage('Hay puestos sin nombre');
-    //     props.showAlertError(true);
-    //     setTimeout(() => {
-    //       props.showAlertError(false);
-    //     }, 5000);
-    //   }
-    // });
+    let submit = true;
 
-    // if (submit) {
-    //   props.postPuestoQData([infoForm]);
-    // }
+    if (submit) {
+      props.postPuestoPxQData([infoForm]);
+    }
   };
-
-  console.log('[INFFOOO]', infoForm);
-  console.log('[PQ]', props.puestosQ);
   return (
     <>
       {infoForm &&
@@ -237,7 +247,7 @@ function TablePuestosPxQ(props) {
                             >
                               <Tooltip placement="top-end" title="Rem">
                                 <Input
-                                  placeholder="Precio inicial"
+                                  placeholder="Rem"
                                   type="number"
                                   name="precioInicial"
                                   prefix={currency}
@@ -277,12 +287,10 @@ function TablePuestosPxQ(props) {
                                 placeholder="Precio inicial"
                                 type="number"
                                 disabled
-                                name="precioInicial"
+                                name="cargaSocial"
                                 prefix={currency}
                                 value={
-                                  (infoForm[cc].puestos[head].precioInicial *
-                                    props.cargaSocial) /
-                                  100
+                                  infoForm[cc].puestos[head].cargaSocial || 0
                                 }
                               />
                             </FormItem>
@@ -302,26 +310,13 @@ function TablePuestosPxQ(props) {
                                   : 'mt-[20px] w-[100px]'
                               }`}
                             >
-                              <Tooltip
-                                placement="top-end"
-                                title="Precio Inicial"
-                              >
-                                <Input
-                                  placeholder="Precio inicial"
-                                  type="number"
-                                  name="total"
-                                  disabled
-                                  prefix={currency}
-                                  value={
-                                    Number(
-                                      infoForm[cc].puestos[head].precioInicial,
-                                    ) +
-                                    (infoForm[cc].puestos[head].precioInicial *
-                                      props.cargaSocial) /
-                                      100
-                                  }
-                                />
-                              </Tooltip>
+                              <Input
+                                type="number"
+                                name="total"
+                                disabled
+                                prefix={currency}
+                                value={infoForm[cc].puestos[head].total || 0}
+                              />
                             </FormItem>
                           </div>
 
@@ -363,6 +358,7 @@ function TablePuestosPxQ(props) {
                                             </p>
                                           ),
                                         )}
+                                      <p className="month w-[90px]">Total</p>
                                     </div>
                                   )}
                                   <div className="flex gap-x-3 gap-y-3">
@@ -381,25 +377,35 @@ function TablePuestosPxQ(props) {
                                               type="number"
                                               disabled
                                               value={
-                                                año.volMeses[
-                                                  Object.keys(año.volMeses)[
-                                                    indexMes
-                                                  ]
-                                                ] *
-                                                (Number(
-                                                  infoForm[cc].puestos[head]
-                                                    .precioInicial,
-                                                ) +
-                                                  (infoForm[cc].puestos[head]
-                                                    .precioInicial *
-                                                    props.cargaSocial) /
-                                                    100)
+                                                infoForm[cc].puestos[head]
+                                                  .precioInicial
+                                                  ? año.volMeses[
+                                                      Object.keys(año.volMeses)[
+                                                        indexMes
+                                                      ]
+                                                    ] *
+                                                    infoForm[cc].puestos[head]
+                                                      .total
+                                                  : 0
                                               }
                                               name="month"
                                             />
                                           </FormItem>
                                         ),
                                       )}
+                                    <FormItem className="mb-0">
+                                      <Input
+                                        className="w-[90px]"
+                                        type="number"
+                                        disabled
+                                        value={
+                                          infoForm[cc].puestos[head]
+                                            .precioInicial
+                                            ? año.volTotal
+                                            : 0
+                                        }
+                                      />
+                                    </FormItem>
                                   </div>
                                 </div>
                               </div>
@@ -429,9 +435,9 @@ function TablePuestosPxQ(props) {
                   key={index}
                   className="flex gap-x-3 w-fit pt-3 ml-[550px] "
                 >
-                  {puesto.años.map((año, indexYear) => (
+                  {AÑOS.map((año, indexYear) => (
                     <div className="flex flex-col" key={indexYear}>
-                      {/* {index === 0 && (
+                      {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
                           <p> Año {indexYear + 1}</p>
                           <div
@@ -445,7 +451,22 @@ function TablePuestosPxQ(props) {
                             )}
                           </div>
                         </div>
-                      )} */}
+                      )}
+                      <div className="titleMonths gap-x-3 flex mb-3">
+                        {visibleItems.includes(indexYear) &&
+                          año &&
+                          index === 0 &&
+                          MONTHS.map((mes, indexMes) => (
+                            <p
+                              key={indexMes}
+                              className="month w-[90px] capitalize"
+                            >
+                              {mes}
+                            </p>
+                          ))}
+                        {index === 0 && <p className="month w-[90px]">Total</p>}
+                        {index !== 0 && <p className="month w-[90px]" />}
+                      </div>
                       <div className="flex gap-x-3 gap-y-3">
                         {index === 0 &&
                           visibleItems.includes(indexYear) &&
@@ -454,6 +475,13 @@ function TablePuestosPxQ(props) {
                           volTotal[indexYear].values.map((valor, index) => (
                             <p className="w-[90px] text-center">{valor}</p>
                           ))}
+                        <p className="w-[90px] text-center font-bold">
+                          {index === 0 &&
+                            volTotal[indexYear] &&
+                            volTotal[indexYear].values.reduce(
+                              (total, current) => total + current,
+                            )}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -462,33 +490,6 @@ function TablePuestosPxQ(props) {
           </div>
         </div>
       )}
-      <div className="flex gap-x-3 flex-end">
-        <Button
-          className="border mt-6b  mt-[40px]"
-          variant="twoTone"
-          color="blue-600"
-          onClick={() => {
-            props.addPuesto({
-              name: '',
-              isNew: true,
-              años: [...AÑOS],
-              id: Math.floor(Math.random() * 1000),
-            });
-          }}
-        >
-          Agregar item
-        </Button>
-        <Button
-          className="border mt-6b  mt-[40px]"
-          variant="twoTone"
-          color="red-600"
-          onClick={() => {
-            setShowRemovePuesto(!showRemovePuesto);
-          }}
-        >
-          {showRemovePuesto === true ? 'Anular' : 'Eliminar item'}
-        </Button>
-      </div>
       <Button
         className="border mt-6b btnSubmitTable mt-[40px]"
         variant="solid"
