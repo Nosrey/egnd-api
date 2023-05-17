@@ -54,6 +54,7 @@ function Costo() {
     }
   }, [info]);
 
+
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {

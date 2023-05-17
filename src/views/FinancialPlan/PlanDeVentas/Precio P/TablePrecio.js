@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+import { info } from 'autoprefixer';
 import {
   Avatar,
   Button,
@@ -9,6 +10,7 @@ import {
   Tabs,
   Tooltip,
 } from 'components/ui';
+import { uniq } from 'lodash';
 import { useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { createPrecio } from 'services/Requests';
@@ -79,6 +81,8 @@ function TablePrecio(props) {
     return newAños;
   };
 
+  
+
   const handleOnChangeInitialValue = (
     pais,
     canalName,
@@ -126,6 +130,7 @@ function TablePrecio(props) {
     setInfoForm(newData);
   };
 
+
   const submitInfoForm = () => {
     const copyData = { ...infoForm };
     const countryArray = [];
@@ -143,11 +148,15 @@ function TablePrecio(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      postPrecioData(countryArray[i]);
+      let idUser = localStorage.getItem('userId')
+      const { countryName, stats } = countryArray[i];
+      const data = { countryName, stats, idUser };
+      postPrecioData(data);
     }
   };
 
   const postPrecioData = (data) => {
+    console.log(data)
     createPrecio(data)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -165,11 +174,17 @@ function TablePrecio(props) {
       });
   };
 
+  
+
+// Combina los conjuntos de datos en una nueva variable
+
+
   return (
     <>
       {infoForm &&
         Object.keys(infoForm).map((pais) => (
           <TabContent value={pais} className="mb-[20px]" key={pais}>
+        
             <FormContainer>
               {infoForm[pais].map((canal) => (
                 <section key={canal.canalName} className="contenedor">
@@ -179,10 +194,12 @@ function TablePrecio(props) {
                   <div>
                     <div>
                       {canal.productos.map((producto) => (
+                        
                         <div
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
+                          
                           <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
                             {producto.id.toString()}
                           </Avatar>
@@ -197,6 +214,7 @@ function TablePrecio(props) {
                           <div className="flex flex-col w-[240px] mt-[81px]">
                             <div className="flex w-[240px]  gap-x-2">
                               <FormItem className=" mb-0 w-[130px] ">
+                              
                                 <Tooltip
                                   placement="top-end"
                                   title="Precio Inicial"
@@ -316,9 +334,9 @@ function TablePrecio(props) {
                                             prefix={moneda}
                                             value={
                                               año.volMeses[
-                                                Object.keys(año.volMeses)[
-                                                  indexMes
-                                                ]
+                                              Object.keys(año.volMeses)[
+                                              indexMes
+                                              ]
                                               ]
                                             }
                                             onChange={(e) => {

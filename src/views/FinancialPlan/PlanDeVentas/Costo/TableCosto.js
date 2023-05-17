@@ -184,6 +184,8 @@ import {
       newData[pais][channelIndex].productos[productoIndex] = producto;
       setInfoForm(newData);
     };
+
+    console.log(infoForm)
     return (
       <>
         {infoForm &&
@@ -202,6 +204,8 @@ import {
                             className="flex  gap-x-3 gap-y-3  mb-6 "
                             key={producto.id}
                           >
+                          {console.log(producto)}
+
                             <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
                               {producto.id.toString()}
                             </Avatar>

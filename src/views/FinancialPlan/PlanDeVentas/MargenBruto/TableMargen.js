@@ -105,6 +105,8 @@ function TableMargen(props) {
     })
   }
 
+  console.log(props.costoData)
+
 
   return (
     <>

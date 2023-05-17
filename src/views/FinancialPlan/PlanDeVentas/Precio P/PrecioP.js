@@ -15,6 +15,8 @@ function PrecioP() {
   const [info, setInfo] = useState(null);
   const [defaultCountry, setDefaultCountry] = useState('');
   const [infoForm, setInfoForm] = useState();
+  const [infoFormPrecio, setInfoFormPrecio] = useState();
+
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const currency = useSelector((state) => state.auth.user.currency);
@@ -54,22 +56,15 @@ function PrecioP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.precioData.length !== 0) {// tengo info precargada
-          const datosPrecargados = {};
-          let pcioDataOrdenada = data?.precioData.sort((a, b) => a.countryName.localeCompare(b.countryName))
+        setInfo(data?.assumptionData);
+        setInfoFormPrecio(data?.precioData);
 
-          for (let i = 0; i < pcioDataOrdenada.length; i++) {
-            datosPrecargados[pcioDataOrdenada[i].countryName] =
-              pcioDataOrdenada[i].stats;
-          }
-          setInfoForm(() => ({ ...datosPrecargados }));
-        } else { // no tengo info precargada
-          setInfo(data?.assumptionData);
-        }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
       })
       .catch((error) => console.error(error));
   }, []);
+
+console.log()
 
   return (
     <div>
@@ -110,6 +105,7 @@ function PrecioP() {
                     contenido={
                       <TablePrecio
                         data={infoForm}
+                        dataInputs={infoFormPrecio}
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }

@@ -10,7 +10,6 @@ import {
 import {MONTHS } from 'constants/forms.constants'
 import ContainerScrollable from 'components/shared/ContainerScrollable'
 import { useSelector } from 'react-redux'
-import TableVentas from '../Ventas/TableVentas'
 import TableMargen from './TableMargen'
 
 const { TabNav, TabList } = Tabs
@@ -27,6 +26,7 @@ function MargenBruto() {
     const [showFaltaPrecioMssg, setShowFaltaPrecioMssg] = useState(false);
     const [showFaltaVolumenMssg, setShowFaltaVolumenMssg] = useState(false);
     const [showFaltaInfoMssg, setShowFaltaInfoMssg] = useState(false);
+    const [costoData , setCostoData]= useState([])
 
 
     const showMultiplicacionPxQ = (dataVolumen, dataPrecio) => {
@@ -62,10 +62,9 @@ function MargenBruto() {
                     for (let i = 0; i < dataVentas.length; i++) {
                     datosPrecargados[dataVentas[i].countryName] = dataVentas[i].stats;
                     }
+                    setCostoData(data.costoData)
                     setInfoForm(() => ({ ...datosPrecargados}))
                     setProducts(data?.assumptionData[0].productos)
-                    console.log(data)
-
                 } else if (data?.volumenData.length === 0) {
                     setShowFaltaVolumenMssg(true)
                 } else if (data?.precioData.length === 0) {
@@ -78,7 +77,6 @@ function MargenBruto() {
             })
             .catch((error) => console.error(error))
     }, [])
-
 
     return (
         <div>
@@ -121,6 +119,7 @@ function MargenBruto() {
                                   showAlertError={(boolean) => setShowErrorAlert(boolean)}
                                   country={country}
                                   currency={currency}
+                                  costoData={costoData}
                                   />}  
                                 />
                              </FormContainer>
