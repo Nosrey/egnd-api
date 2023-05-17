@@ -169,28 +169,12 @@ function TablePuestosPxQ(props) {
 
   const submitInfoForm = () => {
     const copyData = { ...infoForm };
-    console.log(copyData);
-    // let submit = true;
-    // copyData[head].puestos.map((p) => {
-    //   if (p.name === '') {
-    //     submit = false;
-    //     window.scrollTo({ top: 0, behavior: 'smooth' });
-    //     props.errorMessage('Hay puestos sin nombre');
-    //     props.showAlertError(true);
-    //     setTimeout(() => {
-    //       props.showAlertError(false);
-    //     }, 5000);
-    //   }
-    // });
+    let submit = true;
 
-    // if (submit) {
-    //   props.postPuestoQData([infoForm]);
-    // }
+    if (submit) {
+      props.postPuestoPxQData([infoForm]);
+    }
   };
-
-  console.log('[INFFOOO]', infoForm);
-  console.log('[PQ]', props.puestosQ);
-  console.log('[VT]', volTotal);
   return (
     <>
       {infoForm &&

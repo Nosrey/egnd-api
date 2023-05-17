@@ -4,8 +4,8 @@ import { AÑOS } from 'constants/forms.constants';
 import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createPuestosq, getUser } from 'services/Requests';
 import { Link } from 'react-router-dom';
+import { createPuestosq, getUser } from 'services/Requests';
 import TablePuestosQ from './TablePuestosQ';
 
 const { TabNav, TabList } = Tabs;
@@ -115,7 +115,6 @@ function PuestosQ() {
       .catch((error) => console.error(error));
   }, []);
 
-  console.log('c', country);
   return (
     <div>
       {showSuccessAlert && (
@@ -184,10 +183,11 @@ function PuestosQ() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario de {' '}
-                <Link className="text-indigo-700 underline" to="/gastos">
-                  Gastos
-                </Link>{' '}.
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/gastos">
+                Gastos
+              </Link>{' '}
+              .
             </span>
           </div>
         )}

@@ -4,7 +4,7 @@ import { AÑOS } from 'constants/forms.constants';
 import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createPuestosq, getUser } from 'services/Requests';
+import { createPuestospxq, getUser } from 'services/Requests';
 import TablePuestosPxQ from './TablePuestosPxQ';
 
 const { TabNav, TabList } = Tabs;
@@ -62,8 +62,8 @@ function PuestosPxQ() {
     }
   };
 
-  const postPuestoQData = (data) => {
-    createPuestosq(data)
+  const postPuestosPxQData = (data) => {
+    createPuestospxq(data)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setShowSuccessAlert(true);
@@ -95,15 +95,14 @@ function PuestosPxQ() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log('[DATA]', data);
         let def;
-        if (data?.puestosQData[0]) {
-          setPuestosQ(data?.puestosQData[0].puestosq[0]);
-          setInfoForm(data?.puestosQData[0].puestosq[0]);
-          def = Object.keys(data?.puestosQData[0].puestosq[0]).find(
+        if (data?.puestosPxQData[0]) {
+          setPuestosQ(data?.puestosPxQData[0].puestosPxQ[0]);
+          setInfoForm(data?.puestosPxQData[0].puestosPxQ[0]);
+          def = Object.keys(data?.puestosPxQData[0].puestosPxQ[0]).find(
             (p) =>
-              data?.puestosQData[0].puestosq[0][p].visible &&
-              data?.puestosQData[0].puestosq[0][p],
+              data?.puestosPxQData[0].puestosPxQ[0][p].visible &&
+              data?.puestosQData[0].puestosPxQ[0][p],
           );
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
@@ -169,7 +168,7 @@ function PuestosPxQ() {
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }
-                        postPuestoQData={postPuestoQData}
+                        postPuestoPxQData={postPuestosPxQData}
                         addPuesto={addPuesto}
                         removePuesto={removePuesto}
                         showAlertError={(boolean) => setShowErrorAlert(boolean)}
