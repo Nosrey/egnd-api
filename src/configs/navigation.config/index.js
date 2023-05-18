@@ -218,6 +218,16 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
+          {
+            key: 'collapseCostosDirectos.item2',
+            path: '/costopxq',
+            title: 'Costo PxQ',
+            translateKey: 'nav.collapseCostosDirectos.item2',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
         ],
       },
       {

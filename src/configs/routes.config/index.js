@@ -63,6 +63,14 @@ export const protectedRoutes = [
     authority: [],
   },
   {
+    key: 'costopxq',
+    path: '/costopxq',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeVentas/Costo PxQ/Costo'),
+    ),
+    authority: [],
+  },
+  {
     key: 'assumptionfinancieras',
     path: '/assumptionfinancieras',
     component: React.lazy(() =>

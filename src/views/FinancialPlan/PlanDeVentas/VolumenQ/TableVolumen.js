@@ -119,6 +119,7 @@ function TableVolumen(props) {
       setInfoProducts(() => [...props.productos]);
     }
     if (props.data) setInfoForm(props.data);
+
     initialConfig();
   }, [props]);
 
