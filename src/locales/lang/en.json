@@ -34,11 +34,13 @@
     "collapseCostosDirectos": {
       "collapseCostosDirectos": "Costos Directos",
       "item1": "Costos Directos",
-      "item2": "Costos - Precio Unitario"
+      "item2": "Costos PxQ"
     },
     "collapseGastosDeEstructura": {
       "collapseGastosDeEstructura": "Gastos de Estructura",
-      "item1": "Gastos"
+      "item1": "Gastos",
+      "item2": "Puestos Q",
+      "item3": "Puestos PxQ"
     }
   }
 }

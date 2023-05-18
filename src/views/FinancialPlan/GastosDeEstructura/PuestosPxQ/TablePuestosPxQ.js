@@ -24,6 +24,7 @@ function TablePuestosPxQ(props) {
   const [showRemovePuesto, setShowRemovePuesto] = useState(false);
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
+  const [change, setChange] = useState(false);
   const [volTotal, setVolTotal] = useState([]);
   const currency = useSelector((state) => state.auth.user.currency);
 
@@ -103,6 +104,7 @@ function TablePuestosPxQ(props) {
   };
 
   const fillMonthsPrices = (producto, yearIndex) => {
+    setChange(true);
     let newAños = [...producto.años];
     producto.cargaSocial = (producto.precioInicial * props.cargaSocial) / 100;
     producto.total =
@@ -133,7 +135,7 @@ function TablePuestosPxQ(props) {
     mes,
     indexYear,
   ) => {
-    const newData = { ...infoForm };
+    const newData = { ...props.puestosQ };
     const puestoIndex = newData[cc].puestos.findIndex(
       (puesto) => puesto.id === idPuesto,
     );
@@ -379,10 +381,10 @@ function TablePuestosPxQ(props) {
                                               value={
                                                 infoForm[cc].puestos[head]
                                                   .precioInicial
-                                                  ? año.volMeses[
-                                                      Object.keys(año.volMeses)[
-                                                        indexMes
-                                                      ]
+                                                  ? props.puestosQ[cc].puestos[
+                                                      head
+                                                    ].años[indexYear].volMeses[
+                                                      MONTHS[indexMes]
                                                     ] *
                                                     infoForm[cc].puestos[head]
                                                       .total
@@ -401,7 +403,11 @@ function TablePuestosPxQ(props) {
                                         value={
                                           infoForm[cc].puestos[head]
                                             .precioInicial
-                                            ? año.volTotal
+                                            ? change
+                                              ? año.volTotal
+                                              : props.puestosQ[cc].puestos[head]
+                                                  .años[indexYear].volTotal *
+                                                infoForm[cc].puestos[head].total
                                             : 0
                                         }
                                       />
