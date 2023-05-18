@@ -25,7 +25,6 @@ function TablePuestosQ(props) {
   const initialConfig = () => {
     if (infoForm && props.head) {
       const head = { ...infoForm[props.head] };
-
       let arrayvalores = [
         { id: 0, values: [] },
         { id: 1, values: [] },
@@ -296,6 +295,37 @@ function TablePuestosQ(props) {
           </TabContent>
         ))}
 
+<div className="flex gap-x-3 flex-end">
+        <Button
+          className="border mt-6b  mt-[40px]"
+          variant="twoTone"
+          color="blue-600"
+          onClick={() => {
+            props.addPuesto({
+              name: '',
+              isNew: true,
+              años: [...AÑOS],
+              id: Math.floor(Math.random() * 1000),
+            });
+          }}
+        >
+          Agregar item
+        </Button>
+        {infoForm && infoForm[props?.head]?.puestos.some(obj => obj.isNew === true) &&
+            <Button
+            className="border mt-6b  mt-[40px]"
+            variant="twoTone"
+            color="red-600"
+            onClick={() => {
+              setShowRemovePuesto(!showRemovePuesto);
+            }}
+          >
+            {showRemovePuesto === true ? 'Anular' : 'Eliminar item'}
+          </Button>
+        }
+        
+      </div>
+
       {infoForm && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
@@ -343,33 +373,7 @@ function TablePuestosQ(props) {
           </div>
         </div>
       )}
-      <div className="flex gap-x-3 flex-end">
-        <Button
-          className="border mt-6b  mt-[40px]"
-          variant="twoTone"
-          color="blue-600"
-          onClick={() => {
-            props.addPuesto({
-              name: '',
-              isNew: true,
-              años: [...AÑOS],
-              id: Math.floor(Math.random() * 1000),
-            });
-          }}
-        >
-          Agregar item
-        </Button>
-        <Button
-          className="border mt-6b  mt-[40px]"
-          variant="twoTone"
-          color="red-600"
-          onClick={() => {
-            setShowRemovePuesto(!showRemovePuesto);
-          }}
-        >
-          {showRemovePuesto === true ? 'Anular' : 'Eliminar item'}
-        </Button>
-      </div>
+    
       <Button
         className="border mt-6b btnSubmitTable mt-[40px]"
         variant="solid"
