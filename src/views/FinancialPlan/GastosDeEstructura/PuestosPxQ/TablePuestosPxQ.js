@@ -104,7 +104,6 @@ function TablePuestosPxQ(props) {
   };
 
   const fillMonthsPrices = (producto, yearIndex) => {
-    console.log('[PROD]', producto);
     setChange(true);
     let newAños = [...producto.años];
     producto.cargaSocial = (producto.precioInicial * props.cargaSocial) / 100;

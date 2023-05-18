@@ -202,8 +202,6 @@ function TableCosto(props) {
     }
   };
 
-  console.log('view', viewTotals);
-
   useEffect(() => {
     if (infoForm && props.country && infoProducts) {
       const pais = [...infoForm[props.country]];

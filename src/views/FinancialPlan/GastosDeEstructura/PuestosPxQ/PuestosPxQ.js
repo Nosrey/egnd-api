@@ -96,7 +96,6 @@ function PuestosPxQ() {
     getUser(currentState.id)
       .then((data) => {
         let def;
-        console.log('[DATA]', data);
         if (data?.puestosPxQData[0]) {
           setPuestosQ(data?.puestosQData[0].puestosq[0]);
           setInfoForm(data?.puestosPxQData[0].puestosPxQ[0]);
