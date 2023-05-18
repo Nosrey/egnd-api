@@ -94,6 +94,11 @@ export const optionsMonths = [
   { value: 12, label: 'Diciembre' },
 ]
 
+export const optionsIncremento = [
+  { value: "mensual", label: 'Mensual' },
+  { value: "trimestral", label: 'Trimestral' },
+]
+
 export const AÑOS_COSTO = [
   {
     año: 1,
