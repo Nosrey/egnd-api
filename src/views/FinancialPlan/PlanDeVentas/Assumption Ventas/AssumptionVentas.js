@@ -195,7 +195,18 @@ function AssumptionVentas() {
     const isEmpty = validateEmptyInputs();
 
     if (!isEmpty) {
-      createAssumpVenta(channels, churn, countries.sort((a, b) => a.value.localeCompare(b.value)), productos, currentState.id)
+      const countriesSort = countries.sort((a, b) => a.value.localeCompare(b.value))
+      const currentId = currentState.id
+
+      const body = {
+        channels,
+        churn,
+        countriesSort,
+        currentId,
+        productos
+      }
+      
+      createAssumpVenta(body)
 
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -130,7 +130,6 @@ function TablePrecio(props) {
     setInfoForm(newData);
   };
 
-
   const submitInfoForm = () => {
     const copyData = { ...infoForm };
     const countryArray = [];
@@ -156,7 +155,6 @@ function TablePrecio(props) {
   };
 
   const postPrecioData = (data) => {
-    console.log(data)
     createPrecio(data)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });

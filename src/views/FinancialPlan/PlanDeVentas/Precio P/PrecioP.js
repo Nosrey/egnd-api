@@ -56,15 +56,26 @@ function PrecioP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        setInfo(data?.assumptionData);
-        setInfoFormPrecio(data?.precioData);
 
+
+
+        if (data?.precioData.length !== 0) {
+          const datosPrecargados = {};
+          for (let i = 0; i < data?.precioData.length; i++) {
+            datosPrecargados[data?.precioData[i].countryName] = data?.precioData[i].stats;
+          }
+          console.log(datosPrecargados);
+          setInfoForm(() => ({ ...datosPrecargados }));
+        }
+        else {
+          setInfo(data?.assumptionData)
+        }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
       })
       .catch((error) => console.error(error));
   }, []);
 
-console.log()
+  console.log(info, 'ee')
 
   return (
     <div>
