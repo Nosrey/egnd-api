@@ -11,6 +11,7 @@ import {
 import { MdDelete } from 'react-icons/md';
 import CreatableSelect from 'react-select/creatable';
 import { useMedia } from 'utils/hooks/useMedia';
+import { v4 as uuid } from 'uuid';
 
 const optionsModel = [
   { value: 'oneShot', label: 'One Shot' },
@@ -73,6 +74,9 @@ function TableAssumptionVentas({
     return id;
   };
 
+  const uniqueId = uuid();
+
+
   return (
     <div className="px-4 py-5">
       <FormContainer>
@@ -113,6 +117,7 @@ function TableAssumptionVentas({
                           prod.id,
                           e.target.name,
                           e.target.value,
+                          prod.uniqueId
                         )
                       }
                     />
@@ -129,7 +134,7 @@ function TableAssumptionVentas({
                         (option) => option.value === prod.model,
                       )}
                       onChange={(e) =>
-                        handleEditProduct(prod.id, 'model', e.value)
+                        handleEditProduct(prod.id, 'model', e.value, prod.uniqueId)
                       }
                     />
                     {errors[prod.id] && errors[prod.id].name && (
@@ -145,7 +150,7 @@ function TableAssumptionVentas({
                         (option) => option.value === prod.type,
                       )}
                       onChange={(e) =>
-                        handleEditProduct(prod.id, 'type', e.value)
+                        handleEditProduct(prod.id, 'type', e.value, prod.uniqueId)
                       }
                     />
                     {errors[prod.id] && errors[prod.id].name && (
@@ -229,6 +234,7 @@ function TableAssumptionVentas({
                           name: '',
                           model: '',
                           type: '',
+                          uniqueId
                         });
                       }}
                     >
@@ -541,6 +547,7 @@ function TableAssumptionVentas({
                           name: '',
                           sameClient: '',
                           items: [],
+                          uniqueId
                         })
                       }
                     >
