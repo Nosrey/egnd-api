@@ -10,11 +10,22 @@ const app = store.getState();
 const URL_API = 'http://localhost:4000';
 const idUser = app.auth.user.id && app.auth.user.id;
 
+const compareDatas = (newCountryInfo, oldData) => {
+  console.log("DATA", newCountryInfo);
+  const foundCountry = oldData.find(obj => obj.id === newCountryInfo.id);
+  console.log("pais guardao",foundCountry)
+  // if (foundCountry.stats.length === newCountryInfo.countryName) {
+  //     // createPrecio(newCountryInfo);
+  // } else {
+
+  // }
+}
+
 export const getUser = async (id = idUser) => {
   try {
-    console.log('[ID]', id, app);
     const resp = await fetch(`${URL_API}/api/users/${id}`);
     const data = await resp.json();
+    localStorage.setItem("precioData", JSON.stringify(data.response.precioData));
     return data.response;
   } catch (error) {
     console.error('Error:', error);
@@ -99,32 +110,41 @@ export const createAssumpVenta = async (body) => {
           const canal = {};
           canal.canalName = bodySend[0]?.channels[x].name;
           canal.productos = [...productos];
+          canal.id = x +1 ;
           canales.push(canal);
         }
         estructura[bodySend[0]?.countriesSort[i].value] = [...canales];
       }
       const copyData = { ...estructura };
       const countryArray = [];
-
+      let countId = 1;
       // eslint-disable-next-line no-restricted-syntax
       for (const countryName in copyData) {
         const statsArray = copyData[countryName];
-        const countryObject = { countryName, stats: [] };
+        const countryObject = { countryName,id: countId, stats: [] };
 
         for (let i = 0; i < statsArray.length; i++) {
           countryObject.stats.push(statsArray[i]);
         }
-
+        
+        countId ++
         countryArray.push(countryObject);
       }
 
       for (let i = 0; i < countryArray.length; i++) {
         let idUser = localStorage.getItem('userId')
-        const { countryName, stats } = countryArray[i];
-        const data = { countryName, stats, idUser };
-        createPrecio(data);
-      }
+        const { countryName, id, stats } = countryArray[i];
+        const data = { countryName, id, stats, idUser };
+        const oldData = JSON.parse(localStorage.getItem("precioData"));
 
+        if (oldData.length === 0 ) {
+            createPrecio(data);
+        } else if(oldData.find(obj => obj.countryName === data.countryName)){ // si existe este pais lo comparo
+          compareDatas(data, oldData);
+        } else if (!oldData.find(obj => obj.countryName === data.countryName)){ // si no existe este pais
+          createPrecio(data);
+        }
+      }
     }
 
     return data;
