@@ -198,9 +198,9 @@ function TablePrecio(props) {
                           key={producto.id}
                         >
                           
-                          <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
+                          {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
                             {producto.id.toString()}
-                          </Avatar>
+                          </Avatar> */}
                           <FormItem className=" mb-1 w-[210px] mt-[81px]">
                             <Input
                               disabled

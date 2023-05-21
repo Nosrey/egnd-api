@@ -10,15 +10,70 @@ const app = store.getState();
 const URL_API = 'http://localhost:4000';
 const idUser = app.auth.user.id && app.auth.user.id;
 
-const compareDatas = (newCountryInfo, oldData) => {
-  console.log("DATA", newCountryInfo);
-  const foundCountry = oldData.find(obj => obj.id === newCountryInfo.id);
-  console.log("pais guardao",foundCountry)
-  // if (foundCountry.stats.length === newCountryInfo.countryName) {
-  //     // createPrecio(newCountryInfo);
-  // } else {
+const compareChannelsInfo = (newChannel, oldChannel) => {
 
-  // }
+  let updatedChannel= {...newChannel}
+ 
+  // comparo los productos del canal nuevo con el canal viejo
+  for (let i = 0; i < newChannel.productos.length; i++) {
+    for (let j = 0; j < oldChannel.productos.length; j++) {
+      if (newChannel.productos[i].id === oldChannel.productos[j].id) {
+        // si tengo el mismo producto lo analizo y tomo los datos antiguos para no sobreescrcibirlos
+        let copy = {...oldChannel.productos[j]}
+        copy.name=newChannel?.productos[i].name; // a la info vieja le pongo el name actual pero sigo conservando su info
+        updatedChannel.productos[i] = copy
+      }
+    }
+    
+  }
+  return updatedChannel;
+}
+
+const compareDatas = (newCountryInfo, oldData) => {
+  let foundCountry ={...oldData.find(obj => obj.countryName === newCountryInfo.countryName)} ;
+
+  const foundStatsIds = foundCountry.stats.map(stat => stat.uniqueId);
+  const newStatsIds = newCountryInfo.stats.map(stat => stat.uniqueId);
+  const hasSameChannels = foundStatsIds.length === newStatsIds.length && foundStatsIds.every(id => newStatsIds.includes(id));
+  let updatedNewCountryInfo = {...newCountryInfo}
+
+  if (hasSameChannels) {
+      for (let i = 0; i < updatedNewCountryInfo.stats.length; i++) {
+        updatedNewCountryInfo.stats[i] = compareChannelsInfo(newCountryInfo.stats[i], foundCountry.stats[i])
+      }
+  } else {
+    const foundStats = foundCountry.stats;
+    const newStats = newCountryInfo.stats;
+
+    // Recorro cada canal basandome en la nueva estructura
+    for (let i = 0; i < newStats.length; i++) {
+      // Comparandola con cada canal de la vieja
+      for (let x = 0; x < foundStats.length; x++) {
+        if (newStats[i].id === foundStats[x]?.id) { 
+          // si ya tengo este canal, analizo sus prod para ver si hay diferencias
+          updatedNewCountryInfo.stats[i] = compareChannelsInfo(newStats[i], foundStats[i])
+        }
+        
+      }
+    }
+  }
+  return updatedNewCountryInfo;
+}
+
+const removeEntireCountry = (oldData, countryArray) => {
+  const missingCountries = [];
+
+    for (let i = 0; i < oldData.length; i++) {
+      const country = oldData[i].countryName;
+      if (!countryArray.map(obj => obj.countryName).includes(country)) {
+        missingCountries.push(country);
+      }
+    }
+
+    for (let i = 0; i < missingCountries.length; i++) {
+      deleteCountryPrecio(missingCountries[i])
+    }
+    
 }
 
 export const getUser = async (id = idUser) => {
@@ -87,7 +142,6 @@ export const createAssumpVenta = async (body) => {
 
     const data = await response.json();
     const bodySend = [body]
-
     const estructura = {};
     if (bodySend && bodySend[0]) {
       for (let i = 0; i < bodySend[0]?.countriesSort.length; i++) {
@@ -95,7 +149,7 @@ export const createAssumpVenta = async (body) => {
         const realProds = bodySend[0]?.productos;
         for (let x = 0; x < realProds.length; x++) {
           const prod = {};
-          prod.id = realProds[x].id;
+          prod.id = realProds[x].uniqueId;
           prod.volInicial = 0;
           prod.precioInicial = 0;
           prod.tasa = 0;
@@ -110,7 +164,7 @@ export const createAssumpVenta = async (body) => {
           const canal = {};
           canal.canalName = bodySend[0]?.channels[x].name;
           canal.productos = [...productos];
-          canal.id = x +1 ;
+          canal.id = bodySend[0]?.channels[x].uniqueId;
           canales.push(canal);
         }
         estructura[bodySend[0]?.countriesSort[i].value] = [...canales];
@@ -131,20 +185,22 @@ export const createAssumpVenta = async (body) => {
         countryArray.push(countryObject);
       }
 
+      const oldData = JSON.parse(localStorage.getItem("precioData"));
+
       for (let i = 0; i < countryArray.length; i++) {
         let idUser = localStorage.getItem('userId')
         const { countryName, id, stats } = countryArray[i];
         const data = { countryName, id, stats, idUser };
-        const oldData = JSON.parse(localStorage.getItem("precioData"));
-
         if (oldData.length === 0 ) {
             createPrecio(data);
-        } else if(oldData.find(obj => obj.countryName === data.countryName)){ // si existe este pais lo comparo
-          compareDatas(data, oldData);
-        } else if (!oldData.find(obj => obj.countryName === data.countryName)){ // si no existe este pais
+        } else if(oldData.find(obj => obj.countryName === data.countryName)){ // si existe este pais lo comparo y actualizo 
+          createPrecio(compareDatas(data, oldData));
+        } else if (!oldData.find(obj => obj.countryName === data.countryName)){ // si no existe este pais y lo tengo que agregar
           createPrecio(data);
         }
       }
+
+      removeEntireCountry(oldData, countryArray);
     }
 
     return data;
@@ -185,6 +241,24 @@ export const createVolumen = async ({ countryName, stats }) => {
       body: JSON.stringify({
         countryName,
         stats,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error);
+    throw error;
+  }
+};
+
+export const deleteCountryPrecio = async (countryName) => {
+  try {
+    const response = await fetch(`${URL_API}/api/precio`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        countryName,
         idUser,
       }),
     });
