@@ -157,7 +157,7 @@ function Gastos() {
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">
-          <h6>Elije tu Centros de Costos</h6>
+          <h6>Seleccione sus Centros de Costos</h6>
         </div>
         <form onSubmit={handleSubmit} className="p-8">
           <div className="flex">
@@ -185,7 +185,9 @@ function Gastos() {
                 ),
               )}
 
-              <div className="flex items-center gap-x-4 pt-7">
+              
+<p className=" pt-7">Crear nuevo CC :</p>
+              <div className="flex items-center gap-x-4 ">
                 <Input
                   size="sm"
                   placeholder="Nombre"

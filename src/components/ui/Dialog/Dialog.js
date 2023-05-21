@@ -1,14 +1,13 @@
-import React from 'react'
-import Modal from 'react-modal'
-import classNames from 'classnames'
-import PropTypes from 'prop-types'
-import { motion } from 'framer-motion'
-import { theme } from 'twin.macro'
-import CloseButton from '../CloseButton'
-import useWindowSize from '../hooks/useWindowSize'
+import classNames from 'classnames';
+import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
+import Modal from 'react-modal';
+import { theme } from 'twin.macro';
+import CloseButton from '../CloseButton';
+import useWindowSize from '../hooks/useWindowSize';
 
 function Dialog(props) {
-  const currentSize = useWindowSize()
+  const currentSize = useWindowSize();
 
   const {
     children,
@@ -25,11 +24,11 @@ function Dialog(props) {
     contentClassName,
     closeTimeoutMS,
     ...rest
-  } = props
+  } = props;
 
   const onCloseClick = (e) => {
-    onClose(e)
-  }
+    onClose(e);
+  };
 
   const renderCloseButton = (
     <CloseButton
@@ -37,32 +36,32 @@ function Dialog(props) {
       className="ltr:right-6 rtl:left-6"
       absolute
     />
-  )
+  );
 
   const contentStyle = {
     content: {
       inset: 'unset',
     },
     ...style,
-  }
+  };
 
   if (width !== undefined) {
-    contentStyle.content.width = width
+    contentStyle.content.width = width;
 
     if (
       currentSize.width <=
       parseInt(theme`screens.sm`.split(/ /)[0].replace(/[^\d]/g, ''), 10)
     ) {
-      contentStyle.content.width = 'auto'
+      contentStyle.content.width = 'auto';
     }
   }
   if (height !== undefined) {
-    contentStyle.content.height = height
+    contentStyle.content.height = height;
   }
 
-  const defaultDialogContentClass = 'dialog-content'
+  const defaultDialogContentClass = 'dialog-content';
 
-  const dialogClass = classNames(defaultDialogContentClass, contentClassName)
+  const dialogClass = classNames(defaultDialogContentClass, contentClassName);
 
   return (
     <Modal
@@ -95,7 +94,7 @@ function Dialog(props) {
         {children}
       </motion.div>
     </Modal>
-  )
+  );
 }
 
 Dialog.propTypes = {
@@ -109,12 +108,12 @@ Dialog.propTypes = {
   contentClassName: PropTypes.string,
   closeTimeoutMS: PropTypes.number,
   bodyOpenClassName: PropTypes.string,
-}
+};
 
 Dialog.defaultProps = {
   closable: true,
   width: 520,
   closeTimeoutMS: 150,
-}
+};
 
-export default Dialog
+export default Dialog;
