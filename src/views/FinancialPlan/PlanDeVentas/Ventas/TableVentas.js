@@ -66,7 +66,7 @@ function TableVentas(props) {
                 const copy = [...infoProducts]
                 let volumenTotal = 0
                 arrayProdAgrupados.map((prod) => {
-                    let index = copy.findIndex((el)=> el.id === prod[0].id)
+                    let index = copy.findIndex((el)=> el.uniqueId === prod[0].id)
                     const data = prod;
                     const totalSum = data.reduce((accumulator, currentValue) => currentValue.sum.map((value, index) => value + accumulator[index]), Array(data[0].sum.length).fill(0));
     
@@ -203,7 +203,7 @@ function TableVentas(props) {
                     </TabContent>
                 ))}
 
-             {/* {
+            {
                 infoProducts && 
                 <div className='bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]'>
                     <div className='flex items-center'>
@@ -263,7 +263,7 @@ function TableVentas(props) {
                     <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VENTA TOTAL: {moneda}{volTotal}</p>                                   
 
                 </div>
-            } */}
+            } 
         </>
     )
 }

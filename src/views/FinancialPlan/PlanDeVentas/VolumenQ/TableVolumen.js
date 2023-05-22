@@ -61,7 +61,6 @@ function TableVolumen(props) {
           );
           arrayP.push({ ...myProd, sum: arrayvalores });
         }
-
         arrayCanales.push(canalInfo);
         const agrupados = arrayP.reduce((resultado, objeto) => {
           if (!resultado[objeto.id]) {
@@ -77,10 +76,9 @@ function TableVolumen(props) {
         }
         const copy = [...infoProducts];
         let volumenTotal = 0;
-        console.log(arrayProdAgrupados)
 
         arrayProdAgrupados.map((prod) => {
-          let index = copy.findIndex((el) => el.id === prod[0].id);
+          let index = copy.findIndex((el) => el.uniqueId === prod[0].id);
           const data = prod;
           const totalSum = data.reduce(
             (accumulator, currentValue) =>
@@ -245,7 +243,6 @@ function TableVolumen(props) {
 
     for (let i = 0; i < countryArray.length; i++) {
       let idUser = localStorage.getItem('userId')
-      console.log(idUser)
       const { countryName, stats } = countryArray[i];
       const data = { countryName, stats, idUser };
       postVolumenData(data);
@@ -514,7 +511,7 @@ function TableVolumen(props) {
                         {index === 0 && <p className="month w-[90px]">Total</p>}
                         {index !== 0 && <p className="month w-[90px]" />}
                       </div>
-                      {/* <div className="flex gap-x-3 gap-y-3">
+                      <div className="flex gap-x-3 gap-y-3">
                         {visibleItems?.includes(indexYear) &&
                           año &&
                           año.numeros?.map((valor, index) => (
@@ -528,7 +525,7 @@ function TableVolumen(props) {
                           </p>
                           }
                         
-                      </div> */}
+                      </div> 
                     </div>
                   ))}
                 </div>

@@ -255,7 +255,7 @@ function TableCosto(props) {
         const copy = [...infoProducts];
         let volumenTotal = 0;
         arrayProdAgrupados.map((prod) => {
-          let index = copy.findIndex((el) => el.id === prod[0].id);
+          let index = copy.findIndex((el) => el.uniqueId === prod[0].id);
           const data = prod;
           const totalSum = data?.reduce(
             (accumulator, currentValue) =>
