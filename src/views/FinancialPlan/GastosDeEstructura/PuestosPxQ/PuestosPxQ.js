@@ -132,7 +132,7 @@ function PuestosPxQ() {
       )}
       <div className="border-b-2 mb-8 pb-1">
         <h4>Headcount</h4>
-        <span>Centro de puestos</span>
+        <span>Centros de costos</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
