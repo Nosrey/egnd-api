@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { Avatar, FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
 import { MONTHS, OPTIONS_COUNTRY } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -296,6 +296,8 @@ function TableCosto(props) {
     configIncial();
     calcTotales();
   }, [props, infoForm]);
+
+  console.log(props.volumenData, props.precioData);
 
   return (
     <>

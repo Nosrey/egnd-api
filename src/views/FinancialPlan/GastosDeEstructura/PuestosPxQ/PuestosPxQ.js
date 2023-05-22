@@ -96,6 +96,7 @@ function PuestosPxQ() {
     getUser(currentState.id)
       .then((data) => {
         let def;
+        console.log('[DATA]', data);
         if (data?.puestosPxQData[0]) {
           setPuestosQ(data?.puestosQData[0].puestosq[0]);
           setInfoForm(data?.puestosPxQData[0].puestosPxQ[0]);
@@ -105,7 +106,11 @@ function PuestosPxQ() {
               data?.puestosPxQData[0].puestosPxQ[0][p],
           );
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
-          setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
+          if (data?.puestosQData[0].puestosq[0]) {
+            setPuestosQ(data?.puestosQData[0].puestosq[0]);
+          } else {
+            setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
+          }
           setInfo(data?.gastosGeneralData[0].centroDeGastos);
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
@@ -117,6 +122,8 @@ function PuestosPxQ() {
       })
       .catch((error) => console.error(error));
   }, []);
+
+  console.log('info', infoForm);
 
   return (
     <div>
@@ -145,7 +152,7 @@ function PuestosPxQ() {
               {puestosQ &&
                 Object.keys(infoForm).map(
                   (cc, index) =>
-                    infoForm[cc].visible && (
+                    infoForm[cc].visible.visible && (
                       <TabNav key={index} value={cc}>
                         <div
                           className="capitalize"
