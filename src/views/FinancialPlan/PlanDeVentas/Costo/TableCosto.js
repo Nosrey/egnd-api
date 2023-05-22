@@ -76,7 +76,10 @@ function TableCosto(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      postCostoData(countryArray[i]);
+      let idUser = localStorage.getItem('userId')
+      const { countryName, stats } = countryArray[i];
+      const data = { countryName, stats, idUser };
+      postCostoData(data);
     }
   };
 

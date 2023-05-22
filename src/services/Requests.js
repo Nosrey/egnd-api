@@ -274,7 +274,7 @@ export const createAssumpVenta = async (body) => {
 // };
 
 
-export const createVolumen = async ({ countryName, stats }) => {
+export const createVolumen = async ({ countryName, stats, idUser  }) => {
   try {
     const response = await fetch(`${URL_API}/api/volumen`, {
       method: 'POST',
@@ -363,7 +363,7 @@ export const createBienes = async (body) => {
   }
 };
 
-export const createCosto = async ({ countryName, stats }) => {
+export const createCosto = async ({ countryName, stats, idUser  }) => {
   try {
     const response = await fetch(`${URL_API}/api/costo`, {
       method: 'POST',
