@@ -3,7 +3,6 @@ import { Alert, FormContainer, Tabs } from 'components/ui';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { getUser } from 'services/Requests';
 import TableCosto from './TableCosto';
 
@@ -12,10 +11,16 @@ const { TabNav, TabList } = Tabs;
 function Costo() {
   const [info, setInfo] = useState(null);
   const [defaultCountry, setDefaultCountry] = useState('');
-  const [volumenPrecio, setVolumenPrecio] = useState(false);
+  const [visibleData, setVisibleData] = useState(false);
+  const [visibleVolume, setVisibleVolume] = useState(false);
+  const [visiblePrecio, setVisiblePrecio] = useState(false);
+  const [visibleCosto, setVisibleCosto] = useState(false);
   const [volumenData, setVolumenData] = useState();
   const [precioData, setPrecioData] = useState();
+  const [products, setProducts] = useState([]);
+  const [costoData, setCostoData] = useState();
   const [infoForm, setInfoForm] = useState();
+  const [indexCountry, setIndexCountry] = useState(0);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const currency = useSelector((state) => state.auth.user.currency);
@@ -55,14 +60,27 @@ function Costo() {
     }
   }, [info]);
 
+  const defineCountry = (pais, index) => {
+    setDefaultCountry(pais);
+    setIndexCountry(index);
+  };
 
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
+        if (data?.volumenData.length !== 0) setVisibleVolume(true);
+        if (data?.precioData.length !== 0) setVisiblePrecio(true);
+        if (data?.costoData.length !== 0) setVisibleCosto(true);
+
+        if (
+          data?.volumenData.length !== 0 &&
+          data?.precioData.length !== 0 &&
+          data?.costoData.length !== 0
+        ) {
           setVolumenData(data?.volumenData);
           setPrecioData(data?.precioData);
-          setVolumenPrecio(true);
+          setCostoData(data?.costoData);
+          setVisibleData(true);
           const datosPrecargados = {};
           if (data?.costoData.length !== 0) {
             for (let i = 0; i < data?.costoData.length; i++) {
@@ -75,8 +93,10 @@ function Costo() {
           }
         } else {
           setInfo(data?.assumptionData);
-          setVolumenPrecio(false);
+          setVisibleData(false);
         }
+
+        setProducts(data?.assumptionData[0].productos);
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
       })
       .catch((error) => console.error(error));
@@ -95,7 +115,7 @@ function Costo() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Costos</h4>
+        <h4>Costos PxQ</h4>
         <span>Plan de costos</span>
       </div>
 
@@ -103,25 +123,37 @@ function Costo() {
         <div className="border-b-2 px-4 py-1">
           <h6>Carga de productos / servicios</h6>
         </div>
-        {infoForm && volumenPrecio ? (
+
+        {visibleData ? (
           <Tabs defaultValue={defaultCountry}>
             <TabList>
-              {infoForm &&
+              {visibleData &&
                 Object.keys(infoForm).map((pais, index) => (
                   <TabNav key={index} value={pais}>
-                    <div className="capitalize">{pais}</div>
+                    <div
+                      className="capitalize"
+                      onClick={() => {
+                        defineCountry(pais, index);
+                      }}
+                    >
+                      {pais}
+                    </div>
                   </TabNav>
                 ))}
             </TabList>
-            {infoForm && (
+            {visibleData && (
               <div className="container-countries">
                 <FormContainer className="cont-countries">
                   <ContainerScrollable
                     contenido={
                       <TableCosto
                         data={infoForm}
+                        productos={products}
+                        country={defaultCountry}
+                        indexCountry={indexCountry}
                         volumenData={volumenData}
                         precioData={precioData}
+                        costoData={costoData}
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }
@@ -136,31 +168,23 @@ function Costo() {
           </Tabs>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            {!volumenPrecio ? (
-              <span className="text-center cursor-default">
+            {!visibleVolume ? (
+              <span>
                 Para acceder a este formulario primero debe completar los
-                formularios de{' '}
-                <Link className="text-indigo-700 underline" to="/volumenq">
-                  Volumen
-                </Link>{' '}
-                y{' '}
-                <Link className="text-indigo-700 underline" to="/preciop">
-                  Precio
-                </Link>
-                .
+                formulario de Volumen.
+              </span>
+            ) : !visiblePrecio ? (
+              <span>
+                Para acceder a este formulario primero debe completar los
+                formulario de Precio.
               </span>
             ) : (
-              <span className="text-center cursor-default">
-                Para acceder a este formulario primero debe completar el
-                formulario de{' '}
-                <Link
-                  className="text-indigo-700 underline"
-                  to="/assumptionventas"
-                >
-                  Assumptions Ventas
-                </Link>
-                .
-              </span>
+              !visibleCosto && (
+                <span>
+                  Para acceder a este formulario primero debe completar los
+                  formulario de Costo.
+                </span>
+              )
             )}
           </div>
         )}

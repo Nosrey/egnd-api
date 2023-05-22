@@ -97,12 +97,12 @@ function PuestosPxQ() {
       .then((data) => {
         let def;
         if (data?.puestosPxQData[0]) {
-          setPuestosQ(data?.puestosPxQData[0].puestosPxQ[0]);
+          setPuestosQ(data?.puestosQData[0].puestosq[0]);
           setInfoForm(data?.puestosPxQData[0].puestosPxQ[0]);
           def = Object.keys(data?.puestosPxQData[0].puestosPxQ[0]).find(
             (p) =>
               data?.puestosPxQData[0].puestosPxQ[0][p].visible &&
-              data?.puestosQData[0].puestosPxQ[0][p],
+              data?.puestosPxQData[0].puestosPxQ[0][p],
           );
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);

@@ -13,6 +13,7 @@ import { MONTHS } from 'constants/forms.constants';
 import { useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { createCosto } from 'services/Requests';
+import formatNumber from 'utils/formatTotalsValues';
 
 const { TabContent } = Tabs;
 
@@ -75,7 +76,10 @@ function TableCosto(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      postCostoData(countryArray[i]);
+      let idUser = localStorage.getItem('userId')
+      const { countryName, stats } = countryArray[i];
+      const data = { countryName, stats, idUser };
+      postCostoData(data);
     }
   };
 
@@ -202,9 +206,9 @@ function TableCosto(props) {
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
-                          <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
+                          {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
                             {producto.id.toString()}
-                          </Avatar>
+                          </Avatar> */}
                           <FormItem className=" mb-1 w-[210px] mt-[81px]">
                             <Input
                               disabled
@@ -426,10 +430,10 @@ function TableCosto(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={resolveResul(
+                                            value={formatNumber(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -442,7 +446,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.comision,
-                                            )}
+                                            ))}
                                           />
                                         </FormItem>
                                       ),
@@ -460,10 +464,10 @@ function TableCosto(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={resolveResul(
+                                            value={formatNumber(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -476,7 +480,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.impuesto,
-                                            )}
+                                            ))}
                                             onChange={(e) => {
                                               props.handleOnChangeInitialValue(
                                                 pais,
@@ -506,10 +510,10 @@ function TableCosto(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={resolveResul(
+                                            value={formatNumber(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -522,7 +526,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.cargos,
-                                            )}
+                                            ))}
                                             onChange={(e) => {
                                               props.handleOnChangeInitialValue(
                                                 pais,
