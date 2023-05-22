@@ -64,6 +64,7 @@ function VolumenQ() {
               volDataOrdenada[i].stats;
           }
           setInfoForm(() => ({ ...datosPrecargados }));
+          console.log({ ...datosPrecargados })
           setProducts(data?.assumptionData[0].productos);
         } else {
           // no tengo info precargada

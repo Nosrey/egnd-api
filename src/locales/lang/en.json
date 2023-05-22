@@ -34,7 +34,8 @@
     "collapseCostosDirectos": {
       "collapseCostosDirectos": "Costos Directos",
       "item1": "Costos Directos",
-      "item2": "Costos PxQ"
+      "item2": "Margen Bruto",
+      "item3":"Costos PxQ"
     },
     "collapseGastosDeEstructura": {
       "collapseGastosDeEstructura": "Gastos de Estructura",
