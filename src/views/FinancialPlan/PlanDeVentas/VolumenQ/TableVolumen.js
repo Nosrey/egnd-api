@@ -17,6 +17,7 @@ import { MONTHS, optionsMonths } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { createVolumen } from 'services/Requests';
+import formatNumber from 'utils/formatTotalsValues';
 
 const { TabContent } = Tabs;
 
@@ -133,7 +134,11 @@ function TableVolumen(props) {
 
   const fillMonthsPrices = (producto, yearIndex) => {
     let newAños = [...producto.años];
+    newAños.forEach((año) => {
+      año.volMeses.enero = Number(año.volMeses.enero);
+    });
     let volumenActual = producto.volInicial;
+    volumenActual = Number(volumenActual);
     let currentMonth = 1;
 
     for (let i = yearIndex >= 0 ? yearIndex : 0; i < newAños.length; i++) {
@@ -151,6 +156,9 @@ function TableVolumen(props) {
       }
       newAños[i] = { ...newAños[i], volMeses: newMeses, volTotal };
     }
+    newAños.forEach((año) => {
+      año.volMeses.enero = Number(año.volMeses.enero);
+    });
     return newAños;
   };
 
@@ -441,9 +449,9 @@ function TableVolumen(props) {
                                   <FormItem className="mb-0">
                                     <Input
                                       className="w-[90px]"
-                                      type="number"
-                                      disabled
-                                      value={año.volTotal}
+                                      type="text"
+                                      disabled                                      
+                                      value={formatNumber(año.volTotal)}
                                     />
                                   </FormItem>
                                 </div>
@@ -515,13 +523,13 @@ function TableVolumen(props) {
                         {visibleItems?.includes(indexYear) &&
                           año &&
                           año.numeros?.map((valor, index) => (
-                            <p className="w-[90px] text-center">{valor}</p>
+                            <p className="w-[90px] text-center">{formatNumber(valor)}</p>
                           ))}
                           {año.numeros?.length !== 0 &&
                             <p className="w-[90px] text-center font-bold">
-                            {año.numeros?.length !== 0 && año?.numeros?.reduce(
+                            {formatNumber(año.numeros?.length !== 0 && año?.numeros?.reduce(
                               (total, current) => total + current,
-                            )}
+                            ))}
                           </p>
                           }
                         
@@ -540,13 +548,13 @@ function TableVolumen(props) {
               className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
               key={i}
             >
-              VOLUMEN CANAL '{canal.name}': {canal.sum}
+              VOLUMEN CANAL '{canal.name}': {formatNumber(canal.sum)}
             </p>
           ))}
 
           <br />
           <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            VOLUMEN TOTAL: {volTotal}
+            VOLUMEN TOTAL: {formatNumber(volTotal)}
           </p>
         </div>
       )}

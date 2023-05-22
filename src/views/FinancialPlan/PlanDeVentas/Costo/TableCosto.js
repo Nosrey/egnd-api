@@ -13,6 +13,7 @@ import { MONTHS } from 'constants/forms.constants';
 import { useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { createCosto } from 'services/Requests';
+import formatNumber from 'utils/formatTotalsValues';
 
 const { TabContent } = Tabs;
 
@@ -426,10 +427,10 @@ function TableCosto(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={resolveResul(
+                                            value={formatNumber(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -442,7 +443,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.comision,
-                                            )}
+                                            ))}
                                           />
                                         </FormItem>
                                       ),
@@ -460,10 +461,10 @@ function TableCosto(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={resolveResul(
+                                            value={formatNumber(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -476,7 +477,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.impuesto,
-                                            )}
+                                            ))}
                                             onChange={(e) => {
                                               props.handleOnChangeInitialValue(
                                                 pais,
@@ -506,10 +507,10 @@ function TableCosto(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={resolveResul(
+                                            value={formatNumber(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -522,7 +523,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.cargos,
-                                            )}
+                                            ))}
                                             onChange={(e) => {
                                               props.handleOnChangeInitialValue(
                                                 pais,

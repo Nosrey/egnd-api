@@ -11,6 +11,7 @@ import {
 import { MONTHS } from 'constants/forms.constants'
 import { useState, useEffect } from 'react'
 import { FiMinus, FiPlus } from 'react-icons/fi'
+import formatNumber from 'utils/formatTotalsValues'
 
 const { TabContent } = Tabs
 
@@ -169,8 +170,8 @@ function TableVentas(props) {
                                                                                     <FormItem className="mb-0" key={indexMes}>
                                                                                         <Input
                                                                                             className="w-[90px]"
-                                                                                            type="number"
-                                                                                            value={año.volMeses[Object.keys(año.volMeses)[indexMes]]}
+                                                                                            type="text"
+                                                                                            value={formatNumber(año.volMeses[Object.keys(año.volMeses)[indexMes]])}
                                                                                             disabled
                                                                                             prefix={moneda}
                                                                                             name="month"
@@ -182,9 +183,9 @@ function TableVentas(props) {
                                                                             <FormItem className="mb-0" >
                                                                                 <Input
                                                                                     className="w-[90px]"
-                                                                                    type="number"
+                                                                                    type="text"
                                                                                     disabled
-                                                                                    value={año.ventasTotal}
+                                                                                    value={formatNumber(año.ventasTotal)}
                                                                                     prefix={moneda}
                                                                                 />
                                                                             </FormItem>   
@@ -241,10 +242,9 @@ function TableVentas(props) {
                                             </div>
                                             <div className="flex gap-x-3 gap-y-3">
                                                 {visibleItems.includes(indexYear) && año &&
-                                                año.numeros?.map((valor, index ) => (<p   className="w-[90px] text-center">{moneda}{valor}</p>))  
+                                                    año.numeros?.map((valor, index ) => (<p   className="w-[90px] text-center">{moneda}{formatNumber(valor)}</p>))
                                                 }
-                                                <p   className="w-[90px] text-center font-bold">{año.numeros.reduce((total, current) => total + current)}</p>
-                                            </div>
+                                            <p   className="w-[90px] text-center font-bold">{formatNumber(año.numeros.reduce((total, current) => total + current))}</p>                                            </div>
                                         </div>
                                     ))
                                     }
@@ -256,11 +256,11 @@ function TableVentas(props) {
                     <br/>
                     <br/>
                     {totalesCanales.map((canal,i) => (
-                        <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ' key={i}>VENTA CANAL '{canal.name}': {moneda}{canal.sum}</p>                                   
+                        <p className=' pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ' key={i}>VENTA CANAL '{canal.name}': {moneda}{formatNumber(canal.sum)}</p> 
                     ))}
 
                     <br/>
-                    <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VENTA TOTAL: {moneda}{volTotal}</p>                                   
+                    <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VENTA TOTAL: {moneda}{formatNumber(volTotal)}</p>                                  
 
                 </div>
             } 
