@@ -55,6 +55,7 @@ function TablePuestosPxQ(props) {
             const valor =
               head.puestos[i].años[j].volMeses[MONTHS[s]] *
                 Number(head.puestos[i].total) || 0;
+            console.log(head.puestos[i].años[j].volMeses[MONTHS[s]]);
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
             } else {
@@ -135,7 +136,8 @@ function TablePuestosPxQ(props) {
     mes,
     indexYear,
   ) => {
-    const newData = { ...props.puestosQ };
+    const newData = { ...props.data };
+    console.log(props);
     const puestoIndex = newData[cc].puestos.findIndex(
       (puesto) => puesto.id === idPuesto,
     );
@@ -177,13 +179,15 @@ function TablePuestosPxQ(props) {
       props.postPuestoPxQData([infoForm]);
     }
   };
+
+  console.log('[INFP]', infoForm);
   return (
     <>
       {infoForm &&
         Object.keys(infoForm).map((cc, indice) => (
           <TabContent value={cc} className="mb-[20px]" key={cc}>
             <FormContainer>
-              {infoForm[cc].visible && (
+              {infoForm[cc].visible.visible && (
                 <section className="contenedor">
                   <div>
                     <div>
@@ -395,6 +399,7 @@ function TablePuestosPxQ(props) {
                                           </FormItem>
                                         ),
                                       )}
+
                                     <FormItem className="mb-0">
                                       <Input
                                         className="w-[90px]"
@@ -403,11 +408,9 @@ function TablePuestosPxQ(props) {
                                         value={
                                           infoForm[cc].puestos[head]
                                             .precioInicial
-                                            ? change
-                                              ? año.volTotal
-                                              : props.puestosQ[cc].puestos[head]
-                                                  .años[indexYear].volTotal *
-                                                infoForm[cc].puestos[head].total
+                                            ? props.puestosQ[cc].puestos[head]
+                                                .años[indexYear].volTotal *
+                                              infoForm[cc].puestos[head].total
                                             : 0
                                         }
                                       />
@@ -458,6 +461,7 @@ function TablePuestosPxQ(props) {
                           </div>
                         </div>
                       )}
+                      {console.log(volTotal)}
                       <div className="titleMonths gap-x-3 flex mb-3">
                         {visibleItems.includes(indexYear) &&
                           año &&
