@@ -40,9 +40,9 @@
     "collapseGastosDeEstructura": {
       "collapseGastosDeEstructura": "Gastos de Estructura",
       "item1": "Gastos",
-      "item2": "Gastos por CC",
-      "item3": "Puestos Q",
-      "item4": "Puestos PxQ"
+      "item2": "Puestos Q",
+      "item3": "Puestos PxQ",
+      "item4": "Gastos por CC"
     }
   }
 }

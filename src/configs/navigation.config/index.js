@@ -260,10 +260,11 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
+         
           {
             key: 'collapseGastosDeEstructura.item2',
-            path: '/gastos-por-cc',
-            title: 'Gastos por CC',
+            path: '/puestosq',
+            title: 'Puestos Q',
             translateKey: 'nav.collapseGastosDeEstructura.item2',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,
@@ -272,8 +273,8 @@ const navigationConfig = [
           },
           {
             key: 'collapseGastosDeEstructura.item3',
-            path: '/puestosq',
-            title: 'Puestos Q',
+            path: '/puestospxq',
+            title: 'Puestos PxQ',
             translateKey: 'nav.collapseGastosDeEstructura.item3',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,
@@ -282,8 +283,8 @@ const navigationConfig = [
           },
           {
             key: 'collapseGastosDeEstructura.item4',
-            path: '/puestospxq',
-            title: 'Puestos PxQ',
+            path: '/gastos-por-cc',
+            title: 'Gastos por CC',
             translateKey: 'nav.collapseGastosDeEstructura.item4',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,
