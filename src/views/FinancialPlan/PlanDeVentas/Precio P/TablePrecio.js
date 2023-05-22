@@ -37,7 +37,6 @@ function TablePrecio(props) {
   const [visibleItems, setVisibleItems] = useState([0]);
 
   const moneda = props.currency;
-
   const hideYear = (index) => {
     setVisibleItems((prevItems) => {
       if (prevItems.includes(index)) {

@@ -21,7 +21,7 @@ import { createVolumen } from 'services/Requests';
 const { TabContent } = Tabs;
 
 function TableVolumen(props) {
-  const [infoForm, setInfoForm] = useState();
+  const [infoForm, setInfoForm] = useState(props.data);
   const [infoProducts, setInfoProducts] = useState();
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState(0);
@@ -45,13 +45,13 @@ function TableVolumen(props) {
         };
         for (let x = 0; x < props.productos.length; x++) {
           // cada prod
-          const idProd = props.productos[x].id;
+          const idProd = props.productos[x].uniqueId;
           let myProd = canal.productos.find((prod) => prod.id === idProd);
           let arrayvalores = [];
-          for (let j = 0; j < myProd.años.length; j++) {
+          for (let j = 0; j < myProd?.años?.length; j++) {
             // año
             for (let s = 0; s < MONTHS.length; s++) {
-              const valor = myProd.años[j].volMeses[MONTHS[s]];
+              const valor = myProd?.años[j]?.volMeses[MONTHS[s]];
               arrayvalores.push(parseInt(valor, 10));
             }
           }
@@ -63,7 +63,6 @@ function TableVolumen(props) {
         }
 
         arrayCanales.push(canalInfo);
-
         const agrupados = arrayP.reduce((resultado, objeto) => {
           if (!resultado[objeto.id]) {
             resultado[objeto.id] = [];
@@ -74,10 +73,12 @@ function TableVolumen(props) {
 
         const arrayProdAgrupados = []; // este es mi array de arrays prod 1 , prod2,etc
         for (let x = 0; x < props.productos.length; x++) {
-          arrayProdAgrupados.push(agrupados[props.productos[x].id]);
+          arrayProdAgrupados.push(agrupados[props.productos[x].uniqueId]);
         }
         const copy = [...infoProducts];
         let volumenTotal = 0;
+        console.log(arrayProdAgrupados)
+
         arrayProdAgrupados.map((prod) => {
           let index = copy.findIndex((el) => el.id === prod[0].id);
           const data = prod;
@@ -98,7 +99,7 @@ function TableVolumen(props) {
         for (let x = 0; x < copy.length; x++) {
           const objetos = [];
           for (let i = 0; i < 10; i++) {
-            const numerosDelObjeto = copy[x].sum.slice(i * 12, i * 12 + 12);
+            const numerosDelObjeto = copy[x]?.sum?.slice(i * 12, i * 12 + 12);
             const objeto = { numeros: numerosDelObjeto };
             objetos.push(objeto);
           }
@@ -115,11 +116,10 @@ function TableVolumen(props) {
   }, [infoForm]);
 
   useEffect(() => {
-    if (props.productos) {
+    if (props?.productos) {
       setInfoProducts(() => [...props.productos]);
     }
-    if (props.data) setInfoForm(props.data);
-
+    if (props?.data) setInfoForm(props?.data);
     initialConfig();
   }, [props]);
 
@@ -244,7 +244,11 @@ function TableVolumen(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      postVolumenData(countryArray[i]);
+      let idUser = localStorage.getItem('userId')
+      console.log(idUser)
+      const { countryName, stats } = countryArray[i];
+      const data = { countryName, stats, idUser };
+      postVolumenData(data);
     }
   };
 
@@ -510,18 +514,21 @@ function TableVolumen(props) {
                         {index === 0 && <p className="month w-[90px]">Total</p>}
                         {index !== 0 && <p className="month w-[90px]" />}
                       </div>
-                      <div className="flex gap-x-3 gap-y-3">
-                        {visibleItems.includes(indexYear) &&
+                      {/* <div className="flex gap-x-3 gap-y-3">
+                        {visibleItems?.includes(indexYear) &&
                           año &&
                           año.numeros?.map((valor, index) => (
                             <p className="w-[90px] text-center">{valor}</p>
                           ))}
-                        <p className="w-[90px] text-center font-bold">
-                          {año.numeros.reduce(
-                            (total, current) => total + current,
-                          )}
-                        </p>
-                      </div>
+                          {año.numeros?.length !== 0 &&
+                            <p className="w-[90px] text-center font-bold">
+                            {año.numeros?.length !== 0 && año?.numeros?.reduce(
+                              (total, current) => total + current,
+                            )}
+                          </p>
+                          }
+                        
+                      </div> */}
                     </div>
                   ))}
                 </div>

@@ -60,7 +60,7 @@ const compareDatas = (newCountryInfo, oldData) => {
   return updatedNewCountryInfo;
 }
 
-const removeEntireCountry = (oldData, countryArray) => {
+const removeEntireCountry = (oldData, countryArray, dataType) => {
   const missingCountries = [];
 
     for (let i = 0; i < oldData.length; i++) {
@@ -71,16 +71,52 @@ const removeEntireCountry = (oldData, countryArray) => {
     }
 
     for (let i = 0; i < missingCountries.length; i++) {
-      deleteCountryPrecio(missingCountries[i])
-    }
-    
+      if (dataType === "precio") deleteCountryPrecio(missingCountries[i]);
+      if (dataType === "volumen") deleteCountryVolumen(missingCountries[i]);
+      if (dataType === "costo") deleteCountryCosto(missingCountries[i]);
+    }    
 }
 
+const saveNewStructurePrecio = (oldData, data) => {
+  if (oldData.length === 0 ) {
+    const info = {...data, idUser: localStorage.getItem('userId')}
+    createPrecio(info);
+  } else if(oldData.find(obj => obj.countryName === data.countryName)){ // si existe este pais lo comparo y actualizo 
+    createPrecio({...compareDatas(data, oldData), idUser: localStorage.getItem('userId')});
+  } else if (!oldData.find(obj => obj.countryName === data.countryName)){ // si no existe este pais y lo tengo que agregar
+    const info = {...data, idUser: localStorage.getItem('userId')}
+    createPrecio(info);
+  }
+}
+const saveNewStructureVolumen = (oldData, data) => {
+  if (oldData.length === 0 ) {
+    const info = {...data, idUser: localStorage.getItem('userId')}
+    createVolumen(info);
+  } else if(oldData.find(obj => obj.countryName === data.countryName)){ // si existe este pais lo comparo y actualizo 
+    createVolumen({...compareDatas(data, oldData), idUser: localStorage.getItem('userId')});
+  } else if (!oldData.find(obj => obj.countryName === data.countryName)){ // si no existe este pais y lo tengo que agregar
+    const info = {...data, idUser: localStorage.getItem('userId')}
+    createVolumen(info);
+  }
+}
+const saveNewStructureCosto = (oldData, data) => {
+  if (oldData.length === 0 ) {
+    const info = {...data, idUser: localStorage.getItem('userId')}
+    createCosto(info);
+  } else if(oldData.find(obj => obj.countryName === data.countryName)){ // si existe este pais lo comparo y actualizo 
+    createCosto({...compareDatas(data, oldData), idUser: localStorage.getItem('userId')});
+  } else if (!oldData.find(obj => obj.countryName === data.countryName)){ // si no existe este pais y lo tengo que agregar
+    const info = {...data, idUser: localStorage.getItem('userId')}
+    createCosto(info);
+  }
+}
 export const getUser = async (id = idUser) => {
   try {
     const resp = await fetch(`${URL_API}/api/users/${id}`);
     const data = await resp.json();
     localStorage.setItem("precioData", JSON.stringify(data.response.precioData));
+    localStorage.setItem("volumenData", JSON.stringify(data.response.volumenData));
+    localStorage.setItem("costoData", JSON.stringify(data.response.costoData));
     return data.response;
   } catch (error) {
     console.error('Error:', error);
@@ -151,6 +187,9 @@ export const createAssumpVenta = async (body) => {
           const prod = {};
           prod.id = realProds[x].uniqueId;
           prod.volInicial = 0;
+            prod.comision = 0;
+          prod.impuesto = 0;
+          prod.cargos = 0;
           prod.precioInicial = 0;
           prod.tasa = 0;
           prod.name = realProds[x].name;
@@ -185,22 +224,24 @@ export const createAssumpVenta = async (body) => {
         countryArray.push(countryObject);
       }
 
-      const oldData = JSON.parse(localStorage.getItem("precioData"));
-
+      //  por cada pais hago el post correspondiente para modificar la estructura de las distintas tablas
+      const oldPrecioData = JSON.parse(localStorage.getItem("precioData"));
+      const oldVolumenData = JSON.parse(localStorage.getItem("volumenData"));
+      const oldCostoData = JSON.parse(localStorage.getItem("costoData"));
       for (let i = 0; i < countryArray.length; i++) {
         let idUser = localStorage.getItem('userId')
         const { countryName, id, stats } = countryArray[i];
         const data = { countryName, id, stats, idUser };
-        if (oldData.length === 0 ) {
-            createPrecio(data);
-        } else if(oldData.find(obj => obj.countryName === data.countryName)){ // si existe este pais lo comparo y actualizo 
-          createPrecio(compareDatas(data, oldData));
-        } else if (!oldData.find(obj => obj.countryName === data.countryName)){ // si no existe este pais y lo tengo que agregar
-          createPrecio(data);
-        }
+        
+        saveNewStructurePrecio(oldPrecioData, data);
+        saveNewStructureVolumen(oldVolumenData, data);
+        saveNewStructureCosto(oldCostoData, data);
       }
 
-      removeEntireCountry(oldData, countryArray);
+      removeEntireCountry(oldPrecioData, countryArray, "precio");
+      removeEntireCountry(oldVolumenData, countryArray, "volumen");
+      removeEntireCountry(oldCostoData, countryArray, "costo");
+
     }
 
     return data;
@@ -269,7 +310,41 @@ export const deleteCountryPrecio = async (countryName) => {
     throw error;
   }
 };
+export const deleteCountryVolumen = async (countryName) => {
+  try {
+    const response = await fetch(`${URL_API}/api/volumen`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        countryName,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error);
+    throw error;
+  }
+};
 
+export const deleteCountryCosto = async (countryName) => {
+  try {
+    const response = await fetch(`${URL_API}/api/costo`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        countryName,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error);
+    throw error;
+  }
+};
 export const createBienes = async (body) => {
   try {
     const response = await fetch(`/bienes`, {

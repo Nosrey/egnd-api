@@ -217,13 +217,13 @@ function TableCosto(props) {
         };
         for (let x = 0; x < props.productos.length; x++) {
           // cada prod
-          const idProd = props.productos[x].id;
+          const idProd = props.productos[x].uniqueId;
           let myProd = canal.productos.find((prod) => prod.id === idProd);
           let prodChannel = props.volumenData[props.indexCountry].stats[
             canalInfo.id
           ].productos.find((prod) => prod.id === idProd);
           let arrayvalores = [];
-          for (let j = 0; j < myProd.años.length; j++) {
+          for (let j = 0; j < myProd?.años?.length; j++) {
             // año
             for (let s = 0; s < MONTHS.length; s++) {
               const valor =
@@ -250,14 +250,14 @@ function TableCosto(props) {
 
         const arrayProdAgrupados = []; // este es mi array de arrays prod 1 , prod2,etc
         for (let x = 0; x < props.productos.length; x++) {
-          arrayProdAgrupados.push(agrupados[props.productos[x].id]);
+          arrayProdAgrupados.push(agrupados[props.productos[x].uniqueId]);
         }
         const copy = [...infoProducts];
         let volumenTotal = 0;
         arrayProdAgrupados.map((prod) => {
           let index = copy.findIndex((el) => el.id === prod[0].id);
           const data = prod;
-          const totalSum = data.reduce(
+          const totalSum = data?.reduce(
             (accumulator, currentValue) =>
               currentValue.sum.map(
                 (value, index) => value + accumulator[index],
@@ -274,7 +274,7 @@ function TableCosto(props) {
         for (let x = 0; x < copy.length; x++) {
           const objetos = [];
           for (let i = 0; i < 10; i++) {
-            const numerosDelObjeto = copy[x].sum.slice(i * 12, i * 12 + 12);
+            const numerosDelObjeto = copy[x]?.sum?.slice(i * 12, i * 12 + 12);
             const objeto = { numeros: numerosDelObjeto };
             objetos.push(objeto);
           }
@@ -315,9 +315,9 @@ function TableCosto(props) {
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
-                          <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
+                          {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
                             {producto.id.toString()}
-                          </Avatar>
+                          </Avatar> */}
                           <FormItem className=" mb-1 w-[210px] mt-[81px]">
                             <Input
                               disabled

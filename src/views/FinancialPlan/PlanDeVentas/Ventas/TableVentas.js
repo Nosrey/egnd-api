@@ -38,12 +38,12 @@ function TableVentas(props) {
                     sum: 0
                 }
                 for (let x = 0; x < props.productos.length; x++) {// cada prod
-                    const idProd = props.productos[x].id
+                    const idProd = props.productos[x].uniqueId
                     let myProd = canal.productos.find(prod => prod.id === idProd)
                     let arrayvalores = []
-                    for (let j = 0; j < myProd.años.length; j++) { // año
+                    for (let j = 0; j < myProd?.años?.length; j++) { // año
                         for (let s = 0; s < MONTHS.length; s++) {
-                            const valor = myProd.años[j].volMeses[MONTHS[s]]
+                            const valor = myProd?.años[j]?.volMeses[MONTHS[s]]
                             arrayvalores.push(parseInt(valor, 10))                        
                         }
                     }
@@ -61,7 +61,7 @@ function TableVentas(props) {
     
                 const arrayProdAgrupados = [] // este es mi array de arrays prod 1 , prod2,etc
                 for (let x = 0; x < props.productos.length; x++) {
-                    arrayProdAgrupados.push(agrupados[props.productos[x].id])
+                    arrayProdAgrupados.push(agrupados[props.productos[x].uniqueId])
                 }
                 const copy = [...infoProducts]
                 let volumenTotal = 0
@@ -77,7 +77,7 @@ function TableVentas(props) {
                 for (let x = 0; x < copy.length; x++) {
                     const objetos = [];
                     for (let i = 0; i < 10; i++) {
-                    const numerosDelObjeto = copy[x].sum.slice(i * 12, i * 12 + 12);
+                    const numerosDelObjeto = copy[x]?.sum?.slice(i * 12, i * 12 + 12);
                     const objeto = { numeros: numerosDelObjeto };
                     objetos.push(objeto);
                     }
@@ -203,7 +203,7 @@ function TableVentas(props) {
                     </TabContent>
                 ))}
 
-             {
+             {/* {
                 infoProducts && 
                 <div className='bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]'>
                     <div className='flex items-center'>
@@ -263,7 +263,7 @@ function TableVentas(props) {
                     <p className=' pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] '>VENTA TOTAL: {moneda}{volTotal}</p>                                   
 
                 </div>
-            }
+            } */}
         </>
     )
 }
