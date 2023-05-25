@@ -95,9 +95,10 @@ export const optionsMonths = [
 ];
 
 export const optionsIncremento = [
-  { value: "mensual", label: 'Mensual' },
-  { value: "trimestral", label: 'Trimestral' },
-]
+  { value: 'mensual', label: 'Mensual' },
+  { value: 'trimestral', label: 'Trimestral' },
+  { value: 'anual', label: 'Anual' },
+];
 
 export const AÑOS_COSTO = [
   {
