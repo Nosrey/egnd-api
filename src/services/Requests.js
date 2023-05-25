@@ -1,6 +1,6 @@
 import { AÑOS } from 'constants/forms.constants'
+import { puestos } from 'constants/puestos.constant';
 import store from '../store/index';
-
 
 const app = store.getState();
 
@@ -117,6 +117,7 @@ export const getUser = async (id = idUser) => {
     localStorage.setItem("precioData", JSON.stringify(data.response.precioData));
     localStorage.setItem("volumenData", JSON.stringify(data.response.volumenData));
     localStorage.setItem("costoData", JSON.stringify(data.response.costoData));
+    localStorage.setItem("puestoQData", JSON.stringify(data.response.puestosQData));
     return data.response;
   } catch (error) {
     console.error('Error:', error);
@@ -250,29 +251,6 @@ export const createAssumpVenta = async (body) => {
     throw error;
   }
 };
-
-// export const createPrecioInAssump = async ({ countryName, stats, idUser }) => {
-//   try {
-//     const precioResponse = await fetch(`${URL_API}/api/precio`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         countryName,
-//         stats,
-//         idUser
-//       }),
-//     });
-
-//     const dataPrecioResponse = await precioResponse.json();
-//     return dataPrecioResponse
-//   } catch (error) {
-//     console.error('Error', error);
-//     throw error;
-//   }
-// };
-
 
 export const createVolumen = async ({ countryName, stats, idUser  }) => {
   try {
@@ -419,7 +397,8 @@ export const createPrecio = async ({ countryName, stats, idUser }) => {
   }
 };
 
-export const createPuestosq = async (body) => {
+export const createPuestosq = async ({ info, idUser  }) => {
+  console.log("INFO", info);
   try {
     const response = await fetch(`${URL_API}/api/Puestosq`, {
       method: 'POST',
@@ -427,7 +406,7 @@ export const createPuestosq = async (body) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        puestosq: body,
+        puestosq: info,
         idUser,
       }),
     });
@@ -512,6 +491,7 @@ export const createAssumpFinanciera = async (
 export const createGastosGeneral = async ({
   centroDeGastos,
   cargasSociales,
+  id
 }) => {
   try {
     const response = await fetch(`${URL_API}/api/gastosgeneral`, {
@@ -520,9 +500,56 @@ export const createGastosGeneral = async ({
       body: JSON.stringify({
         centroDeGastos,
         cargasSociales,
-        idUser,
+        idUser: id,
       }),
     });
+
+    // genero la estructur
+    let estructura = {};
+    Object.keys(centroDeGastos).map((cc, index) => {
+      let heads = [];
+      // console.log("para ", cc)
+      // console.log( puestos[0][cc])
+      if (puestos[0][cc]) {
+        for (let i = 0; i < puestos[0][cc]?.length; i++) {
+          let head = {};
+          head.id = i;
+          head['años'] = [...AÑOS];
+          head.name = puestos[0][cc][i];
+          head.isNew = false;
+          heads.push(head);
+          let h = {};
+          h.visible = centroDeGastos[cc];
+          h.puestos = [...heads];
+  
+          estructura[cc] = { ...h };
+        }
+      } else{
+        let h = {};
+          h.visible = centroDeGastos[cc];
+          h.puestos = [...heads];
+  
+          estructura[cc] = { ...h };
+      }
+      
+    });
+
+    // la lleno con la info correspopndiente para suplantar las tablas
+    const oldPuestosQData = JSON.parse(localStorage.getItem("puestoQData"));
+    let centrosC = oldPuestosQData[0].puestosq[0]
+    const newData = {...estructura}
+    const keyArray = Object.keys(centroDeGastos)
+    for (let i = 0; i < keyArray.length; i++) {
+      if (centrosC[keyArray[i]]) {// si existe este CC
+        if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) { // tengo data de este cc me la traigo
+          newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos
+        }  
+      }         
+    }
+    let idUser = localStorage.getItem('userId')
+    const info = {info: newData, idUser}
+    createPuestosq(info);
+
     const data = await response.json();
     return data;
   } catch (error) {
