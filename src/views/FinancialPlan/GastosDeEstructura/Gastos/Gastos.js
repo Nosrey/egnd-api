@@ -100,7 +100,9 @@ function Gastos() {
     e.preventDefault();
 
     if (validarCheckbox(initialValues.centroDeGastos)) {
-      createGastosGeneral(initialValues)
+      const id= localStorage.getItem('userId')
+      const data = {...initialValues , id}
+      createGastosGeneral(data)
         .then(() => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setShowSuccessAlert(true);
