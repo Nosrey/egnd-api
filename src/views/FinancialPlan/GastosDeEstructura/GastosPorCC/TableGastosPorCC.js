@@ -114,11 +114,21 @@ function TablePuestosPxQ(props) {
       for (let mes in newMeses) {
         newMeses[mes] = parseInt(precioActual, 10);
         volTotal += parseInt(parseInt(precioActual, 10), 10);
-        if (cuenta.incremento === "mensual") {
+        if (cuenta.incremento === 'mensual') {
           precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
           currentMonth++;
-        } else if (cuenta.incremento === "trimestral"){
-          if (mes === "marzo" || mes === "junio" || mes === "septiembre" ||mes === "diciembre") {
+        } else if (cuenta.incremento === 'trimestral') {
+          if (
+            mes === 'marzo' ||
+            mes === 'junio' ||
+            mes === 'septiembre' ||
+            mes === 'diciembre'
+          ) {
+            precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
+            currentMonth++;
+          }
+        } else if (cuenta.incremento === 'anual') {
+          if (mes === 'diciembre') {
             precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
             currentMonth++;
           }
@@ -210,7 +220,9 @@ function TablePuestosPxQ(props) {
                         <div className="flex  gap-x-3 " key={head.name}>
                           <FormItem
                             className={`${
-                              index === 0 ? 'mt-12 w-[210px]' : 'mb-2  w-[210px]'
+                              index === 0
+                                ? 'mt-12 w-[210px]'
+                                : 'mb-2  w-[210px]'
                             }`}
                           >
                             <Input
@@ -247,25 +259,22 @@ function TablePuestosPxQ(props) {
                                   : 'mt-[20px] w-[100px]'
                               }`}
                             >
-                                <Input
-                                 
-                                  type="number"
-                                  name="precioInicial"
-                                  prefix={currency}
-                                  value={
-                                    infoForm[cc].cuentas[head].precioInicial
-                                  }
-                                  onChange={(e) =>
-                                    handleOnChangeInitialValue(
-                                      cc,
-                                      infoForm[cc].cuentas[head].id,
-                                      e.target.value,
-                                      'precioInicial',
-                                      null,
-                                      null,
-                                    )
-                                  }
-                                />
+                              <Input
+                                type="number"
+                                name="precioInicial"
+                                prefix={currency}
+                                value={infoForm[cc].cuentas[head].precioInicial}
+                                onChange={(e) =>
+                                  handleOnChangeInitialValue(
+                                    cc,
+                                    infoForm[cc].cuentas[head].id,
+                                    e.target.value,
+                                    'precioInicial',
+                                    null,
+                                    null,
+                                  )
+                                }
+                              />
                             </FormItem>
                           </div>
 
@@ -288,17 +297,18 @@ function TablePuestosPxQ(props) {
                                 type="number"
                                 name="tasa"
                                 prefix="%"
-                                value={
-                                  parseInt(infoForm[cc].cuentas[head].tasa, 10)
-                                }
+                                value={parseInt(
+                                  infoForm[cc].cuentas[head].tasa,
+                                  10,
+                                )}
                                 onChange={(e) =>
                                   handleOnChangeInitialValue(
                                     cc,
-                                      infoForm[cc].cuentas[head].id,
-                                      e.target.value,
+                                    infoForm[cc].cuentas[head].id,
+                                    e.target.value,
                                     'tasa',
                                     null,
-                                    null
+                                    null,
                                   )
                                 }
                               />
@@ -319,23 +329,24 @@ function TablePuestosPxQ(props) {
                                   : 'mt-[20px] w-[100px]'
                               }`}
                             >
-                                <Select
-                                  name="incremento"
-                                  placeholder="Inicio de Actividades"
-                                  options={optionsIncremento}
-                                  value={optionsIncremento.filter(
-                                    (option) =>
-                                      option.value === infoForm[cc].cuentas[head].incremento
-                                  )}
-                                  onChange={(e) =>
-                                    handleOnChangeInitialValue(
-                                      cc,
-                                      infoForm[cc].cuentas[head].id,
-                                      e.value,
-                                      'mesInicial',
-                                    )
-                                  }
-                                />
+                              <Select
+                                name="incremento"
+                                placeholder="Inicio de Actividades"
+                                options={optionsIncremento}
+                                value={optionsIncremento.filter(
+                                  (option) =>
+                                    option.value ===
+                                    infoForm[cc].cuentas[head].incremento,
+                                )}
+                                onChange={(e) =>
+                                  handleOnChangeInitialValue(
+                                    cc,
+                                    infoForm[cc].cuentas[head].id,
+                                    e.value,
+                                    'mesInicial',
+                                  )
+                                }
+                              />
                             </FormItem>
                           </div>
 
@@ -392,34 +403,37 @@ function TablePuestosPxQ(props) {
                                             key={indexMes}
                                           >
                                             <Tooltip
-                                                placement="top-end"
-                                                title={`${mes  } - año ${indexYear + 1}` }
-                                              >
-                                                <Input
-                                                  className="w-[90px]"
-                                                  type="number"
-                                                  value={
+                                              placement="top-end"
+                                              title={`${mes} - año ${
+                                                indexYear + 1
+                                              }`}
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="number"
+                                                value={
+                                                  infoForm[cc].cuentas[head]
+                                                    .años[indexYear].volMeses[
+                                                    Object.keys(año.volMeses)[
+                                                      indexMes
+                                                    ]
+                                                  ]
+                                                }
+                                                name="month"
+                                                prefix={currency}
+                                                onChange={(e) => {
+                                                  handleOnChangeInitialValue(
+                                                    cc,
                                                     infoForm[cc].cuentas[head]
-                                                      .años[indexYear].volMeses[
-                                                          Object.keys(año.volMeses)[
-                                                            indexMes
-                                                          ]
-                                                        ]
-                                                  }
-                                                  name="month"
-                                                  prefix={currency}
-                                                  onChange={(e) => {
-                                                    handleOnChangeInitialValue(
-                                                      cc,
-                                                      infoForm[cc].cuentas[head].id,
-                                                      e.target.value,
-                                                      'mes',
-                                                      MONTHS[indexMes],
-                                                      indexYear,
-                                                    );
-                                                  }}
-                                                />
-                                             </Tooltip>   
+                                                      .id,
+                                                    e.target.value,
+                                                    'mes',
+                                                    MONTHS[indexMes],
+                                                    indexYear,
+                                                  );
+                                                }}
+                                              />
+                                            </Tooltip>
                                           </FormItem>
                                         ),
                                       )}
