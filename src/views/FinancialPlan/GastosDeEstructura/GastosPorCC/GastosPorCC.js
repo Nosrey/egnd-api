@@ -3,7 +3,7 @@ import { Alert, FormContainer, Tabs } from 'components/ui';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createPuestospxq, getUser } from 'services/Requests';
+import { getUser } from 'services/Requests';
 import { Cuentas } from 'constants/cuentas.constant';
 import TableGastosPorCC from './TableGastosPorCC';
 
@@ -47,64 +47,11 @@ function GastosPorCC() {
     }
   }, [info]);
 
-  const addPuesto = (newPuesto) => {
-    const news = infoForm[country].puestos.filter((p) => p.isNew);
-    if (news.length < 3) {
-      infoForm[country].puestos.push(newPuesto);
-      setInfoForm({ ...infoForm });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setErrorMessage('Solo se pueden agregar 3 puestos');
-      setShowErrorAlert(true);
-      setTimeout(() => {
-        setShowErrorAlert(false);
-      }, 5000);
-    }
-  };
-
-  const postPuestosPxQData = (data) => {
-    createPuestospxq(data)
-      .then(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setShowSuccessAlert(true);
-        setTimeout(() => {
-          setShowSuccessAlert(false);
-        }, 5000);
-      })
-      .catch((error) => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setErrorMessage('No se puedieron guardar los datos.');
-        showErrorAlert(true);
-        setTimeout(() => {
-          showErrorAlert(false);
-        }, 5000);
-      });
-  };
-
-  const handleEditPuesto = (index, value, campo) => {
-    index[campo] = value;
-    setInfoForm({ ...infoForm });
-  };
-
-  const removePuesto = (campo, id, puesto) => {
-    const newP = campo.filter((item) => id !== item.id);
-    infoForm[puesto].puestos = newP;
-    setInfoForm({ ...infoForm });
-  };
 
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
         let def;
-        // if (data?.puestosPxQData[0]) {
-        //   setPuestosQ(data?.puestosPxQData[0].puestosPxQ[0]);
-        //   setInfoForm(data?.puestosPxQData[0].puestosPxQ[0]);
-        //   def = Object.keys(data?.puestosPxQData[0].puestosPxQ[0]).find(
-        //     (p) =>
-        //       data?.puestosPxQData[0].puestosPxQ[0][p].visible &&
-        //       data?.puestosQData[0].puestosPxQ[0][p],
-        //   );
-        // } else 
         if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
           setInfo(data?.gastosGeneralData[0].centroDeGastos);
@@ -165,18 +112,13 @@ function GastosPorCC() {
                     contenido={
                       <TableGastosPorCC
                         data={infoForm}
-                        puestosQ={puestosQ}
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }
-                        postPuestoPxQData={postPuestosPxQData}
-                        addPuesto={addPuesto}
-                        removePuesto={removePuesto}
                         showAlertError={(boolean) => setShowErrorAlert(boolean)}
                         errorMessage={(error) => setErrorMessage(error)}
                         head={country}
                         cargaSocial={cargaSocial}
-                        handleEditPuesto={handleEditPuesto}
                       />
                     }
                   />

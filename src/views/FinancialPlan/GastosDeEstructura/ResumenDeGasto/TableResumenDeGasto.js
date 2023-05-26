@@ -20,7 +20,7 @@ import { createGastosPorCC } from 'services/Requests';
 
 const { TabContent } = Tabs;
 
-function TablePuestosPxQ(props) {
+function TableResumenDeGasto(props) {
   const [infoForm, setInfoForm] = useState();
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
@@ -218,6 +218,7 @@ function TablePuestosPxQ(props) {
     <>
       {infoForm &&
         Object.keys(infoForm).map((cc, indice) => (
+          <TabContent value={cc} className="mb-[20px]" key={cc}>
             <FormContainer>
               {infoForm[cc].visible && (
                 <section className="contenedor">
@@ -479,6 +480,7 @@ function TablePuestosPxQ(props) {
                 </section>
               )}
             </FormContainer>
+          </TabContent>
         ))}
 
       {infoForm && Object.keys(sumVerticales).length !== 0 && (
@@ -556,4 +558,4 @@ function TablePuestosPxQ(props) {
   );
 }
 
-export default TablePuestosPxQ;
+export default TableResumenDeGasto;

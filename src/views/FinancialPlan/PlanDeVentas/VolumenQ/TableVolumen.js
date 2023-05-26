@@ -106,6 +106,7 @@ function TableVolumen(props) {
         }
         setInfoProducts(() => [...copy]);
       }
+      console.log([...arrayCanales]);
       setTotalesCanales(() => [...arrayCanales]);
     }
   };
@@ -486,6 +487,7 @@ function TableVolumen(props) {
                   >
                     {prod.name}
                   </p>
+                  {console.log(infoProducts)}
                   {prod.sum?.map((año, indexYear) => (
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (

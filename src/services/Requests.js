@@ -557,3 +557,22 @@ export const createGastosGeneral = async ({
     throw error;
   }
 };
+export const createGastosPorCC = async ({body, idUser}) => {
+  try {
+    const response = await fetch(`${URL_API}/api/gastosporcc`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        centroDeCostos: body,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error.message);
+    throw error;
+  }
+};
