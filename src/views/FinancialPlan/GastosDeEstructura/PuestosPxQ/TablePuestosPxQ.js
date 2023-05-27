@@ -3,19 +3,11 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
-import {
-  Button,
-  FormContainer,
-  FormItem,
-  Input,
-  Tabs,
-  Tooltip,
-} from 'components/ui';
+import { Button, FormContainer, FormItem, Input, Tabs } from 'components/ui';
 import { AÑOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { MdDelete } from 'react-icons/md';
-import { useSelector } from 'react-redux';
 
 const { TabContent } = Tabs;
 
@@ -24,9 +16,7 @@ function TablePuestosPxQ(props) {
   const [showRemovePuesto, setShowRemovePuesto] = useState(false);
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
-  const [change, setChange] = useState(false);
   const [volTotal, setVolTotal] = useState([]);
-  const currency = useSelector((state) => state.auth.user.currency);
 
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
@@ -52,10 +42,12 @@ function TablePuestosPxQ(props) {
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
+            console.log(head);
             const valor =
-              head.puestos[i].años[j].volMeses[MONTHS[s]] *
-                Number(head.puestos[i].total) || 0;
-            console.log(head.puestos[i].años[j].volMeses[MONTHS[s]]);
+              calcPercent(head.puestos[i].total, head.puestos[i].incremento)[
+                j
+              ] || 0;
+
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
             } else {
@@ -87,100 +79,21 @@ function TablePuestosPxQ(props) {
     });
   };
 
-  const replaceMonth = (producto, indexYear, mes, value) => {
-    let newAños = [...producto.años];
-    const newMeses = { ...newAños[indexYear].volMeses };
-    newMeses[mes] = value !== '' ? value : null;
-    const volTotal = Object.values(newMeses).reduce(
-      (acc, curr) => acc + parseInt(curr, 10),
-      0,
-    );
-    newAños[indexYear] = {
-      ...newAños[indexYear],
-      volMeses: newMeses,
-      volTotal,
-    };
+  const calcPercent = (total, percent) => {
+    let tot = total;
+    let calcs = [];
 
-    return newAños;
-  };
-
-  const fillMonthsPrices = (producto, yearIndex) => {
-    setChange(true);
-    let newAños = [...producto.años];
-    producto.cargaSocial = (producto.precioInicial * props.cargaSocial) / 100;
-    producto.total =
-      Number(producto.precioInicial) + Number(producto.cargaSocial);
-    for (let i = yearIndex >= 0 ? yearIndex : 0; i < newAños.length; i++) {
-      const newMeses = { ...newAños[i].volMeses };
-      let vT = 0;
-      for (let mes in newMeses) {
-        newMeses[mes] = newAños[i].volMeses[mes];
-        vT += parseInt(newAños[i].volMeses[mes], 10);
-
-        volTotal[i].values[MONTHS.indexOf(mes)] += newAños[i].volMeses[mes];
+    for (let i = 0; i <= 10; i++) {
+      if (i === 0) {
+        calcs.push(total);
       }
-      newAños[i] = {
-        ...newAños[i],
-        volMeses: newMeses,
-        volTotal: vT * Number(producto.total),
-      };
+      tot += (tot * Number(percent)) / 100;
+      let insert = tot + tot * Number(percent);
+      calcs.push(insert);
     }
-    return newAños;
+    return calcs;
   };
 
-  const handleOnChangeInitialValue = (
-    cc,
-    idPuesto,
-    newValue,
-    key,
-    mes,
-    indexYear,
-  ) => {
-    const newData = { ...props.data };
-    console.log(props);
-    const puestoIndex = newData[cc].puestos.findIndex(
-      (puesto) => puesto.id === idPuesto,
-    );
-
-    let puesto = {
-      ...newData[cc].puestos[puestoIndex],
-    };
-    switch (key) {
-      case 'mes':
-        puesto.años = replaceMonth(
-          puesto,
-          indexYear,
-          mes,
-          newValue === ''
-            ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
-        );
-        break;
-      case 'precioInicial':
-        puesto.precioInicial = newValue;
-        puesto.años = fillMonthsPrices(puesto, -1);
-        break;
-
-      default:
-        break;
-    }
-
-    newData[cc].puestos[puestoIndex] = puesto;
-    setInfoForm(newData);
-  };
-
-  const submitInfoForm = () => {
-    const copyData = { ...infoForm };
-    let submit = true;
-
-    if (submit) {
-      props.postPuestoPxQData([infoForm]);
-    }
-  };
-
-  console.log('[INFP]', infoForm);
   return (
     <>
       {infoForm &&
@@ -202,13 +115,6 @@ function TablePuestosPxQ(props) {
                                 color="red-600"
                                 className="col-start-12 col-end-13 row-start-2 mb-0 mt-10"
                                 icon={<MdDelete />}
-                                onClick={() =>
-                                  props.removePuesto(
-                                    infoForm[cc].puestos,
-                                    infoForm[cc].puestos[head].id,
-                                    cc,
-                                  )
-                                }
                               />
                             )}
 
@@ -227,104 +133,8 @@ function TablePuestosPxQ(props) {
                               type="text"
                               name="name"
                               value={infoForm[cc].puestos[head].name}
-                              onChange={(e) =>
-                                props.handleEditPuesto(
-                                  infoForm[cc].puestos[head],
-                                  e.target.value,
-                                  e.target.name,
-                                )
-                              }
                             />
                           </FormItem>
-
-                          <div className="flex flex-col">
-                            {index === 0 && (
-                              <div className="titleRow min-w-[62px]">
-                                <p> Rem</p>
-                              </div>
-                            )}
-
-                            <FormItem
-                              className={`${
-                                index === 0
-                                  ? 'mt-[40px] w-[100px]'
-                                  : 'mt-[20px] w-[100px]'
-                              }`}
-                            >
-                              <Tooltip placement="top-end" title="Rem">
-                                <Input
-                                  placeholder="Rem"
-                                  type="number"
-                                  name="precioInicial"
-                                  prefix={currency}
-                                  value={
-                                    infoForm[cc].puestos[head].precioInicial
-                                  }
-                                  onChange={(e) =>
-                                    handleOnChangeInitialValue(
-                                      cc,
-                                      infoForm[cc].puestos[head].id,
-                                      e.target.value,
-                                      'precioInicial',
-                                      null,
-                                      null,
-                                    )
-                                  }
-                                />
-                              </Tooltip>
-                            </FormItem>
-                          </div>
-
-                          <div className="flex flex-col">
-                            {index === 0 && (
-                              <div className="titleRow min-w-[62px]">
-                                <p> Cargas S.</p>
-                              </div>
-                            )}
-
-                            <FormItem
-                              className={`${
-                                index === 0
-                                  ? 'mt-[40px] w-[100px]'
-                                  : 'mt-[20px] w-[100px]'
-                              }`}
-                            >
-                              <Input
-                                placeholder="Precio inicial"
-                                type="number"
-                                disabled
-                                name="cargaSocial"
-                                prefix={currency}
-                                value={
-                                  infoForm[cc].puestos[head].cargaSocial || 0
-                                }
-                              />
-                            </FormItem>
-                          </div>
-
-                          <div className="flex flex-col">
-                            {index === 0 && (
-                              <div className="titleRow min-w-[62px]">
-                                <p>TOTAL</p>
-                              </div>
-                            )}
-
-                            <FormItem
-                              className={`${
-                                index === 0
-                                  ? 'mt-[40px] w-[100px]'
-                                  : 'mt-[20px] w-[100px]'
-                              }`}
-                            >
-                              <Input
-                                type="number"
-                                name="total"
-                                disabled
-                                prefix={currency}
-                                value={infoForm[cc].puestos[head].total || 0}
-                              />
-                            </FormItem>
-                          </div>
 
                           {infoForm[cc].puestos[head].años.map(
                             (año, indexYear) => (
@@ -383,16 +193,12 @@ function TablePuestosPxQ(props) {
                                               type="number"
                                               disabled
                                               value={
-                                                infoForm[cc].puestos[head]
-                                                  .precioInicial
-                                                  ? props.puestosQ[cc].puestos[
-                                                      head
-                                                    ].años[indexYear].volMeses[
-                                                      MONTHS[indexMes]
-                                                    ] *
-                                                    infoForm[cc].puestos[head]
-                                                      .total
-                                                  : 0
+                                                calcPercent(
+                                                  infoForm[cc].puestos[head]
+                                                    .total,
+                                                  infoForm[cc].puestos[head]
+                                                    .incremento,
+                                                )[indexYear]
                                               }
                                               name="month"
                                             />
@@ -406,12 +212,11 @@ function TablePuestosPxQ(props) {
                                         type="number"
                                         disabled
                                         value={
-                                          infoForm[cc].puestos[head]
-                                            .precioInicial
-                                            ? props.puestosQ[cc].puestos[head]
-                                                .años[indexYear].volTotal *
-                                              infoForm[cc].puestos[head].total
-                                            : 0
+                                          calcPercent(
+                                            infoForm[cc].puestos[head].total,
+                                            infoForm[cc].puestos[head]
+                                              .incremento,
+                                          )[indexYear] * 12
                                         }
                                       />
                                     </FormItem>
@@ -442,7 +247,7 @@ function TablePuestosPxQ(props) {
               infoForm[head].puestos.map((puesto, index) => (
                 <div
                   key={index}
-                  className="flex gap-x-3 w-fit pt-3 ml-[550px] "
+                  className="flex gap-x-3 w-fit pt-3 ml-[200px] "
                 >
                   {AÑOS.map((año, indexYear) => (
                     <div className="flex flex-col" key={indexYear}>
@@ -461,7 +266,6 @@ function TablePuestosPxQ(props) {
                           </div>
                         </div>
                       )}
-                      {console.log(volTotal)}
                       <div className="titleMonths gap-x-3 flex mb-3">
                         {visibleItems.includes(indexYear) &&
                           año &&
@@ -489,7 +293,7 @@ function TablePuestosPxQ(props) {
                           {index === 0 &&
                             volTotal[indexYear] &&
                             volTotal[indexYear].values.reduce(
-                              (total, current) => total + current,
+                              (total, current) => Math.round(total + current),
                             )}
                         </p>
                       </div>
@@ -500,14 +304,6 @@ function TablePuestosPxQ(props) {
           </div>
         </div>
       )}
-      <Button
-        className="border mt-6b btnSubmitTable mt-[40px]"
-        variant="solid"
-        type="submit"
-        onClick={submitInfoForm}
-      >
-        Guardar
-      </Button>
     </>
   );
 }

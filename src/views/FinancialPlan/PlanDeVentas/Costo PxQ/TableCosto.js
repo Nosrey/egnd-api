@@ -3,6 +3,7 @@ import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
 import { MONTHS, OPTIONS_COUNTRY } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
+import { resolveResul } from '../../../../services/TotalProductsService';
 
 const { TabContent } = Tabs;
 
@@ -46,21 +47,6 @@ function TableCosto(props) {
       // Si el elemento no está en la lista, lo agregamos para mostrarlo
       return [...prevItems, index];
     });
-  };
-
-  const resolveResul = (vol, precio, div) => {
-    div = parseInt(div);
-    vol = parseInt(vol);
-    precio = parseInt(precio);
-
-    let value = 0;
-    const mult = vol * precio;
-
-    if (div !== 0) {
-      value = (div * mult) / 100;
-      value = value.toFixed(1);
-    }
-    return parseInt(value);
   };
 
   const resolveResulPlane = (vol, precio, div) => {
@@ -296,8 +282,6 @@ function TableCosto(props) {
     configIncial();
     calcTotales();
   }, [props, infoForm]);
-
-  console.log(props.volumenData, props.precioData);
 
   return (
     <>
