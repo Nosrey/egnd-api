@@ -95,6 +95,14 @@ export const protectedRoutes = [
     authority: [],
   },
   {
+    key: 'resumengasto',
+    path: '/resumengasto',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/GastosDeEstructura/ResumenDeGasto/ResumenDeGasto'),
+    ),
+    authority: [],
+  },
+  {
     key: 'margenbruto',
     path: '/margenbruto',
     component: React.lazy(() =>

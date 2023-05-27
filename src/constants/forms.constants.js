@@ -95,10 +95,19 @@ export const optionsMonths = [
 ];
 
 export const optionsIncremento = [
-  { value: "mensual", label: 'Mensual' },
-  { value: "trimestral", label: 'Trimestral' },
-]
-
+  { value: 'mensual', label: 'Mensual' },
+  { value: 'trimestral', label: 'Trimestral' },
+  { value: 'anual', label: 'Anual' },
+];
+export const optionsDiasStock = [
+  { value: 0, label: "0 días" },
+  { value: 15, label: '15 días' },
+  { value: 30, label: '30 días' },
+  { value: 45, label: '45 días' },
+  { value: 60, label: '60 días' }, 
+  { value: 75, label: '75 días' },
+  { value: 90, label: '90 días' },
+];
 export const AÑOS_COSTO = [
   {
     año: 1,

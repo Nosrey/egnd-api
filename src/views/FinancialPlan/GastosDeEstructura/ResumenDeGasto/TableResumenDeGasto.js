@@ -20,7 +20,7 @@ import { createGastosPorCC } from 'services/Requests';
 
 const { TabContent } = Tabs;
 
-function TablePuestosPxQ(props) {
+function TableResumenDeGasto(props) {
   const [infoForm, setInfoForm] = useState();
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
@@ -72,7 +72,6 @@ function TablePuestosPxQ(props) {
 
   useEffect(() => {
     if (props.data) setInfoForm(props.data);
-    setHeads(props.head)
   }, [props]);
 
   const hideYear = (index) => {
@@ -196,12 +195,7 @@ function TablePuestosPxQ(props) {
 
   const submitInfoForm = () => {
     let idUser = localStorage.getItem('userId')
-    const keyArray = Object.keys(infoForm)
-    const copy = {...infoForm}
-    for (let x = 0; x < keyArray.length; x++) {
-      copy[keyArray[x]].sum = []
-    }
-    const body = [copy];
+    const body = [{ ...infoForm }];
     const data = { body, idUser };
 
     createGastosPorCC(data).then(() => {
@@ -223,11 +217,16 @@ function TablePuestosPxQ(props) {
   return (
     <>
       {infoForm &&
+        Object.keys(infoForm).map((cc, indice) => (
+          <TabContent value={cc} className="mb-[20px]" key={cc}>
             <FormContainer>
-              {infoForm[head].visible && (
+              {infoForm[cc].visible && (
                 <section className="contenedor">
-                      {Object.keys(infoForm[head].cuentas).map((cta, index) => (
-                        <div className="flex  gap-x-3 " key={cta.name}>
+                  <div>
+                    <div>
+                      {}
+                      {Object.keys(infoForm[cc].cuentas).map((head, index) => (
+                        <div className="flex  gap-x-3 " key={head.name}>
                           <FormItem
                             className={`${
                               index === 0
@@ -241,13 +240,13 @@ function TablePuestosPxQ(props) {
                                   ? 'capitalize mt-10'
                                   : 'capitalize mt-5'
                               }`}
-                              disabled={!infoForm[head].cuentas[cta].isNew}
+                              disabled={!infoForm[cc].cuentas[head].isNew}
                               type="text"
                               name="name"
-                              value={infoForm[head].cuentas[cta].name}
+                              value={infoForm[cc].cuentas[head].name}
                               onChange={(e) =>
                                 props.handleEditPuesto(
-                                  infoForm[head].cuentas[cta],
+                                  infoForm[cc].cuentas[head],
                                   e.target.value,
                                   e.target.name,
                                 )
@@ -274,11 +273,11 @@ function TablePuestosPxQ(props) {
                                 name="precioInicial"
                                 disabled={index === 0}
                                 prefix={currency}
-                                value={infoForm[head].cuentas[cta].precioInicial}
+                                value={infoForm[cc].cuentas[head].precioInicial}
                                 onChange={(e) =>
                                   handleOnChangeInitialValue(
-                                    head,
-                                    infoForm[head].cuentas[cta].id,
+                                    cc,
+                                    infoForm[cc].cuentas[head].id,
                                     e.target.value,
                                     'precioInicial',
                                     null,
@@ -310,13 +309,13 @@ function TablePuestosPxQ(props) {
                                 disabled={index === 0}
                                 prefix="%"
                                 value={parseInt(
-                                  infoForm[head].cuentas[cta].tasa,
+                                  infoForm[cc].cuentas[head].tasa,
                                   10,
                                 )}
                                 onChange={(e) =>
                                   handleOnChangeInitialValue(
-                                    head,
-                                    infoForm[head].cuentas[cta].id,
+                                    cc,
+                                    infoForm[cc].cuentas[head].id,
                                     e.target.value,
                                     'tasa',
                                     null,
@@ -353,12 +352,12 @@ function TablePuestosPxQ(props) {
                                 value={optionsIncremento.filter(
                                   (option) =>
                                     option.value ===
-                                    infoForm[head].cuentas[cta].incremento,
+                                    infoForm[cc].cuentas[head].incremento,
                                 )}
                                 onChange={(e) =>
                                   handleOnChangeInitialValue(
-                                    head,
-                                    infoForm[head].cuentas[cta].id,
+                                    cc,
+                                    infoForm[cc].cuentas[head].id,
                                     e.value,
                                     'mesInicial',
                                   )
@@ -369,7 +368,7 @@ function TablePuestosPxQ(props) {
                             </FormItem>
                           </div>
 
-                          {infoForm[head].cuentas[cta].años.map(
+                          {infoForm[cc].cuentas[head].años.map(
                             (año, indexYear) => (
                               <div className="flex flex-col" key={indexYear}>
                                 {index === 0 && (
@@ -430,9 +429,8 @@ function TablePuestosPxQ(props) {
                                               <Input
                                                 className="w-[90px]"
                                                 type="number"
-                                                disabled={index === 0}
                                                 value={
-                                                  infoForm[head].cuentas[cta]
+                                                  infoForm[cc].cuentas[head]
                                                     .años[indexYear].volMeses[
                                                     Object.keys(año.volMeses)[
                                                       indexMes
@@ -443,8 +441,8 @@ function TablePuestosPxQ(props) {
                                                 prefix={currency}
                                                 onChange={(e) => {
                                                   handleOnChangeInitialValue(
-                                                    head,
-                                                    infoForm[head].cuentas[cta]
+                                                    cc,
+                                                    infoForm[cc].cuentas[head]
                                                       .id,
                                                     e.target.value,
                                                     'mes',
@@ -462,9 +460,8 @@ function TablePuestosPxQ(props) {
                                         className="w-[90px]"
                                         type="number"
                                         disabled
-                                        prefix={currency}
                                         value={
-                                          infoForm[head].cuentas[cta]
+                                          infoForm[cc].cuentas[head]
                                             .precioInicial
                                             ? año.volTotal
                                             : 0
@@ -478,10 +475,13 @@ function TablePuestosPxQ(props) {
                           )}
                         </div>
                       ))}
+                    </div>
+                  </div>
                 </section>
               )}
             </FormContainer>
-       }
+          </TabContent>
+        ))}
 
       {infoForm && Object.keys(sumVerticales).length !== 0 && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
@@ -558,4 +558,4 @@ function TablePuestosPxQ(props) {
   );
 }
 
-export default TablePuestosPxQ;
+export default TableResumenDeGasto;

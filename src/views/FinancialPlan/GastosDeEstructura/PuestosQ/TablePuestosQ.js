@@ -295,7 +295,7 @@ function TablePuestosQ(props) {
           </TabContent>
         ))}
 
-<div className="flex gap-x-3 flex-end">
+      <div className="flex gap-x-3 flex-end">
         <Button
           className="border mt-6b  mt-[40px]"
           variant="twoTone"
@@ -311,19 +311,19 @@ function TablePuestosQ(props) {
         >
           Agregar item
         </Button>
-        {infoForm && infoForm[props?.head]?.puestos.some(obj => obj.isNew === true) &&
+        {infoForm &&
+          infoForm[props?.head]?.puestos.some((obj) => obj.isNew === true) && (
             <Button
-            className="border mt-6b  mt-[40px]"
-            variant="twoTone"
-            color="red-600"
-            onClick={() => {
-              setShowRemovePuesto(!showRemovePuesto);
-            }}
-          >
-            {showRemovePuesto === true ? 'Anular' : 'Eliminar item'}
-          </Button>
-        }
-        
+              className="border mt-6b  mt-[40px]"
+              variant="twoTone"
+              color="red-600"
+              onClick={() => {
+                setShowRemovePuesto(!showRemovePuesto);
+              }}
+            >
+              {showRemovePuesto === true ? 'Anular' : 'Eliminar item'}
+            </Button>
+          )}
       </div>
 
       {infoForm && (
@@ -357,6 +357,21 @@ function TablePuestosQ(props) {
                           </div>
                         </div>
                       )}
+
+                      <div className="titleMonths gap-x-3 flex mb-3">
+                        {visibleItems.includes(indexYear) &&
+                          año &&
+                          index === 0 &&
+                          MONTHS.map((mes, indexMes) => (
+                            <p
+                              key={indexMes}
+                              className="month w-[90px] capitalize"
+                            >
+                              {mes}
+                            </p>
+                          ))}
+                      </div>
+
                       <div className="flex gap-x-3 gap-y-3">
                         {index === 0 &&
                           visibleItems.includes(indexYear) &&
@@ -373,7 +388,7 @@ function TablePuestosQ(props) {
           </div>
         </div>
       )}
-    
+
       <Button
         className="border mt-6b btnSubmitTable mt-[40px]"
         variant="solid"

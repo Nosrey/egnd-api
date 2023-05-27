@@ -1,10 +1,12 @@
+/* eslint-disable no-lonely-if */
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import { Alert, FormContainer, Tabs } from 'components/ui';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createPuestospxq, getUser } from 'services/Requests';
+import { getUser } from 'services/Requests';
 import { Cuentas } from 'constants/cuentas.constant';
+import { Link } from 'react-router-dom';
 import TableGastosPorCC from './TableGastosPorCC';
 
 const { TabNav, TabList } = Tabs;
@@ -42,79 +44,29 @@ function GastosPorCC() {
           estructura[cc] = { ...h };
         }
       });
-      console.log(estructura);
       setInfoForm(() => ({ ...estructura }));
     }
   }, [info]);
 
-  const addPuesto = (newPuesto) => {
-    const news = infoForm[country].puestos.filter((p) => p.isNew);
-    if (news.length < 3) {
-      infoForm[country].puestos.push(newPuesto);
-      setInfoForm({ ...infoForm });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setErrorMessage('Solo se pueden agregar 3 puestos');
-      setShowErrorAlert(true);
-      setTimeout(() => {
-        setShowErrorAlert(false);
-      }, 5000);
-    }
-  };
-
-  const postPuestosPxQData = (data) => {
-    createPuestospxq(data)
-      .then(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setShowSuccessAlert(true);
-        setTimeout(() => {
-          setShowSuccessAlert(false);
-        }, 5000);
-      })
-      .catch((error) => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setErrorMessage('No se puedieron guardar los datos.');
-        showErrorAlert(true);
-        setTimeout(() => {
-          showErrorAlert(false);
-        }, 5000);
-      });
-  };
-
-  const handleEditPuesto = (index, value, campo) => {
-    index[campo] = value;
-    setInfoForm({ ...infoForm });
-  };
-
-  const removePuesto = (campo, id, puesto) => {
-    const newP = campo.filter((item) => id !== item.id);
-    infoForm[puesto].puestos = newP;
-    setInfoForm({ ...infoForm });
-  };
 
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        let def;
-        // if (data?.puestosPxQData[0]) {
-        //   setPuestosQ(data?.puestosPxQData[0].puestosPxQ[0]);
-        //   setInfoForm(data?.puestosPxQData[0].puestosPxQ[0]);
-        //   def = Object.keys(data?.puestosPxQData[0].puestosPxQ[0]).find(
-        //     (p) =>
-        //       data?.puestosPxQData[0].puestosPxQ[0][p].visible &&
-        //       data?.puestosQData[0].puestosPxQ[0][p],
-        //   );
-        // } else 
-        if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
+        if (data?.gastosGeneralData.length !== 0) { // carge info en assumption gastos
+          if (data.gastosPorCCData.length !== 0 ) { // tengo data precargada en este form
+            setInfoForm(() => ({... data?.gastosPorCCData[0].centroDeCostos[0]}));
+          } else { // uso la data de assumptions para construir
+            if (data?.gastosGeneralData[0].centroDeGastos.length !== 0)setInfo(data?.gastosGeneralData[0].centroDeGastos);
+          }
           setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
-          setInfo(data?.gastosGeneralData[0].centroDeGastos);
+          let def;
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
           );
+          setDefaultCountry(def);
+          setCountry(def);
+          setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
         }
-        setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
-        setDefaultCountry(def);
-        setCountry(def);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -165,18 +117,13 @@ function GastosPorCC() {
                     contenido={
                       <TableGastosPorCC
                         data={infoForm}
-                        puestosQ={puestosQ}
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }
-                        postPuestoPxQData={postPuestosPxQData}
-                        addPuesto={addPuesto}
-                        removePuesto={removePuesto}
                         showAlertError={(boolean) => setShowErrorAlert(boolean)}
                         errorMessage={(error) => setErrorMessage(error)}
                         head={country}
                         cargaSocial={cargaSocial}
-                        handleEditPuesto={handleEditPuesto}
                       />
                     }
                   />
@@ -188,7 +135,11 @@ function GastosPorCC() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario de Gastos.
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/gastos">
+                Gastos
+              </Link>{' '}
+              .
             </span>
           </div>
         )}

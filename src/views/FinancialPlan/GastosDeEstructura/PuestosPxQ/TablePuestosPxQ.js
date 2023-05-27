@@ -47,7 +47,6 @@ function TablePuestosPxQ(props) {
               calcPercent(head.puestos[i].total, head.puestos[i].incremento)[
                 j
               ] || 0;
-
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
             } else {
@@ -287,10 +286,11 @@ function TablePuestosPxQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">{valor}</p>
+                            <p className="w-[90px] text-center">{currency}{valor}</p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
-                          {index === 0 &&
+                          {index === 0 && currency}
+                        {index === 0 &&
                             volTotal[indexYear] &&
                             volTotal[indexYear].values.reduce(
                               (total, current) => Math.round(total + current),

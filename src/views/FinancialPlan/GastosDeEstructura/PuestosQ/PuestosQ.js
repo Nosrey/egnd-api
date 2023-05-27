@@ -60,7 +60,9 @@ function PuestosQ() {
   };
 
   const postPuestoQData = (data) => {
-    createPuestosq(data)
+    let idUser = localStorage.getItem('userId')
+      const info = { info: data, idUser };
+    createPuestosq(info)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setShowSuccessAlert(true);

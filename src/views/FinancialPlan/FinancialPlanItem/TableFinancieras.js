@@ -5,8 +5,10 @@ import {
   FormContainer,
   FormItem,
   Input,
+  Select,
   Table,
 } from 'components/ui';
+import { optionsDiasStock } from 'constants/forms.constants';
 import { Field, Form, Formik } from 'formik';
 import { createAssumpFinanciera } from 'services/Requests';
 
@@ -243,25 +245,27 @@ function TableFinancieras({
                     </div>
                   </Card>
                   <Card className="col-start-7 col-end-9 row-start-1">
-                    <h5 className="mb-[18px]">Meses de Stock</h5>
+                    <h5 className="mb-[18px]">Días de Stock</h5>
                     <div>
                       <FormItem
                         className={`${
                           media === 'mobile' ? 'w-[60%]' : 'w-[60%]'
                         } `}
                       >
-                        <Field
-                          placeholder="0.0"
-                          value={dataFinanciera.stock}
-                          type="number"
-                          size="sm"
-                          suffix="%"
-                          component={Input}
+                        <Select
+                          name="incremento"
+                          placeholder="Seleccione"
+                          options={optionsDiasStock}
+                          // value={optionsIncremento.filter(
+                          //   (option) =>
+                          //     option.value ===
+                          //     infoForm[cc].cuentas[head].incremento,
+                          // )}
                           onChange={(e) =>
                             setFormValues(
                               'stock',
                               'pagoProducto',
-                              e.target.value,
+                              e.value,
                             )
                           }
                         />
