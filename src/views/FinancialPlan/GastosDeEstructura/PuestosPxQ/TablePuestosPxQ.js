@@ -55,7 +55,6 @@ function TablePuestosPxQ(props) {
             const valor =
               head.puestos[i].años[j].volMeses[MONTHS[s]] *
                 Number(head.puestos[i].total) || 0;
-            console.log(head.puestos[i].años[j].volMeses[MONTHS[s]]);
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
             } else {
@@ -137,7 +136,6 @@ function TablePuestosPxQ(props) {
     indexYear,
   ) => {
     const newData = { ...props.data };
-    console.log(props);
     const puestoIndex = newData[cc].puestos.findIndex(
       (puesto) => puesto.id === idPuesto,
     );
@@ -180,7 +178,6 @@ function TablePuestosPxQ(props) {
     }
   };
 
-  console.log('[INFP]', infoForm);
   return (
     <>
       {infoForm &&
@@ -483,10 +480,11 @@ function TablePuestosPxQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">{valor}</p>
+                            <p className="w-[90px] text-center">{currency}{valor}</p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
-                          {index === 0 &&
+                          {index === 0 && currency}
+                        {index === 0 &&
                             volTotal[indexYear] &&
                             volTotal[indexYear].values.reduce(
                               (total, current) => total + current,

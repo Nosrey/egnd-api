@@ -430,6 +430,7 @@ function TableCosto(props) {
                                       className="w-[90px]"
                                       type="number"
                                       disabled
+                                      prefix={moneda}
                                       value={resolveTotalYear(
                                         indexPais,
                                         indexCanal,
@@ -661,7 +662,7 @@ function TableCosto(props) {
                               año &&
                               MONTHS.map((valor, indexNum) => (
                                 <p className="w-[90px] text-center">
-                                  {
+                                   {moneda}{
                                     viewTotals[props.country][prod.name][
                                       indexYear
                                     ][indexNum]
@@ -669,7 +670,7 @@ function TableCosto(props) {
                                 </p>
                               ))}
                             <p className="w-[90px] text-center font-bold">
-                              {año.reduce(
+                            {moneda} {año.reduce(
                                 (total, current) =>
                                   parseInt(total) + parseInt(current),
                               )}
@@ -690,13 +691,13 @@ function TableCosto(props) {
               className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
               key={i}
             >
-              COSTO CANAL '{canal.name}': {canal.sum}
+              COSTO CANAL '{canal.name}':  {moneda}{canal.sum}
             </p>
           ))}
 
           <br />
           <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            COSTO TOTAL: {volTotal}
+            COSTO TOTAL: {moneda} {volTotal}
           </p>
         </div>
       )}

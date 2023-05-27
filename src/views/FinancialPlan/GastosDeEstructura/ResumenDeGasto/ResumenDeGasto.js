@@ -9,8 +9,9 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {  getUser } from 'services/Requests';
 import { Cuentas } from 'constants/cuentas.constant';
-import { AÑOS } from 'constants/forms.constants';
+import { AÑOS, MONTHS } from 'constants/forms.constants';
 import { FiMinus, FiPlus } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 
 function ResumenDeGasto() {
@@ -20,6 +21,48 @@ function ResumenDeGasto() {
   const currentState = useSelector((state) => state.auth.user);
   const [visibleItems, setVisibleItems] = useState([0]);
     const currency = useSelector((state) => state.auth.user.currency);
+    const [sumVerticales, setSumVerticales] = useState({});
+
+    // Logica para mostrar las SUMATORIAS VERTICALES , 
+  const generateSumVertical = () => {
+    if (infoForm) {
+      const copy = {...infoForm}
+      const keyArray = Object.keys(copy)
+      let sumacta = []
+      for (let i = 0; i < keyArray.length; i++) {
+        for (let x = 0; x < copy[keyArray[i]].cuentas.length; x++) { // admin 
+          let sumanios = []
+          for (let p = 0; p < copy[keyArray[i]].cuentas[x].años.length; p++) {
+            for (let s = 0; s < MONTHS.length; s++) {
+              sumanios.push(parseInt(copy[keyArray[i]].cuentas[x].años[p].volMeses[MONTHS[s]]));
+            }
+          }
+          sumacta.push(sumanios)
+        }
+      }
+      const sumArray = sumacta.reduce((acc, curr) => {
+        curr.forEach((num, index) => {
+          acc[index] = (acc[index] || 0) + num;
+        });
+        return acc;
+      }, []);
+      const chunks = [];
+      let index = 0;
+      while (index < sumArray.length) {
+        chunks.push(sumArray.slice(index, index + 12));
+        index += 12;
+      }
+      // eslint-disable-next-line arrow-body-style
+      setSumVerticales(()=>{
+        return [...chunks]
+      })
+    }
+  }
+  useEffect(() => {
+    if (infoForm ) {
+      generateSumVertical();
+    }
+  }, [infoForm]);
 
   useEffect(() => {
     let estructura = {};
@@ -42,10 +85,10 @@ function ResumenDeGasto() {
           estructura[cc] = { ...h };
         }
       });
-      console.log(estructura);
       setInfoForm(() => ({ ...estructura }));
     }
   }, [info]);
+
   const hideYear = (index) => {
     setVisibleItems((prevItems) => {
       if (prevItems.includes(index)) {
@@ -59,13 +102,26 @@ function ResumenDeGasto() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
-          setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
-          setInfo(data?.gastosGeneralData[0].centroDeGastos);
-        }
+        if (data?.gastosPorCCData.length !== 0) {
+          // if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
+          //   setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
+          //   setInfo(data?.gastosGeneralData[0].centroDeGastos);
+          // }
+          setInfoForm(() => ({ ...data?.gastosPorCCData[0].centroDeCostos[0] }))
+        } 
       })
       .catch((error) => console.error(error));
   }, []);
+
+  const sumMes = (cta , year, mes) => {
+    const arrayKeys = Object.keys(infoForm)
+    let sum = 0
+    for (let i = 0; i < arrayKeys.length; i++) {
+      sum += parseInt(infoForm[arrayKeys[i]].cuentas[cta].años[year].volMeses[mes])
+    }
+    return sum;
+                                                      
+  }
 
   return (
     <div>
@@ -84,7 +140,8 @@ function ResumenDeGasto() {
             <ContainerScrollable
               contenido={
                 <FormContainer>
-                <section className="contenedor">
+                  <>
+                  <section className="contenedor">
                     <div>
                       <div>
                         {Object.keys(infoForm['Administración'].cuentas).map((head, index) => (
@@ -171,13 +228,9 @@ function ResumenDeGasto() {
                                                   className="w-[90px]"
                                                   type="number"
                                                   disabled
-                                                  value={
-                                                    infoForm["Administración"].cuentas[head]
-                                                      .años[indexYear].volMeses[
-                                                      Object.keys(año.volMeses)[
-                                                        indexMes
-                                                      ]
-                                                    ]
+                                                  value={sumMes(head,indexYear,Object.keys(año.volMeses)[
+                                                    indexMes
+                                                  ])
                                                   }
                                                   name="month"
                                                   prefix={currency}
@@ -191,6 +244,7 @@ function ResumenDeGasto() {
                                           className="w-[90px]"
                                           type="number"
                                           disabled
+                                          prefix={currency}
                                           value={
                                             infoForm["Administración"].cuentas[head]
                                               .precioInicial
@@ -209,16 +263,83 @@ function ResumenDeGasto() {
                       </div>
                     </div>
                   </section>
+                  {sumVerticales && sumVerticales.length !== 0 && (
+                    <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
+                      <div className="flex items-center">
+                        <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
+                          Total
+                        </p>
+                      </div>
+                      <div className="w-fit pt-3 border border-neutral-600 border-x-0 border-b-0">
+                        
+                        <div
+                          className="flex gap-x-3 w-fit pt-3 ml-[200px] "
+                        >
+                           {AÑOS.map((año, indexYear) => (
+                            <div className="flex flex-col" key={indexYear}>
+                              
+                                <div className="titleRowR min-w-[62px]">
+                                  <p> Año {indexYear + 1}</p>
+                                  <div
+                                    className="iconYear"
+                                    onClick={() => hideYear(indexYear)}
+                                  >
+                                    {visibleItems.includes(indexYear) ? (
+                                      <FiMinus />
+                                    ) : (
+                                      <FiPlus />
+                                    )}
+                                  </div>
+                                </div>
+                              <div className="titleMonths gap-x-3 flex mb-3">
+                                {visibleItems.includes(indexYear) &&
+                                  año &&
+                                  MONTHS.map((mes, indexMes) => (
+                                    <p
+                                      key={indexMes}
+                                      className="month w-[90px] capitalize"
+                                    >
+                                      {mes}
+                                    </p>
+                                  ))}
+                                <p className="month w-[90px]">Total</p>
+                              </div>
+                              <div className="flex gap-x-3 gap-y-3">
+                                {
+                                  visibleItems.includes(indexYear) &&
+                                  año && sumVerticales.length !== 0 &&
+                                  sumVerticales[indexYear]?.map((valor, index) => (
+                                    <p className="w-[90px] text-center">{currency}{valor}</p>
+                                  ))
+                                }
+                                <p className="w-[90px] text-center font-bold">
+                                  {currency}{
+                                    sumVerticales[indexYear]?.reduce((acumulador, numero) => acumulador + numero, 0)
+                                  }
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  </>
               </FormContainer>
               }
             />
           </FormContainer>
         </div>
+        
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
-              Para acceder a este formulario primero debe completar el
-              formulario de Gastos.
+            Para acceder a este formulario primero debe completar el
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/gastos">
+                Gastos
+              </Link>{' '}
+              .
             </span>
           </div>
         )}
