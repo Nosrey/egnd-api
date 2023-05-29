@@ -107,7 +107,7 @@ function PuestosP() {
           );
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0].puestosq[0]) {
-            setPuestosQ(data?.puestosPData[0].puestosp[0]);
+            setPuestosQ(data?.puestosQData[0].puestosq[0]);
           } else {
             setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
           }
