@@ -8,6 +8,7 @@ import { AÑOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { MdDelete } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 const { TabContent } = Tabs;
 
@@ -17,7 +18,8 @@ function TablePuestosPxQ(props) {
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
-
+  
+  const currency = useSelector((state) => state.auth.user.currency);
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
   // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las
