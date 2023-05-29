@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { getUser } from 'services/Requests';
-import { FormContainer, Tabs, Alert } from 'components/ui';
-import { AÑOS } from 'constants/forms.constants';
 import ContainerScrollable from 'components/shared/ContainerScrollable';
+import { Alert, FormContainer, Tabs } from 'components/ui';
+import { AÑOS } from 'constants/forms.constants';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getUser } from 'services/Requests';
 import TableVolumen from './TableVolumen';
 
 const { TabNav, TabList } = Tabs;
@@ -64,7 +64,6 @@ function VolumenQ() {
               volDataOrdenada[i].stats;
           }
           setInfoForm(() => ({ ...datosPrecargados }));
-          console.log({ ...datosPrecargados })
           setProducts(data?.assumptionData[0].productos);
         } else {
           // no tengo info precargada

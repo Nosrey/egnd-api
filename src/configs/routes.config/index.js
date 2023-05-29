@@ -109,12 +109,20 @@ export const protectedRoutes = [
       import('views/FinancialPlan/PlanDeVentas/MargenBruto/MargenBruto'),
     ),
     authority: [],
-    },
-    {
+  },
+  {
     key: 'puestosq',
     path: '/puestosq',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosQ/PuestosQ'),
+    ),
+    authority: [],
+  },
+  {
+    key: 'puestosp',
+    path: '/puestosp',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/GastosDeEstructura/PuestosP/PuestosP'),
     ),
     authority: [],
   },

@@ -4,15 +4,14 @@ import { AÑOS } from 'constants/forms.constants';
 import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createPuestospxq, getUser } from 'services/Requests';
-import TablePuestosPxQ from './TablePuestosPxQ';
+import { createPuestosp, getUser } from 'services/Requests';
+import TablePuestosP from './TablePuestosP';
 
 const { TabNav, TabList } = Tabs;
 
-function PuestosPxQ() {
+function PuestosP() {
   const [info, setInfo] = useState(null);
   const [puestosQ, setPuestosQ] = useState([]);
-  const [visibleP, setVisibleP] = useState(false);
   const [cargaSocial, setCargaSocial] = useState(0);
   const [defaultCountry, setDefaultCountry] = useState('');
   const [infoForm, setInfoForm] = useState();
@@ -34,6 +33,7 @@ function PuestosPxQ() {
           head.name = puestos[0][cc][i];
           head.isNew = false;
           head.precioInicial = 0;
+          head.incremento = 0;
           head.cargaSocial = 0;
           head.total = 0;
           heads.push(head);
@@ -63,8 +63,8 @@ function PuestosPxQ() {
     }
   };
 
-  const postPuestosPxQData = (data) => {
-    createPuestospxq(data)
+  const postPuestosPData = (data) => {
+    createPuestosp(data)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setShowSuccessAlert(true);
@@ -98,8 +98,7 @@ function PuestosPxQ() {
       .then((data) => {
         let def;
         if (data?.puestosPData[0]) {
-          setVisibleP(true);
-          setPuestosQ(data?.puestosQData[0].puestosq[0]);
+          setPuestosQ(data?.puestosPData[0].puestosp[0]);
           setInfoForm(data?.puestosPData[0].puestosp[0]);
           def = Object.keys(data?.puestosPData[0].puestosp[0]).find(
             (p) =>
@@ -108,7 +107,7 @@ function PuestosPxQ() {
           );
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0].puestosq[0]) {
-            setPuestosQ(data?.puestosQData[0].puestosq[0]);
+            setPuestosQ(data?.puestosPData[0].puestosp[0]);
           } else {
             setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
           }
@@ -143,9 +142,9 @@ function PuestosPxQ() {
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Puestos (PxQ)</h6>
+          <h6>Puestos (P)</h6>
         </div>
-        {infoForm && visibleP ? (
+        {infoForm ? (
           <Tabs defaultValue={country}>
             <TabList>
               {puestosQ &&
@@ -168,13 +167,13 @@ function PuestosPxQ() {
                 <FormContainer className="cont-countries">
                   <ContainerScrollable
                     contenido={
-                      <TablePuestosPxQ
+                      <TablePuestosP
                         data={infoForm}
                         puestosQ={puestosQ}
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }
-                        postPuestoPxQData={postPuestosPxQData}
+                        postPuestoPData={postPuestosPData}
                         addPuesto={addPuesto}
                         removePuesto={removePuesto}
                         showAlertError={(boolean) => setShowErrorAlert(boolean)}
@@ -189,18 +188,11 @@ function PuestosPxQ() {
               </div>
             )}
           </Tabs>
-        ) : visibleP ? (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
-              Para acceder a este formulario primero debe completar el
-              formulario de Gastos.
-            </span>
-          </div>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario de Puestos P.
+              formulario de Gastos.
             </span>
           </div>
         )}
@@ -209,4 +201,4 @@ function PuestosPxQ() {
   );
 }
 
-export default PuestosPxQ;
+export default PuestosP;

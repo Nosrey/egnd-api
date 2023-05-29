@@ -260,7 +260,7 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
-         
+
           {
             key: 'collapseGastosDeEstructura.item2',
             path: '/puestosq',
@@ -293,8 +293,8 @@ const navigationConfig = [
           },
           {
             key: 'collapseGastosDeEstructura.item5',
-            path: '/resumengasto',
-            title: 'Gastos por CC',
+            path: '/puestosp',
+            title: 'Puestos P',
             translateKey: 'nav.collapseGastosDeEstructura.item5',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,
