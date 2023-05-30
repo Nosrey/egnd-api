@@ -76,7 +76,6 @@ function TableAssumptionVentas({
 
   const uniqueId = uuid();
 
-
   return (
     <div className="px-4 py-5">
       <FormContainer>
@@ -91,8 +90,8 @@ function TableAssumptionVentas({
           >
             <span className=" ">ID</span>
             <span className="col-start-2 col-end-6">Producto / Servicio</span>
-            <span className="col-start-6 col-end-10">Revenue Model</span>
-            <span className="col-start-10 col-end-13">Tipo</span>
+            <span className="col-start-6 col-end-9">Revenue Model</span>
+            <span className="col-start-9 col-end-13">Tipo</span>
           </div>
           <div>
             {productos && productos.length > 0 ? (
@@ -117,7 +116,7 @@ function TableAssumptionVentas({
                           prod.id,
                           e.target.name,
                           e.target.value,
-                          prod.uniqueId
+                          prod.uniqueId,
                         )
                       }
                     />
@@ -134,7 +133,12 @@ function TableAssumptionVentas({
                         (option) => option.value === prod.model,
                       )}
                       onChange={(e) =>
-                        handleEditProduct(prod.id, 'model', e.value, prod.uniqueId)
+                        handleEditProduct(
+                          prod.id,
+                          'model',
+                          e.value,
+                          prod.uniqueId,
+                        )
                       }
                     />
                     {errors[prod.id] && errors[prod.id].name && (
@@ -150,7 +154,12 @@ function TableAssumptionVentas({
                         (option) => option.value === prod.type,
                       )}
                       onChange={(e) =>
-                        handleEditProduct(prod.id, 'type', e.value, prod.uniqueId)
+                        handleEditProduct(
+                          prod.id,
+                          'type',
+                          e.value,
+                          prod.uniqueId,
+                        )
                       }
                     />
                     {errors[prod.id] && errors[prod.id].name && (
@@ -234,7 +243,7 @@ function TableAssumptionVentas({
                           name: '',
                           model: '',
                           type: '',
-                          uniqueId
+                          uniqueId,
                         });
                       }}
                     >
@@ -547,7 +556,7 @@ function TableAssumptionVentas({
                           name: '',
                           sameClient: '',
                           items: [],
-                          uniqueId
+                          uniqueId,
                         })
                       }
                     >

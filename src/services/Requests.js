@@ -1,5 +1,5 @@
-
 import { AÑOS } from 'constants/forms.constants';
+import { puestos } from 'constants/puestos.constant';
 import store from '../store/index';
 
 const app = store.getState();
@@ -445,8 +445,8 @@ export const createPrecio = async ({ countryName, stats, idUser }) => {
   }
 };
 
-export const createPuestosq = async ({ info, idUser  }) => {
-  console.log("INFO", info);
+export const createPuestosq = async ({ info, idUser }) => {
+  console.log('INFO', info);
   try {
     const response = await fetch(`${URL_API}/api/Puestosq`, {
       method: 'POST',
@@ -559,7 +559,7 @@ export const createAssumpFinanciera = async (
 export const createGastosGeneral = async ({
   centroDeGastos,
   cargasSociales,
-  id
+  id,
 }) => {
   try {
     const response = await fetch(`${URL_API}/api/gastosgeneral`, {
@@ -589,33 +589,34 @@ export const createGastosGeneral = async ({
           let h = {};
           h.visible = centroDeGastos[cc];
           h.puestos = [...heads];
-  
+
           estructura[cc] = { ...h };
         }
-      } else{
+      } else {
         let h = {};
-          h.visible = centroDeGastos[cc];
-          h.puestos = [...heads];
-  
-          estructura[cc] = { ...h };
+        h.visible = centroDeGastos[cc];
+        h.puestos = [...heads];
+
+        estructura[cc] = { ...h };
       }
-      
     });
 
     // la lleno con la info correspopndiente para suplantar las tablas
-    const oldPuestosQData = JSON.parse(localStorage.getItem("puestoQData"));
-    let centrosC = oldPuestosQData[0].puestosq[0]
-    const newData = {...estructura}
-    const keyArray = Object.keys(centroDeGastos)
+    const oldPuestosQData = JSON.parse(localStorage.getItem('puestoQData'));
+    let centrosC = oldPuestosQData[0].puestosq[0];
+    const newData = { ...estructura };
+    const keyArray = Object.keys(centroDeGastos);
     for (let i = 0; i < keyArray.length; i++) {
-      if (centrosC[keyArray[i]]) {// si existe este CC
-        if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) { // tengo data de este cc me la traigo
-          newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos
-        }  
-      }         
+      if (centrosC[keyArray[i]]) {
+        // si existe este CC
+        if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
+          // tengo data de este cc me la traigo
+          newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
+        }
+      }
     }
-    let idUser = localStorage.getItem('userId')
-    const info = {info: newData, idUser}
+    let idUser = localStorage.getItem('userId');
+    const info = { info: newData, idUser };
     createPuestosq(info);
 
     const data = await response.json();
@@ -625,7 +626,7 @@ export const createGastosGeneral = async ({
     throw error;
   }
 };
-export const createGastosPorCC = async ({body, idUser}) => {
+export const createGastosPorCC = async ({ body, idUser }) => {
   try {
     const response = await fetch(`${URL_API}/api/gastosporcc`, {
       method: 'POST',
