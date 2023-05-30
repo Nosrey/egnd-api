@@ -52,7 +52,7 @@ function TablePuestosP(props) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
             const valor =
-              head.visible.puestos[i].años[j].volMeses[MONTHS[s]] *
+              head.puestos[i].años[j].volMeses[MONTHS[s]] *
                 Number(head.puestos[i].total) || 0;
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
@@ -181,13 +181,15 @@ function TablePuestosP(props) {
       props.postPuestoPData([infoForm]);
     }
   };
+
+  console.log('[INFO]', infoForm);
   return (
     <>
       {infoForm &&
         Object.keys(infoForm).map((cc, indice) => (
           <TabContent value={cc} className="mb-[20px]" key={cc}>
             <FormContainer>
-              {infoForm[cc].visible.visible && (
+              {infoForm[cc].visible && (
                 <section className="contenedor">
                   <div>
                     <div>
