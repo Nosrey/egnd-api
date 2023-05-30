@@ -18,7 +18,7 @@ function TablePuestosPxQ(props) {
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
-  
+
   const currency = useSelector((state) => state.auth.user.currency);
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
@@ -288,11 +288,14 @@ function TablePuestosPxQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">{currency}{valor}</p>
+                            <p className="w-[90px] text-center">
+                              {currency}
+                              {valor}
+                            </p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
                           {index === 0 && currency}
-                        {index === 0 &&
+                          {index === 0 &&
                             volTotal[indexYear] &&
                             volTotal[indexYear].values.reduce(
                               (total, current) => Math.round(total + current),

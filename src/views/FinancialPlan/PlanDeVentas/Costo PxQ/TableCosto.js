@@ -594,7 +594,7 @@ function TableCosto(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[500px]  pl-[45px] capitalize self-center ${
+                    className={`w-[437px]  pl-[45px] capitalize self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >
@@ -646,7 +646,8 @@ function TableCosto(props) {
                               año &&
                               MONTHS.map((valor, indexNum) => (
                                 <p className="w-[90px] text-center">
-                                   {moneda}{
+                                  {moneda}
+                                  {
                                     viewTotals[props.country][prod.name][
                                       indexYear
                                     ][indexNum]
@@ -654,7 +655,8 @@ function TableCosto(props) {
                                 </p>
                               ))}
                             <p className="w-[90px] text-center font-bold">
-                            {moneda} {año.reduce(
+                              {moneda}{' '}
+                              {año.reduce(
                                 (total, current) =>
                                   parseInt(total) + parseInt(current),
                               )}
@@ -675,7 +677,8 @@ function TableCosto(props) {
               className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
               key={i}
             >
-              COSTO CANAL '{canal.name}':  {moneda}{canal.sum}
+              COSTO CANAL '{canal.name}': {moneda}
+              {canal.sum}
             </p>
           ))}
 
