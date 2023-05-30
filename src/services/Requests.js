@@ -1,5 +1,6 @@
 
 import { AÑOS } from 'constants/forms.constants';
+import { puestos } from 'constants/puestos.constant';
 import store from '../store/index';
 
 const app = store.getState();
