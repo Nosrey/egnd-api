@@ -4,10 +4,11 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
 import { Button, FormContainer, FormItem, Input, Tabs } from 'components/ui';
-import { AÑOS, MONTHS } from 'constants/forms.constants';
+import { AÑOS, EMPTY_CARGOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { MdDelete } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 const { TabContent } = Tabs;
 
@@ -17,6 +18,7 @@ function TablePuestosPxQ(props) {
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
+  const currency = useSelector((state) => state.auth.user.currency);
 
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
@@ -42,11 +44,7 @@ function TablePuestosPxQ(props) {
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
-            console.log(head);
-            const valor =
-              calcPercent(head.puestos[i].total, head.puestos[i].incremento)[
-                j
-              ] || 0;
+            const valor = 0;
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
             } else {
@@ -78,20 +76,29 @@ function TablePuestosPxQ(props) {
     });
   };
 
-  const calcPercent = (total, percent) => {
-    let tot = total;
-    let calcs = [];
+  const calcPercent = (total, percent, indexMes, indexYear, cc, head) => {
+    console.log(indexYear);
+    const q =
+      props.puestosQ[cc].puestos[head].años[indexYear].volMeses[
+        MONTHS[indexMes]
+      ];
+    let calcs = { ...EMPTY_CARGOS };
 
-    for (let i = 0; i <= 10; i++) {
-      if (i === 0) {
-        calcs.push(total);
+    if (indexYear === 0) {
+      calcs[indexYear][indexMes] = total;
+      if (q !== 0) {
+        calcs[indexYear][indexMes] = total * q;
       }
-      tot += (tot * Number(percent)) / 100;
-      let insert = tot + tot * Number(percent);
-      calcs.push(insert);
+    } else if (q !== 0) {
+      calcs[indexYear][indexMes] = 20;
+    } else {
+      calcs[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
     }
+
     return calcs;
   };
+
+  console.log('[PROPS]', props);
 
   return (
     <>
@@ -197,7 +204,11 @@ function TablePuestosPxQ(props) {
                                                     .total,
                                                   infoForm[cc].puestos[head]
                                                     .incremento,
-                                                )[indexYear]
+                                                  indexMes,
+                                                  indexYear,
+                                                  cc,
+                                                  head,
+                                                )[indexYear][indexMes]
                                               }
                                               name="month"
                                             />
@@ -210,13 +221,7 @@ function TablePuestosPxQ(props) {
                                         className="w-[90px]"
                                         type="number"
                                         disabled
-                                        value={
-                                          calcPercent(
-                                            infoForm[cc].puestos[head].total,
-                                            infoForm[cc].puestos[head]
-                                              .incremento,
-                                          )[indexYear] * 12
-                                        }
+                                        value={0}
                                       />
                                     </FormItem>
                                   </div>
@@ -286,11 +291,14 @@ function TablePuestosPxQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">{currency}{valor}</p>
+                            <p className="w-[90px] text-center">
+                              {currency}
+                              {valor}
+                            </p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
                           {index === 0 && currency}
-                        {index === 0 &&
+                          {index === 0 &&
                             volTotal[indexYear] &&
                             volTotal[indexYear].values.reduce(
                               (total, current) => Math.round(total + current),
