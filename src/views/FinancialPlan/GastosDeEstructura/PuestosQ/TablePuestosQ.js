@@ -253,27 +253,23 @@ function TablePuestosQ(props) {
                                           >
                                             <Input
                                               className="w-[90px]"
-                                              type="number"
-                                              disabled={
-                                                infoForm[cc].puestos[head]
-                                                  .name === ''
-                                              }
-                                              value={
-                                                año.volMeses[
-                                                  Object.keys(año.volMeses)[
-                                                    indexMes
-                                                  ]
-                                                ]
-                                              }
+                                              type="text"
+                                              pattern="[0-9]*"
+                                              inputMode="numeric"
+                                              disabled={infoForm[cc].puestos[head].name === ''}
+                                              value={año.volMeses[Object.keys(año.volMeses)[indexMes]]}
                                               onChange={(e) => {
-                                                handleOnChangeInitialValue(
-                                                  cc,
-                                                  infoForm[cc].puestos[head].id,
-                                                  e.target.value,
-                                                  'mes',
-                                                  MONTHS[indexMes],
-                                                  indexYear,
-                                                );
+                                                const inputValue = e.target.value;
+                                                if (/^\d*$/.test(inputValue)) {
+                                                  handleOnChangeInitialValue(
+                                                    cc,
+                                                    infoForm[cc].puestos[head].id,
+                                                    inputValue,
+                                                    'mes',
+                                                    MONTHS[indexMes],
+                                                    indexYear,
+                                                  );
+                                                }
                                               }}
                                               name="month"
                                             />
