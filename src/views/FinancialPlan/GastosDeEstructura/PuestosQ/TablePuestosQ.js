@@ -157,7 +157,7 @@ function TablePuestosQ(props) {
                   <div>
                     <div>
                       {Object.keys(infoForm[cc].puestos).map((head, index) => (
-                        <div className="flex  gap-x-3 gap-y-3 " key={head.name}>
+                        <div className="flex  gap-x-3 gap-y-3 " key={head.name}>                             
                           {showRemovePuesto &&
                             infoForm[cc].puestos[head].isNew && (
                               <Button
@@ -165,7 +165,7 @@ function TablePuestosQ(props) {
                                 size="sm"
                                 variant="twoTone"
                                 color="red-600"
-                                className="col-start-12 col-end-13 row-start-2 mb-0 mt-10"
+                                className="col-start-12 col-end-13 row-start-2 mb-0 mt-6"
                                 icon={<MdDelete />}
                                 onClick={() =>
                                   props.removePuesto(
@@ -173,7 +173,7 @@ function TablePuestosQ(props) {
                                     infoForm[cc].puestos[head].id,
                                     cc,
                                   )
-                                }
+                                }                              
                               />
                             )}
                           <FormItem
@@ -199,7 +199,7 @@ function TablePuestosQ(props) {
                                 )
                               }
                             />
-                          </FormItem>
+                          </FormItem>                          
                           {infoForm[cc].puestos[head].años.map(
                             (año, indexYear) => (
                               <div className="flex flex-col" key={indexYear}>
@@ -253,27 +253,23 @@ function TablePuestosQ(props) {
                                           >
                                             <Input
                                               className="w-[90px]"
-                                              type="number"
-                                              disabled={
-                                                infoForm[cc].puestos[head]
-                                                  .name === ''
-                                              }
-                                              value={
-                                                año.volMeses[
-                                                  Object.keys(año.volMeses)[
-                                                    indexMes
-                                                  ]
-                                                ]
-                                              }
+                                              type="text"
+                                              pattern="[0-9]*"
+                                              inputMode="numeric"
+                                              disabled={infoForm[cc].puestos[head].name === ''}
+                                              value={año.volMeses[Object.keys(año.volMeses)[indexMes]]}
                                               onChange={(e) => {
-                                                handleOnChangeInitialValue(
-                                                  cc,
-                                                  infoForm[cc].puestos[head].id,
-                                                  e.target.value,
-                                                  'mes',
-                                                  MONTHS[indexMes],
-                                                  indexYear,
-                                                );
+                                                const inputValue = e.target.value;
+                                                if (/^\d*$/.test(inputValue)) {
+                                                  handleOnChangeInitialValue(
+                                                    cc,
+                                                    infoForm[cc].puestos[head].id,
+                                                    inputValue,
+                                                    'mes',
+                                                    MONTHS[indexMes],
+                                                    indexYear,
+                                                  );
+                                                }
                                               }}
                                               name="month"
                                             />
