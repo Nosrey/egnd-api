@@ -5,6 +5,7 @@ import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createPuestospxq, getUser } from 'services/Requests';
+import { Link } from 'react-router-dom';
 import TablePuestosPxQ from './TablePuestosPxQ';
 
 const { TabNav, TabList } = Tabs;
@@ -191,16 +192,24 @@ function PuestosPxQ() {
           </Tabs>
         ) : visibleP ? (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario de Gastos.
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/gastos">
+                Gastos
+              </Link>
+              .
             </span>
           </div>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario de Puestos P.
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/puestosp">
+                Puestos P
+              </Link>
+              .
             </span>
           </div>
         )}
