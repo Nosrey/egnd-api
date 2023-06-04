@@ -154,8 +154,8 @@ function Gastos() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Gastos</h4>
-        <span>Assumptions Gastos</span>
+        <h4>Supuesto de Gasto de Estructura</h4>
+        <span>Gastos de Estructura</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">

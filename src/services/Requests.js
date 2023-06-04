@@ -145,6 +145,8 @@ export const getUser = async (id = idUser) => {
       JSON.stringify(data.response.volumenData),
     );
     localStorage.setItem('costoData', JSON.stringify(data.response.costoData));
+    localStorage.setItem("puestoQData", JSON.stringify(data.response.puestosQData));
+    localStorage.setItem("puestoPData", JSON.stringify(data.response.puestosPData));
     return data.response;
   } catch (error) {
     console.error('Error:', error);
@@ -278,27 +280,6 @@ export const createAssumpVenta = async (body) => {
   }
 };
 
-// export const createPrecioInAssump = async ({ countryName, stats, idUser }) => {
-//   try {
-//     const precioResponse = await fetch(`${URL_API}/api/precio`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         countryName,
-//         stats,
-//         idUser
-//       }),
-//     });
-
-//     const dataPrecioResponse = await precioResponse.json();
-//     return dataPrecioResponse
-//   } catch (error) {
-//     console.error('Error', error);
-//     throw error;
-//   }
-// };
 
 export const createVolumen = async ({ countryName, stats, idUser }) => {
   try {
@@ -486,7 +467,7 @@ export const createPuestospxq = async (body) => {
   }
 };
 
-export const createPuestosp = async (body) => {
+export const createPuestosp = async ({ info, idUser }) => {
   try {
     const response = await fetch(`${URL_API}/api/puestosp`, {
       method: 'POST',
@@ -494,7 +475,7 @@ export const createPuestosp = async (body) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        puestosp: body,
+        puestosp: info,
         idUser,
       }),
     });
@@ -556,6 +537,44 @@ export const createAssumpFinanciera = async (
   }
 };
 
+const updatePuestosQData = (estructura, centroDeGastos) => {
+  const oldPuestosQData = JSON.parse(localStorage.getItem('puestoQData'));
+  let centrosC = oldPuestosQData[0].puestosq[0];
+  const newData = { ...estructura };
+  const keyArray = Object.keys(centroDeGastos);
+  for (let i = 0; i < keyArray.length; i++) {
+    if (centrosC[keyArray[i]]) {
+      // si existe este CC
+      if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
+        // tengo data de este cc me la traigo
+        newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
+      }
+    }
+  }
+  let idUser = localStorage.getItem('userId');
+  const info = { info: newData, idUser };
+  createPuestosq(info);
+}
+
+const updatePuestosPData = (estructura, centroDeGastos) => {
+  const oldPuestosPData = JSON.parse(localStorage.getItem('puestoPData'));
+  let centrosC = oldPuestosPData[0].puestosp[0];
+  const newData = { ...estructura };
+  const keyArray = Object.keys(centroDeGastos);
+  for (let i = 0; i < keyArray.length; i++) {
+    if (centrosC[keyArray[i]]) {
+      // si existe este CC
+      if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
+        // tengo data de este cc me la traigo
+        newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
+      }
+    }
+  }
+  let idUser = localStorage.getItem('userId');
+  const info = { info: newData, idUser };
+  createPuestosp(info);
+}
+
 export const createGastosGeneral = async ({
   centroDeGastos,
   cargasSociales,
@@ -602,23 +621,8 @@ export const createGastosGeneral = async ({
     });
 
     // la lleno con la info correspopndiente para suplantar las tablas
-    const oldPuestosQData = JSON.parse(localStorage.getItem('puestoQData'));
-    let centrosC = oldPuestosQData[0].puestosq[0];
-    const newData = { ...estructura };
-    const keyArray = Object.keys(centroDeGastos);
-    for (let i = 0; i < keyArray.length; i++) {
-      if (centrosC[keyArray[i]]) {
-        // si existe este CC
-        if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
-          // tengo data de este cc me la traigo
-          newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
-        }
-      }
-    }
-    let idUser = localStorage.getItem('userId');
-    const info = { info: newData, idUser };
-    createPuestosq(info);
-
+    updatePuestosQData(estructura, centroDeGastos);
+    updatePuestosPData(estructura, centroDeGastos);
     const data = await response.json();
     return data;
   } catch (error) {

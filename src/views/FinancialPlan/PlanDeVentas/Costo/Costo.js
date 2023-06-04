@@ -95,8 +95,8 @@ function Costo() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Costos</h4>
-        <span>Plan de costos</span>
+        <h4>Costos Unitarios</h4>
+        <span>Costos Directos</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
@@ -140,11 +140,11 @@ function Costo() {
               <span className="text-center cursor-default">
                 Para acceder a este formulario primero debe completar los
                 formularios de{' '}
-                <Link className="text-indigo-700 underline" to="/volumenq">
+                <Link className="text-indigo-700 underline" to="/volumen">
                   Volumen
                 </Link>{' '}
                 y{' '}
-                <Link className="text-indigo-700 underline" to="/preciop">
+                <Link className="text-indigo-700 underline" to="/precio">
                   Precio
                 </Link>
                 .
@@ -155,9 +155,9 @@ function Costo() {
                 formulario de{' '}
                 <Link
                   className="text-indigo-700 underline"
-                  to="/assumptionventas"
+                  to="/supuestos-ventas"
                 >
-                  Assumptions Ventas
+                  Supuestos de Ventas
                 </Link>
                 .
               </span>

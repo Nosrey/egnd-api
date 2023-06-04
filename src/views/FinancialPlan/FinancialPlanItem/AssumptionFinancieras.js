@@ -106,8 +106,8 @@ function AssumptionsFinancieras() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Assumption Financieras</h4>
-        <span>Financial Plan</span>
+        <h4>Assumption Gastos Financieros</h4>
+        <span>Gastos Financieros para Operación</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">

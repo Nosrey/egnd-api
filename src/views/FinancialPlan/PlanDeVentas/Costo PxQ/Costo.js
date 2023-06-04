@@ -4,6 +4,7 @@ import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
+import { Link } from 'react-router-dom';
 import TableCosto from './TableCosto';
 
 const { TabNav, TabList } = Tabs;
@@ -115,8 +116,8 @@ function Costo() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Costos PxQ</h4>
-        <span>Plan de costos</span>
+        <h4>Costos Totales</h4>
+        <span>Costos directos</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
@@ -169,20 +170,29 @@ function Costo() {
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             {!visibleVolume ? (
-              <span>
+              <span className="text-center cursor-default">
                 Para acceder a este formulario primero debe completar los
-                formulario de Volumen.
+                formulario de{' '}
+                <Link className="text-indigo-700 underline" to="/volumen">
+                  Volumen.
+                </Link>
               </span>
             ) : !visiblePrecio ? (
-              <span>
+              <span className="text-center cursor-default">
                 Para acceder a este formulario primero debe completar los
-                formulario de Precio.
+                formulario de{' '}
+                <Link className="text-indigo-700 underline" to="/preciop">
+                  Precio.
+                </Link>
               </span>
             ) : (
               !visibleCosto && (
-                <span>
+                <span className="text-center cursor-default">
                   Para acceder a este formulario primero debe completar los
-                  formulario de Costo.
+                  formulario de{' '}
+                  <Link className="text-indigo-700 underline" to="/costo">
+                    Costo.
+                  </Link>
                 </span>
               )
             )}

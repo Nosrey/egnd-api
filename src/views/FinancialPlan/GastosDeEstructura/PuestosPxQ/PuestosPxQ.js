@@ -5,6 +5,7 @@ import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createPuestospxq, getUser } from 'services/Requests';
+import { Link } from 'react-router-dom';
 import TablePuestosPxQ from './TablePuestosPxQ';
 
 const { TabNav, TabList } = Tabs;
@@ -103,9 +104,13 @@ function PuestosPxQ() {
           setInfoForm(data?.puestosPData[0].puestosp[0]);
           def = Object.keys(data?.puestosPData[0].puestosp[0]).find(
             (p) =>
-              data?.puestosPData[0].puestosp[0][p].visible.visible &&
+              data?.puestosPData[0].puestosp[0][p].visible &&
               data?.puestosPData[0].puestosp[0][p],
           );
+          setDefaultCountry(def);
+          setCountry(def);
+          setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
+
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0].puestosq[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
@@ -116,10 +121,11 @@ function PuestosPxQ() {
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
           );
+          setDefaultCountry(def);
+          setCountry(def);
+          setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
         }
-        setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
-        setDefaultCountry(def);
-        setCountry(def);
+     
       })
       .catch((error) => console.error(error));
   }, []);
@@ -138,12 +144,12 @@ function PuestosPxQ() {
       )}
       <div className="border-b-2 mb-8 pb-1">
         <h4>Headcount</h4>
-        <span>Centros de costos</span>
+        {/* <span>Centros de costos</span> */}
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Puestos (PxQ)</h6>
+          <h6>Nomina x Salario</h6>
         </div>
         {infoForm && visibleP ? (
           <Tabs defaultValue={country}>
@@ -151,7 +157,7 @@ function PuestosPxQ() {
               {puestosQ &&
                 Object.keys(infoForm).map(
                   (cc, index) =>
-                    infoForm[cc].visible.visible && (
+                    infoForm[cc].visible && (
                       <TabNav key={index} value={cc}>
                         <div
                           className="capitalize"
@@ -175,13 +181,8 @@ function PuestosPxQ() {
                           setShowSuccessAlert(boolean)
                         }
                         postPuestoPxQData={postPuestosPxQData}
-                        addPuesto={addPuesto}
-                        removePuesto={removePuesto}
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        errorMessage={(error) => setErrorMessage(error)}
                         head={country}
                         cargaSocial={cargaSocial}
-                        handleEditPuesto={handleEditPuesto}
                       />
                     }
                   />
@@ -191,16 +192,24 @@ function PuestosPxQ() {
           </Tabs>
         ) : visibleP ? (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario de Gastos.
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+                Supuesto de Gasto de Estructura
+              </Link>
+              .
             </span>
           </div>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario de Puestos P.
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/salarios">
+                Salarios
+              </Link>
+              .
             </span>
           </div>
         )}

@@ -60,8 +60,8 @@ function PuestosQ() {
   };
 
   const postPuestoQData = (data) => {
-    let idUser = localStorage.getItem('userId')
-      const info = { info: data, idUser };
+    let idUser = localStorage.getItem('userId');
+    const info = { info: data, idUser };
     createPuestosq(info)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -130,13 +130,13 @@ function PuestosQ() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Headcount</h4>
-        <span>Centros de Costos</span>
+        <h4>Proyección nomina</h4>
+        <span>Headcount</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Puestos (Q)</h6>
+          <h6>Cantidad por puesto</h6>
         </div>
         {infoForm ? (
           <Tabs defaultValue={country}>
@@ -185,10 +185,10 @@ function PuestosQ() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/gastos">
-                Gastos
-              </Link>{' '}
+              formulario {' '}
+              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+              Supuesto de Gasto de Estructura
+              </Link>
               .
             </span>
           </div>

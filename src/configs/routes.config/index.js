@@ -14,7 +14,7 @@ export const protectedRoutes = [
   },
   {
     key: 'assumptiongeneral',
-    path: '/assumptiongeneral',
+    path: '/supuestos-generales',
     component: React.lazy(() =>
       import('views/FinancialPlan/AssumtionsGenerales/AssumptionGeneral'),
     ),
@@ -22,7 +22,7 @@ export const protectedRoutes = [
   },
   {
     key: 'assumptionventas',
-    path: '/assumptionventas',
+    path: '/supuestos-ventas',
     component: React.lazy(() =>
       import(
         'views/FinancialPlan/PlanDeVentas/Assumption Ventas/AssumptionVentas'
@@ -32,7 +32,7 @@ export const protectedRoutes = [
   },
   {
     key: 'preciop',
-    path: '/preciop',
+    path: '/precio',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP'),
     ),
@@ -40,7 +40,7 @@ export const protectedRoutes = [
   },
   {
     key: 'volumenq',
-    path: '/volumenq',
+    path: '/volumen',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/VolumenQ/VolumenQ'),
     ),
@@ -56,7 +56,7 @@ export const protectedRoutes = [
   },
   {
     key: 'costo',
-    path: '/costo',
+    path: '/costos-unitarios',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/Costo/Costo'),
     ),
@@ -71,6 +71,14 @@ export const protectedRoutes = [
     authority: [],
   },
   {
+    key: 'plandecuentas',
+    path: '/plandecuentas',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeCuentas/PlanDeCuentas'),
+    ),
+    authority: [],
+  },
+  {
     key: 'assumptionfinancieras',
     path: '/assumptionfinancieras',
     component: React.lazy(() =>
@@ -80,7 +88,7 @@ export const protectedRoutes = [
   },
   {
     key: 'gastos',
-    path: '/gastos',
+    path: '/supuestos-gastos',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/Gastos/Gastos'),
     ),
@@ -114,7 +122,7 @@ export const protectedRoutes = [
   },
   {
     key: 'puestosq',
-    path: '/puestosq',
+    path: '/proyeccion-nomina',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosQ/PuestosQ'),
     ),
@@ -122,7 +130,7 @@ export const protectedRoutes = [
   },
   {
     key: 'puestosp',
-    path: '/puestosp',
+    path: '/salarios',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosP/PuestosP'),
     ),
@@ -130,7 +138,7 @@ export const protectedRoutes = [
   },
   {
     key: 'puestospxq',
-    path: '/puestospxq',
+    path: '/headcount',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosPxQ/PuestosPxQ'),
     ),

@@ -110,7 +110,7 @@ function AssumptionGeneral() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Assumptions Generales</h4>
+        <h4>Supuestos Generales del Modelo</h4>
         <span>Supuestos Generales</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">

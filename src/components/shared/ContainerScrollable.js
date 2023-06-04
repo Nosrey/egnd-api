@@ -1,42 +1,45 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useRef } from 'react'
-import { BsChevronRight, BsChevronLeft } from 'react-icons/bs'
-import { useMedia } from 'utils/hooks/useMedia'
+import React, { useState, useRef } from 'react';
+import { BsChevronRight, BsChevronLeft } from 'react-icons/bs';
+import { useLocation } from 'react-router-dom';
+import { useMedia } from 'utils/hooks/useMedia';
 
 function ContainerScrollable(props) {
-  const [scrollPosition, setScrollPosition] = useState(0)
-  const containerTableRef = useRef(null)
-  const btnLeftRef = useRef(null)
-  const btnRightRef = useRef(null)
-  const media = useMedia()
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const containerTableRef = useRef(null);
+  const btnLeftRef = useRef(null);
+  const btnRightRef = useRef(null);
+  const media = useMedia();
+  const location = useLocation();
+  const currentPath = location.pathname;
+  console.log(currentPath);
 
-  const [activeDrag, setActiveDrag] = useState(false)
+  const [activeDrag, setActiveDrag] = useState(false);
 
   const iconVisibility = () => {
-    const containerTable = containerTableRef.current
-    const btnLeft = btnLeftRef && btnLeftRef.current
-    const btnRight = btnRightRef && btnRightRef.current
+    const containerTable = containerTableRef.current;
+    const btnLeft = btnLeftRef && btnLeftRef.current;
+    const btnRight = btnRightRef && btnRightRef.current;
 
-    const scrollLeftValue = Math.ceil(containerTable.scrollLeft)
-    const tableWidth = containerTable.offsetWidth
-    const contentWidth = containerTable.scrollWidth
+    const scrollLeftValue = Math.ceil(containerTable.scrollLeft);
+    const tableWidth = containerTable.offsetWidth;
+    const contentWidth = containerTable.scrollWidth;
 
     if (scrollLeftValue === 0) {
       if (btnLeft) {
         btnLeft.style.display = 'none';
       }
     } else if (btnLeft) {
-        btnLeft.style.display = 'block';
-      }
-    
+      btnLeft.style.display = 'block';
+    }
+
     if (contentWidth - tableWidth <= scrollLeftValue) {
       if (btnRight) {
         btnRight.style.display = 'none';
       }
     } else if (btnRight) {
-        btnRight.style.display = 'block';
-      }
-    
+      btnRight.style.display = 'block';
+    }
 
     // if (scrollLeftValue === 0) {
     //   btnLeft && (btnLeft.style.display = 'none');
@@ -49,48 +52,53 @@ function ContainerScrollable(props) {
     // } else {
     //   btnRight && (btnRight.style.display = 'block');
     // }
-  }
+  };
 
   const handleRightClick = () => {
-    const newPosition = scrollPosition + 450
-    containerTableRef.current.scrollLeft = newPosition
-    setScrollPosition(newPosition)
-    setTimeout(() => iconVisibility(), 50)
-  }
+    const newPosition = scrollPosition + 450;
+    containerTableRef.current.scrollLeft = newPosition;
+    setScrollPosition(newPosition);
+    setTimeout(() => iconVisibility(), 50);
+  };
 
   const handleLeftClick = () => {
-    const newPosition = scrollPosition - 450
-    containerTableRef.current.scrollLeft = newPosition
-    setScrollPosition(newPosition)
-    setTimeout(() => iconVisibility(), 50)
-  }
+    const newPosition = scrollPosition - 450;
+    containerTableRef.current.scrollLeft = newPosition;
+    setScrollPosition(newPosition);
+    setTimeout(() => iconVisibility(), 50);
+  };
 
   const handleMouseDown = () => {
-    setActiveDrag(true)
-    containerTableRef.current.classList.add('dragging')
-  }
+    setActiveDrag(true);
+    containerTableRef.current.classList.add('dragging');
+  };
 
   const handleMouseMove = (drag) => {
-    if (!activeDrag) return
-    containerTableRef.current.scrollLeft -= drag.movementX
-    iconVisibility()
-  }
+    if (!activeDrag) return;
+    containerTableRef.current.scrollLeft -= drag.movementX;
+    iconVisibility();
+  };
 
   const handleMouseUp = () => {
-    setActiveDrag(false)
-    containerTableRef.current.classList.remove('dragging')
-  }
+    setActiveDrag(false);
+    containerTableRef.current.classList.remove('dragging');
+  };
 
   return (
     <div
-      className="wrapper p-4 overflow-x-auto scroll-smooth relative "
+      // className="wrapper p-4 overflow-x-auto scroll-smooth relative "
+      className={`p-4 ${
+        currentPath === '/salarios'
+          ? ''
+          : 'wrapper overflow-x-auto scroll-smooth relative'
+      } `}
       ref={containerTableRef}
       onScroll={iconVisibility}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      {media !== 'mobile' && (
+      {media !== 'mobile' && currentPath !== '/salarios' && (
         <>
           <div className="fixed top-[55vh] z-50 cursor-pointer bg-[#f2f2f2] shadow-lg shadow-gray-300 w-[40px] h-[40px] rounded-full flex items-center justify-center">
             <BsChevronLeft
@@ -111,7 +119,7 @@ function ContainerScrollable(props) {
 
       {props.contenido}
     </div>
-  )
+  );
 }
 
-export default ContainerScrollable
+export default ContainerScrollable;
