@@ -88,7 +88,7 @@ function ContainerScrollable(props) {
     <div
       // className="wrapper p-4 overflow-x-auto scroll-smooth relative "
       className={`p-4 ${
-        currentPath === '/puestosp'
+        currentPath === '/salarios'
           ? ''
           : 'wrapper overflow-x-auto scroll-smooth relative'
       } `}
@@ -98,7 +98,7 @@ function ContainerScrollable(props) {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      {media !== 'mobile' && currentPath !== '/puestosp' && (
+      {media !== 'mobile' && currentPath !== '/salarios' && (
         <>
           <div className="fixed top-[55vh] z-50 cursor-pointer bg-[#f2f2f2] shadow-lg shadow-gray-300 w-[40px] h-[40px] rounded-full flex items-center justify-center">
             <BsChevronLeft

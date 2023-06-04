@@ -77,7 +77,7 @@ const navigationConfig = [
           },
           {
             key: 'collapsePlanVentas.item2',
-            path: '/volumenq',
+            path: '/volumen',
             title: 'Cantidad y Volumen',
             translateKey: 'nav.collapsePlanVentas.item2',
             icon: '',
@@ -221,7 +221,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseHeadcount.item2',
-            path: '/puestosp',
+            path: '/salarios',
             title: 'Salarios',
             translateKey: 'nav.collapseHeadcount.item2',
             icon: '',
@@ -231,7 +231,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseHeadcount.item3',
-            path: '/puestospxq',
+            path: '/headcount',
             title: 'Headcount',
             translateKey: 'nav.collapseHeadcount.item3',
             icon: '',
@@ -263,7 +263,7 @@ const navigationConfig = [
         subMenu: [
           {
             key: 'collapseGastosDeEstructura.item1',
-            path: '/gastos',
+            path: '/supuestos-gastos',
             title: 'Supuesto de Gasto de estructura',
             translateKey: 'nav.collapseGastosDeEstructura.item1',
             icon: '',
@@ -367,7 +367,7 @@ const navigationConfig = [
           {
             key: 'collapseGastosFinancierosParaOperacion.item1',
             path: '/assumptionfinancieras',
-            title: 'Assumption Gastos Financerios ',
+            title: 'Assumption Gastos Financieros ',
             translateKey: 'nav.collapseGastosFinancierosParaOperacion.item1',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,

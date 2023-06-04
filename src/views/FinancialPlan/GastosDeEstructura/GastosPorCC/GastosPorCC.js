@@ -84,8 +84,8 @@ function GastosPorCC() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Gastos por Centro de Costo</h4>
-        <span>Gastos</span>
+        <h4>Proyección de Gastos por Centro de Costo</h4>
+        <span>Gastos de Estructura</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
@@ -135,9 +135,9 @@ function GastosPorCC() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/gastos">
-                Gastos
+              formulario {' '}
+              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+              Supuesto de Gasto de Estructura
               </Link>{' '}
               .
             </span>

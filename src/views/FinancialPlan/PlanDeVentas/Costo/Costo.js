@@ -140,7 +140,7 @@ function Costo() {
               <span className="text-center cursor-default">
                 Para acceder a este formulario primero debe completar los
                 formularios de{' '}
-                <Link className="text-indigo-700 underline" to="/volumenq">
+                <Link className="text-indigo-700 underline" to="/volumen">
                   Volumen
                 </Link>{' '}
                 y{' '}

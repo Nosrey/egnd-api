@@ -137,13 +137,13 @@ function PuestosP() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Headcount</h4>
-        <span>Centros de costos</span>
+        <h4>Salarios</h4>
+        <span>Headcount</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Puestos (P)</h6>
+          <h6>Salarios</h6>
         </div>
         {infoForm ? (
           <Tabs defaultValue={country}>
@@ -193,9 +193,9 @@ function PuestosP() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/gastos">
-                Gastos
+              formulario {' '}
+              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+              Supuesto de Gasto de Estructura
               </Link>
               .
             </span>

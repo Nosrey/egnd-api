@@ -40,7 +40,7 @@ export const protectedRoutes = [
   },
   {
     key: 'volumenq',
-    path: '/volumenq',
+    path: '/volumen',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/VolumenQ/VolumenQ'),
     ),
@@ -80,7 +80,7 @@ export const protectedRoutes = [
   },
   {
     key: 'gastos',
-    path: '/gastos',
+    path: '/supuestos-gastos',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/Gastos/Gastos'),
     ),
@@ -120,7 +120,7 @@ export const protectedRoutes = [
   },
   {
     key: 'puestosp',
-    path: '/puestosp',
+    path: '/salarios',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosP/PuestosP'),
     ),
@@ -128,7 +128,7 @@ export const protectedRoutes = [
   },
   {
     key: 'puestospxq',
-    path: '/puestospxq',
+    path: '/headcount',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosPxQ/PuestosPxQ'),
     ),

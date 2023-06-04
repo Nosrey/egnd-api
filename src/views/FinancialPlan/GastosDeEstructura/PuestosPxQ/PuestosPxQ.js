@@ -139,12 +139,12 @@ function PuestosPxQ() {
       )}
       <div className="border-b-2 mb-8 pb-1">
         <h4>Headcount</h4>
-        <span>Centros de costos</span>
+        {/* <span>Centros de costos</span> */}
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Puestos (PxQ)</h6>
+          <h6>Nomina x Salario</h6>
         </div>
         {infoForm && visibleP ? (
           <Tabs defaultValue={country}>
@@ -195,8 +195,8 @@ function PuestosPxQ() {
             <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
               formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/gastos">
-                Gastos
+              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+                Supuesto de Gasto de Estructura
               </Link>
               .
             </span>
@@ -206,8 +206,8 @@ function PuestosPxQ() {
             <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
               formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/puestosp">
-                Puestos P
+              <Link className="text-indigo-700 underline" to="/salarios">
+                Salarios
               </Link>
               .
             </span>

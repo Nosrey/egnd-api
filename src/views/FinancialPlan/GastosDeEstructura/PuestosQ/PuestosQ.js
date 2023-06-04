@@ -185,9 +185,9 @@ function PuestosQ() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/gastos">
-                Gastos
+              formulario {' '}
+              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+              Supuesto de Gasto de Estructura
               </Link>
               .
             </span>
