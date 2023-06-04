@@ -649,3 +649,43 @@ export const createGastosPorCC = async ({ body, idUser }) => {
     throw error;
   }
 };
+
+export const createCapexQ = async (body) => {
+  try {
+    const response = await fetch(`${URL_API}/api/capexq`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        capexQ: body,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error.message);
+    throw error;
+  }
+};
+
+export const createCapexP = async (body) => {
+  try {
+    const response = await fetch(`${URL_API}/api/capexp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        capexP: body,
+        idUser,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error.message);
+    throw error;
+  }
+};

@@ -437,8 +437,48 @@ const navigationConfig = [
           },
         ],
       },
-    
-     
+      {
+        key: 'collapsePlanDeInversionYAmortizacion',
+        path: '',
+        title: 'Plan de Inversion y Amortizacion',
+        translateKey:
+          'nav.collapsePlanDeInversionYAmortizacion.collapsePlanDeInversionYAmortizacion',
+        icon: '',
+        type: NAV_ITEM_TYPE_COLLAPSE,
+        authority: [],
+        subMenu: [
+          {
+            key: 'collapsePlanDeInversionYAmortizacion.item1',
+            path: '/capexq',
+            title: 'Capex Q',
+            translateKey: 'nav.collapsePlanDeInversionYAmortizacion.item1',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
+          {
+            key: 'collapsePlanDeInversionYAmortizacion.item2',
+            path: '/capexp',
+            title: 'Capex P',
+            translateKey: 'nav.collapsePlanDeInversionYAmortizacion.item2',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
+          {
+            key: 'collapsePlanDeInversionYAmortizacion.item3',
+            path: '/capexpxq',
+            title: 'Capex PxQ',
+            translateKey: 'nav.collapsePlanDeInversionYAmortizacion.item3',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
+        ],
+      },
     ],
   },
 ];
