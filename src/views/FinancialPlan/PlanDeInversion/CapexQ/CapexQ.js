@@ -71,7 +71,7 @@ function CapexQ() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data.capexQData[0].length !== 0) {
+        if (data.capexQData[0] && data.capexQData[0]?.length !== 0) {
           setBienes(data.capexQData[0].capexQ);
         } else {
           addBien({
