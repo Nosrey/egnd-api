@@ -109,7 +109,7 @@ function Ventas() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Ventas (P x Q)</h4>
+        <h4>Ventas Totales</h4>
         <span>Plan de ventas</span>
       </div>
 
@@ -158,7 +158,7 @@ function Ventas() {
             {showFaltaPrecioMssg && (
               <span className="text-center cursor-default">
                 Para ver esta información debe completar el formulario de{' '}
-                <Link className="text-indigo-700 underline" to="/preciop">
+                <Link className="text-indigo-700 underline" to="/precio">
                   Precio
                 </Link>
                 .
@@ -181,7 +181,7 @@ function Ventas() {
                   Volumen
                 </Link>{' '}
                 y{' '}
-                <Link className="text-indigo-700 underline" to="/preciop">
+                <Link className="text-indigo-700 underline" to="/precio">
                   Precio
                 </Link>
                 .

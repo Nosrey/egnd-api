@@ -130,13 +130,13 @@ function PuestosQ() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Headcount</h4>
-        <span>Centros de Costos</span>
+        <h4>Proyección nomina</h4>
+        <span>Headcount</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Puestos (Q)</h6>
+          <h6>Cantidad por puesto</h6>
         </div>
         {infoForm ? (
           <Tabs defaultValue={country}>

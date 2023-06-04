@@ -86,7 +86,7 @@ function PrecioP() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Precio (P)</h4>
+        <h4>Precio</h4>
         <span>Plan de ventas</span>
       </div>
 
@@ -131,9 +131,9 @@ function PrecioP() {
               formulario de{' '}
               <Link
                 className="text-indigo-700 underline"
-                to="/assumptionventas"
+                to="/supuestos-ventas"
               >
-                Assumptions Ventas
+                Supuestos de Ventas
               </Link>
               .
             </span>

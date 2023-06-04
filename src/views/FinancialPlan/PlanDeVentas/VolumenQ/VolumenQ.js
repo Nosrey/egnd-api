@@ -88,7 +88,7 @@ function VolumenQ() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Volumen (Q)</h4>
+        <h4>Cantidad y Volumen</h4>
         <span>Plan de ventas</span>
       </div>
 
@@ -138,9 +138,9 @@ function VolumenQ() {
               formulario de{' '}
               <Link
                 className="text-indigo-700 underline"
-                to="/assumptionventas"
+                to="/supuestos-ventas"
               >
-                Assumptions Ventas
+                Supuestos de Ventas
               </Link>
               .
             </span>

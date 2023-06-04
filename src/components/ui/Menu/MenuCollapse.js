@@ -62,7 +62,7 @@ function MenuCollapse(props) {
       <div className={menuCollapseItemClass} onClick={toggleCollapse}>
         <span className="flex items-center">{label}</span>
         <motion.span
-          className="text-lg mt-1"
+          className="text-md mt-1"
           initial={{ transform: 'rotate(0deg)' }}
           animate={{
             transform: isExpanded ? 'rotate(-180deg)' : 'rotate(0deg)',

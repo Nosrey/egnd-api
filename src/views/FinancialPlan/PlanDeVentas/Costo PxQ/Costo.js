@@ -115,8 +115,8 @@ function Costo() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Costos PxQ</h4>
-        <span>Plan de costos</span>
+        <h4>Costos Totales</h4>
+        <span>Costos directos</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">

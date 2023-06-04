@@ -247,7 +247,7 @@ function AssumptionVentas() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Assumptions ventas</h4>
+        <h4>Supuestos de Ventas</h4>
         <span>Plan de ventas</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">

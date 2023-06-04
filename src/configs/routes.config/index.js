@@ -14,7 +14,7 @@ export const protectedRoutes = [
   },
   {
     key: 'assumptiongeneral',
-    path: '/assumptiongeneral',
+    path: '/supuestos-generales',
     component: React.lazy(() =>
       import('views/FinancialPlan/AssumtionsGenerales/AssumptionGeneral'),
     ),
@@ -22,7 +22,7 @@ export const protectedRoutes = [
   },
   {
     key: 'assumptionventas',
-    path: '/assumptionventas',
+    path: '/supuestos-ventas',
     component: React.lazy(() =>
       import(
         'views/FinancialPlan/PlanDeVentas/Assumption Ventas/AssumptionVentas'
@@ -32,7 +32,7 @@ export const protectedRoutes = [
   },
   {
     key: 'preciop',
-    path: '/preciop',
+    path: '/precio',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/Precio P/PrecioP'),
     ),
@@ -56,7 +56,7 @@ export const protectedRoutes = [
   },
   {
     key: 'costo',
-    path: '/costo',
+    path: '/costos-unitarios',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/Costo/Costo'),
     ),
@@ -112,7 +112,7 @@ export const protectedRoutes = [
   },
   {
     key: 'puestosq',
-    path: '/puestosq',
+    path: '/proyeccion-nomina',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosQ/PuestosQ'),
     ),
