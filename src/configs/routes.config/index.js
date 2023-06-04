@@ -98,7 +98,9 @@ export const protectedRoutes = [
     key: 'resumengasto',
     path: '/resumengasto',
     component: React.lazy(() =>
-      import('views/FinancialPlan/GastosDeEstructura/ResumenDeGasto/ResumenDeGasto'),
+      import(
+        'views/FinancialPlan/GastosDeEstructura/ResumenDeGasto/ResumenDeGasto'
+      ),
     ),
     authority: [],
   },
@@ -131,6 +133,30 @@ export const protectedRoutes = [
     path: '/puestospxq',
     component: React.lazy(() =>
       import('views/FinancialPlan/GastosDeEstructura/PuestosPxQ/PuestosPxQ'),
+    ),
+    authority: [],
+  },
+  {
+    key: 'capexq',
+    path: '/capexq',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeInversion/CapexQ/CapexQ'),
+    ),
+    authority: [],
+  },
+  {
+    key: 'capexp',
+    path: '/capexp',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeInversion/CapexP/CapexP'),
+    ),
+    authority: [],
+  },
+  {
+    key: 'capexpxq',
+    path: '/capexpxq',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeInversion/CapexPxQ/CapexPxQ'),
     ),
     authority: [],
   },

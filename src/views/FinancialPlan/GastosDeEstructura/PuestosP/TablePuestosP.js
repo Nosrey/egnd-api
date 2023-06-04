@@ -182,7 +182,6 @@ function TablePuestosP(props) {
     }
   };
 
-  console.log('[INFO]', infoForm);
   return (
     <>
       {infoForm &&

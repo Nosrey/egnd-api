@@ -4,7 +4,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
 import {
-  Avatar,
   Button,
   FormContainer,
   FormItem,
@@ -251,7 +250,7 @@ function TableVolumen(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      let idUser = localStorage.getItem('userId')
+      let idUser = localStorage.getItem('userId');
       const { countryName, stats } = countryArray[i];
       const data = { countryName, stats, idUser };
       postVolumenData(data);
@@ -451,7 +450,7 @@ function TableVolumen(props) {
                                     <Input
                                       className="w-[90px]"
                                       type="text"
-                                      disabled                                      
+                                      disabled
                                       value={formatNumber(año.volTotal)}
                                     />
                                   </FormItem>
@@ -487,7 +486,6 @@ function TableVolumen(props) {
                   >
                     {prod.name}
                   </p>
-                  {console.log(infoProducts)}
                   {prod.sum?.map((año, indexYear) => (
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
@@ -525,17 +523,21 @@ function TableVolumen(props) {
                         {visibleItems?.includes(indexYear) &&
                           año &&
                           año.numeros?.map((valor, index) => (
-                            <p className="w-[90px] text-center">{formatNumber(valor)}</p>
+                            <p className="w-[90px] text-center">
+                              {formatNumber(valor)}
+                            </p>
                           ))}
-                          {año.numeros?.length !== 0 &&
-                            <p className="w-[90px] text-center font-bold">
-                            {formatNumber(año.numeros?.length !== 0 && año?.numeros?.reduce(
-                              (total, current) => total + current,
-                            ))}
+                        {año.numeros?.length !== 0 && (
+                          <p className="w-[90px] text-center font-bold">
+                            {formatNumber(
+                              año.numeros?.length !== 0 &&
+                                año?.numeros?.reduce(
+                                  (total, current) => total + current,
+                                ),
+                            )}
                           </p>
-                          }
-                        
-                      </div> 
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>

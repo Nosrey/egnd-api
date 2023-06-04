@@ -77,7 +77,6 @@ function TablePuestosPxQ(props) {
   };
 
   const calcPercent = (total, percent, indexMes, indexYear, cc, head) => {
-    console.log(indexYear);
     const q =
       props.puestosQ[cc].puestos[head].años[indexYear].volMeses[
         MONTHS[indexMes]
@@ -97,8 +96,6 @@ function TablePuestosPxQ(props) {
 
     return calcs;
   };
-
-  console.log('[PROPS]', props);
 
   return (
     <>
