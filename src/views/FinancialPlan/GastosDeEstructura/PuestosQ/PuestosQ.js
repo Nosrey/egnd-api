@@ -60,8 +60,8 @@ function PuestosQ() {
   };
 
   const postPuestoQData = (data) => {
-    let idUser = localStorage.getItem('userId')
-      const info = { info: data, idUser };
+    let idUser = localStorage.getItem('userId');
+    const info = { info: data, idUser };
     createPuestosq(info)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -188,7 +188,7 @@ function PuestosQ() {
               formulario de{' '}
               <Link className="text-indigo-700 underline" to="/gastos">
                 Gastos
-              </Link>{' '}
+              </Link>
               .
             </span>
           </div>

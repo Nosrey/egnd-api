@@ -331,7 +331,7 @@ function TablePuestosP(props) {
                           <div className="flex flex-col">
                             {index === 0 && (
                               <div className="titleRow min-w-[100px]">
-                                <p>Incemento anual</p>
+                                <p>Incremento anual</p>
                               </div>
                             )}
 

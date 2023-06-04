@@ -5,6 +5,7 @@ import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createPuestosp, getUser } from 'services/Requests';
+import { Link } from 'react-router-dom';
 import TablePuestosP from './TablePuestosP';
 
 const { TabNav, TabList } = Tabs;
@@ -190,9 +191,13 @@ function PuestosP() {
           </Tabs>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario de Gastos.
+              formulario de{' '}
+              <Link className="text-indigo-700 underline" to="/gastos">
+                Gastos
+              </Link>
+              .
             </span>
           </div>
         )}
