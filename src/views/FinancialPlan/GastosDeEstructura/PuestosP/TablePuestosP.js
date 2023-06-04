@@ -20,9 +20,7 @@ const { TabContent } = Tabs;
 
 function TablePuestosP(props) {
   const [infoForm, setInfoForm] = useState();
-  const [showRemovePuesto, setShowRemovePuesto] = useState(false);
   const [head, setHeads] = useState(props.head);
-  const [visibleItems, setVisibleItems] = useState([0]);
   const [change, setChange] = useState(false);
   const [volTotal, setVolTotal] = useState([]);
   const currency = useSelector((state) => state.auth.user.currency);
@@ -75,32 +73,6 @@ function TablePuestosP(props) {
     initialConfig();
   }, [props]);
 
-  const hideYear = (index) => {
-    setVisibleItems((prevItems) => {
-      if (prevItems.includes(index)) {
-        // Si el elemento ya está en la lista, lo eliminamos para ocultarlo
-        return prevItems.filter((id) => id !== index);
-      } // Si el elemento no está en la lista, lo agregamos para mostrarlo
-      return [...prevItems, index];
-    });
-  };
-
-  const replaceMonth = (producto, indexYear, mes, value) => {
-    let newAños = [...producto.años];
-    const newMeses = { ...newAños[indexYear].volMeses };
-    newMeses[mes] = value !== '' ? value : null;
-    const volTotal = Object.values(newMeses).reduce(
-      (acc, curr) => acc + parseInt(curr, 10),
-      0,
-    );
-    newAños[indexYear] = {
-      ...newAños[indexYear],
-      volMeses: newMeses,
-      volTotal,
-    };
-
-    return newAños;
-  };
 
   const fillMonthsPrices = (producto, yearIndex) => {
     setChange(true);
@@ -144,18 +116,6 @@ function TablePuestosP(props) {
       ...newData[cc].puestos[puestoIndex],
     };
     switch (key) {
-      case 'mes':
-        puesto.años = replaceMonth(
-          puesto,
-          indexYear,
-          mes,
-          newValue === ''
-            ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
-        );
-        break;
       case 'precioInicial':
         puesto.precioInicial = newValue;
         puesto.años = fillMonthsPrices(puesto, -1);
@@ -182,7 +142,6 @@ function TablePuestosP(props) {
     }
   };
 
-  console.log('[INFO]', infoForm);
   return (
     <>
       {infoForm &&
@@ -195,25 +154,6 @@ function TablePuestosP(props) {
                     <div>
                       {Object.keys(infoForm[cc].puestos).map((head, index) => (
                         <div className="flex  gap-x-3 gap-y-3 " key={head.name}>
-                          {showRemovePuesto &&
-                            infoForm[cc].puestos[head].isNew && (
-                              <Button
-                                shape="circle"
-                                size="sm"
-                                variant="twoTone"
-                                color="red-600"
-                                className="col-start-12 col-end-13 row-start-2 mb-0 mt-10"
-                                icon={<MdDelete />}
-                                onClick={() =>
-                                  props.removePuesto(
-                                    infoForm[cc].puestos,
-                                    infoForm[cc].puestos[head].id,
-                                    cc,
-                                  )
-                                }
-                              />
-                            )}
-
                           <FormItem
                             className={`${
                               index === 0 ? 'mt-12 w-[210px]' : 'mb-2 w-[210px]'

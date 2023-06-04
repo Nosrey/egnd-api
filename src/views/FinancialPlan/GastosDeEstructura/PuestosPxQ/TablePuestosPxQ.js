@@ -14,7 +14,6 @@ const { TabContent } = Tabs;
 
 function TablePuestosPxQ(props) {
   const [infoForm, setInfoForm] = useState();
-  const [showRemovePuesto, setShowRemovePuesto] = useState(false);
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
@@ -77,7 +76,6 @@ function TablePuestosPxQ(props) {
   };
 
   const calcPercent = (total, percent, indexMes, indexYear, cc, head) => {
-    console.log(indexYear);
     const q =
       props.puestosQ[cc].puestos[head].años[indexYear].volMeses[
         MONTHS[indexMes]
@@ -98,31 +96,18 @@ function TablePuestosPxQ(props) {
     return calcs;
   };
 
-  console.log('[PROPS]', props);
-
   return (
     <>
       {infoForm &&
         Object.keys(infoForm).map((cc, indice) => (
           <TabContent value={cc} className="mb-[20px]" key={cc}>
             <FormContainer>
-              {infoForm[cc].visible.visible && (
+              {infoForm[cc].visible && (
                 <section className="contenedor">
                   <div>
                     <div>
                       {Object.keys(infoForm[cc].puestos).map((head, index) => (
                         <div className="flex  gap-x-3 gap-y-3 " key={head.name}>
-                          {showRemovePuesto &&
-                            infoForm[cc].puestos[head].isNew && (
-                              <Button
-                                shape="circle"
-                                size="sm"
-                                variant="twoTone"
-                                color="red-600"
-                                className="col-start-12 col-end-13 row-start-2 mb-0 mt-10"
-                                icon={<MdDelete />}
-                              />
-                            )}
 
                           <FormItem
                             className={`${

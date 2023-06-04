@@ -49,23 +49,11 @@ function PuestosP() {
     }
   }, [info]);
 
-  const addPuesto = (newPuesto) => {
-    const news = infoForm[country].puestos.filter((p) => p.isNew);
-    if (news.length < 3) {
-      infoForm[country].puestos.push(newPuesto);
-      setInfoForm({ ...infoForm });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setErrorMessage('Solo se pueden agregar 3 puestos');
-      setShowErrorAlert(true);
-      setTimeout(() => {
-        setShowErrorAlert(false);
-      }, 5000);
-    }
-  };
 
   const postPuestosPData = (data) => {
-    createPuestosp(data)
+     let idUser = localStorage.getItem('userId');
+    const info = { info: data, idUser };
+    createPuestosp(info)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setShowSuccessAlert(true);
@@ -88,12 +76,6 @@ function PuestosP() {
     setInfoForm({ ...infoForm });
   };
 
-  const removePuesto = (campo, id, puesto) => {
-    const newP = campo.filter((item) => id !== item.id);
-    infoForm[puesto].puestos = newP;
-    setInfoForm({ ...infoForm });
-  };
-
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
@@ -103,15 +85,17 @@ function PuestosP() {
           setInfoForm(data?.puestosPData[0].puestosp[0]);
           def = Object.keys(data?.puestosPData[0].puestosp[0]).find(
             (p) =>
-              data?.puestosPData[0].puestosp[0][p].visible.visible &&
-              data?.puestosPData[0].puestosp[0][p],
-          );
+            data?.puestosPData[0].puestosp[0][p].visible &&
+            data?.puestosPData[0].puestosp[0][p],
+            );
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
           } else {
             setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
           }
+          setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
+
           setInfo(data?.gastosGeneralData[0].centroDeGastos);
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
@@ -151,7 +135,7 @@ function PuestosP() {
               {puestosQ &&
                 Object.keys(infoForm).map(
                   (cc, index) =>
-                    infoForm[cc].visible.visible && (
+                    infoForm[cc].visible && (
                       <TabNav key={index} value={cc}>
                         <div
                           className="capitalize"
@@ -175,8 +159,6 @@ function PuestosP() {
                           setShowSuccessAlert(boolean)
                         }
                         postPuestoPData={postPuestosPData}
-                        addPuesto={addPuesto}
-                        removePuesto={removePuesto}
                         showAlertError={(boolean) => setShowErrorAlert(boolean)}
                         errorMessage={(error) => setErrorMessage(error)}
                         head={country}

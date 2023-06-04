@@ -15,13 +15,11 @@ import { Link } from 'react-router-dom';
 
 
 function ResumenDeGasto() {
-  const [info, setInfo] = useState(null);
-  const [puestosQ, setPuestosQ] = useState([]);
   const [infoForm, setInfoForm] = useState();
   const currentState = useSelector((state) => state.auth.user);
   const [visibleItems, setVisibleItems] = useState([0]);
-    const currency = useSelector((state) => state.auth.user.currency);
-    const [sumVerticales, setSumVerticales] = useState({});
+  const currency = useSelector((state) => state.auth.user.currency);
+  const [sumVerticales, setSumVerticales] = useState({});
 
     // Logica para mostrar las SUMATORIAS VERTICALES , 
   const generateSumVertical = () => {
@@ -64,31 +62,6 @@ function ResumenDeGasto() {
     }
   }, [infoForm]);
 
-  useEffect(() => {
-    let estructura = {};
-    if (info) {
-      Object.keys(puestosQ).map((cc, index) => {
-        let heads = [];
-        for (let i = 0; i < Cuentas.length; i++) {
-          let head = {};
-          head.id = i;
-          head['años'] = [...AÑOS];
-          head.name = Cuentas[i];
-          head.precioInicial = 0;
-          head.tasa = 0;
-          head.incremento = "mensual";
-          heads.push(head);
-          let h = {};
-          h.visible = puestosQ[cc];
-          h.cuentas = [...heads];
-
-          estructura[cc] = { ...h };
-        }
-      });
-      setInfoForm(() => ({ ...estructura }));
-    }
-  }, [info]);
-
   const hideYear = (index) => {
     setVisibleItems((prevItems) => {
       if (prevItems.includes(index)) {
@@ -103,10 +76,6 @@ function ResumenDeGasto() {
     getUser(currentState.id)
       .then((data) => {
         if (data?.gastosPorCCData.length !== 0) {
-          // if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
-          //   setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
-          //   setInfo(data?.gastosGeneralData[0].centroDeGastos);
-          // }
           setInfoForm(() => ({ ...data?.gastosPorCCData[0].centroDeCostos[0] }))
         } 
       })
@@ -335,8 +304,8 @@ function ResumenDeGasto() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
             Para acceder a este formulario primero debe completar el
-              formulario {' '}
-              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+              formulario de{' '}
+              <Link className="text-indigo-700 underline"  to="/supuestos-gastos">
               Supuesto de Gasto de Estructura
               </Link>{' '}
               .

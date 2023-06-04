@@ -104,9 +104,13 @@ function PuestosPxQ() {
           setInfoForm(data?.puestosPData[0].puestosp[0]);
           def = Object.keys(data?.puestosPData[0].puestosp[0]).find(
             (p) =>
-              data?.puestosPData[0].puestosp[0][p].visible.visible &&
+              data?.puestosPData[0].puestosp[0][p].visible &&
               data?.puestosPData[0].puestosp[0][p],
           );
+          setDefaultCountry(def);
+          setCountry(def);
+          setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
+
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0].puestosq[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
@@ -117,10 +121,11 @@ function PuestosPxQ() {
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
           );
+          setDefaultCountry(def);
+          setCountry(def);
+          setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
         }
-        setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
-        setDefaultCountry(def);
-        setCountry(def);
+     
       })
       .catch((error) => console.error(error));
   }, []);
@@ -152,7 +157,7 @@ function PuestosPxQ() {
               {puestosQ &&
                 Object.keys(infoForm).map(
                   (cc, index) =>
-                    infoForm[cc].visible.visible && (
+                    infoForm[cc].visible && (
                       <TabNav key={index} value={cc}>
                         <div
                           className="capitalize"
@@ -176,13 +181,8 @@ function PuestosPxQ() {
                           setShowSuccessAlert(boolean)
                         }
                         postPuestoPxQData={postPuestosPxQData}
-                        addPuesto={addPuesto}
-                        removePuesto={removePuesto}
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        errorMessage={(error) => setErrorMessage(error)}
                         head={country}
                         cargaSocial={cargaSocial}
-                        handleEditPuesto={handleEditPuesto}
                       />
                     }
                   />

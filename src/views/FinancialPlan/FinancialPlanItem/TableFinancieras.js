@@ -65,6 +65,15 @@ function TableFinancieras({
     IVA: 'IVA CF (costo)',
     imponible: 'Imponible sobre costo',
   };
+  const handleKeyPress = (e) => {
+    if (e.key === '-') {
+      e.preventDefault();
+    }
+    const value = e.target.value + e.key;
+    if (value > 100) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <div className="px-4 py-5">
@@ -118,10 +127,10 @@ function TableFinancieras({
                             } `}
                           >
                             <Field
-                              placeholder="0.0"
+                              placeholder="0"
                               name={`cobranzas.${time.name}`}
                               value={dataFinanciera.cobranzas[time.name]}
-                              type="text"
+                              type="number"
                               size="sm"
                               suffix="%"
                               component={Input}
@@ -132,6 +141,7 @@ function TableFinancieras({
                                   e.target.value,
                                 )
                               }
+                              onKeyPress={handleKeyPress}
                             />
                           </FormItem>
                         </div>
@@ -184,6 +194,7 @@ function TableFinancieras({
                                   e.target.value,
                                 )
                               }
+                              onKeyPress={handleKeyPress}
                             />
                           </FormItem>
                         </div>
@@ -238,6 +249,7 @@ function TableFinancieras({
                                   e.target.value,
                                 )
                               }
+                              onKeyPress={handleKeyPress}
                             />
                           </FormItem>
                         </div>
@@ -318,6 +330,7 @@ function TableFinancieras({
                                   e.target.value,
                                 )
                               }
+                              onKeyPress={handleKeyPress}
                             />
                           </FormItem>
                         </div>
