@@ -42,7 +42,9 @@ function CapexQ() {
     const isEmpty = validateEmptyInputs();
 
     if (!isEmpty) {
-      createCapexQ(bienes)
+      let idUser = localStorage.getItem('userId');
+      const info = { info: bienes, idUser };
+      createCapexQ(info)
         .then(() => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           showSuccessAlert(true);
@@ -69,6 +71,7 @@ function CapexQ() {
   };
 
   useEffect(() => {
+    
     getUser(currentState.id)
       .then((data) => {
         if (data.capexQData[0] && data.capexQData[0]?.length !== 0) {
@@ -102,8 +105,8 @@ function CapexQ() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Capex Q</h4>
-        <span>Bienes</span>
+        <h4>Estimación de volumen de Inversiones</h4>
+        <span>Inversiones</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">

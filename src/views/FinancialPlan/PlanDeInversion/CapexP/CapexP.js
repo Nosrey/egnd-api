@@ -18,9 +18,10 @@ function CapexP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data.capexPData[0].length !== 0) {
+        if (data.capexPData[0] && data.capexPData[0].length !== 0) {
           setBienes(data.capexPData[0].capexP);
-        } else if (data.capexQData[0].length !== 0) {
+        } else if (data.capexQData[0] && data.capexQData[0].length !== 0) {
+          console.log("aca",data.capexQData[0].capexQ );
           setBienes(data.capexQData[0].capexQ);
         }
       })
@@ -40,8 +41,8 @@ function CapexP() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Capex P</h4>
-        <span>Bienes</span>
+        <h4>Estimación de costo de Inversiones</h4>
+        <span>Inversiones</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">

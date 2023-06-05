@@ -146,7 +146,7 @@ export const protectedRoutes = [
   },
   {
     key: 'capexq',
-    path: '/capexq',
+    path: '/volumen-inversion',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeInversion/CapexQ/CapexQ'),
     ),
@@ -154,7 +154,7 @@ export const protectedRoutes = [
   },
   {
     key: 'capexp',
-    path: '/capexp',
+    path: '/costo-inversion',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeInversion/CapexP/CapexP'),
     ),
@@ -162,7 +162,7 @@ export const protectedRoutes = [
   },
   {
     key: 'capexpxq',
-    path: '/capexpxq',
+    path: '/inversion-total',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeInversion/CapexPxQ/CapexPxQ'),
     ),

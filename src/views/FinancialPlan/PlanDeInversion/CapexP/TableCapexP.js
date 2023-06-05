@@ -137,7 +137,9 @@ function TableCapexP(props) {
   };
 
   const submitInfoForm = () => {
-    createCapexP(infoForm)
+    let idUser = localStorage.getItem('userId');
+    const info = { info: infoForm, idUser };
+    createCapexP(info)
       .then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         props.showAlertSuces(true);

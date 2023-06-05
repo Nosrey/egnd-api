@@ -41,13 +41,13 @@ function CapexPxQ() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Capex PxQ</h4>
-        <span>Bienes</span>
+        <h4>Visualización de Inversiones</h4>
+        <span>Inversiones</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Inversiòn de bienes</h6>
+          <h6>Bienes</h6>
         </div>
         {capexP.length !== 0 ? (
           <Tabs>

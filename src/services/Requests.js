@@ -650,7 +650,7 @@ export const createGastosPorCC = async ({ body, idUser }) => {
   }
 };
 
-export const createCapexQ = async (body) => {
+export const createCapexQ = async ({ info, idUser }) => {
   try {
     const response = await fetch(`${URL_API}/api/capexq`, {
       method: 'POST',
@@ -658,7 +658,7 @@ export const createCapexQ = async (body) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        capexQ: body,
+        capexQ: info,
         idUser,
       }),
     });
@@ -670,7 +670,7 @@ export const createCapexQ = async (body) => {
   }
 };
 
-export const createCapexP = async (body) => {
+export const createCapexP = async ({ info, idUser }) => {
   try {
     const response = await fetch(`${URL_API}/api/capexp`, {
       method: 'POST',
@@ -678,7 +678,7 @@ export const createCapexP = async (body) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        capexP: body,
+        capexP: info,
         idUser,
       }),
     });
