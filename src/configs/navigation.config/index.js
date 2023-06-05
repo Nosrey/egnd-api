@@ -17,7 +17,7 @@ const navigationConfig = [
       {
         key: 'collapseGeneral',
         path: '',
-        title: 'Supuestos generales del Modelo',
+        title: 'Supuestos del Modelo',
         translateKey: 'nav.collapseGeneral.collapseGeneral',
         icon: '',
         type: NAV_ITEM_TYPE_COLLAPSE,
@@ -26,7 +26,7 @@ const navigationConfig = [
           {
             key: 'nav.collapseMenu.collapseGeneral.item1',
             path: '/supuestos-generales',
-            title: 'Supuestos generales del Modelo',
+            title: 'Supuestos del Modelo',
             translateKey: 'nav.collapseMenu.collapseGeneral.item1',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,

@@ -6,8 +6,8 @@
     "collapseMenu": {
       "collapseMenu": "Financial Plan",
       "collapseGeneral": {
-        "collapseGeneral": "Supuestos generales del Modelo",
-        "item1": "Supuestos generales del Modelo",
+        "collapseGeneral": "Supuestos del Modelo",
+        "item1": "Supuestos del Modelo",
         "item2": "Mercado"
       },
       "collapsePlanCuentas": "Plan de Cuentas"
@@ -40,21 +40,21 @@
     },
     "collapseGastosDeEstructura": {
       "collapseGastosDeEstructura": "Gastos de Estructura",
-      "item1": "Supuesto de Gasto de estructura",
+      "item1": "Supuesto de Gasto",
       "item2": "Proyección de Gastos por CC",
       "item3": "Consolidado de Gasto",
       "item4": "Dashboard de Gasto",
       "item5": "CAC"
     },
     "collapsePlanDeInversionesYAmortizaciones": {
-      "collapsePlanDeInversionesYAmortizaciones": "Plan de inversiones y Amortizaciones",
-      "item1": "Estimación de volumen de Inversiones",
-      "item2": "Estimación costo Inversiones",
-      "item3": "Visualización Inversiones y Amortizaciones"
+      "collapsePlanDeInversionesYAmortizaciones": "Inversiones y Amortizaciones",
+      "item1": "Volumen de Inversiones",
+      "item2": "Costo Inversiones",
+      "item3": "Inversiones y Amortizaciones"
     },
     "collapseGastosFinancierosParaOperacion": {
-      "collapseGastosFinancierosParaOperacion": "Gastos Financieros para Operación",
-      "item1": "Assumption Gastos Financieros",
+      "collapseGastosFinancierosParaOperacion": "Gastos Financieros",
+      "item1": "Supuesto de Gastos Financieros",
       "item2": "Préstamos"
     },
     "collapseEstadosFinancieros": {
