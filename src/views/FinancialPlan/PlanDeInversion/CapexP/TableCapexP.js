@@ -166,7 +166,11 @@ function TableCapexP(props) {
             total.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
           }
           for (let j = 0; j <= 11; j++) {
-            total[i][j] += Number(d.años[i].volMeses[MONTHS[j]]);
+            if (d.precioInicial === 0) {
+              total[i][j] += 0;
+            } else {
+              total[i][j] += Number(d.años[i].volMeses[MONTHS[j]]);
+            }
           }
         }
       });
@@ -375,9 +379,11 @@ function TableCapexP(props) {
                                     className="w-[90px]"
                                     type="number"
                                     value={
-                                      cta.años[indexYear].volMeses[
-                                        Object.keys(año.volMeses)[indexMes]
-                                      ]
+                                      cta.precioInicial !== 0
+                                        ? cta.años[indexYear].volMeses[
+                                            Object.keys(año.volMeses)[indexMes]
+                                          ]
+                                        : 0
                                     }
                                     name="month"
                                     prefix={currency}

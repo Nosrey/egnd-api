@@ -4,8 +4,8 @@ import { AÑOS } from 'constants/forms.constants';
 import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createPuestospxq, getUser } from 'services/Requests';
 import { Link } from 'react-router-dom';
+import { createPuestospxq, getUser } from 'services/Requests';
 import TablePuestosPxQ from './TablePuestosPxQ';
 
 const { TabNav, TabList } = Tabs;
@@ -98,8 +98,8 @@ function PuestosPxQ() {
     getUser(currentState.id)
       .then((data) => {
         let def;
-        if (data?.puestosPData[0]) {
-          setVisibleP(true);
+        if (data?.puestosPData[0]) setVisibleP(true);
+        if (data?.puestosPData[0] && data?.puestosQData[0]) {
           setPuestosQ(data?.puestosQData[0].puestosq[0]);
           setInfoForm(data?.puestosPData[0].puestosp[0]);
           def = Object.keys(data?.puestosPData[0].puestosp[0]).find(
@@ -110,9 +110,8 @@ function PuestosPxQ() {
           setDefaultCountry(def);
           setCountry(def);
           setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
-
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
-          if (data?.puestosQData[0].puestosq[0]) {
+          if (data?.puestosQData[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
           } else {
             setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
@@ -125,7 +124,6 @@ function PuestosPxQ() {
           setCountry(def);
           setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
         }
-     
       })
       .catch((error) => console.error(error));
   }, []);
@@ -195,7 +193,10 @@ function PuestosPxQ() {
             <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
               formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
+              <Link
+                className="text-indigo-700 underline"
+                to="/supuestos-gastos"
+              >
                 Supuesto de Gasto de Estructura
               </Link>
               .

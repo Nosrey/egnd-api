@@ -4,7 +4,7 @@ import { Alert, FormContainer, Tabs } from 'components/ui';
 import { AÑOS2 } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createCapexQ, getUser } from 'services/Requests';
+import { createCapexP, createCapexQ, getUser } from 'services/Requests';
 import { v4 as uuid } from 'uuid';
 import TableCapexQ from './TableCapexQ';
 
@@ -46,6 +46,7 @@ function CapexQ() {
       const info = { info: bienes, idUser };
       createCapexQ(info)
         .then(() => {
+          createCapexP(info);
           window.scrollTo({ top: 0, behavior: 'smooth' });
           showSuccessAlert(true);
           setTimeout(() => {
@@ -71,7 +72,6 @@ function CapexQ() {
   };
 
   useEffect(() => {
-    
     getUser(currentState.id)
       .then((data) => {
         if (data.capexQData[0] && data.capexQData[0]?.length !== 0) {

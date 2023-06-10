@@ -19,9 +19,14 @@ function CapexP() {
     getUser(currentState.id)
       .then((data) => {
         if (data.capexPData[0] && data.capexPData[0].length !== 0) {
+          const newData = [...data.capexPData[0].capexP];
+          newData.map((n) => {
+            console.log(n);
+          });
+
           setBienes(data.capexPData[0].capexP);
         } else if (data.capexQData[0] && data.capexQData[0].length !== 0) {
-          console.log("aca",data.capexQData[0].capexQ );
+          console.log('aca', data.capexQData[0].capexQ);
           setBienes(data.capexQData[0].capexQ);
         }
       })
