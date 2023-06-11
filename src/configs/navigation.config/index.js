@@ -108,7 +108,7 @@ const navigationConfig = [
 
           {
             key: 'collapsePlanVentas.item5',
-            path: '/clientesalta',
+            path: '/clientes-altas-churn',
             title: 'Clientes - Alta y Churn',
             translateKey: 'nav.collapsePlanVentas.item5',
             icon: '',

@@ -170,7 +170,7 @@ export const protectedRoutes = [
   },
   {
     key: 'churn',
-    path: '/clienteschurn',
+    path: '/clientes-altas-churn',
     component: React.lazy(() =>
       import('views/FinancialPlan/PlanDeVentas/Churn/Churn'),
     ),
