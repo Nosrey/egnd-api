@@ -157,7 +157,7 @@ function TablePuestosQ(props) {
                   <div>
                     <div>
                       {Object.keys(infoForm[cc].puestos).map((head, index) => (
-                        <div className="flex  gap-x-3 gap-y-3 " key={head.name}>                             
+                        <div className="flex  gap-x-3 gap-y-3 " key={head.name}>
                           {showRemovePuesto &&
                             infoForm[cc].puestos[head].isNew && (
                               <Button
@@ -173,7 +173,7 @@ function TablePuestosQ(props) {
                                     infoForm[cc].puestos[head].id,
                                     cc,
                                   )
-                                }                              
+                                }
                               />
                             )}
                           <FormItem
@@ -199,7 +199,7 @@ function TablePuestosQ(props) {
                                 )
                               }
                             />
-                          </FormItem>                          
+                          </FormItem>
                           {infoForm[cc].puestos[head].años.map(
                             (año, indexYear) => (
                               <div className="flex flex-col" key={indexYear}>
@@ -256,14 +256,25 @@ function TablePuestosQ(props) {
                                               type="text"
                                               pattern="[0-9]*"
                                               inputMode="numeric"
-                                              disabled={infoForm[cc].puestos[head].name === ''}
-                                              value={año.volMeses[Object.keys(año.volMeses)[indexMes]]}
+                                              disabled={
+                                                infoForm[cc].puestos[head]
+                                                  .name === ''
+                                              }
+                                              value={
+                                                año.volMeses[
+                                                  Object.keys(año.volMeses)[
+                                                    indexMes
+                                                  ]
+                                                ]
+                                              }
                                               onChange={(e) => {
-                                                const inputValue = e.target.value;
+                                                const inputValue =
+                                                  e.target.value;
                                                 if (/^\d*$/.test(inputValue)) {
                                                   handleOnChangeInitialValue(
                                                     cc,
-                                                    infoForm[cc].puestos[head].id,
+                                                    infoForm[cc].puestos[head]
+                                                      .id,
                                                     inputValue,
                                                     'mes',
                                                     MONTHS[indexMes],
@@ -302,6 +313,9 @@ function TablePuestosQ(props) {
               isNew: true,
               años: [...AÑOS],
               id: Math.floor(Math.random() * 1000),
+              precioInicial: 0,
+              incremento: 0,
+              cargaSocial: 0,
             });
           }}
         >

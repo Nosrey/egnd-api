@@ -44,6 +44,7 @@ function CapexQ() {
     if (!isEmpty) {
       let idUser = localStorage.getItem('userId');
       const info = { info: bienes, idUser };
+
       createCapexQ(info)
         .then(() => {
           createCapexP(info);
