@@ -157,7 +157,7 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
-          
+
           {
             key: 'collapseCostosDirectos.item2',
             path: '/costopxq',
@@ -308,7 +308,8 @@ const navigationConfig = [
         key: 'collapsePlanDeInversionesYAmortizaciones',
         path: '',
         title: 'Plan de inversiones y Amortizaciones',
-        translateKey: 'nav.collapsePlanDeInversionesYAmortizaciones.collapsePlanDeInversionesYAmortizaciones',
+        translateKey:
+          'nav.collapsePlanDeInversionesYAmortizaciones.collapsePlanDeInversionesYAmortizaciones',
         icon: '',
         type: NAV_ITEM_TYPE_COLLAPSE,
         authority: [],
@@ -349,7 +350,8 @@ const navigationConfig = [
         key: 'collapseGastosFinancierosParaOperacion',
         path: '',
         title: 'Gastos Financieros para Operación',
-        translateKey: 'nav.collapseGastosFinancierosParaOperacion.collapseGastosFinancierosParaOperacion',
+        translateKey:
+          'nav.collapseGastosFinancierosParaOperacion.collapseGastosFinancierosParaOperacion',
         icon: '',
         type: NAV_ITEM_TYPE_COLLAPSE,
         authority: [],
@@ -380,7 +382,8 @@ const navigationConfig = [
         key: 'collapseEstadosFinancieros',
         path: '',
         title: 'Estados Financieros',
-        translateKey: 'nav.collapseEstadosFinancieros.collapseEstadosFinancieros',
+        translateKey:
+          'nav.collapseEstadosFinancieros.collapseEstadosFinancieros',
         icon: '',
         type: NAV_ITEM_TYPE_COLLAPSE,
         authority: [],

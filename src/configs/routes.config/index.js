@@ -168,4 +168,12 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'churn',
+    path: '/clienteschurn',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeVentas/Churn/Churn'),
+    ),
+    authority: [],
+  },
 ];
