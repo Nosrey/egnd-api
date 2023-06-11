@@ -112,7 +112,7 @@ function PuestosPxQ() {
           setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
 
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
-          if (data?.puestosQData[0].puestosq[0]) {
+          if (data?.puestosQData[0] && data?.puestosQData[0]?.puestosq[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
           } else {
             setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);

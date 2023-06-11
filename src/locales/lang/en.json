@@ -19,10 +19,9 @@
       "item2": "Cantidad y Volumen",
       "item3": "Precio",
       "item4": "Ventas totales",
-      "item5": "Clientes - Alta",
-      "item6": "Clientes - Churn",
-      "item7": "Clientes - Clientes Totales",
-      "item8": "Dashboard Venta"
+      "item5": "Clientes - Alta y Churn",
+      "item6": "Clientes - Clientes Totales",
+      "item7": "Dashboard Venta"
     },
     "collapseCostosDirectos": {
       "collapseCostosDirectos": "Costos Directos y Margen Bruto",
