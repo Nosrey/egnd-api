@@ -303,6 +303,9 @@ function TableCapexQ(props) {
                     bien: '',
                     descripcion: '',
                     unidad: '',
+                    tasa: 0,
+                    precioInicial: 0,
+                    incremento: 'mensual',
                     años: JSON.parse(JSON.stringify(AÑOS)),
                   });
                 }}
