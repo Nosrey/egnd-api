@@ -181,6 +181,7 @@ function TableChurn(props) {
   };
 
   console.log('[V]', props.volumenData);
+  console.log('[AD]', props.assumptionData);
   return (
     <>
       {infoForm &&
@@ -297,10 +298,9 @@ function TableChurn(props) {
                                               ].años[indexYear].volMeses[
                                                 MONTHS[indexMes]
                                               ] /
-                                                props.assumptionData[indexCanal]
-                                                  .canales[indexCanal].items[
-                                                  indexProd
-                                                ].volumen,
+                                                props.assumptionData[0].canales[
+                                                  indexCanal
+                                                ].items[indexProd].volumen,
                                             )}
                                           />
                                         </FormItem>
@@ -332,14 +332,12 @@ function TableChurn(props) {
                                                       .años[indexYear].volMeses[
                                                       MONTHS[indexMes - 1]
                                                     ] /
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].canales[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
                                                         .items[indexProd]
                                                         .volumen) *
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].churns[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .churns[indexCanal]
                                                         .items[indexProd]
                                                         .porcentajeChurn) /
                                                       100,
@@ -375,9 +373,8 @@ function TableChurn(props) {
                                                       .años[indexYear].volMeses[
                                                       MONTHS[indexMes - 1]
                                                     ] /
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].canales[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
                                                         .items[indexProd]
                                                         .volumen -
                                                       (props.volumenData[
@@ -388,9 +385,8 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 2]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
                                                         ((props.volumenData[
@@ -401,14 +397,14 @@ function TableChurn(props) {
                                                           .volMeses[
                                                           MONTHS[indexMes - 2]
                                                         ] /
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].canales[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
                                                             .items[indexProd]
                                                             .volumen) *
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].churns[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
                                                           100) -
@@ -420,14 +416,12 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 2]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen) *
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].churns[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
                                                           .items[indexProd]
                                                           .porcentajeChurn) /
                                                         100,
@@ -440,9 +434,8 @@ function TableChurn(props) {
                                                       .años[indexYear].volMeses[
                                                       MONTHS[indexMes - 1]
                                                     ] /
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].canales[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
                                                         .items[indexProd]
                                                         .volumen -
                                                       (props.volumenData[
@@ -453,9 +446,8 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 2]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
                                                         ((props.volumenData[
@@ -466,14 +458,14 @@ function TableChurn(props) {
                                                           .volMeses[
                                                           MONTHS[indexMes - 2]
                                                         ] /
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].canales[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
                                                             .items[indexProd]
                                                             .volumen) *
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].churns[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
                                                           100) -
@@ -485,14 +477,12 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 2]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen) *
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].churns[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
                                                           .items[indexProd]
                                                           .porcentajeChurn) /
                                                         100,
@@ -527,9 +517,8 @@ function TableChurn(props) {
                                                       .años[indexYear].volMeses[
                                                       MONTHS[indexMes]
                                                     ] /
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].canales[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
                                                         .items[indexProd]
                                                         .volumen -
                                                       (props.volumenData[
@@ -540,9 +529,8 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 1]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
                                                         ((props.volumenData[
@@ -553,14 +541,14 @@ function TableChurn(props) {
                                                           .volMeses[
                                                           MONTHS[indexMes - 1]
                                                         ] /
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].canales[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
                                                             .items[indexProd]
                                                             .volumen) *
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].churns[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
                                                           100),
@@ -596,14 +584,12 @@ function TableChurn(props) {
                                                       .años[indexYear].volMeses[
                                                       MONTHS[indexMes - 1]
                                                     ] /
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].canales[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
                                                         .items[indexProd]
                                                         .volumen) *
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].churns[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .churns[indexCanal]
                                                         .items[indexProd]
                                                         .porcentajeChurn) /
                                                       100,
@@ -638,9 +624,8 @@ function TableChurn(props) {
                                                       .años[indexYear].volMeses[
                                                       MONTHS[indexMes]
                                                     ] /
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].canales[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
                                                         .items[indexProd]
                                                         .volumen -
                                                       (props.volumenData[
@@ -651,9 +636,8 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 1]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
                                                         ((props.volumenData[
@@ -664,14 +648,14 @@ function TableChurn(props) {
                                                           .volMeses[
                                                           MONTHS[indexMes - 1]
                                                         ] /
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].canales[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
                                                             .items[indexProd]
                                                             .volumen) *
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].churns[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
                                                           100) -
@@ -683,14 +667,12 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 1]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen) *
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].churns[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
                                                           .items[indexProd]
                                                           .porcentajeChurn) /
                                                         100,
@@ -703,9 +685,8 @@ function TableChurn(props) {
                                                       .años[indexYear].volMeses[
                                                       MONTHS[indexMes]
                                                     ] /
-                                                      props.assumptionData[
-                                                        indexCanal
-                                                      ].canales[indexCanal]
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
                                                         .items[indexProd]
                                                         .volumen -
                                                       (props.volumenData[
@@ -716,9 +697,8 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 1]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
                                                         ((props.volumenData[
@@ -729,14 +709,14 @@ function TableChurn(props) {
                                                           .volMeses[
                                                           MONTHS[indexMes - 1]
                                                         ] /
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].canales[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
                                                             .items[indexProd]
                                                             .volumen) *
-                                                          props.assumptionData[
-                                                            indexCanal
-                                                          ].churns[indexCanal]
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
                                                           100) -
@@ -748,14 +728,12 @@ function TableChurn(props) {
                                                         .volMeses[
                                                         MONTHS[indexMes - 1]
                                                       ] /
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].canales[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen) *
-                                                        props.assumptionData[
-                                                          indexCanal
-                                                        ].churns[indexCanal]
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
                                                           .items[indexProd]
                                                           .porcentajeChurn) /
                                                         100,
