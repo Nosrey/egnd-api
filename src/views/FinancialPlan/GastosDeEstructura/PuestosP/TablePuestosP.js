@@ -13,7 +13,6 @@ import {
 } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
-import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 const { TabContent } = Tabs;
@@ -72,7 +71,6 @@ function TablePuestosP(props) {
     if (props.data) setInfoForm(props.data);
     initialConfig();
   }, [props]);
-
 
   const fillMonthsPrices = (producto, yearIndex) => {
     setChange(true);
@@ -142,6 +140,8 @@ function TablePuestosP(props) {
     }
   };
 
+  console.log('[info p]', infoForm);
+
   return (
     <>
       {infoForm &&
@@ -165,7 +165,7 @@ function TablePuestosP(props) {
                                   ? 'capitalize mt-10'
                                   : 'capitalize mt-5'
                               }`}
-                              disabled={!infoForm[cc].puestos[head].isNew}
+                              disabled
                               type="text"
                               name="name"
                               value={infoForm[cc].puestos[head].name}

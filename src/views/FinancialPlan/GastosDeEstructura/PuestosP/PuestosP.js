@@ -4,8 +4,8 @@ import { AÑOS } from 'constants/forms.constants';
 import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createPuestosp, getUser } from 'services/Requests';
 import { Link } from 'react-router-dom';
+import { createPuestosp, getUser } from 'services/Requests';
 import TablePuestosP from './TablePuestosP';
 
 const { TabNav, TabList } = Tabs;
@@ -49,9 +49,8 @@ function PuestosP() {
     }
   }, [info]);
 
-
   const postPuestosPData = (data) => {
-     let idUser = localStorage.getItem('userId');
+    let idUser = localStorage.getItem('userId');
     const info = { info: data, idUser };
     createPuestosp(info)
       .then(() => {
@@ -79,15 +78,16 @@ function PuestosP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
+        console.log('data p ', data);
         let def;
         if (data?.puestosPData[0]) {
           setPuestosQ(data?.puestosPData[0].puestosp[0]);
           setInfoForm(data?.puestosPData[0].puestosp[0]);
           def = Object.keys(data?.puestosPData[0].puestosp[0]).find(
             (p) =>
-            data?.puestosPData[0].puestosp[0][p].visible &&
-            data?.puestosPData[0].puestosp[0][p],
-            );
+              data?.puestosPData[0].puestosp[0][p].visible &&
+              data?.puestosPData[0].puestosp[0][p],
+          );
         } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
@@ -175,9 +175,12 @@ function PuestosP() {
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span className="text-center cursor-default">
               Para acceder a este formulario primero debe completar el
-              formulario {' '}
-              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
-              Supuesto de Gasto de Estructura
+              formulario{' '}
+              <Link
+                className="text-indigo-700 underline"
+                to="/supuestos-gastos"
+              >
+                Supuesto de Gasto de Estructura
               </Link>
               .
             </span>
