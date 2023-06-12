@@ -176,4 +176,12 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'mercado',
+    path: '/research',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/AssumtionsGenerales/Mercado/Mercado'),
+    ),
+    authority: [],
+  },
 ];
