@@ -87,20 +87,30 @@ function TablePuestosPxQ(props) {
       ];
     let calcs = { ...EMPTY_CARGOS };
 
-    console.log('q', q);
-
     if (indexYear === 0) {
       calcs[indexYear][indexMes] = total * q;
       if (q !== 0) {
         calcs[indexYear][indexMes] = total * q;
       }
     } else if (q !== 0) {
-      calcs[indexYear][indexMes] = 20;
+      // calcs[indexYear][indexMes] = 20;
+      calcs[indexYear][indexMes] = total * q;
     } else {
-      calcs[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
+      // calcs[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
+      calcs[indexYear][indexMes] = total * q;
     }
 
     return calcs;
+  };
+
+  const totHor = (volTotal, total) => {
+    let res;
+    if (!volTotal || !total) {
+      res = 0;
+    } else {
+      res = volTotal * total;
+    }
+    return res;
   };
 
   return (
@@ -212,7 +222,12 @@ function TablePuestosPxQ(props) {
                                         className="w-[90px]"
                                         type="number"
                                         disabled
-                                        value={0}
+                                        value={totHor(
+                                          infoForm[cc].puestos[head].total,
+                                          infoForm[cc].puestos[head].años[
+                                            indexYear
+                                          ].volTotal,
+                                        )}
                                       />
                                     </FormItem>
                                   </div>
