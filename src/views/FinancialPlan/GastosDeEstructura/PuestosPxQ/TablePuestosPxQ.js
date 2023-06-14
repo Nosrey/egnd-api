@@ -3,11 +3,10 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
-import { Button, FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
 import { AÑOS, EMPTY_CARGOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
-import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 const { TabContent } = Tabs;
@@ -43,7 +42,10 @@ function TablePuestosPxQ(props) {
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
-            const valor = 0;
+            const valor =
+              Number(head.puestos[i].años[j].volMeses[MONTHS[s]]) *
+                Number(head.puestos[i].total) || 0;
+
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
             } else {
@@ -76,14 +78,19 @@ function TablePuestosPxQ(props) {
   };
 
   const calcPercent = (total, percent, indexMes, indexYear, cc, head) => {
+    if (!total) {
+      total = 0;
+    }
     const q =
       props.puestosQ[cc].puestos[head].años[indexYear].volMeses[
         MONTHS[indexMes]
       ];
     let calcs = { ...EMPTY_CARGOS };
 
+    console.log('q', q);
+
     if (indexYear === 0) {
-      calcs[indexYear][indexMes] = total;
+      calcs[indexYear][indexMes] = total * q;
       if (q !== 0) {
         calcs[indexYear][indexMes] = total * q;
       }
@@ -108,7 +115,6 @@ function TablePuestosPxQ(props) {
                     <div>
                       {Object.keys(infoForm[cc].puestos).map((head, index) => (
                         <div className="flex  gap-x-3 gap-y-3 " key={head.name}>
-
                           <FormItem
                             className={`${
                               index === 0 ? 'mt-12 w-[210px]' : 'mb-2 w-[210px]'
