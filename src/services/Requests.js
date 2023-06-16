@@ -145,8 +145,14 @@ export const getUser = async (id = idUser) => {
       JSON.stringify(data.response.volumenData),
     );
     localStorage.setItem('costoData', JSON.stringify(data.response.costoData));
-    localStorage.setItem("puestoQData", JSON.stringify(data.response.puestosQData));
-    localStorage.setItem("puestoPData", JSON.stringify(data.response.puestosPData));
+    localStorage.setItem(
+      'puestoQData',
+      JSON.stringify(data.response.puestosQData),
+    );
+    localStorage.setItem(
+      'puestoPData',
+      JSON.stringify(data.response.puestosPData),
+    );
     return data.response;
   } catch (error) {
     console.error('Error:', error);
@@ -279,7 +285,6 @@ export const createAssumpVenta = async (body) => {
     throw error;
   }
 };
-
 
 export const createVolumen = async ({ countryName, stats, idUser }) => {
   try {
@@ -427,7 +432,6 @@ export const createPrecio = async ({ countryName, stats, idUser }) => {
 };
 
 export const createPuestosq = async ({ info, idUser }) => {
-  console.log('INFO', info);
   try {
     const response = await fetch(`${URL_API}/api/Puestosq`, {
       method: 'POST',
@@ -554,7 +558,7 @@ const updatePuestosQData = (estructura, centroDeGastos) => {
   let idUser = localStorage.getItem('userId');
   const info = { info: newData, idUser };
   createPuestosq(info);
-}
+};
 
 const updatePuestosPData = (estructura, centroDeGastos) => {
   const oldPuestosPData = JSON.parse(localStorage.getItem('puestoPData'));
@@ -573,7 +577,7 @@ const updatePuestosPData = (estructura, centroDeGastos) => {
   let idUser = localStorage.getItem('userId');
   const info = { info: newData, idUser };
   createPuestosp(info);
-}
+};
 
 export const createGastosGeneral = async ({
   centroDeGastos,

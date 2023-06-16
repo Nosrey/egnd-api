@@ -40,6 +40,8 @@ export const resolveResul = (vol, precio, div) => {
 export const calcTotal = (costoData, volumenData) => {
   configIncial(costoData);
 
+  console.log('cf', configIncial(costoData));
+
   if (costoData.length !== 0 && volumenData.length !== 0) {
     costoData.map((p, indexInicial) => {
       p.stats.map((s, indexStats) => {

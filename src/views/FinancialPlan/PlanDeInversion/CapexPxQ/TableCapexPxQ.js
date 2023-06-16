@@ -40,8 +40,7 @@ function TableCapexPxQ(props) {
           for (let j = 0; j <= 11; j++) {
             total[i][j] +=
               Number(d.años[i].volMeses[MONTHS[j]]) *
-              (capexQ[index].precioInicial !== 0 ||
-              Number(capexQ[index].años[i].volMeses[MONTHS[j]]) !== 0
+              (capexQ[index].precioInicial !== 0
                 ? Number(capexQ[index].años[i].volMeses[MONTHS[j]])
                 : 0);
           }
@@ -181,12 +180,7 @@ function TableCapexPxQ(props) {
                                       cta.años[indexYear].volMeses[
                                         Object.keys(año.volMeses)[indexMes]
                                       ] *
-                                      (capexQ[index].precioInicial !== 0 ||
-                                      Number(
-                                        capexQ[index].años[indexYear].volMeses[
-                                          Object.keys(año.volMeses)[indexMes]
-                                        ],
-                                      ) !== 0
+                                      (capexQ[index].precioInicial !== 0
                                         ? Number(
                                             capexQ[index].años[indexYear]
                                               .volMeses[

@@ -49,21 +49,6 @@ function PuestosPxQ() {
     }
   }, [info]);
 
-  const addPuesto = (newPuesto) => {
-    const news = infoForm[country].puestos.filter((p) => p.isNew);
-    if (news.length < 3) {
-      infoForm[country].puestos.push(newPuesto);
-      setInfoForm({ ...infoForm });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setErrorMessage('Solo se pueden agregar 3 puestos');
-      setShowErrorAlert(true);
-      setTimeout(() => {
-        setShowErrorAlert(false);
-      }, 5000);
-    }
-  };
-
   const postPuestosPxQData = (data) => {
     createPuestospxq(data)
       .then(() => {
@@ -81,17 +66,6 @@ function PuestosPxQ() {
           showErrorAlert(false);
         }, 5000);
       });
-  };
-
-  const handleEditPuesto = (index, value, campo) => {
-    index[campo] = value;
-    setInfoForm({ ...infoForm });
-  };
-
-  const removePuesto = (campo, id, puesto) => {
-    const newP = campo.filter((item) => id !== item.id);
-    infoForm[puesto].puestos = newP;
-    setInfoForm({ ...infoForm });
   };
 
   useEffect(() => {
