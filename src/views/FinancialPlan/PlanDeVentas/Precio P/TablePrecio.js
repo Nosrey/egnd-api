@@ -58,7 +58,8 @@ function TablePrecio(props) {
       // eslint-disable-next-line no-restricted-syntax
       for (const mes in newMeses) {
         if (currentMonth >= producto.inicioMes) {
-          newMeses[mes] = precioActual;
+          newMeses[mes] = Math.round(precioActual);
+
           precioActual *= 1 + producto.tasa / 100;
         } else {
           newMeses[mes] = 0;
@@ -80,8 +81,6 @@ function TablePrecio(props) {
     return newAños;
   };
 
-  
-
   const handleOnChangeInitialValue = (
     pais,
     canalName,
@@ -91,6 +90,8 @@ function TablePrecio(props) {
     mes,
     indexYear,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
       (canal) => canal.canalName === canalName,
@@ -104,22 +105,22 @@ function TablePrecio(props) {
     };
     switch (key) {
       case 'precioInicial':
-        producto.precioInicial = newValue;
+        producto.precioInicial = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
       case 'tasa':
-        producto.tasa = newValue;
+        producto.tasa = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
       case 'mesInicial':
-        producto.inicioMes = newValue;
+        producto.inicioMes = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
       case 'mes':
-        producto.años = replaceMonth(producto, indexYear, mes, newValue);
+        producto.años = replaceMonth(producto, indexYear, mes, inputNumero);
         break;
       default:
         break;
@@ -127,6 +128,11 @@ function TablePrecio(props) {
 
     newData[pais][channelIndex].productos[productoIndex] = producto;
     setInfoForm(newData);
+  };
+
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
   };
 
   const submitInfoForm = () => {
@@ -146,7 +152,7 @@ function TablePrecio(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      let idUser = localStorage.getItem('userId')
+      let idUser = localStorage.getItem('userId');
       const { countryName, stats } = countryArray[i];
       const data = { countryName, stats, idUser };
       postPrecioData(data);
@@ -171,17 +177,13 @@ function TablePrecio(props) {
       });
   };
 
-  
-
-// Combina los conjuntos de datos en una nueva variable
-
+  // Combina los conjuntos de datos en una nueva variable
 
   return (
     <>
       {infoForm &&
         Object.keys(infoForm).map((pais) => (
           <TabContent value={pais} className="mb-[20px]" key={pais}>
-        
             <FormContainer>
               {infoForm[pais].map((canal) => (
                 <section key={canal.canalName} className="contenedor">
@@ -191,12 +193,10 @@ function TablePrecio(props) {
                   <div>
                     <div>
                       {canal.productos.map((producto) => (
-                        
                         <div
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
-                          
                           {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
                             {producto.id.toString()}
                           </Avatar> */}
@@ -211,17 +211,18 @@ function TablePrecio(props) {
                           <div className="flex flex-col w-[240px] mt-[81px]">
                             <div className="flex w-[240px]  gap-x-2">
                               <FormItem className=" mb-0 w-[130px] ">
-                              
                                 <Tooltip
                                   placement="top-end"
                                   title="Precio Inicial"
                                 >
                                   <Input
                                     placeholder="Precio inicial"
-                                    type="number"
+                                    type="text"
                                     name="precioInicial"
                                     prefix={moneda}
-                                    value={producto.precioInicial}
+                                    value={formatearNumero(
+                                      producto.precioInicial,
+                                    )}
                                     onChange={(e) =>
                                       handleOnChangeInitialValue(
                                         pais,
@@ -241,10 +242,10 @@ function TablePrecio(props) {
                                 >
                                   <Input
                                     placeholder="Crecimiento Mensual"
-                                    type="number"
+                                    type="text"
                                     name="tasa"
                                     suffix="%"
-                                    value={producto.tasa}
+                                    value={formatearNumero(producto.tasa)}
                                     onChange={(e) =>
                                       handleOnChangeInitialValue(
                                         pais,
@@ -327,15 +328,15 @@ function TablePrecio(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             prefix={moneda}
-                                            value={
+                                            value={formatearNumero(
                                               año.volMeses[
-                                              Object.keys(año.volMeses)[
-                                              indexMes
-                                              ]
-                                              ]
-                                            }
+                                                Object.keys(año.volMeses)[
+                                                  indexMes
+                                                ]
+                                              ],
+                                            )}
                                             onChange={(e) => {
                                               handleOnChangeInitialValue(
                                                 pais,
