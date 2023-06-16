@@ -7,7 +7,7 @@ export const SegmentContextProvider = SegmentContext.Provider
 export const SegmentContextConsumer = SegmentContext.Consumer
 
 export function useSegment() {
-    return useContext(SegmentContext)
+  return useContext(SegmentContext)
 }
 
 export default SegmentContext

@@ -1,35 +1,69 @@
 {
-    "nav": {
-        "home": "Home",
-        "singleMenuItem": "Single menu item",
-        "financialPlan": "Financial Plan",
-        "collapseMenu": {
-            "collapseMenu": "Financial Plan",
-            "collapseGeneral": {
-                "collapseGeneral": "Assumptions General",
-                "item1": "Assumptions General",
-                "item2": "Research"
-            },
-            "collapsePlanCuentas": "Plan de Cuentas"
-        },
+  "nav": {
+    "home": "Home",
+    "singleMenuItem": "Single menu item",
+    "financialPlan": "Financial Plan",
+    "collapseMenu": {
+      "collapseMenu": "Financial Plan",
+      "collapseGeneral": {
+        "collapseGeneral": "Supuestos del Modelo",
+        "item1": "Supuestos del Modelo",
+        "item2": "Mercado"
+      },
+      "collapsePlanCuentas": "Plan de Cuentas"
+    },
 
-        "collapsePlanVentas": {
-            "collapsePlanVentas": "Assumptions Ventas",
-            "item1": "Assumptions Ventas",
-            "item2": "GMV y Take Rate",
-            "item3": "Volumen (Q)",
-            "item4": "Precio (P)",
-            "item5": "Ventas",
-            "item6": "Clientes - Alta",
-            "item7": "Clientes - Churn",
-            "item8": "Clientes - Clientes Totales",
-            "item9": "Dashboard Venta"
-        },
-        "collapseFinancialPlan": {
-            "collapseFinancialPlan": "Financial Plan",
-            "item1": "Precio de bienes",
-            "item2": "Inversión",
-            "item3": "Assumption Financieras"
-        }
+    "collapsePlanVentas": {
+      "collapsePlanVentas": "Plan de Ventas",
+      "item1": "Supuestos de Ventas",
+      "item2": "Cantidad y Volumen",
+      "item3": "Precio",
+      "item4": "Ventas totales",
+      "item5": "Clientes - Alta y Churn",
+      "item6": "Clientes - Clientes Totales",
+      "item7": "Dashboard Venta"
+    },
+    "collapseCostosDirectos": {
+      "collapseCostosDirectos": "Costos Directos y Margen Bruto",
+      "item1": "Costos Unitarios",
+      "item2": "Costos Totales",
+      "item3":"Dashboard Costos",
+      "item4":"Dashboard CMG Bruta"
+    },
+    "collapseHeadcount": {
+      "collapseHeadcount": "Headcount",
+      "item1": "Proyección nomina",
+      "item2": "Salarios",
+      "item3":"Headcount",
+      "item4":"Dashboard Headcount"
+    },
+    "collapseGastosDeEstructura": {
+      "collapseGastosDeEstructura": "Gastos de Estructura",
+      "item1": "Supuesto de Gasto",
+      "item2": "Proyección de Gastos por CC",
+      "item3": "Consolidado de Gasto",
+      "item4": "Dashboard de Gasto",
+      "item5": "CAC"
+    },
+    "collapsePlanDeInversionesYAmortizaciones": {
+      "collapsePlanDeInversionesYAmortizaciones": "Inversiones y Amortizaciones",
+      "item1": "Volumen de Inversiones",
+      "item2": "Costo Inversiones",
+      "item3": "Inversiones y Amortizaciones"
+    },
+    "collapseGastosFinancierosParaOperacion": {
+      "collapseGastosFinancierosParaOperacion": "Gastos Financieros",
+      "item1": "Supuesto de Gastos Financieros",
+      "item2": "Préstamos"
+    },
+    "collapseEstadosFinancieros": {
+      "collapseEstadosFinancieros": "Estados Financieros",
+      "item1": "P&L",
+      "item2": "Cashflow Directo e Indirecto",
+      "item3": "Balance y Working Capital",
+      "item4": "Dashboard Financiero"
     }
+   
+
+  }
 }

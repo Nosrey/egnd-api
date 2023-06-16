@@ -1,25 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const TextEllipsis = (props) => {
-    const { text, maxTextCount } = props
+function TextEllipsis(props) {
+  const { text, maxTextCount } = props
 
-    return (
-        <>
-            {(text && text.length) > maxTextCount
-                ? text.substring(0, maxTextCount - 3) + '...'
-                : text}
-        </>
-    )
+  return (
+    <div>
+      {(text && text.length) > maxTextCount
+        ? `${text.substring(0, maxTextCount - 3)}...`
+        : text}
+    </div>
+  )
 }
 
 TextEllipsis.propTypes = {
-    text: PropTypes.string,
+  text: PropTypes.string,
+  maxTextCount: PropTypes.number
 }
 
 TextEllipsis.defaultProps = {
-    text: '',
-    maxTextCount: 0,
+  text: '',
+  maxTextCount: 0,
 }
 
 export default TextEllipsis

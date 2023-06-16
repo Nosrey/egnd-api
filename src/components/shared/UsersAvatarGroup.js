@@ -4,72 +4,73 @@ import acronym from 'utils/acronym'
 import PropTypes from 'prop-types'
 import useTwColorByName from 'utils/hooks/useTwColorByName'
 
-const UsersAvatarGroup = (props) => {
-    const {
-        avatarGroupProps,
-        avatarProps,
-        imgKey,
-        nameKey,
-        onAvatarClick,
-        users,
-        ...rest
-    } = props
+function UsersAvatarGroup(props) {
+  const {
+    avatarGroupProps,
+    avatarProps,
+    imgKey,
+    nameKey,
+    onAvatarClick,
+    users,
+    ...rest
+  } = props
 
-    const bgColor = useTwColorByName()
+  const bgColor = useTwColorByName()
 
-    const defaultAvatarProps = useMemo(() => {
-        return {
-            shape: 'circle',
-            size: 30,
-            className: 'cursor-pointer',
-            ...avatarProps,
-        }
-    }, [avatarProps])
+  const defaultAvatarProps = useMemo(
+    () => ({
+      shape: 'circle',
+      size: 30,
+      className: 'cursor-pointer',
+      ...avatarProps,
+    }),
+    [avatarProps]
+  )
 
-    const handleAvatarClick = (avatar) => {
-        onAvatarClick?.(avatar)
-    }
+  const handleAvatarClick = (avatar) => {
+    onAvatarClick?.(avatar)
+  }
 
-    return (
-        <Avatar.Group
-            omittedAvatarTooltip
-            omittedAvatarProps={defaultAvatarProps}
-            chained
-            {...avatarGroupProps}
-            {...rest}
-        >
-            {users.map((elm, index) => (
-                <Tooltip key={elm[nameKey] + index} title={elm[nameKey]}>
-                    <Avatar
-                        {...defaultAvatarProps}
-                        className={`${
-                            elm[imgKey] ? '' : bgColor(elm[nameKey])
-                        } ${defaultAvatarProps.className}`}
-                        src={elm[imgKey]}
-                        onClick={() => handleAvatarClick(elm)}
-                    >
-                        {acronym(elm.name)}
-                    </Avatar>
-                </Tooltip>
-            ))}
-        </Avatar.Group>
-    )
+  return (
+    <Avatar.Group
+      omittedAvatarTooltip
+      omittedAvatarProps={defaultAvatarProps}
+      chained
+      {...avatarGroupProps}
+      {...rest}
+    >
+      {users.map((elm, index) => (
+        <Tooltip key={elm[nameKey] + index} title={elm[nameKey]}>
+          <Avatar
+            {...defaultAvatarProps}
+            className={`${elm[imgKey] ? '' : bgColor(elm[nameKey])} ${
+              defaultAvatarProps.className
+            }`}
+            src={elm[imgKey]}
+            onClick={() => handleAvatarClick(elm)}
+          >
+            {acronym(elm.name)}
+          </Avatar>
+        </Tooltip>
+      ))}
+    </Avatar.Group>
+  )
 }
 
 UsersAvatarGroup.defaultProps = {
-    avatarProps: {},
-    avatarGroupProps: {},
-    users: [],
-    nameKey: 'name',
-    imgKey: 'img',
+  avatarProps: {},
+  avatarGroupProps: {},
+  users: [],
+  nameKey: 'name',
+  imgKey: 'img',
 }
 
 UsersAvatarGroup.propTypes = {
-    users: PropTypes.array,
-    avatarProps: PropTypes.object,
-    avatarGroupProps: PropTypes.object,
-    nameKey: PropTypes.string,
-    imgKey: PropTypes.string,
+  users: PropTypes.arrayOf(),
+  avatarProps: PropTypes.objectOf(),
+  avatarGroupProps: PropTypes.objectOf(),
+  nameKey: PropTypes.string,
+  imgKey: PropTypes.string,
 }
 
 export default UsersAvatarGroup

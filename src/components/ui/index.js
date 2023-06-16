@@ -34,10 +34,10 @@ export { default as TimeInput } from './TimeInput'
 export { default as Timeline } from './Timeline'
 export { default as ScrollBar } from './ScrollBar'
 export {
-    default as ConfigProvider,
-    ConfigContext,
-    ConfigConsumer,
-    useConfig,
-    defaultConfig,
+  default as ConfigProvider,
+  ConfigContext,
+  ConfigConsumer,
+  useConfig,
+  defaultConfig,
 } from './ConfigProvider'
 export { default as hooks } from './hooks'
