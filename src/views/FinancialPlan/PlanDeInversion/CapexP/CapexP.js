@@ -81,8 +81,8 @@ function CapexP() {
             <span>
               Para acceder a este formulario primero debe completar el
               formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/capexq">
-                Capex Q
+              <Link className="text-indigo-700 underline" to="/volumen-inversion">
+                Volumen de Inversiones
               </Link>{' '}
               .
             </span>
