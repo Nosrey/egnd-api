@@ -2,6 +2,7 @@ import React from 'react';
 import { Input, Button, FormItem, FormContainer } from 'components/ui';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import ImageMercado from '../../../../assets/image/Mercado.png';
 
 const validationSchema = Yup.object().shape({
   mercado: Yup.string()
@@ -42,41 +43,144 @@ function Mercado() {
             {({ touched, errors, resetForm }) => (
               <Form>
                 <FormContainer>
-                  <FormItem
-                    className="max-w-sm"
-                    label="Mercado"
-                    invalid={errors.mercado && touched.mercado}
-                    errorMessage={errors.mercado}
-                  >
-                    <Field
-                      type="text"
-                      autoComplete="off"
-                      name="mercado"
-                      placeholder="Mercado"
-                      component={Input}
-                    />
-                  </FormItem>
+                  <div className="flex gap-[16px]">
+                    <FormItem
+                      className="w-[40%]"
+                      label="Mercado"
+                      invalid={errors.mercado && touched.mercado}
+                      errorMessage={errors.mercado}
+                    >
+                      <Field
+                        type="text"
+                        autoComplete="off"
+                        name="mercado"
+                        placeholder="Mercado"
+                        component={Input}
+                      />
+                    </FormItem>
 
-                  <FormItem
-                    className="max-w-sm"
-                    label="Definicion de Mercado Target"
-                    invalid={errors.definicion && touched.definicion}
-                    errorMessage={errors.definicion}
-                  >
-                    <Field
-                      className="mb-2"
-                      type="text"
-                      autoComplete="off"
-                      name="definicion"
-                      placeholder="Definicion"
-                      component={Input}
-                    />
-                    <span>
-                      * Lorem Ipsum ha sido el texto de relleno estándar de las
-                      industrias desde el año 1500, cuando un impresor (N. del
-                      T. persona que se dedica a la imprenta).
-                    </span>
-                  </FormItem>
+                    <FormItem
+                      className="w-[40%]"
+                      label="Definicion de Mercado Target"
+                      invalid={errors.definicion && touched.definicion}
+                      errorMessage={errors.definicion}
+                    >
+                      <Field
+                        className="mb-2"
+                        type="text"
+                        autoComplete="off"
+                        name="definicion"
+                        placeholder="Definicion"
+                        component={Input}
+                      />
+                      <span>
+                        * Lorem Ipsum ha sido el texto de relleno estándar de
+                        las industrias desde el año 1500, cuando un impresor (N.
+                        del T. persona que se dedica a la imprenta).
+                      </span>
+                    </FormItem>
+                  </div>
+
+                  <h4>Tamano de Mercado</h4>
+
+                  <div className="flex gap-[50px] items-center">
+                    <div>
+                      <div>
+                        <span>TAM</span>
+                        <div className="flex gap-[16px] mt-2.5">
+                          <FormItem
+                            className="max-w-[100px]"
+                            invalid={errors.mercado && touched.mercado}
+                            errorMessage={errors.mercado}
+                          >
+                            <Field
+                              type="text"
+                              autoComplete="off"
+                              name="mercado"
+                              placeholder="Valor"
+                              component={Input}
+                            />
+                          </FormItem>
+                          <FormItem
+                            className="max-w-sm"
+                            invalid={errors.mercado && touched.mercado}
+                            errorMessage={errors.mercado}
+                          >
+                            <Field
+                              type="text"
+                              autoComplete="off"
+                              name="mercado"
+                              placeholder="Descripción"
+                              component={Input}
+                            />
+                          </FormItem>
+                        </div>
+                      </div>
+                      <div>
+                        <span>SAM</span>
+                        <div className="flex gap-[16px] mt-2.5">
+                          <FormItem
+                            className="max-w-[100px]"
+                            invalid={errors.mercado && touched.mercado}
+                            errorMessage={errors.mercado}
+                          >
+                            <Field
+                              type="text"
+                              autoComplete="off"
+                              name="mercado"
+                              placeholder="Valor"
+                              component={Input}
+                            />
+                          </FormItem>
+                          <FormItem
+                            className="max-w-sm"
+                            invalid={errors.mercado && touched.mercado}
+                            errorMessage={errors.mercado}
+                          >
+                            <Field
+                              type="text"
+                              autoComplete="off"
+                              name="mercado"
+                              placeholder="Descripción"
+                              component={Input}
+                            />
+                          </FormItem>
+                        </div>
+                      </div>
+                      <div>
+                        <span>SOM</span>
+                        <div className="flex gap-[16px] mt-2.5">
+                          <FormItem
+                            className="max-w-[100px]"
+                            invalid={errors.mercado && touched.mercado}
+                            errorMessage={errors.mercado}
+                          >
+                            <Field
+                              type="text"
+                              autoComplete="off"
+                              name="mercado"
+                              placeholder="Valor"
+                              component={Input}
+                            />
+                          </FormItem>
+                          <FormItem
+                            className="max-w-sm"
+                            invalid={errors.mercado && touched.mercado}
+                            errorMessage={errors.mercado}
+                          >
+                            <Field
+                              type="text"
+                              autoComplete="off"
+                              name="mercado"
+                              placeholder="Descripción"
+                              component={Input}
+                            />
+                          </FormItem>
+                        </div>
+                      </div>
+                    </div>
+                    <img className="w-[45%]" src={ImageMercado} alt="" />
+                  </div>
 
                   <FormItem>
                     <Button variant="solid" type="submit">
