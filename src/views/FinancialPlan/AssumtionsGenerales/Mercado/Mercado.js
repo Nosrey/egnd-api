@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input, Button, FormItem, FormContainer } from 'components/ui';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -10,6 +10,21 @@ const validationSchema = Yup.object().shape({
     .max(50, 'Too Long!')
     .required('Required'),
   definicion: Yup.string()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  valorTam: Yup.number().required('Required'),
+  tam: Yup.string()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  valorSam: Yup.number().required('Required'),
+  sam: Yup.string()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  valorSom: Yup.number().required('Required'),
+  som: Yup.string()
     .min(3, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
@@ -30,9 +45,16 @@ function Mercado() {
             initialValues={{
               mercado: '',
               definicion: '',
+              valorTam: '',
+              tam: '',
+              valorSam: '',
+              sam: '',
+              valorSom: '',
+              som: '',
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm, setSubmitting }) => {
+              console.log(values);
               setTimeout(() => {
                 alert(JSON.stringify(values, null, 2));
                 setSubmitting(false);
@@ -40,12 +62,12 @@ function Mercado() {
               }, 400);
             }}
           >
-            {({ touched, errors, resetForm }) => (
+            {({ touched, errors, resetForm, values }) => (
               <Form>
                 <FormContainer>
                   <div className="flex gap-[16px]">
                     <FormItem
-                      className="w-[40%]"
+                      className="w-[40%] max-w-[480px]"
                       label="Mercado"
                       invalid={errors.mercado && touched.mercado}
                       errorMessage={errors.mercado}
@@ -60,7 +82,7 @@ function Mercado() {
                     </FormItem>
 
                     <FormItem
-                      className="w-[40%]"
+                      className="w-[40%] max-w-[480px]"
                       label="Definicion de Mercado Target"
                       invalid={errors.definicion && touched.definicion}
                       errorMessage={errors.definicion}
@@ -81,35 +103,37 @@ function Mercado() {
                     </FormItem>
                   </div>
 
-                  <h4>Tamano de Mercado</h4>
+                  <h4 className="mt-[20px]">Tamaño de Mercado</h4>
 
-                  <div className="flex gap-[50px] items-center">
-                    <div>
+                  <div className="flex gap-[50px] items-center mt-[20px]">
+                    <div className="w-[50%]">
                       <div>
                         <span>TAM</span>
-                        <div className="flex gap-[16px] mt-2.5">
+                        <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
-                            className="max-w-[100px]"
-                            invalid={errors.mercado && touched.mercado}
-                            errorMessage={errors.mercado}
+                            // className="max-w-[100px]"
+                            className="w-[30%]"
+                            invalid={errors.valorTam && touched.valorTam}
+                            errorMessage={errors.valorTam}
                           >
                             <Field
                               type="text"
                               autoComplete="off"
-                              name="mercado"
+                              name="valorTam"
                               placeholder="Valor"
                               component={Input}
                             />
                           </FormItem>
                           <FormItem
-                            className="max-w-sm"
-                            invalid={errors.mercado && touched.mercado}
-                            errorMessage={errors.mercado}
+                            // className="max-w-sm"
+                            className="w-[80%]"
+                            invalid={errors.tam && touched.tam}
+                            errorMessage={errors.tam}
                           >
                             <Field
                               type="text"
                               autoComplete="off"
-                              name="mercado"
+                              name="tam"
                               placeholder="Descripción"
                               component={Input}
                             />
@@ -118,29 +142,29 @@ function Mercado() {
                       </div>
                       <div>
                         <span>SAM</span>
-                        <div className="flex gap-[16px] mt-2.5">
+                        <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
-                            className="max-w-[100px]"
-                            invalid={errors.mercado && touched.mercado}
-                            errorMessage={errors.mercado}
+                            className="w-[30%]"
+                            invalid={errors.valorSam && touched.valorSam}
+                            errorMessage={errors.valorSam}
                           >
                             <Field
                               type="text"
                               autoComplete="off"
-                              name="mercado"
+                              name="valorSam"
                               placeholder="Valor"
                               component={Input}
                             />
                           </FormItem>
                           <FormItem
-                            className="max-w-sm"
-                            invalid={errors.mercado && touched.mercado}
-                            errorMessage={errors.mercado}
+                            className="w-[80%]"
+                            invalid={errors.sam && touched.sam}
+                            errorMessage={errors.sam}
                           >
                             <Field
                               type="text"
                               autoComplete="off"
-                              name="mercado"
+                              name="sam"
                               placeholder="Descripción"
                               component={Input}
                             />
@@ -149,29 +173,29 @@ function Mercado() {
                       </div>
                       <div>
                         <span>SOM</span>
-                        <div className="flex gap-[16px] mt-2.5">
+                        <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
-                            className="max-w-[100px]"
-                            invalid={errors.mercado && touched.mercado}
-                            errorMessage={errors.mercado}
+                            className="w-[30%]"
+                            invalid={errors.valorSom && touched.valorSom}
+                            errorMessage={errors.valorSom}
                           >
                             <Field
                               type="text"
                               autoComplete="off"
-                              name="mercado"
+                              name="valorSom"
                               placeholder="Valor"
                               component={Input}
                             />
                           </FormItem>
                           <FormItem
-                            className="max-w-sm"
-                            invalid={errors.mercado && touched.mercado}
-                            errorMessage={errors.mercado}
+                            className="w-[80%]"
+                            invalid={errors.som && touched.som}
+                            errorMessage={errors.som}
                           >
                             <Field
                               type="text"
                               autoComplete="off"
-                              name="mercado"
+                              name="som"
                               placeholder="Descripción"
                               component={Input}
                             />
@@ -179,14 +203,31 @@ function Mercado() {
                         </div>
                       </div>
                     </div>
-                    <img className="w-[45%]" src={ImageMercado} alt="" />
+                    <div className=" w-[50%] relative">
+                      <img
+                        className="w-[100%] max-w-[860px] "
+                        src={ImageMercado}
+                        alt=""
+                      />
+                      <span className="absolute right-[10%] top-[10%] text-[22px] text-[#181851]">
+                        {values?.valorTam}7
+                      </span>
+                      <span className="absolute right-[10%] top-[47%] text-[22px] text-[#181851]">
+                        {values?.valorSam}8
+                      </span>
+                      <span className="absolute right-[10%] top-[86%] text-[22px] text-[#181851]">
+                        {values?.valorSom}9
+                      </span>
+                    </div>
                   </div>
 
-                  <FormItem>
-                    <Button variant="solid" type="submit">
-                      Submit
-                    </Button>
-                  </FormItem>
+                  <div className="flex justify-end mt-[40px]">
+                    <FormItem>
+                      <Button variant="solid" type="submit">
+                        Guardar
+                      </Button>
+                    </FormItem>
+                  </div>
                 </FormContainer>
               </Form>
             )}
