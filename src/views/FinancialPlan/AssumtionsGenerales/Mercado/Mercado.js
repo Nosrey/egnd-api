@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Input, Button, FormItem, FormContainer } from 'components/ui';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -30,6 +31,16 @@ const validationSchema = Yup.object().shape({
     .required('Required'),
 });
 function Mercado() {
+  const currency = useSelector((state) => state.auth.user.currency);
+
+  const formatearNumero = (numero) => {
+    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
+
+  const removePunctuation = (value) => value.replace(/[.,]/g, '');
+
   return (
     <div>
       <div className="border-b-2 mb-8 pb-1">
@@ -54,7 +65,7 @@ function Mercado() {
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm, setSubmitting }) => {
-              console.log(values);
+              console.log(removePunctuation(values.valorTam));
               setTimeout(() => {
                 alert(JSON.stringify(values, null, 2));
                 setSubmitting(false);
@@ -122,6 +133,8 @@ function Mercado() {
                               name="valorTam"
                               placeholder="Valor"
                               component={Input}
+                              prefix={currency}
+                              value={formatearNumero(values?.valorTam)}
                             />
                           </FormItem>
                           <FormItem
@@ -154,6 +167,8 @@ function Mercado() {
                               name="valorSam"
                               placeholder="Valor"
                               component={Input}
+                              prefix={currency}
+                              value={formatearNumero(values?.valorSam)}
                             />
                           </FormItem>
                           <FormItem
@@ -185,6 +200,8 @@ function Mercado() {
                               name="valorSom"
                               placeholder="Valor"
                               component={Input}
+                              prefix={currency}
+                              value={formatearNumero(values?.valorSom)}
                             />
                           </FormItem>
                           <FormItem
@@ -209,14 +226,17 @@ function Mercado() {
                         src={ImageMercado}
                         alt=""
                       />
-                      <span className="absolute right-[10%] top-[10%] text-[22px] text-[#181851]">
-                        {values?.valorTam}7
+                      <span className="absolute right-[5%] top-[10%] text-[22px] text-[#181851]">
+                        {currency}
+                        {formatearNumero(values?.valorTam)}
                       </span>
-                      <span className="absolute right-[10%] top-[47%] text-[22px] text-[#181851]">
-                        {values?.valorSam}8
+                      <span className="absolute right-[5%] top-[47%] text-[22px] text-[#181851]">
+                        {currency}
+                        {formatearNumero(values?.valorSam)}
                       </span>
-                      <span className="absolute right-[10%] top-[86%] text-[22px] text-[#181851]">
-                        {values?.valorSom}9
+                      <span className="absolute right-[5%] top-[86%] text-[22px] text-[#181851]">
+                        {currency}
+                        {formatearNumero(values?.valorSom)}
                       </span>
                     </div>
                   </div>
