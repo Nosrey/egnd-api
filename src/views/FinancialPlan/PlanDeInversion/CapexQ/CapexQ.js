@@ -47,14 +47,15 @@ function CapexQ() {
 
       createCapexQ(info)
         .then(() => {
-          createCapexP(info);
           window.scrollTo({ top: 0, behavior: 'smooth' });
-          showSuccessAlert(true);
+          setShowSuccessAlert(true);
           setTimeout(() => {
-            showSuccessAlert(false);
+            setShowSuccessAlert(false);
           }, 5000);
+          createCapexP(info);
         })
         .catch((error) => {
+          console.log('err', error);
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setErrorMessage('Ha ocurrido un error');
           setShowErrorAlert(true);

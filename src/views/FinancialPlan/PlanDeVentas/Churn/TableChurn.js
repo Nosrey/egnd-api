@@ -180,8 +180,6 @@ function TableChurn(props) {
     setInfoForm(newData);
   };
 
-  console.log('[V]', props.volumenData);
-  console.log('[AD]', props.assumptionData);
   return (
     <>
       {infoForm &&
