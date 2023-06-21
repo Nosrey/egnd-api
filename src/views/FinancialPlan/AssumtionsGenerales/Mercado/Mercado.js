@@ -7,28 +7,28 @@ import ImageMercado from '../../../../assets/image/Mercado.png';
 
 const validationSchema = Yup.object().shape({
   mercado: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+    .min(3, '¡Demasiado corto!')
+    .max(50, '¡Demasiado largo!')
+    .required('Requerido'),
   definicion: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  valorTam: Yup.number().required('Required'),
+    .min(3, '¡Demasiado corto!')
+    .max(50, '¡Demasiado largo!')
+    .required('Requerido'),
+  valorTam: Yup.string().required('Requerido'),
   tam: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  valorSam: Yup.number().required('Required'),
+    .min(3, '¡Demasiado corto!')
+    .max(50, '¡Demasiado largo!')
+    .required('Requerido'),
+  valorSam: Yup.string().required('Requerido'),
   sam: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  valorSom: Yup.number().required('Required'),
+    .min(3, '¡Demasiado corto!')
+    .max(50, '¡Demasiado largo!')
+    .required('Requerido'),
+  valorSom: Yup.string().required('Requerido'),
   som: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+    .min(3, '¡Demasiado corto!')
+    .max(50, '¡Demasiado largo!')
+    .required('Requerido'),
 });
 function Mercado() {
   const currency = useSelector((state) => state.auth.user.currency);
