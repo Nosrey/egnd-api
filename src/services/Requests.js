@@ -693,3 +693,39 @@ export const createCapexP = async ({ info, idUser }) => {
     throw error;
   }
 };
+
+export const createMercado = async (
+  mercado,
+  definicion,
+  newValorTam,
+  tam,
+  newValorSam,
+  sam,
+  newValorSom,
+  som,
+) => {
+  const response = await fetch(`${URL_API}/api/mercado`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      mercado,
+      definicion,
+      newValorTam,
+      tam,
+      newValorSam,
+      sam,
+      newValorSom,
+      som,
+    }),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }
+
+  throw new Error('Error en la petición POST');
+};

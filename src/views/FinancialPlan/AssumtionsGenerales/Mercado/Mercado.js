@@ -1,37 +1,40 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Input, Button, FormItem, FormContainer } from 'components/ui';
+import { Input, Button, FormItem, FormContainer, Alert } from 'components/ui';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { createMercado } from 'services/Requests';
 import ImageMercado from '../../../../assets/image/Mercado.png';
 
 const validationSchema = Yup.object().shape({
   mercado: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(50, '¡Demasiado largo!')
+    .max(100, '¡Demasiado largo!')
     .required('Requerido'),
   definicion: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(50, '¡Demasiado largo!')
+    .max(100, '¡Demasiado largo!')
     .required('Requerido'),
   valorTam: Yup.string().required('Requerido'),
   tam: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(50, '¡Demasiado largo!')
+    .max(100, '¡Demasiado largo!')
     .required('Requerido'),
   valorSam: Yup.string().required('Requerido'),
   sam: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(50, '¡Demasiado largo!')
+    .max(100, '¡Demasiado largo!')
     .required('Requerido'),
   valorSom: Yup.string().required('Requerido'),
   som: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(50, '¡Demasiado largo!')
+    .max(100, '¡Demasiado largo!')
     .required('Requerido'),
 });
 function Mercado() {
   const currency = useSelector((state) => state.auth.user.currency);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const formatearNumero = (numero) => {
     const inputNumero = Number(numero.replace(/\D/g, ''));
@@ -43,6 +46,16 @@ function Mercado() {
 
   return (
     <div>
+      {showSuccessAlert && (
+        <Alert className="mb-4" type="success" showIcon>
+          Los datos se guardaron satisfactoriamente.
+        </Alert>
+      )}
+      {showErrorAlert && (
+        <Alert className="mb-4" type="danger" showIcon>
+          No se pudieron guardar los datos.
+        </Alert>
+      )}
       <div className="border-b-2 mb-8 pb-1">
         <h4>Mercado</h4>
         <span>Research</span>
@@ -65,12 +78,44 @@ function Mercado() {
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm, setSubmitting }) => {
-              console.log(removePunctuation(values.valorTam));
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-                resetForm();
-              }, 400);
+              const newValorTam = removePunctuation(values.valorTam);
+              const newValorSam = removePunctuation(values.valorSam);
+              const newValorSom = removePunctuation(values.valorSom);
+              createMercado(
+                values.mercado,
+                values.definicion,
+                newValorTam,
+                values.tam,
+                newValorSam,
+                values.sam,
+                newValorSom,
+                values.som,
+              )
+                .then((data) => {
+                  setTimeout(() => {
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth',
+                    });
+                    setShowSuccessAlert(true);
+                    setTimeout(() => {
+                      setShowSuccessAlert(false);
+                    }, 5000);
+                    setSubmitting(false);
+                    resetForm();
+                  }, 400);
+                })
+                .catch((error) => {
+                  console.error('Error de API:', error.response.data.message);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                  });
+                  setShowErrorAlert(true);
+                  setTimeout(() => {
+                    setShowErrorAlert(false);
+                  }, 5000);
+                });
             }}
           >
             {({ touched, errors, resetForm, values }) => (
