@@ -703,6 +703,7 @@ export const createMercado = async (
   sam,
   newValorSom,
   som,
+  currentState,
 ) => {
   const response = await fetch(`${URL_API}/api/mercado`, {
     method: 'POST',
@@ -718,6 +719,7 @@ export const createMercado = async (
       sam,
       newValorSom,
       som,
+      idUser: currentState,
     }),
   });
 

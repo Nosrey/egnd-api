@@ -82,7 +82,7 @@ function TablePuestosPxQ(props) {
       total = 0;
     }
     const q =
-      props.puestosQ[cc].puestos[head].años[indexYear].volMeses[
+      props.puestosQ[cc]?.puestos[head]?.años[indexYear]?.volMeses[
         MONTHS[indexMes]
       ];
     let calcs = { ...EMPTY_CARGOS };
@@ -246,7 +246,7 @@ function TablePuestosPxQ(props) {
         ))}
 
       {infoForm && (
-        <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
+        <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px] h-[230px]">
           <div className="flex items-center">
             <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
               Total

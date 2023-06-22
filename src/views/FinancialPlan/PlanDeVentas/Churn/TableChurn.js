@@ -214,10 +214,10 @@ function TableChurn(props) {
                             />
                             <p className="mt-20">Clientes</p>
                             <p className="mt-8">Churn numero</p>
-                            <p className="mt-8">Inicio</p>
-                            <p className="mt-8">Altas</p>
-                            <p className="mt-8">Bajas</p>
-                            <p className="mt-8">Final</p>
+                            <p className="mt-8 font-bold">Inicio</p>
+                            <p className="mt-8 font-bold">Altas</p>
+                            <p className="mt-8 font-bold">Bajas</p>
+                            <p className="mt-8 font-bold">Final</p>
                           </FormItem>
 
                           {producto.años.map((año, indexYear) => (
@@ -360,7 +360,7 @@ function TableChurn(props) {
                                           key={indexMes}
                                         >
                                           <Input
-                                            className="w-[90px]"
+                                            className="w-[90px] border-2 border-solid border-gray-800"
                                             type="text"
                                             disabled
                                             value={
@@ -504,7 +504,7 @@ function TableChurn(props) {
                                           key={indexMes}
                                         >
                                           <Input
-                                            className="w-[90px]"
+                                            className="w-[90px] border-2 border-solid border-gray-800"
                                             type="text"
                                             disabled
                                             value={
@@ -570,7 +570,7 @@ function TableChurn(props) {
                                           key={indexMes}
                                         >
                                           <Input
-                                            className="w-[90px]"
+                                            className="w-[90px] border-2 border-solid border-gray-800"
                                             type="text"
                                             disabled
                                             value={
@@ -611,7 +611,7 @@ function TableChurn(props) {
                                           key={indexMes}
                                         >
                                           <Input
-                                            className="w-[90px]"
+                                            className="w-[90px] border-2 border-solid border-gray-800"
                                             type="text"
                                             disabled
                                             value={
