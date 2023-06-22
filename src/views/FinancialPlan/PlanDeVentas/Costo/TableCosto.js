@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Avatar,
   Button,
   FormContainer,
   FormItem,
@@ -54,9 +53,10 @@ function TableCosto(props) {
 
     if (div !== 0) {
       const mult = vol * precio;
-      value = (div * mult) / 100;
+      value = (Number(div) * mult) / 100;
       value = value.toFixed(1);
     }
+
     return value;
   };
 
@@ -76,7 +76,7 @@ function TableCosto(props) {
     }
 
     for (let i = 0; i < countryArray.length; i++) {
-      let idUser = localStorage.getItem('userId')
+      let idUser = localStorage.getItem('userId');
       const { countryName, stats } = countryArray[i];
       const data = { countryName, stats, idUser };
       postCostoData(data);
@@ -433,20 +433,23 @@ function TableCosto(props) {
                                             type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={formatNumber(resolveResul(
-                                              props.volumenData[indexPais]
-                                                .stats[indexCanal].productos[
-                                                indexProd
-                                              ].años[indexYear].volMeses[
-                                                MONTHS[indexMes]
-                                              ],
-                                              props.precioData[indexPais].stats[
-                                                indexCanal
-                                              ].productos[indexProd].años[
-                                                indexYear
-                                              ].volMeses[MONTHS[indexMes]],
-                                              producto.comision,
-                                            ))}
+                                            value={formatNumber(
+                                              resolveResul(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                props.precioData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                producto.comision,
+                                              ),
+                                            )}
                                           />
                                         </FormItem>
                                       ),
@@ -467,20 +470,23 @@ function TableCosto(props) {
                                             type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={formatNumber(resolveResul(
-                                              props.volumenData[indexPais]
-                                                .stats[indexCanal].productos[
-                                                indexProd
-                                              ].años[indexYear].volMeses[
-                                                MONTHS[indexMes]
-                                              ],
-                                              props.precioData[indexPais].stats[
-                                                indexCanal
-                                              ].productos[indexProd].años[
-                                                indexYear
-                                              ].volMeses[MONTHS[indexMes]],
-                                              producto.impuesto,
-                                            ))}
+                                            value={formatNumber(
+                                              resolveResul(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                props.precioData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                producto.impuesto,
+                                              ),
+                                            )}
                                             onChange={(e) => {
                                               props.handleOnChangeInitialValue(
                                                 pais,
@@ -513,20 +519,23 @@ function TableCosto(props) {
                                             type="text"
                                             disabled
                                             prefix={moneda}
-                                            value={formatNumber(resolveResul(
-                                              props.volumenData[indexPais]
-                                                .stats[indexCanal].productos[
-                                                indexProd
-                                              ].años[indexYear].volMeses[
-                                                MONTHS[indexMes]
-                                              ],
-                                              props.precioData[indexPais].stats[
-                                                indexCanal
-                                              ].productos[indexProd].años[
-                                                indexYear
-                                              ].volMeses[MONTHS[indexMes]],
-                                              producto.cargos,
-                                            ))}
+                                            value={formatNumber(
+                                              resolveResul(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                props.precioData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                producto.cargos,
+                                              ),
+                                            )}
                                             onChange={(e) => {
                                               props.handleOnChangeInitialValue(
                                                 pais,

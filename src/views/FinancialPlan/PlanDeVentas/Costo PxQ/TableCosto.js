@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { MONTHS, OPTIONS_COUNTRY } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -387,12 +387,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="number"
-                                            prefix={moneda}
-                                            disabled
-                                            value={
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -405,7 +402,28 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]]
                                             }
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              type="number"
+                                              prefix={moneda}
+                                              disabled
+                                              value={
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ] *
+                                                props.costoData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ]
+                                              }
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
@@ -434,13 +452,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            id={`${indexYear}-${MONTHS[indexMes]}-comision`}
-                                            type="number"
-                                            disabled
-                                            prefix={moneda}
-                                            value={resolveResul(
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -454,7 +468,30 @@ function TableCosto(props) {
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.comision,
                                             )}
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              id={`${indexYear}-${MONTHS[indexMes]}-comision`}
+                                              type="number"
+                                              disabled
+                                              prefix={moneda}
+                                              value={resolveResul(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                props.precioData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                producto.comision,
+                                              )}
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
@@ -483,12 +520,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="number"
-                                            disabled
-                                            prefix={moneda}
-                                            value={resolveResul(
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -502,7 +536,29 @@ function TableCosto(props) {
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.impuesto,
                                             )}
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              type="number"
+                                              disabled
+                                              prefix={moneda}
+                                              value={resolveResul(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                props.precioData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                producto.impuesto,
+                                              )}
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
@@ -531,13 +587,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="number"
-                                            id={`${indexYear}-${MONTHS[indexMes]}-cargos`}
-                                            disabled
-                                            prefix={moneda}
-                                            value={resolveResul(
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -551,7 +603,30 @@ function TableCosto(props) {
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.cargos,
                                             )}
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              type="number"
+                                              id={`${indexYear}-${MONTHS[indexMes]}-cargos`}
+                                              disabled
+                                              prefix={moneda}
+                                              value={resolveResul(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                props.precioData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                                producto.cargos,
+                                              )}
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}

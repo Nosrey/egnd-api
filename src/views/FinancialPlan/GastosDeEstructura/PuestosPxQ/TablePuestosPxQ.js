@@ -3,7 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
-import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { AÑOS, EMPTY_CARGOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -82,21 +82,23 @@ function TablePuestosPxQ(props) {
       total = 0;
     }
     const q =
-      props.puestosQ[cc].puestos[head].años[indexYear].volMeses[
-        MONTHS[indexMes]
-      ];
+      props.data[cc].puestos[head].años[indexYear].volMeses[MONTHS[indexMes]];
+
     let calcs = { ...EMPTY_CARGOS };
 
     if (indexYear === 0) {
-      calcs[indexYear][indexMes] = total * q;
       if (q !== 0) {
+        calcs[indexYear][indexMes] = total * q;
+        calcs[indexYear][indexMes] = calcs[indexYear][indexMes].toFixed(2);
+      } else {
         calcs[indexYear][indexMes] = total * q;
       }
     } else if (q !== 0) {
-      // calcs[indexYear][indexMes] = 20;
+      // c[indexYear][indexMes] = 20;
       calcs[indexYear][indexMes] = total * q;
+      calcs[indexYear][indexMes] = calcs[indexYear][indexMes].toFixed(2);
     } else {
-      // calcs[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
+      // c[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
       calcs[indexYear][indexMes] = total * q;
     }
 
@@ -108,8 +110,9 @@ function TablePuestosPxQ(props) {
     if (!volTotal || !total) {
       res = 0;
     } else {
-      res = volTotal * total;
+      res = total.toFixed(2);
     }
+
     return res;
   };
 
@@ -195,11 +198,9 @@ function TablePuestosPxQ(props) {
                                             }`}
                                             key={indexMes}
                                           >
-                                            <Input
-                                              className="w-[90px]"
-                                              type="number"
-                                              disabled
-                                              value={
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={
                                                 calcPercent(
                                                   infoForm[cc].puestos[head]
                                                     .total,
@@ -211,8 +212,26 @@ function TablePuestosPxQ(props) {
                                                   head,
                                                 )[indexYear][indexMes]
                                               }
-                                              name="month"
-                                            />
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="number"
+                                                disabled
+                                                value={
+                                                  calcPercent(
+                                                    infoForm[cc].puestos[head]
+                                                      .total,
+                                                    infoForm[cc].puestos[head]
+                                                      .incremento,
+                                                    indexMes,
+                                                    indexYear,
+                                                    cc,
+                                                    head,
+                                                  )[indexYear][indexMes]
+                                                }
+                                                name="month"
+                                              />
+                                            </Tooltip>
                                           </FormItem>
                                         ),
                                       )}
