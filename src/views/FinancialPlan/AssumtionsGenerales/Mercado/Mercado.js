@@ -38,17 +38,21 @@ function Mercado() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
-  const [valueForm, setValueForm] = useState();
+  const [valueForm, setValueForm] = useState({});
+  const [isInitialValuesSet, setIsInitialValuesSet] = useState(false);
 
   useEffect(() => {
-    console.log(currentState);
     getUser(currentState)
       .then((data) => {
         if (data.mercadoData.length !== 0) {
+          console.log(data.mercadoData[0]);
           setValueForm(data.mercadoData[0]);
+          setIsInitialValuesSet(true);
         }
       })
-      .catch(console.log('error'));
+      .catch((error) => {
+        console.log('Error:', error);
+      });
   }, []);
 
   const formatearNumero = (numero) => {
@@ -81,30 +85,27 @@ function Mercado() {
         </div>
         <div className="px-4 py-5">
           <Formik
-            initialValues={{
-              // mercado: valueForm.mercado,
-              // definicion: valueForm?.definicion,
-              // valorTam: valueForm?.valorTam,
-              // tam: valueForm?.tam,
-              // valorSam: valueForm?.valorSam,
-              // sam: valueForm?.sam,
-              // valorSom: valueForm?.valorSom,
-              // som: valueForm?.som,
-
-              mercado: '',
-              definicion: '',
-              valorTam: '',
-              tam: '',
-              valorSam: '',
-              sam: '',
-              valorSom: '',
-              som: '',
-            }}
+            enableReinitialize
+            initialValues={
+              isInitialValuesSet
+                ? {
+                    mercado: valueForm?.mercado || '',
+                    definicion: valueForm?.definicion || '',
+                    valorTam: valueForm?.valorTam || '',
+                    tam: valueForm?.tam || '',
+                    valorSam: valueForm?.valorSam || '',
+                    sam: valueForm?.sam || '',
+                    valorSom: valueForm?.valorSom || '',
+                    som: valueForm?.som || '',
+                  }
+                : {}
+            }
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm, setSubmitting }) => {
               const newValorTam = removePunctuation(values.valorTam);
               const newValorSam = removePunctuation(values.valorSam);
               const newValorSom = removePunctuation(values.valorSom);
+              console.log(values);
               createMercado(
                 values.mercado,
                 values.definicion,
