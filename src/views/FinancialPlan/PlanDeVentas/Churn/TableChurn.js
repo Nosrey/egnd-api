@@ -100,7 +100,7 @@ function TableChurn(props) {
       const newMeses = { ...newAños[i].volMeses };
       for (const mes in newMeses) {
         if (currentMonth >= producto.inicioMes) {
-          newMeses[mes] = precioActual;
+          newMeses[mes] = Math.round(precioActual);
           precioActual *= 1 + producto.tasa / 100;
         } else {
           newMeses[mes] = 0;
@@ -131,6 +131,8 @@ function TableChurn(props) {
     mes,
     indexYear,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
       (canal) => canal.canalName === canalName,
@@ -144,33 +146,33 @@ function TableChurn(props) {
     };
     switch (key) {
       case 'precioInicial':
-        producto.precioInicial = newValue;
+        producto.precioInicial = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
       case 'tasa':
-        producto.tasa = newValue;
+        producto.tasa = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
       case 'mesInicial':
-        producto.inicioMes = newValue;
+        producto.inicioMes = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
       case 'comision':
-        producto.comision = newValue;
+        producto.comision = inputNumero;
         break;
 
       case 'impuesto':
-        producto.impuesto = newValue;
+        producto.impuesto = inputNumero;
         break;
 
       case 'cargos':
-        producto.cargos = newValue;
+        producto.cargos = inputNumero;
         break;
 
       case 'mes':
-        producto.años = replaceMonth(producto, indexYear, mes, newValue);
+        producto.años = replaceMonth(producto, indexYear, mes, inputNumero);
         break;
       default:
         break;
@@ -178,6 +180,11 @@ function TableChurn(props) {
 
     newData[pais][channelIndex].productos[productoIndex] = producto;
     setInfoForm(newData);
+  };
+
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
   };
 
   console.log('[V]', props.volumenData);
@@ -261,16 +268,16 @@ function TableChurn(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             disabled
-                                            value={
+                                            value={formatearNumero(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
                                               ].años[indexYear].volMeses[
                                                 MONTHS[indexMes]
-                                              ]
-                                            }
+                                              ],
+                                            )}
                                             name="month"
                                           />
                                         </FormItem>
