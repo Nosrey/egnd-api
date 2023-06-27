@@ -318,7 +318,7 @@ function TableCosto(props) {
                           <div className="flex flex-col w-[240px] mt-[138px]">
                             <FormItem className="mb-0 mt-2 w-[90px]">
                               <Input
-                                type="number"
+                                type="text"
                                 name="comision"
                                 disabled
                                 suffix="%"
@@ -328,7 +328,7 @@ function TableCosto(props) {
 
                             <FormItem className="mb-0 mt-4 w-[90px]">
                               <Input
-                                type="number"
+                                type="text"
                                 name="impuesto"
                                 disabled
                                 suffix="%"
@@ -338,7 +338,7 @@ function TableCosto(props) {
 
                             <FormItem className="mb-0 mt-2 w-[90px]">
                               <Input
-                                type="number"
+                                type="text"
                                 name="cargos"
                                 disabled
                                 suffix="%"
@@ -389,7 +389,7 @@ function TableCosto(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
+                                            type="text"
                                             prefix={moneda}
                                             disabled
                                             value={
