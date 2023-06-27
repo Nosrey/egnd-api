@@ -175,6 +175,8 @@ function AssumptionVentas() {
   };
 
   const validateEmptyInputs = () => {
+    console.log('c', channels);
+    console.log('churns', churn);
     let isEmpty = false;
     productos.forEach((p) => {
       if (p.name === '' || p.model === '' || p.type === '') {
@@ -186,6 +188,25 @@ function AssumptionVentas() {
       if (c.name === '' || c.sameClient === '') {
         isEmpty = true;
       }
+      if (c.items.length === 0) {
+        isEmpty = true;
+      }
+      c.items.forEach((i) => {
+        if (i.volumen === '') {
+          isEmpty = true;
+        }
+      });
+    });
+
+    churn.forEach((c) => {
+      if (c.items.length === 0) {
+        isEmpty = true;
+      }
+      c.items.forEach((i) => {
+        if (i.volumen === '') {
+          isEmpty = true;
+        }
+      });
     });
 
     return isEmpty;
@@ -195,19 +216,20 @@ function AssumptionVentas() {
     const isEmpty = validateEmptyInputs();
 
     if (!isEmpty) {
-      const countriesSort = countries.sort((a, b) => a.value.localeCompare(b.value))
-      const currentId = currentState.id
+      const countriesSort = countries.sort((a, b) =>
+        a.value.localeCompare(b.value),
+      );
+      const currentId = currentState.id;
 
       const body = {
         channels,
         churn,
         countriesSort,
         currentId,
-        productos
-      }
-      
-      createAssumpVenta(body)
+        productos,
+      };
 
+      createAssumpVenta(body)
         .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setShowSuccessAlert(true);

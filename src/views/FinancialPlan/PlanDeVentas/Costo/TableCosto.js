@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Avatar,
   Button,
   FormContainer,
   FormItem,
@@ -54,9 +53,10 @@ function TableCosto(props) {
 
     if (div !== 0) {
       const mult = vol * precio;
-      value = (div * mult) / 100;
+      value = (Number(div) * mult) / 100;
       value = value.toFixed(1);
     }
+
     return value;
   };
 

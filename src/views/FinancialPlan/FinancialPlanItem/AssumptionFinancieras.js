@@ -1,18 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import ContainerScrollable from 'components/shared/ContainerScrollable';
-import {
-  Alert,
-  Button,
-  Card,
-  FormContainer,
-  FormItem,
-  Input,
-  Table,
-} from 'components/ui';
-import { Field, Form, Formik } from 'formik';
+import { Alert } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { createAssumpFinanciera, getUser } from 'services/Requests';
+import { getUser } from 'services/Requests';
 import { useMedia } from 'utils/hooks/useMedia';
 import TableFinancieras from './TableFinancieras';
 
@@ -68,7 +59,9 @@ function AssumptionsFinancieras() {
   const [userData, setUserData] = useState();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
-
+  const [messageError, setMessageError] = useState(
+    'No se pudieron guardar los datos.',
+  );
   const [dataFinanciera, setDataFinanciera] = useState(defaultState);
   useEffect(() => {
     getUser(currentState.id).then((d) => {
@@ -84,10 +77,25 @@ function AssumptionsFinancieras() {
       const input = tiempos[index].name;
       const state = dataFinanciera.input;
       const newData = { ...dataFinanciera[campo], [input]: value };
-      setDataFinanciera({
-        ...dataFinanciera,
-        [campo]: newData,
+      let tot = 0;
+      Object.keys(newData).forEach((key, index) => {
+        tot += Number(newData[key]);
       });
+
+      if (tot > 100) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setShowErrorAlert(true);
+        setMessageError('El porcentaje supera el 100%');
+        setTimeout(() => {
+          setShowErrorAlert(false);
+          setMessageError('No se pudieron guardar los datos.');
+        }, 5000);
+      } else {
+        setDataFinanciera({
+          ...dataFinanciera,
+          [campo]: newData,
+        });
+      }
     } else {
       setDataFinanciera({ ...dataFinanciera, [index]: value });
     }
@@ -102,7 +110,7 @@ function AssumptionsFinancieras() {
       )}
       {showErrorAlert && (
         <Alert className="mb-4" type="danger" showIcon>
-          No se pudieron guardar los datos.
+          {messageError}
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">

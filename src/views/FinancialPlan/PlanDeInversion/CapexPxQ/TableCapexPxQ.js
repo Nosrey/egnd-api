@@ -40,9 +40,7 @@ function TableCapexPxQ(props) {
           for (let j = 0; j <= 11; j++) {
             total[i][j] +=
               Number(d.años[i].volMeses[MONTHS[j]]) *
-              (capexQ[index].precioInicial !== 0
-                ? Number(capexQ[index].años[i].volMeses[MONTHS[j]])
-                : 0);
+              (Number(capexQ[index].años[i].volMeses[MONTHS[j]]) || 0);
           }
         }
       });
@@ -69,9 +67,7 @@ function TableCapexPxQ(props) {
 
   const tot = calcTotal();
 
-  console.log('CQ', capexQ);
-  console.log('CP', capexP);
-
+  console.log(capexQ);
   return (
     <>
       {capexP && (
@@ -170,7 +166,16 @@ function TableCapexPxQ(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={`${mes} - año ${indexYear + 1}`}
+                                  title={`$${
+                                    cta.años[indexYear].volMeses[
+                                      Object.keys(año.volMeses)[indexMes]
+                                    ] *
+                                    (Number(
+                                      capexQ[index].años[indexYear].volMeses[
+                                        Object.keys(año.volMeses)[indexMes]
+                                      ],
+                                    ) || 0)
+                                  }`}
                                 >
                                   <Input
                                     className="w-[90px]"
@@ -180,16 +185,11 @@ function TableCapexPxQ(props) {
                                       cta.años[indexYear].volMeses[
                                         Object.keys(año.volMeses)[indexMes]
                                       ] *
-                                      (capexQ[index].precioInicial !== 0
-                                        ? Number(
-                                            capexQ[index].años[indexYear]
-                                              .volMeses[
-                                              Object.keys(año.volMeses)[
-                                                indexMes
-                                              ]
-                                            ],
-                                          )
-                                        : 0)
+                                      (Number(
+                                        capexQ[index].años[indexYear].volMeses[
+                                          Object.keys(año.volMeses)[indexMes]
+                                        ],
+                                      ) || 0)
                                     }
                                     name="month"
                                     prefix={currency}
@@ -265,7 +265,11 @@ function TableCapexPxQ(props) {
                           </p>
                         ))}
                       <p className="w-[90px] text-center font-bold">
+
                         {currency}
+
+                        {indexYear === 0 && currency}
+
                         {totals[indexYear].reduce(
                           (acumulador, numero) => acumulador + numero,
                           0,
@@ -279,7 +283,8 @@ function TableCapexPxQ(props) {
           </div>
 
           <p className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ">
-            TOTAL: {tot}
+            TOTAL: {currency}
+            {tot}
           </p>
         </div>
       )}
