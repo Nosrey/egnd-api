@@ -16,6 +16,7 @@ function TableMargen(props) {
   const [volTotal, setVolTotal] = useState(0);
   const [totalesCanales, setTotalesCanales] = useState([]);
   const moneda = props.currency;
+  let ini = [];
 
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
@@ -100,7 +101,7 @@ function TableMargen(props) {
 
   const resolveResul = (vol, precio, div) => {
     div = parseInt(div);
-    vol = parseInt(vol);
+    vol = parseInt(vol) / 10;
     precio = parseInt(precio);
 
     let value = 0;
@@ -130,28 +131,21 @@ function TableMargen(props) {
     });
   };
 
-  // const calcTotals = () => {
-  //   let total = [];
-  //   if (props.volumenData[0]) {
-  //     capexP.map((d, index) => {
-  //       for (let i = 0; i <= 9; i++) {
-  //         if (!total[i]) {
-  //           total.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  //         }
-  //         for (let j = 0; j <= 11; j++) {
-  //           total[i][j] +=
-  //             Number(d.años[i].volMeses[MONTHS[j]]) *
-  //             (Number(capexQ[index].años[i].volMeses[MONTHS[j]]) || 0);
-  //         }
-  //       }
-  //     });
+  const init = () => {
+    if (props.volumenData[0]) {
+      props.volumenData[0].map((v, indexP) => {
+        ini.push({});
+      });
+    }
+  };
 
-  //     return total;
-  //   }
-  // };
+  const calcTotals = () => {
+    let total = [];
+    if (props.volumenData[0]) {
+      props.volumenData[0].map((v, indexP) => {});
+    }
+  };
 
-  // const totals = calcTotals();
-  // console.log('p', props);
   return (
     <>
       {infoForm &&
@@ -210,6 +204,7 @@ function TableMargen(props) {
 
                                   <p className="month w-[90px]">Total</p>
                                 </div>
+                                {}
                                 <div className="flex gap-x-3 gap-y-3">
                                   {visibleItems.includes(indexYear) &&
                                     año &&
@@ -223,13 +218,14 @@ function TableMargen(props) {
                                             className="w-[90px]"
                                             type="text"
                                             value={
-                                              Number(
+                                              (Number(
                                                 props.volumenData[0].stats[
                                                   indexCanal
                                                 ].productos[indexP].años[
                                                   indexYear
                                                 ].volMeses[mes],
-                                              ) *
+                                              ) /
+                                                10) *
                                                 Number(
                                                   props.precioData[0].stats[
                                                     indexCanal
@@ -403,25 +399,6 @@ function TableMargen(props) {
                 </div>
               ))}
           </div>
-
-          <br />
-          <br />
-          <br />
-          {totalesCanales.map((canal, i) => (
-            <p
-              className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
-              key={i}
-            >
-              VENTA CANAL '{canal.name}': {moneda}
-              {formatNumber(canal.sum)}
-            </p>
-          ))}
-
-          <br />
-          <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            VENTA TOTAL: {moneda}
-            {formatNumber(volTotal)}
-          </p>
         </div>
       )}
     </>

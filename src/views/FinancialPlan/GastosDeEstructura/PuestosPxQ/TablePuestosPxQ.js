@@ -26,6 +26,8 @@ function TablePuestosPxQ(props) {
     if (infoForm && props.head) {
       const head = { ...infoForm[props.head] };
 
+      console.log('info-headcount', head.puestos);
+
       let arrayvalores = [
         { id: 0, values: [] },
         { id: 1, values: [] },
@@ -42,12 +44,15 @@ function TablePuestosPxQ(props) {
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
-            const valor =
+            let valor =
               Number(head.puestos[i].años[j].volMeses[MONTHS[s]]) *
                 Number(head.puestos[i].total) || 0;
 
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
+              arrayvalores[j].values[s] = Number(
+                arrayvalores[j].values[s],
+              ).toFixed(2);
             } else {
               arrayvalores[j].values.push(valor);
             }
