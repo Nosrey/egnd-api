@@ -203,6 +203,7 @@ function TableCapexPxQ(props) {
                               type="number"
                               value={cta.años[indexYear].volTotal}
                               disabled
+                              prefix={currency}
                             />
                           </FormItem>
                         </div>
@@ -266,7 +267,7 @@ function TableCapexPxQ(props) {
                         ))}
                       <p className="w-[90px] text-center font-bold">
 
-                        {currency}
+                        {/* {currency} */}
 
                         {indexYear === 0 && currency}
 

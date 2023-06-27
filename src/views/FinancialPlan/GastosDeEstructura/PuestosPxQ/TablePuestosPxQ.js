@@ -86,12 +86,7 @@ function TablePuestosPxQ(props) {
     if (!total) {
       total = 0;
     }
-    const q =
-      props.puestosQ[cc]?.puestos[head]?.años[indexYear]?.volMeses[
-        MONTHS[indexMes]
-      ];
-
-      props.data[cc].puestos[head].años[indexYear].volMeses[MONTHS[indexMes]];
+    const q =props.data[cc].puestos[head].años[indexYear].volMeses[MONTHS[indexMes]];
 
     let calcs = { ...EMPTY_CARGOS };
 
