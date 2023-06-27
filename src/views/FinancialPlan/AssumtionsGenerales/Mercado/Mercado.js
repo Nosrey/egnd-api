@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Input, Button, FormItem, FormContainer, Alert } from 'components/ui';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { createMercado } from 'services/Requests';
+import { createMercado, getUser } from 'services/Requests';
 import ImageMercado from '../../../../assets/image/Mercado.png';
 
 const validationSchema = Yup.object().shape({
@@ -33,16 +33,35 @@ const validationSchema = Yup.object().shape({
 });
 function Mercado() {
   const currency = useSelector((state) => state.auth.user.currency);
+  const currentState = useSelector((state) => state.auth.user.id);
+
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
+  const [valueForm, setValueForm] = useState({});
+  const [isInitialValuesSet, setIsInitialValuesSet] = useState(false);
+
+  useEffect(() => {
+    getUser(currentState)
+      .then((data) => {
+        if (data.mercadoData.length !== 0) {
+          console.log(data.mercadoData[0]);
+          setValueForm(data.mercadoData[0]);
+          setIsInitialValuesSet(true);
+        }
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+      });
+  }, []);
+
   const formatearNumero = (numero) => {
-    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const inputNumero = Number(numero?.replace(/\D/g, ''));
     const nuevoNum = inputNumero.toLocaleString('es-AR');
     return nuevoNum;
   };
 
-  const removePunctuation = (value) => value.replace(/[.,]/g, '');
+  const removePunctuation = (value) => value?.replace(/[.,]/g, '');
 
   return (
     <div>
@@ -66,21 +85,27 @@ function Mercado() {
         </div>
         <div className="px-4 py-5">
           <Formik
-            initialValues={{
-              mercado: '',
-              definicion: '',
-              valorTam: '',
-              tam: '',
-              valorSam: '',
-              sam: '',
-              valorSom: '',
-              som: '',
-            }}
+            enableReinitialize
+            initialValues={
+              isInitialValuesSet
+                ? {
+                    mercado: valueForm?.mercado || '',
+                    definicion: valueForm?.definicion || '',
+                    valorTam: valueForm?.valorTam || '',
+                    tam: valueForm?.tam || '',
+                    valorSam: valueForm?.valorSam || '',
+                    sam: valueForm?.sam || '',
+                    valorSom: valueForm?.valorSom || '',
+                    som: valueForm?.som || '',
+                  }
+                : {}
+            }
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm, setSubmitting }) => {
               const newValorTam = removePunctuation(values.valorTam);
               const newValorSam = removePunctuation(values.valorSam);
               const newValorSom = removePunctuation(values.valorSom);
+              console.log(values);
               createMercado(
                 values.mercado,
                 values.definicion,
@@ -90,6 +115,7 @@ function Mercado() {
                 values.sam,
                 newValorSom,
                 values.som,
+                currentState,
               )
                 .then((data) => {
                   setTimeout(() => {

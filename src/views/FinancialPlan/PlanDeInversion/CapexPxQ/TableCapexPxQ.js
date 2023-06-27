@@ -102,7 +102,7 @@ function TableCapexPxQ(props) {
                   <div className="flex flex-col">
                     {index === 0 && (
                       <div className="titleRow min-w-[62px]">
-                        <p>Descripcion</p>
+                        <p>Descripción</p>
                       </div>
                     )}
                     <FormItem
@@ -265,7 +265,11 @@ function TableCapexPxQ(props) {
                           </p>
                         ))}
                       <p className="w-[90px] text-center font-bold">
+
+                        {currency}
+
                         {indexYear === 0 && currency}
+
                         {totals[indexYear].reduce(
                           (acumulador, numero) => acumulador + numero,
                           0,
