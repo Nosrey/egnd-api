@@ -26,8 +26,6 @@ function TablePuestosPxQ(props) {
     if (infoForm && props.head) {
       const head = { ...infoForm[props.head] };
 
-      console.log('info-headcount', head.puestos);
-
       let arrayvalores = [
         { id: 0, values: [] },
         { id: 1, values: [] },

@@ -125,7 +125,6 @@ function PuestosQ() {
   const compareData = (data, idUser) => {
     const pp = JSON.parse(localStorage.getItem('puestoPData'));
     let updatedData = { ...data.info[0] };
-    console.log('[D]', pp[0].puestosp[0]);
 
     Object.keys(updatedData).map((u) => {
       Object.values(updatedData[u].puestos).map((p, index) => {

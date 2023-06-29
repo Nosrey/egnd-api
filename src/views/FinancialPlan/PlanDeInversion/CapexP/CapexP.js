@@ -20,13 +20,10 @@ function CapexP() {
       .then((data) => {
         if (data.capexPData[0] && data.capexPData[0].length !== 0) {
           const newData = [...data.capexPData[0].capexP];
-          newData.map((n) => {
-            console.log(n);
-          });
+          newData.map((n) => {});
 
           setBienes(data.capexPData[0].capexP);
         } else if (data.capexQData[0] && data.capexQData[0].length !== 0) {
-          console.log('aca', data.capexQData[0].capexQ);
           setBienes(data.capexQData[0].capexQ);
         }
       })
@@ -81,7 +78,10 @@ function CapexP() {
             <span>
               Para acceder a este formulario primero debe completar el
               formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/volumen-inversion">
+              <Link
+                className="text-indigo-700 underline"
+                to="/volumen-inversion"
+              >
                 Volumen de Inversiones
               </Link>{' '}
               .
