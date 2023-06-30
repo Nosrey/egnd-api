@@ -113,7 +113,7 @@ function TableCapexQ(props) {
                       </div>
                     )}
 
-                    <div className="inline-block">
+                    <div className="inline-block flex items-center gap-4">
                       {showRemoveProd && (
                         <Button
                           shape="circle"
@@ -148,7 +148,7 @@ function TableCapexQ(props) {
                   <div className="flex flex-col ">
                     {index === 0 && (
                       <div className="titleRow min-w-[62px]">
-                        <p> Descripcion</p>
+                        <p> Descripción</p>
                       </div>
                     )}
 

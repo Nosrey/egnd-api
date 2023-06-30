@@ -76,8 +76,8 @@ function CapexPxQ() {
             <span>
               Para acceder a este formulario primero debe completar el
               formulario de{' '}
-              <Link className="text-indigo-700 underline" to="/capexp">
-                Capex P
+              <Link className="text-indigo-700 underline" to="/costo-inversion">
+                Estimación de Costo  de Inversiones
               </Link>{' '}
               .
             </span>
