@@ -3,7 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
-import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { AÑOS, EMPTY_CARGOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -26,6 +26,8 @@ function TablePuestosPxQ(props) {
     if (infoForm && props.head) {
       const head = { ...infoForm[props.head] };
 
+      console.log('info-headcount', head.puestos);
+
       let arrayvalores = [
         { id: 0, values: [] },
         { id: 1, values: [] },
@@ -42,12 +44,15 @@ function TablePuestosPxQ(props) {
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
-            const valor =
+            let valor =
               Number(head.puestos[i].años[j].volMeses[MONTHS[s]]) *
                 Number(head.puestos[i].total) || 0;
 
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
+              arrayvalores[j].values[s] = Number(
+                arrayvalores[j].values[s],
+              ).toFixed(2);
             } else {
               arrayvalores[j].values.push(valor);
             }
@@ -81,22 +86,23 @@ function TablePuestosPxQ(props) {
     if (!total) {
       total = 0;
     }
-    const q =
-      props.puestosQ[cc].puestos[head].años[indexYear].volMeses[
-        MONTHS[indexMes]
-      ];
+    const q =props.data[cc].puestos[head].años[indexYear].volMeses[MONTHS[indexMes]];
+
     let calcs = { ...EMPTY_CARGOS };
 
     if (indexYear === 0) {
-      calcs[indexYear][indexMes] = total * q;
       if (q !== 0) {
+        calcs[indexYear][indexMes] = total * q;
+        calcs[indexYear][indexMes] = calcs[indexYear][indexMes].toFixed(2);
+      } else {
         calcs[indexYear][indexMes] = total * q;
       }
     } else if (q !== 0) {
-      // calcs[indexYear][indexMes] = 20;
+      // c[indexYear][indexMes] = 20;
       calcs[indexYear][indexMes] = total * q;
+      calcs[indexYear][indexMes] = calcs[indexYear][indexMes].toFixed(2);
     } else {
-      // calcs[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
+      // c[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
       calcs[indexYear][indexMes] = total * q;
     }
 
@@ -108,8 +114,9 @@ function TablePuestosPxQ(props) {
     if (!volTotal || !total) {
       res = 0;
     } else {
-      res = volTotal * total;
+      res = total.toFixed(2);
     }
+
     return res;
   };
 
@@ -195,11 +202,9 @@ function TablePuestosPxQ(props) {
                                             }`}
                                             key={indexMes}
                                           >
-                                            <Input
-                                              className="w-[90px]"
-                                              type="number"
-                                              disabled
-                                              value={
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={
                                                 calcPercent(
                                                   infoForm[cc].puestos[head]
                                                     .total,
@@ -211,8 +216,26 @@ function TablePuestosPxQ(props) {
                                                   head,
                                                 )[indexYear][indexMes]
                                               }
-                                              name="month"
-                                            />
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="number"
+                                                disabled
+                                                value={
+                                                  calcPercent(
+                                                    infoForm[cc].puestos[head]
+                                                      .total,
+                                                    infoForm[cc].puestos[head]
+                                                      .incremento,
+                                                    indexMes,
+                                                    indexYear,
+                                                    cc,
+                                                    head,
+                                                  )[indexYear][indexMes]
+                                                }
+                                                name="month"
+                                              />
+                                            </Tooltip>
                                           </FormItem>
                                         ),
                                       )}
@@ -246,7 +269,7 @@ function TablePuestosPxQ(props) {
         ))}
 
       {infoForm && (
-        <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
+        <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px] h-[230px]">
           <div className="flex items-center">
             <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
               Total

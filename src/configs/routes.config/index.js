@@ -180,9 +180,11 @@ export const protectedRoutes = [
     key: 'margenbruto',
     path: '/margenbruto',
     component: React.lazy(() =>
-      import('views/FinancialPlan/PlanDeVentas/MargenBruto/MargenBruto'),)
-   },
-   {
+      import('views/FinancialPlan/PlanDeVentas/MargenBruto/MargenBruto'),
+    ),
+    authority: [],
+  },
+  {
     key: 'mercado',
     path: '/research',
     component: React.lazy(() =>
