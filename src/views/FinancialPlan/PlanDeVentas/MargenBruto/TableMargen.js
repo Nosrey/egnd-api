@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
@@ -16,7 +18,7 @@ function TableMargen(props) {
   const [volTotal, setVolTotal] = useState(0);
   const [totalesCanales, setTotalesCanales] = useState([]);
   const moneda = props.currency;
-  let ini = [];
+
 
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
@@ -131,25 +133,120 @@ function TableMargen(props) {
     });
   };
 
-  const init = () => {
+  const calcValues = () => {
+    let total = [];
     if (props.volumenData[0]) {
-      props.volumenData[0].map((v, indexP) => {
-        ini.push({});
+      Object.values(props.volumenData).map((v, indexCountry) => {
+        total.push([]);
+        v.stats.map((s, indexCanal) => {
+          total[indexCountry].push([]);
+          s.productos.map((p, indexProd) => {
+            total[indexCountry][indexCanal].push([]);
+            for (let i = 0; i <= 9; i++) {
+              if (!total[indexCountry][indexCanal][indexProd][i]) {
+                total[indexCountry][indexCanal][indexProd].push([
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                ]);
+              }
+              for (let j = 0; j <= 11; j++) {
+                total[indexCountry][indexCanal][indexProd][i][j] =
+                  (Number(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+                  ) /
+                    10) *
+                    Number(
+                      props.precioData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+                    ) -
+                  (resolveResul(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+                    props.precioData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+
+                    props.costoData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].comision,
+                  ) +
+                    resolveResul(
+                      props.volumenData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+                      props.precioData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+
+                      props.costoData[indexCountry].stats[indexCanal].productos[
+                        indexProd
+                      ].impuesto,
+                    ) +
+                    resolveResul(
+                      props.volumenData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+                      props.precioData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+
+                      props.costoData[indexCountry].stats[indexCanal].productos[
+                        indexProd
+                      ].cargos,
+                    ) +
+                    parseInt(
+                      props.volumenData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]] *
+                        props.precioData[indexCountry].stats[indexCanal]
+                          .productos[indexProd].años[i].volMeses[MONTHS[j]],
+                    ));
+              }
+            }
+          });
+        });
       });
+
+      return total;
     }
   };
 
   const calcTotals = () => {
-    let total = [];
+    let total = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
     if (props.volumenData[0]) {
-      props.volumenData[0].map((v, indexP) => {});
+      Object.values(props.volumenData).map((v, indexCountry) => {
+        v.stats.map((s, indexCanal) => {
+          s.productos.map((p, indexProd) => {
+            for (let i = 0; i <= 9; i++) {
+              for (let j = 0; j <= 11; j++) {
+                total[i][j] +=
+                  values[indexCountry][indexCanal][indexProd][i][j];
+              }
+            }
+          });
+        });
+      });
     }
+
+    return total;
   };
+
+  const values = calcValues();
+  const totals = calcTotals();
+
 
   return (
     <>
       {infoForm &&
-        Object.keys(infoForm).map((pais) => (
+        Object.keys(infoForm).map((pais, indexCountry) => (
           <TabContent value={pais} className="mb-[20px]" key={pais}>
             <FormContainer>
               {infoForm[pais].map((canal, indexCanal) => (
@@ -217,83 +314,11 @@ function TableMargen(props) {
                                           <Input
                                             className="w-[90px]"
                                             type="text"
-                                            value={
-                                              (Number(
-                                                props.volumenData[0].stats[
-                                                  indexCanal
-                                                ].productos[indexP].años[
-                                                  indexYear
-                                                ].volMeses[mes],
-                                              ) /
-                                                10) *
-                                                Number(
-                                                  props.precioData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[mes],
-                                                ) -
-                                              (resolveResul(
-                                                props.volumenData[0].stats[
-                                                  indexCanal
-                                                ].productos[indexP].años[
-                                                  indexYear
-                                                ].volMeses[mes],
-                                                props.precioData[0].stats[
-                                                  indexCanal
-                                                ].productos[indexP].años[
-                                                  indexYear
-                                                ].volMeses[mes],
-
-                                                props.costoData[0].stats[
-                                                  indexCanal
-                                                ].productos[indexP].comision,
-                                              ) +
-                                                resolveResul(
-                                                  props.volumenData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[mes],
-                                                  props.precioData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[mes],
-
-                                                  props.costoData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].impuesto,
-                                                ) +
-                                                resolveResul(
-                                                  props.volumenData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[mes],
-                                                  props.precioData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[mes],
-
-                                                  props.costoData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].cargos,
-                                                ) +
-                                                parseInt(
-                                                  props.volumenData[0].stats[
-                                                    indexCanal
-                                                  ].productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[mes] *
-                                                    props.precioData[0].stats[
-                                                      indexCanal
-                                                    ].productos[indexP].años[
-                                                      indexYear
-                                                    ].volMeses[mes],
-                                                ))
-                                            }
+                                            value={formatNumber(
+                                              values[indexCountry][indexCanal][
+                                                indexP
+                                              ][indexYear][indexMes],
+                                            )}
                                             disabled
                                             prefix={moneda}
                                             name="month"
@@ -307,7 +332,13 @@ function TableMargen(props) {
                                       className="w-[90px]"
                                       type="text"
                                       disabled
-                                      value={formatNumber(año.ventasTotal)}
+                                      value={formatNumber(
+                                        values[indexCountry][indexCanal][
+                                          indexP
+                                        ][indexYear].reduce(
+                                          (total, current) => total + current,
+                                        ),
+                                      )}
                                       prefix={moneda}
                                     />
                                   </FormItem>
@@ -383,12 +414,12 @@ function TableMargen(props) {
                           año.numeros?.map((valor, index) => (
                             <p className="w-[90px] text-center">
                               {moneda}
-                              {formatNumber(valor)}
+                              {formatNumber(totals[indexYear][index])}
                             </p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
                           {formatNumber(
-                            año.numeros.reduce(
+                            totals[indexYear].reduce(
                               (total, current) => total + current,
                             ),
                           )}

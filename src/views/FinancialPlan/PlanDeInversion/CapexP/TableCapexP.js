@@ -24,7 +24,7 @@ function TableCapexP(props) {
 
   useEffect(() => {
     if (props.data) setInfoForm(props.data);
-  }, [props]);
+  }, []);
 
   const hideYear = (index) => {
     setVisibleItems((prevItems) => {

@@ -48,8 +48,22 @@ function TableCapexPxQ(props) {
       return total;
     }
   };
+  const calcHor = () => {
+    let tot = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    if (capexP && capexQ) {
+      capexP.map((d, index) => {
+        for (let i = 0; i <= 9; i++) {
+          for (let j = 0; j <= 11; j++) {
+            tot[i] +=
+              Number(d.años[i].volMeses[MONTHS[j]]) *
+              (Number(capexQ[index].años[i].volMeses[MONTHS[j]]) || 0);
+          }
+        }
+      });
+    }
 
-  const totals = calcTotals();
+    return tot;
+  };
 
   const calcTotal = () => {
     let tot = 0;
@@ -65,9 +79,9 @@ function TableCapexPxQ(props) {
     }
   };
 
+  const totals = calcTotals();
   const tot = calcTotal();
 
-  console.log(capexQ);
   return (
     <>
       {capexP && (
@@ -201,7 +215,7 @@ function TableCapexPxQ(props) {
                             <Input
                               className="w-[90px]"
                               type="number"
-                              value={cta.años[indexYear].volTotal}
+                              value={totHor[indexYear]}
                               disabled
                               prefix={currency}
                             />
