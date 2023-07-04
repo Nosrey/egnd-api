@@ -19,6 +19,7 @@ function TableMargen(props) {
   const [totalesCanales, setTotalesCanales] = useState([]);
   const moneda = props.currency;
 
+
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
   // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las
@@ -240,6 +241,7 @@ function TableMargen(props) {
 
   const values = calcValues();
   const totals = calcTotals();
+
 
   return (
     <>
