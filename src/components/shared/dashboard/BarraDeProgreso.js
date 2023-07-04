@@ -1,4 +1,5 @@
 // import { Progress } from 'components/ui';
+import { Progress } from 'components/ui';
 import React from 'react';
 
 function BarraDeProgreso({ paises }) {
@@ -6,15 +7,8 @@ function BarraDeProgreso({ paises }) {
     <div>
       {paises.map((country) => (
         <div key={country.name}>
-          <h3>{country.name}</h3>
-          <div
-            style={{
-              backgroundColor: 'lightgray',
-              height: '20px',
-              width: `${country.sales}px`,
-            }}
-          />
-          <p>{country.sales} ventas</p>
+          <span>{country.name}</span>
+          <Progress percent={30} />
         </div>
       ))}
     </div>

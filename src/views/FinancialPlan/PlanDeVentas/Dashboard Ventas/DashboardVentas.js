@@ -3,7 +3,6 @@ import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';
 import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
-import { Select, Card } from 'components/ui';
 import Total from 'components/shared/dashboard/Total';
 import React from 'react';
 import SelectOptions from 'components/shared/dashboard/SelectOptions';
@@ -84,13 +83,13 @@ function DashboardVentas() {
             <CardNumerica title="Venta de Productos" cantidad={763} />
             <CardNumerica title="Venta de Productos" cantidad={763} />
           </div>
-          <div className="flex justify-center items-center gap-[50px] mt-[40px] mb-[40px]">
+          <div className="flex justify-center gap-[50px] mt-[50px] mb-[40px]">
             <div className="w-[50%]">
-              <h5>Distribución de Ventas por Mes</h5>
+              <h5 className="mb-[30px]">Distribución de Ventas por Mes</h5>
               <GraficoDeBarra data={data} />
             </div>
             <div className="w-[50%]">
-              <h5>Distribución de Ventas por País</h5>
+              <h5 className="mb-[30px]">Distribución de Ventas por País</h5>
               <BarraDeProgreso paises={paisesData} />
             </div>
           </div>

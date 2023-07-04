@@ -1,7 +1,10 @@
 import React from 'react';
+import { Select } from 'components/ui';
 
-function SelectOptions({ options, periodo }) {
-  return <Select placeholder={periodo} options={options} />;
+function SelectOptions({ options, placehol }) {
+  return (
+    <Select className="w-[12%]" placeholder={placehol} options={options} />
+  );
 }
 
 export default SelectOptions;
