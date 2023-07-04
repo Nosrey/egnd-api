@@ -192,4 +192,14 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'dashboardVentas',
+    path: '/dashboardventas',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/PlanDeVentas/Dashboard Ventas/DashboardVentas'
+      ),
+    ),
+    authority: [],
+  },
 ];
