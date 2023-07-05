@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-lonely-if */
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import { Alert, FormContainer, Tabs } from 'components/ui';
-import { AÑOS2 } from 'constants/forms.constants';
+import { AÑOS2, AÑOS3 } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createCapexP, createCapexQ, getUser } from 'services/Requests';
@@ -11,6 +12,7 @@ import TableCapexQ from './TableCapexQ';
 function CapexQ() {
   const [bienes, setBienes] = useState([]);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [capexP, setCapexP] = useState([]);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const currentState = useSelector((state) => state.auth.user);
@@ -38,6 +40,37 @@ function CapexQ() {
     return isEmpty;
   };
 
+  const validateData = (info) => {
+    let data = JSON.parse(JSON.stringify(info));
+    data = [data];
+
+    Object.values(data[0]).map((d) => {
+      const find = capexP.capexP.find((c) => c.id === d.id);
+      if (find) {
+        d.precioInicial = find.precioInicial;
+        d.tasa = find.tasa;
+        d.incremento = find.incremento;
+        d.años = find.años;
+      } else {
+        d.precioInicial = 0;
+        d.tasa = 0;
+        d.incremento = 'mensual';
+        d.años = [...AÑOS3];
+      }
+    });
+
+    const f = [];
+
+    Object.values(data[0]).map((d) => {
+      f.push(d);
+    });
+
+    let idUser = localStorage.getItem('userId');
+    const inf = { info: f, idUser };
+
+    createCapexP(inf);
+  };
+
   const submit = () => {
     const isEmpty = validateEmptyInputs();
 
@@ -52,7 +85,7 @@ function CapexQ() {
           setTimeout(() => {
             setShowSuccessAlert(false);
           }, 5000);
-          createCapexP(info);
+          validateData(info.info);
         })
         .catch((error) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -75,6 +108,9 @@ function CapexQ() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
+        if (data.capexPData[0]) {
+          setCapexP(data.capexPData[0]);
+        }
         if (data.capexQData[0] && data.capexQData[0]?.length !== 0) {
           setBienes(data.capexQData[0].capexQ);
         } else {

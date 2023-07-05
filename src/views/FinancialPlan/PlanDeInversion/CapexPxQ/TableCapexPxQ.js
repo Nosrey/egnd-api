@@ -281,7 +281,6 @@ function TableCapexPxQ(props) {
                           </p>
                         ))}
                       <p className="w-[90px] text-center font-bold">
-
                         {/* {currency} */}
 
                         {indexYear === 0 && currency}

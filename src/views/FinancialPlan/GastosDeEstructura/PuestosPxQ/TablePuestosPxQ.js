@@ -84,7 +84,8 @@ function TablePuestosPxQ(props) {
     if (!total) {
       total = 0;
     }
-    const q =props.data[cc].puestos[head].años[indexYear].volMeses[MONTHS[indexMes]];
+    const q =
+      props.data[cc].puestos[head].años[indexYear].volMeses[MONTHS[indexMes]];
 
     let calcs = { ...EMPTY_CARGOS };
 
@@ -112,11 +113,14 @@ function TablePuestosPxQ(props) {
     if (!volTotal || !total) {
       res = 0;
     } else {
-      res = total.toFixed(2);
+      res = volTotal * total;
+      res = res.toFixed(2);
     }
 
     return res;
   };
+
+  console.log(volTotal);
 
   return (
     <>
@@ -328,7 +332,8 @@ function TablePuestosPxQ(props) {
                           {index === 0 &&
                             volTotal[indexYear] &&
                             volTotal[indexYear].values.reduce(
-                              (total, current) => Math.round(total + current),
+                              (total, current) =>
+                                Math.round(Number(total) + Number(current)),
                             )}
                         </p>
                       </div>

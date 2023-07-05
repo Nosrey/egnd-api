@@ -132,6 +132,59 @@ export const AÑOS2 = [
     volTotal: 0,
   },
 ];
+
+export const AÑOS3 = [
+  {
+    año: 1,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 2,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 3,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 4,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 5,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 6,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 7,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 8,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 9,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+  {
+    año: 10,
+    volMeses: { ...MESES },
+    volTotal: 0,
+  },
+];
 export const optionsMonths = [
   { value: 1, label: 'Enero' },
   { value: 2, label: 'Febrero' },
