@@ -88,6 +88,7 @@ function CapexQ() {
           validateData(info.info);
         })
         .catch((error) => {
+          console.log('err', error);
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setErrorMessage('Ha ocurrido un error');
           setShowErrorAlert(true);

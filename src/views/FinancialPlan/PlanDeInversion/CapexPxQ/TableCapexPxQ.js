@@ -82,7 +82,6 @@ function TableCapexPxQ(props) {
   const totals = calcTotals();
   const tot = calcTotal();
   const totHor = calcHor();
-
   return (
     <>
       {capexP && (

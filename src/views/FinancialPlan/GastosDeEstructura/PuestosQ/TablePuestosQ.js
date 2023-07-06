@@ -98,6 +98,8 @@ function TablePuestosQ(props) {
     mes,
     indexYear,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...infoForm };
     const puestoIndex = newData[cc].puestos.findIndex(
       (puesto) => puesto.id === idPuesto,
@@ -112,11 +114,11 @@ function TablePuestosQ(props) {
           puesto,
           indexYear,
           mes,
-          newValue === ''
+          inputNumero === ''
             ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
+            : inputNumero[0] === '0'
+            ? inputNumero.substring(1)
+            : inputNumero,
         );
         break;
       default:
@@ -125,6 +127,11 @@ function TablePuestosQ(props) {
 
     newData[cc].puestos[puestoIndex] = puesto;
     setInfoForm(newData);
+  };
+
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
   };
 
   const submitInfoForm = () => {
@@ -260,27 +267,27 @@ function TablePuestosQ(props) {
                                                 infoForm[cc].puestos[head]
                                                   .name === ''
                                               }
-                                              value={
+                                              value={formatearNumero(
                                                 año.volMeses[
                                                   Object.keys(año.volMeses)[
                                                     indexMes
                                                   ]
-                                                ]
-                                              }
+                                                ],
+                                              )}
                                               onChange={(e) => {
                                                 const inputValue =
                                                   e.target.value;
-                                                if (/^\d*$/.test(inputValue)) {
-                                                  handleOnChangeInitialValue(
-                                                    cc,
-                                                    infoForm[cc].puestos[head]
-                                                      .id,
-                                                    inputValue,
-                                                    'mes',
-                                                    MONTHS[indexMes],
-                                                    indexYear,
-                                                  );
-                                                }
+
+                                                handleOnChangeInitialValue(
+                                                  cc,
+                                                  infoForm[cc].puestos[head].id,
+                                                  inputValue,
+                                                  'mes',
+                                                  MONTHS[indexMes],
+                                                  indexYear,
+                                                );
+                                                // if (/^\d*$/.test(inputValue)) {
+                                                // }
                                               }}
                                               name="month"
                                             />
@@ -388,7 +395,9 @@ function TablePuestosQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">{valor}</p>
+                            <p className="w-[90px] text-center">
+                              {formatearNumero(valor)}
+                            </p>
                           ))}
                       </div>
                     </div>

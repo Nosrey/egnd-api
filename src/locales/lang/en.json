@@ -20,21 +20,21 @@
       "item3": "Precio",
       "item4": "Ventas totales",
       "item5": "Clientes - Alta y Churn",
-      "item7": "Dashboard Venta"
+      "item7": "Dashboard de Ventas"
     },
     "collapseCostosDirectos": {
       "collapseCostosDirectos": "Costos Directos y Margen Bruto",
       "item1": "Costos Unitarios",
       "item2": "Costos Totales",
-      "item3":"Dashboard Costos",
-      "item4":"Dashboard CMG Bruta"
+      "item3": "Dashboard Costos",
+      "item4": "Dashboard CMG Bruta"
     },
     "collapseHeadcount": {
       "collapseHeadcount": "Headcount",
       "item1": "Proyección nomina",
       "item2": "Salarios",
-      "item3":"Headcount",
-      "item4":"Dashboard Headcount"
+      "item3": "Headcount",
+      "item4": "Dashboard Headcount"
     },
     "collapseGastosDeEstructura": {
       "collapseGastosDeEstructura": "Gastos de Estructura",
@@ -62,7 +62,5 @@
       "item3": "Balance y Working Capital",
       "item4": "Dashboard Financiero"
     }
-   
-
   }
 }

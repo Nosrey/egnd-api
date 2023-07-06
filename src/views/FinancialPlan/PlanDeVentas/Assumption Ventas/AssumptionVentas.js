@@ -175,6 +175,8 @@ function AssumptionVentas() {
   };
 
   const validateEmptyInputs = () => {
+    console.log('c', channels);
+    console.log('churns', churn);
     let isEmpty = false;
     productos.forEach((p) => {
       if (p.name === '' || p.model === '' || p.type === '') {
