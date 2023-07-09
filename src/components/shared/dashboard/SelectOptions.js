@@ -1,4 +1,3 @@
-import React from 'react';
 import { Select } from 'components/ui';
 
 function SelectOptions({ options, placehol }) {

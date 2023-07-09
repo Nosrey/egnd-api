@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Progress } from 'components/ui';
 import './scrollBar.css';
 
@@ -16,7 +15,7 @@ function ProgresoCircularScroll({ title, churnProducto }) {
           <div className="max-h-[80px] overflow-y-auto custom-scrollbar pr-[8px]">
             {churnProducto.map((producto, index) => (
               <div key={index}>
-                <span>{producto.nombre}</span>
+                <span>{producto.channels}</span>
                 <span>{producto.numero}</span>
               </div>
             ))}
