@@ -61,7 +61,7 @@ function TableCapexP(props) {
       const newMeses = { ...newAños[i].volMeses };
       let volTotal = 0;
       for (let mes in newMeses) {
-        newMeses[mes] = parseInt(precioActual, 10);
+        newMeses[mes] = Math.round(parseInt(precioActual, 10));
         volTotal += parseInt(parseInt(precioActual, 10), 10);
         if (cuenta.incremento === 'mensual') {
           precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
@@ -94,6 +94,8 @@ function TableCapexP(props) {
   };
 
   const handleOnChangeInitialValue = (id, newValue, key, mes, indexYear) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = [...infoForm];
     const ctaIndex = newData.findIndex((bien) => bien.id === id);
 
@@ -106,25 +108,25 @@ function TableCapexP(props) {
           cuenta,
           indexYear,
           mes,
-          newValue === ''
+          inputNumero === ''
             ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
+            : inputNumero[0] === '0'
+            ? inputNumero.substring(1)
+            : inputNumero,
         );
         break;
       case 'precioInicial':
-        cuenta.precioInicial = newValue;
+        cuenta.precioInicial = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
       case 'tasa':
-        cuenta.tasa = newValue;
+        cuenta.tasa = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
       case 'mesInicial':
-        cuenta.incremento = newValue;
+        cuenta.incremento = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
@@ -134,6 +136,11 @@ function TableCapexP(props) {
 
     newData[ctaIndex] = cuenta;
     setInfoForm(newData);
+  };
+
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
   };
 
   const submitInfoForm = () => {
@@ -250,9 +257,9 @@ function TableCapexP(props) {
                       }`}
                     >
                       <Input
-                        type="number"
+                        type="text"
                         name="precioInicial"
-                        value={cta.precioInicial}
+                        value={formatearNumero(cta.precioInicial)}
                         onChange={(e) =>
                           handleOnChangeInitialValue(
                             cta.id,
@@ -281,10 +288,10 @@ function TableCapexP(props) {
                       }`}
                     >
                       <Input
-                        type="number"
+                        type="text"
                         name="tasa"
                         prefix="%"
-                        value={cta.tasa}
+                        value={formatearNumero(cta.tasa)}
                         onChange={(e) =>
                           handleOnChangeInitialValue(
                             cta.id,
@@ -377,14 +384,14 @@ function TableCapexP(props) {
                                 >
                                   <Input
                                     className="w-[90px]"
-                                    type="number"
-                                    value={
+                                    type="text"
+                                    value={formatearNumero(
                                       cta.precioInicial !== 0
                                         ? cta.años[indexYear].volMeses[
                                             Object.keys(año.volMeses)[indexMes]
                                           ]
-                                        : 0
-                                    }
+                                        : 0,
+                                    )}
                                     name="month"
                                     prefix={currency}
                                     onChange={(e) => {
@@ -456,7 +463,7 @@ function TableCapexP(props) {
                           <p className="w-[90px] text-center">
                             <p className="w-[90px] text-center">
                               {currency}
-                              {totals[indexYear][index]}
+                              {formatearNumero(totals[indexYear][index])}
                             </p>
                           </p>
                         ))}
