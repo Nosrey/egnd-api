@@ -128,8 +128,8 @@ const navigationConfig = [
           // },
           {
             key: 'collapsePlanVentas.item7',
-            path: '/dashboardventa',
-            title: 'Dashboard Venta',
+            path: '/dashboardventas',
+            title: 'Dashboard de Ventas',
             translateKey: 'nav.collapsePlanVentas.item7',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,

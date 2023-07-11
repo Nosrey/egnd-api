@@ -115,7 +115,8 @@ function TablePuestosPxQ(props) {
     if (!volTotal || !total) {
       res = 0;
     } else {
-      res = total.toFixed(2);
+      res = volTotal * total;
+      res = res.toFixed(2);
     }
 
     return res;
@@ -129,6 +130,7 @@ function TablePuestosPxQ(props) {
     const nuevoNum = inputNumero.toLocaleString('es-AR');
     return nuevoNum;
   };
+
 
   return (
     <>
@@ -346,6 +348,7 @@ function TablePuestosPxQ(props) {
                                   (total, current) =>
                                     Math.round(total + current),
                                 ),
+
                             )}
                         </p>
                       </div>

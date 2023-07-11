@@ -1,15 +1,15 @@
-import React, { useRef, useEffect, useCallback, useMemo } from 'react'
-import PropTypes from 'prop-types'
-import ApexChart from 'react-apexcharts'
+import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import ApexChart from 'react-apexcharts';
 import {
   apexLineChartDefaultOption,
   apexBarChartDefaultOption,
   apexAreaChartDefaultOption,
   apexDonutChartDefaultOption,
-} from 'configs/chart.config'
-import { DIR_RTL } from 'constants/theme.constant'
+} from 'configs/chart.config';
+import { DIR_RTL } from 'constants/theme.constant';
 
-const notDonut = ['line', 'bar', 'area']
+const notDonut = ['line', 'bar', 'area'];
 
 function Chart(props) {
   const {
@@ -24,66 +24,66 @@ function Chart(props) {
     donutText,
     className,
     ...rest
-  } = props
+  } = props;
 
-  const chartRef = useRef()
+  const chartRef = useRef();
 
   const chartDefaultOption = useMemo(() => {
     switch (type) {
       case 'line':
-        return apexLineChartDefaultOption
+        return apexLineChartDefaultOption;
       case 'bar':
-        return apexBarChartDefaultOption
+        return apexBarChartDefaultOption;
       case 'area':
-        return apexAreaChartDefaultOption
+        return apexAreaChartDefaultOption;
       case 'donut':
-        return apexDonutChartDefaultOption
+        return apexDonutChartDefaultOption;
       default:
-        return apexLineChartDefaultOption
+        return apexLineChartDefaultOption;
     }
-  }, [type])
+  }, [type]);
 
-  let options = JSON.parse(JSON.stringify(chartDefaultOption))
-  const isMobile = window.innerWidth < 768
+  let options = JSON.parse(JSON.stringify(chartDefaultOption));
+  const isMobile = window.innerWidth < 768;
 
   const setLegendOffset = useCallback(() => {
     if (chartRef.current) {
       const lengend = chartRef.current.querySelectorAll(
-        'div.apexcharts-legend'
-      )[0]
+        'div.apexcharts-legend',
+      )[0];
       if (direction === DIR_RTL) {
-        lengend.style.right = 'auto'
-        lengend.style.left = '0'
+        lengend.style.right = 'auto';
+        lengend.style.left = '0';
       }
       if (isMobile) {
-        lengend.style.position = 'relative'
-        lengend.style.top = 0
-        lengend.style.justifyContent = 'start'
-        lengend.style.padding = 0
+        lengend.style.position = 'relative';
+        lengend.style.top = 0;
+        lengend.style.justifyContent = 'start';
+        lengend.style.padding = 0;
       }
     }
-  }, [direction, isMobile])
+  }, [direction, isMobile]);
 
   useEffect(() => {
     if (notDonut.includes(type)) {
-      setLegendOffset()
+      setLegendOffset();
     }
-  }, [type, setLegendOffset])
+  }, [type, setLegendOffset]);
 
   if (notDonut.includes(type)) {
-    options.xaxis.categories = xAxis
+    options.xaxis.categories = xAxis;
   }
 
   if (customOptions) {
-    options = { ...options, ...customOptions }
+    options = { ...options, ...customOptions };
   }
 
   if (type === 'donut') {
     if (donutTitle) {
-      options.plotOptions.pie.donut.labels.total.label = donutTitle
+      options.plotOptions.pie.donut.labels.total.label = donutTitle;
     }
     if (donutText) {
-      options.plotOptions.pie.donut.labels.total.formatter = () => donutText
+      options.plotOptions.pie.donut.labels.total.formatter = () => donutText;
     }
   }
 
@@ -103,7 +103,7 @@ function Chart(props) {
         {...rest}
       />
     </div>
-  )
+  );
 }
 
 Chart.propTypes = {
@@ -114,7 +114,7 @@ Chart.propTypes = {
   type: PropTypes.oneOf(['line', 'bar', 'area', 'donut']),
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   xAxis: PropTypes.arrayOf(),
-}
+};
 
 Chart.defaultProps = {
   // series: [],
@@ -124,6 +124,6 @@ Chart.defaultProps = {
   width: '100%',
   type: 'line',
   xAxis: [],
-}
+};
 
-export default Chart
+export default Chart;

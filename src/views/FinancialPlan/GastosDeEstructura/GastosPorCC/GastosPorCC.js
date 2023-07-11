@@ -15,6 +15,7 @@ function GastosPorCC() {
   const [info, setInfo] = useState(null);
   const [puestosQ, setPuestosQ] = useState([]);
   const [puestosP, setPuestosP] = useState([]);
+  const [viewP, setViewP] = useState(false);
   const [cargaSocial, setCargaSocial] = useState(0);
   const [defaultCountry, setDefaultCountry] = useState('');
   const [infoForm, setInfoForm] = useState();
@@ -69,7 +70,10 @@ function GastosPorCC() {
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
           );
-          setPuestosP(data?.puestosPData[0].puestosp[0]);
+          if (data?.puestosPData[0]) {
+            setPuestosP(data?.puestosPData[0].puestosp[0]);
+            setViewP(true);
+          }
           setDefaultCountry(def);
           setCountry(def);
           setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
@@ -99,7 +103,7 @@ function GastosPorCC() {
         <div className="border-b-2 px-4 py-1">
           <h6>Centros de costo</h6>
         </div>
-        {infoForm ? (
+        {infoForm && viewP ? (
           <Tabs defaultValue={country}>
             <TabList>
               {puestosQ &&
@@ -139,6 +143,17 @@ function GastosPorCC() {
               </div>
             )}
           </Tabs>
+        ) : !viewP ? (
+          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+            <span>
+              Para acceder a este formulario primero debe completar el
+              formulario{' '}
+              <Link className="text-indigo-700 underline" to="/salarios">
+                Salarios
+              </Link>{' '}
+              .
+            </span>
+          </div>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>

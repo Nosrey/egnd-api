@@ -461,7 +461,15 @@ function TablePuestosPxQ(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={`${mes} - año ${indexYear + 1}`}
+                                  title={
+                                    index === 0
+                                      ? volTotal[indexYear].values[indexMes]
+                                      : infoForm[head].cuentas[cta].años[
+                                          indexYear
+                                        ].volMeses[
+                                          Object.keys(año.volMeses)[indexMes]
+                                        ]
+                                  }
                                 >
                                   <Input
                                     className="w-[90px]"

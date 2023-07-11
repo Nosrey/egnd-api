@@ -59,7 +59,6 @@ function Churn() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log('[DATA]', data);
         if (
           data?.volumenData.length !== 0 &&
           data?.assumptionData.length !== 0
