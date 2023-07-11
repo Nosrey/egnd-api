@@ -186,6 +186,15 @@ function TableCapexP(props) {
     }
   };
 
+  const formateoDescripcion = (numero) => {
+    if (typeof numero !== 'string') {
+      numero = numero.toString();
+    }
+    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
+
   const totals = calcTotals();
 
   return (
@@ -237,7 +246,7 @@ function TableCapexP(props) {
                         disabled
                         type="text"
                         name="name"
-                        value={cta.descripcion}
+                        value={formateoDescripcion(cta.descripcion)}
                       />
                     </FormItem>
                   </div>

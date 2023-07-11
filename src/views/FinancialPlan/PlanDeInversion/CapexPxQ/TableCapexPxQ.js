@@ -65,6 +65,15 @@ function TableCapexPxQ(props) {
     }
   };
 
+  const formatearNumero = (numero) => {
+    if (typeof numero !== 'string') {
+      numero = numero.toString();
+    }
+    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
+
   const tot = calcTotal();
 
   console.log(capexQ);
@@ -117,7 +126,7 @@ function TableCapexPxQ(props) {
                         disabled
                         type="text"
                         name="name"
-                        value={cta.descripcion}
+                        value={formatearNumero(cta.descripcion)}
                       />
                     </FormItem>
                   </div>
@@ -179,18 +188,19 @@ function TableCapexPxQ(props) {
                                 >
                                   <Input
                                     className="w-[90px]"
-                                    type="number"
+                                    type="text"
                                     disabled
-                                    value={
+                                    value={formatearNumero(
                                       cta.años[indexYear].volMeses[
                                         Object.keys(año.volMeses)[indexMes]
                                       ] *
-                                      (Number(
-                                        capexQ[index].años[indexYear].volMeses[
-                                          Object.keys(año.volMeses)[indexMes]
-                                        ],
-                                      ) || 0)
-                                    }
+                                        (Number(
+                                          capexQ[index].años[indexYear]
+                                            .volMeses[
+                                            Object.keys(año.volMeses)[indexMes]
+                                          ],
+                                        ) || 0),
+                                    )}
                                     name="month"
                                     prefix={currency}
                                   />
@@ -200,8 +210,10 @@ function TableCapexPxQ(props) {
                           <FormItem className="mb-0">
                             <Input
                               className="w-[90px]"
-                              type="number"
-                              value={cta.años[indexYear].volTotal}
+                              type="text"
+                              value={formatearNumero(
+                                cta.años[indexYear].volTotal,
+                              )}
                               disabled
                               prefix={currency}
                             />
@@ -262,18 +274,19 @@ function TableCapexPxQ(props) {
                         MONTHS.map((valor, index) => (
                           <p className="w-[90px] text-center">
                             {currency}
-                            {totals[indexYear][index]}
+                            {formatearNumero(totals[indexYear][index])}
                           </p>
                         ))}
                       <p className="w-[90px] text-center font-bold">
-
                         {/* {currency} */}
 
                         {indexYear === 0 && currency}
 
-                        {totals[indexYear].reduce(
-                          (acumulador, numero) => acumulador + numero,
-                          0,
+                        {formatearNumero(
+                          totals[indexYear].reduce(
+                            (acumulador, numero) => acumulador + numero,
+                            0,
+                          ),
                         )}
                       </p>
                     </div>
@@ -285,7 +298,7 @@ function TableCapexPxQ(props) {
 
           <p className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ">
             TOTAL: {currency}
-            {tot}
+            {formatearNumero(tot)}
           </p>
         </div>
       )}
