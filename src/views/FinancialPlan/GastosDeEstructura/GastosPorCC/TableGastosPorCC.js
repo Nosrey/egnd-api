@@ -566,9 +566,11 @@ function TablePuestosPxQ(props) {
                           ),
                         )}
                       <p className="w-[90px] text-center font-bold">
-                        {sumVerticales[head].sum[indexYear].reduce(
-                          (acumulador, numero) => acumulador + numero,
-                          0,
+                        {formatearNumero(
+                          sumVerticales[head].sum[indexYear].reduce(
+                            (acumulador, numero) => acumulador + numero,
+                            0,
+                          ),
                         )}
                       </p>
                     </div>
