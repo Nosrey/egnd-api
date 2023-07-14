@@ -124,7 +124,7 @@ function TablePuestosPxQ(props) {
 
   const formatearNumero = (numero) => {
     if (typeof numero !== 'string') {
-      numero = numero.toString();
+      numero = numero?.toString();
     }
     const inputNumero = Number(numero.replace(/\D/g, ''));
     const nuevoNum = inputNumero.toLocaleString('es-AR');
