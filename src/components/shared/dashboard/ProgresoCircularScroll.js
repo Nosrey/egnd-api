@@ -15,6 +15,7 @@ function ProgresoCircularScroll({ title, churnProducto }) {
         );
       });
     });
+    console.log(churnProducto)
   }, []);
 
   return (
@@ -31,6 +32,11 @@ function ProgresoCircularScroll({ title, churnProducto }) {
             {churnProducto.churns.map((churn, index) => (
               <div key={index} className="md:mb-0 mb-4 mx-6">
                 <span className="font-bold">{churn.channel}</span>
+                {churn.items.map((item, i) => (
+                  <div key={i} className="md:mb-0 mb-4 mx-6">
+                    <span className="">{item.porcentajeChurn}</span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
