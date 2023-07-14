@@ -182,14 +182,10 @@ function TableChurn(props) {
     setInfoForm(newData);
   };
 
-
   const formatearNumero = (numero) => {
     const nuevoNum = numero.toLocaleString('es-AR');
     return nuevoNum;
   };
-
-  console.log('[V]', props.volumenData);
-  console.log('[AD]', props.assumptionData);
 
   return (
     <>

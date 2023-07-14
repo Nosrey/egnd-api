@@ -316,6 +316,8 @@ export const EMPTY_COMISION = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
+export const BASIC_EMPTY = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 export const EMPTY_TOTALES = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
