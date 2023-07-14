@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable-loop */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
@@ -97,6 +98,7 @@ function TablePuestosQ(props) {
     key,
     mes,
     indexYear,
+    indexMes,
   ) => {
     const inputNumero = Number(newValue.replace(/\D/g, ''));
 
@@ -108,18 +110,23 @@ function TablePuestosQ(props) {
     let puesto = {
       ...newData[cc].puestos[puestoIndex],
     };
+
     switch (key) {
       case 'mes':
-        puesto.años = replaceMonth(
-          puesto,
-          indexYear,
-          mes,
-          inputNumero === ''
-            ? 0
-            : inputNumero[0] === '0'
-            ? inputNumero.substring(1)
-            : inputNumero,
-        );
+        for (let i = indexYear; i < 10; i++) {
+          for (let j = i === indexYear ? indexMes : 0; j < 12; j++) {
+            puesto.años = replaceMonth(
+              puesto,
+              i,
+              MONTHS[j],
+              inputNumero === ''
+                ? 0
+                : inputNumero[0] === '0'
+                ? inputNumero.substring(1)
+                : inputNumero,
+            );
+          }
+        }
         break;
       default:
         break;
@@ -285,6 +292,7 @@ function TablePuestosQ(props) {
                                                   'mes',
                                                   MONTHS[indexMes],
                                                   indexYear,
+                                                  indexMes,
                                                 );
                                                 // if (/^\d*$/.test(inputValue)) {
                                                 // }

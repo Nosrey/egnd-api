@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useState } from 'react';
-import { getUser } from 'services/Requests';
-import { FormContainer, Tabs, Alert } from 'components/ui';
-import { AÑOS } from 'constants/forms.constants';
 import ContainerScrollable from 'components/shared/ContainerScrollable';
+import { Alert, FormContainer, Tabs } from 'components/ui';
+import { AÑOS } from 'constants/forms.constants';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getUser } from 'services/Requests';
 import TablePrecio from './TablePrecio';
 
 const { TabNav, TabList } = Tabs;
@@ -35,6 +35,7 @@ function PrecioP() {
           prod.precioInicial = 0;
           prod.tasa = 0;
           prod.name = realProds[x].name;
+          prod.type = realProds[x].type;
           prod.inicioMes = 1;
           prod.fecha = '';
           prod['años'] = [...AÑOS];
@@ -58,20 +59,20 @@ function PrecioP() {
       .then((data) => {
         if (data?.precioData.length !== 0) {
           const datosPrecargados = {};
-          const ordererData =data.precioData.sort((a, b) => a.countryName.localeCompare(b.countryName));
+          const ordererData = data.precioData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          );
           for (let i = 0; i < ordererData.length; i++) {
             datosPrecargados[ordererData[i].countryName] = ordererData[i].stats;
           }
           setInfoForm(() => ({ ...datosPrecargados }));
-        }
-        else {
-          setInfo(data?.assumptionData)
+        } else {
+          setInfo(data?.assumptionData);
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
       })
       .catch((error) => console.error(error));
   }, []);
-
 
   return (
     <div>
