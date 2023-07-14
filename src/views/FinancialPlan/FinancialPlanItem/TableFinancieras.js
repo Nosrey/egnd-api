@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Card,
   FormContainer,
@@ -274,11 +273,7 @@ function TableFinancieras({
                           //     infoForm[cc].cuentas[head].incremento,
                           // )}
                           onChange={(e) =>
-                            setFormValues(
-                              'stock',
-                              'pagoProducto',
-                              e.value,
-                            )
+                            setFormValues('stock', 'pagoProducto', e.value)
                           }
                         />
                       </FormItem>

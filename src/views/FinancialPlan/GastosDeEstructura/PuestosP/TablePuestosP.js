@@ -82,7 +82,7 @@ function TablePuestosP(props) {
       const newMeses = { ...newAños[i].volMeses };
       let vT = 0;
       for (let mes in newMeses) {
-        newMeses[mes] = newAños[i].volMeses[mes];
+        newMeses[mes] = Math.round(newAños[i].volMeses[mes]);
         vT += parseInt(newAños[i].volMeses[mes], 10);
 
         volTotal[i].values[MONTHS.indexOf(mes)] += newAños[i].volMeses[mes];
@@ -104,6 +104,8 @@ function TablePuestosP(props) {
     mes,
     indexYear,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...props.data };
 
     const puestoIndex = newData[cc].puestos.findIndex(
@@ -115,12 +117,12 @@ function TablePuestosP(props) {
     };
     switch (key) {
       case 'precioInicial':
-        puesto.precioInicial = newValue;
+        puesto.precioInicial = inputNumero;
         puesto.años = fillMonthsPrices(puesto, -1);
         break;
 
       case 'incremento':
-        puesto.incremento = newValue;
+        puesto.incremento = inputNumero;
         break;
 
       default:
@@ -131,6 +133,11 @@ function TablePuestosP(props) {
     setInfoForm(newData);
   };
 
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero?.toLocaleString('es-AR');
+    return nuevoNum;
+  };
+
   const submitInfoForm = () => {
     const copyData = { ...infoForm };
     let submit = true;
@@ -139,8 +146,6 @@ function TablePuestosP(props) {
       props.postPuestoPData([infoForm]);
     }
   };
-
-  console.log('[info p]', infoForm);
 
   return (
     <>
@@ -196,12 +201,12 @@ function TablePuestosP(props) {
                               <Tooltip placement="top-end" title="Rem">
                                 <Input
                                   placeholder="Rem"
-                                  type="number"
+                                  type="text"
                                   name="precioInicial"
                                   prefix={currency}
-                                  value={
-                                    infoForm[cc].puestos[head].precioInicial
-                                  }
+                                  value={formatearNumero(
+                                    infoForm[cc].puestos[head].precioInicial,
+                                  )}
                                   onChange={(e) =>
                                     handleOnChangeInitialValue(
                                       cc,
@@ -233,13 +238,15 @@ function TablePuestosP(props) {
                             >
                               <Input
                                 placeholder="Precio inicial"
-                                type="number"
+                                type="text"
                                 disabled
                                 name="cargaSocial"
                                 prefix={currency}
-                                value={
-                                  infoForm[cc].puestos[head].cargaSocial || 0
-                                }
+                                value={formatearNumero(
+                                  Math.round(
+                                    infoForm[cc].puestos[head].cargaSocial || 0,
+                                  ),
+                                )}
                               />
                             </FormItem>
                           </div>
@@ -259,11 +266,15 @@ function TablePuestosP(props) {
                               }`}
                             >
                               <Input
-                                type="number"
+                                type="text"
                                 name="total"
                                 disabled
                                 prefix={currency}
-                                value={infoForm[cc].puestos[head].total || 0}
+                                value={formatearNumero(
+                                  Math.round(
+                                    infoForm[cc].puestos[head].total || 0,
+                                  ),
+                                )}
                               />
                             </FormItem>
                           </div>
@@ -283,10 +294,12 @@ function TablePuestosP(props) {
                               }`}
                             >
                               <Input
-                                type="number"
+                                type="text"
                                 name="incremento"
                                 prefix="%"
-                                value={infoForm[cc].puestos[head].incremento}
+                                value={formatearNumero(
+                                  infoForm[cc].puestos[head].incremento,
+                                )}
                                 onChange={(e) =>
                                   handleOnChangeInitialValue(
                                     cc,

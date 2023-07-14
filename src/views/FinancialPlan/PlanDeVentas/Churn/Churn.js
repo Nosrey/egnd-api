@@ -38,6 +38,7 @@ function Churn() {
           prod.precioInicial = 0;
           prod.tasa = 0;
           prod.name = realProds[x].name;
+          prod.type = realProds[x].type;
           prod.inicioMes = 1;
           prod.fecha = '';
           prod['años'] = [...AÑOS];
@@ -59,7 +60,6 @@ function Churn() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log('[DATA]', data);
         if (
           data?.volumenData.length !== 0 &&
           data?.assumptionData.length !== 0

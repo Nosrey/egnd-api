@@ -3,8 +3,8 @@ import { Alert, FormContainer, Tabs } from 'components/ui';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getUser } from 'services/Requests';
 import { Link } from 'react-router-dom';
+import { getUser } from 'services/Requests';
 import TableCosto from './TableCosto';
 
 const { TabNav, TabList } = Tabs;
@@ -43,6 +43,7 @@ function Costo() {
           prod.precioInicial = 0;
           prod.tasa = 0;
           prod.name = realProds[x].name;
+          prod.type = realProds[x].type;
           prod.inicioMes = 1;
           prod.fecha = '';
           prod['años'] = [...AÑOS];

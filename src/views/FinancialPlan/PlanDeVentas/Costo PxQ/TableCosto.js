@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { MONTHS, OPTIONS_COUNTRY } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -283,6 +283,15 @@ function TableCosto(props) {
     calcTotales();
   }, [props, infoForm]);
 
+  const formatearNumero = (numero) => {
+    if (typeof numero !== 'string') {
+      numero = numero.toString();
+    }
+    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
+
   return (
     <>
       {infoForm &&
@@ -318,31 +327,31 @@ function TableCosto(props) {
                           <div className="flex flex-col w-[240px] mt-[138px]">
                             <FormItem className="mb-0 mt-2 w-[90px]">
                               <Input
-                                type="number"
+                                type="text"
                                 name="comision"
                                 disabled
                                 suffix="%"
-                                value={producto.comision}
+                                value={formatearNumero(producto.comision)}
                               />
                             </FormItem>
 
                             <FormItem className="mb-0 mt-4 w-[90px]">
                               <Input
-                                type="number"
+                                type="text"
                                 name="impuesto"
                                 disabled
                                 suffix="%"
-                                value={producto.impuesto}
+                                value={formatearNumero(producto.impuesto)}
                               />
                             </FormItem>
 
                             <FormItem className="mb-0 mt-2 w-[90px]">
                               <Input
-                                type="number"
+                                type="text"
                                 name="cargos"
                                 disabled
                                 suffix="%"
-                                value={producto.cargos}
+                                value={formatearNumero(producto.cargos)}
                               />
                             </FormItem>
                           </div>
@@ -387,12 +396,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="number"
-                                            prefix={moneda}
-                                            disabled
-                                            value={
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -405,21 +411,43 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]]
                                             }
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              prefix={moneda}
+                                              disabled
+                                              value={formatearNumero(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ] *
+                                                  props.costoData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                              )}
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
                                   <FormItem className="mb-0">
                                     <Input
                                       className="w-[90px]"
-                                      type="number"
+                                      type="text"
                                       disabled
                                       prefix={moneda}
-                                      value={resolveTotalYear(
-                                        indexPais,
-                                        indexCanal,
-                                        indexProd,
-                                        indexYear,
+                                      value={formatearNumero(
+                                        resolveTotalYear(
+                                          indexPais,
+                                          indexCanal,
+                                          indexProd,
+                                          indexYear,
+                                        ),
                                       )}
                                     />
                                   </FormItem>
@@ -434,13 +462,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            id={`${indexYear}-${MONTHS[indexMes]}-comision`}
-                                            type="number"
-                                            disabled
-                                            prefix={moneda}
-                                            value={resolveResul(
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -454,21 +478,47 @@ function TableCosto(props) {
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.comision,
                                             )}
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              id={`${indexYear}-${MONTHS[indexMes]}-comision`}
+                                              type="text"
+                                              disabled
+                                              prefix={moneda}
+                                              value={formatearNumero(
+                                                resolveResul(
+                                                  props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                                  props.precioData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                                  producto.comision,
+                                                ),
+                                              )}
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
                                   <FormItem className="mb-0">
                                     <Input
                                       className="w-[90px]"
-                                      type="number"
+                                      type="text"
                                       disabled
-                                      value={resolveTotalYearPercent(
-                                        indexPais,
-                                        indexCanal,
-                                        indexProd,
-                                        indexYear,
-                                        producto.comision,
+                                      prefix={moneda}
+                                      value={formatearNumero(
+                                        resolveTotalYearPercent(
+                                          indexPais,
+                                          indexCanal,
+                                          indexProd,
+                                          indexYear,
+                                          producto.comision,
+                                        ),
                                       )}
                                     />
                                   </FormItem>
@@ -483,12 +533,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="number"
-                                            disabled
-                                            prefix={moneda}
-                                            value={resolveResul(
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -502,7 +549,29 @@ function TableCosto(props) {
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.impuesto,
                                             )}
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              disabled
+                                              prefix={moneda}
+                                              value={formatearNumero(
+                                                resolveResul(
+                                                  props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                                  props.precioData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                                  producto.impuesto,
+                                                ),
+                                              )}
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
@@ -511,12 +580,15 @@ function TableCosto(props) {
                                       className="w-[90px]"
                                       type="number"
                                       disabled
-                                      value={resolveTotalYearPercent(
-                                        indexPais,
-                                        indexCanal,
-                                        indexProd,
-                                        indexYear,
-                                        producto.impuesto,
+                                      prefix={moneda}
+                                      value={formatearNumero(
+                                        resolveTotalYearPercent(
+                                          indexPais,
+                                          indexCanal,
+                                          indexProd,
+                                          indexYear,
+                                          producto.impuesto,
+                                        ),
                                       )}
                                     />
                                   </FormItem>
@@ -531,13 +603,9 @@ function TableCosto(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="number"
-                                            id={`${indexYear}-${MONTHS[indexMes]}-cargos`}
-                                            disabled
-                                            prefix={moneda}
-                                            value={resolveResul(
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -551,21 +619,47 @@ function TableCosto(props) {
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.cargos,
                                             )}
-                                          />
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              id={`${indexYear}-${MONTHS[indexMes]}-cargos`}
+                                              disabled
+                                              prefix={moneda}
+                                              value={formatearNumero(
+                                                resolveResul(
+                                                  props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                                  props.precioData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                                  producto.cargos,
+                                                ),
+                                              )}
+                                            />
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
                                   <FormItem className="mb-0">
                                     <Input
                                       className="w-[90px]"
-                                      type="number"
+                                      type="text"
                                       disabled
-                                      value={resolveTotalYearPercent(
-                                        indexPais,
-                                        indexCanal,
-                                        indexProd,
-                                        indexYear,
-                                        producto.cargos,
+                                      prefix={moneda}
+                                      value={formatearNumero(
+                                        resolveTotalYearPercent(
+                                          indexPais,
+                                          indexCanal,
+                                          indexProd,
+                                          indexYear,
+                                          producto.cargos,
+                                        ),
                                       )}
                                     />
                                   </FormItem>
@@ -647,18 +741,20 @@ function TableCosto(props) {
                               MONTHS.map((valor, indexNum) => (
                                 <p className="w-[90px] text-center">
                                   {moneda}
-                                  {
+                                  {formatearNumero(
                                     viewTotals[props.country][prod.name][
                                       indexYear
-                                    ][indexNum]
-                                  }
+                                    ][indexNum],
+                                  )}
                                 </p>
                               ))}
                             <p className="w-[90px] text-center font-bold">
                               {moneda}{' '}
-                              {año.reduce(
-                                (total, current) =>
-                                  parseInt(total) + parseInt(current),
+                              {formatearNumero(
+                                año.reduce(
+                                  (total, current) =>
+                                    parseInt(total) + parseInt(current),
+                                ),
                               )}
                             </p>
                           </div>
@@ -678,13 +774,13 @@ function TableCosto(props) {
               key={i}
             >
               COSTO CANAL '{canal.name}': {moneda}
-              {canal.sum}
+              {formatearNumero(canal.sum)}
             </p>
           ))}
 
           <br />
           <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            COSTO TOTAL: {moneda} {volTotal}
+            COSTO TOTAL: {moneda} {formatearNumero(volTotal)}
           </p>
         </div>
       )}

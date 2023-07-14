@@ -68,12 +68,12 @@ function PuestosQ() {
 
     createPuestosq(info)
       .then(() => {
-        createPuestosp(info);
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setShowSuccessAlert(true);
         setTimeout(() => {
           setShowSuccessAlert(false);
         }, 5000);
+        compareData(info, idUser);
       })
       .catch((error) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -121,6 +121,34 @@ function PuestosQ() {
       })
       .catch((error) => console.error(error));
   }, []);
+
+  const compareData = (data, idUser) => {
+    const pp = JSON.parse(localStorage.getItem('puestoPData'));
+    let updatedData = { ...data.info[0] };
+
+    Object.keys(updatedData).map((u) => {
+      Object.values(updatedData[u].puestos).map((p, index) => {
+        if (pp[0].puestosp[0][u].puestos[index]) {
+          if (p.name === pp[0].puestosp[0][u].puestos[index].name) {
+            p.cargaSocial = pp[0].puestosp[0][u].puestos[index].cargaSocial;
+            p.incremento = pp[0].puestosp[0][u].puestos[index].incremento;
+            p.precioInicial = pp[0].puestosp[0][u].puestos[index].precioInicial;
+            p.total = pp[0].puestosp[0][u].puestos[index].total;
+          } else if (p.name === pp[0].puestosp[0][u].puestos[index + 1].name) {
+            p.cargaSocial = pp[0].puestosp[0][u].puestos[index + 1].cargaSocial;
+            p.incremento = pp[0].puestosp[0][u].puestos[index + 1].incremento;
+            p.precioInicial =
+              pp[0].puestosp[0][u].puestos[index + 1].precioInicial;
+            p.total = pp[0].puestosp[0][u].puestos[index + 1].total;
+          }
+        }
+      });
+    });
+
+    const info = { info: updatedData, idUser };
+
+    createPuestosp(info);
+  };
 
   return (
     <div>

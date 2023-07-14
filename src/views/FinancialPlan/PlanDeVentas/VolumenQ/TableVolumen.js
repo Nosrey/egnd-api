@@ -146,7 +146,7 @@ function TableVolumen(props) {
       let volTotal = 0;
       for (let mes in newMeses) {
         if (currentMonth >= producto.inicioMes) {
-          newMeses[mes] = volumenActual;
+          newMeses[mes] = Math.round(volumenActual);
           volTotal += parseInt(volumenActual, 10);
           volumenActual *= 1 + producto.tasa / 100;
         } else {
@@ -188,6 +188,8 @@ function TableVolumen(props) {
     mes,
     indexYear,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
       (canal) => canal.canalName === canalName,
@@ -201,17 +203,17 @@ function TableVolumen(props) {
     };
     switch (key) {
       case 'volumenInicial':
-        producto.volInicial = newValue;
+        producto.volInicial = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
       case 'tasa':
-        producto.tasa = newValue;
+        producto.tasa = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
       case 'mesInicial':
-        producto.inicioMes = newValue;
+        producto.inicioMes = inputNumero;
         producto.años = fillMonthsPrices(producto, -1);
         break;
 
@@ -220,11 +222,11 @@ function TableVolumen(props) {
           producto,
           indexYear,
           mes,
-          newValue === ''
+          inputNumero === ''
             ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
+            : inputNumero[0] === '0'
+            ? inputNumero.substring(1)
+            : inputNumero,
         );
         break;
       default:
@@ -233,6 +235,11 @@ function TableVolumen(props) {
 
     newData[pais][channelIndex].productos[productoIndex] = producto;
     setInfoForm(newData);
+  };
+
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
   };
 
   const submitInfoForm = () => {
@@ -313,9 +320,9 @@ function TableVolumen(props) {
                                 >
                                   <Input
                                     placeholder="Volumen inicial"
-                                    type="number"
+                                    type="text"
                                     name="volumenInicial"
-                                    value={producto.volInicial}
+                                    value={formatearNumero(producto.volInicial)}
                                     onChange={(e) =>
                                       handleOnChangeInitialValue(
                                         pais,
@@ -335,10 +342,10 @@ function TableVolumen(props) {
                                 >
                                   <Input
                                     placeholder="Crecimiento Mensual"
-                                    type="number"
+                                    type="text"
                                     name="tasa"
                                     suffix="%"
-                                    value={producto.tasa}
+                                    value={formatearNumero(producto.tasa)}
                                     onChange={(e) =>
                                       handleOnChangeInitialValue(
                                         pais,
@@ -421,14 +428,14 @@ function TableVolumen(props) {
                                         >
                                           <Input
                                             className="w-[90px]"
-                                            type="number"
-                                            value={
+                                            type="text"
+                                            value={formatearNumero(
                                               año.volMeses[
                                                 Object.keys(año.volMeses)[
                                                   indexMes
                                                 ]
-                                              ]
-                                            }
+                                              ],
+                                            )}
                                             onChange={(e) => {
                                               handleOnChangeInitialValue(
                                                 pais,

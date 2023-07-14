@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable-loop */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
@@ -97,7 +98,10 @@ function TablePuestosQ(props) {
     key,
     mes,
     indexYear,
+    indexMes,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...infoForm };
     const puestoIndex = newData[cc].puestos.findIndex(
       (puesto) => puesto.id === idPuesto,
@@ -106,18 +110,23 @@ function TablePuestosQ(props) {
     let puesto = {
       ...newData[cc].puestos[puestoIndex],
     };
+
     switch (key) {
       case 'mes':
-        puesto.años = replaceMonth(
-          puesto,
-          indexYear,
-          mes,
-          newValue === ''
-            ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
-        );
+        for (let i = indexYear; i < 10; i++) {
+          for (let j = i === indexYear ? indexMes : 0; j < 12; j++) {
+            puesto.años = replaceMonth(
+              puesto,
+              i,
+              MONTHS[j],
+              inputNumero === ''
+                ? 0
+                : inputNumero[0] === '0'
+                ? inputNumero.substring(1)
+                : inputNumero,
+            );
+          }
+        }
         break;
       default:
         break;
@@ -125,6 +134,11 @@ function TablePuestosQ(props) {
 
     newData[cc].puestos[puestoIndex] = puesto;
     setInfoForm(newData);
+  };
+
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
   };
 
   const submitInfoForm = () => {
@@ -260,27 +274,28 @@ function TablePuestosQ(props) {
                                                 infoForm[cc].puestos[head]
                                                   .name === ''
                                               }
-                                              value={
+                                              value={formatearNumero(
                                                 año.volMeses[
                                                   Object.keys(año.volMeses)[
                                                     indexMes
                                                   ]
-                                                ]
-                                              }
+                                                ],
+                                              )}
                                               onChange={(e) => {
                                                 const inputValue =
                                                   e.target.value;
-                                                if (/^\d*$/.test(inputValue)) {
-                                                  handleOnChangeInitialValue(
-                                                    cc,
-                                                    infoForm[cc].puestos[head]
-                                                      .id,
-                                                    inputValue,
-                                                    'mes',
-                                                    MONTHS[indexMes],
-                                                    indexYear,
-                                                  );
-                                                }
+
+                                                handleOnChangeInitialValue(
+                                                  cc,
+                                                  infoForm[cc].puestos[head].id,
+                                                  inputValue,
+                                                  'mes',
+                                                  MONTHS[indexMes],
+                                                  indexYear,
+                                                  indexMes,
+                                                );
+                                                // if (/^\d*$/.test(inputValue)) {
+                                                // }
                                               }}
                                               name="month"
                                             />
@@ -337,7 +352,7 @@ function TablePuestosQ(props) {
       </div>
 
       {infoForm && (
-        <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
+        <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px] h-[230px]">
           <div className="flex items-center">
             <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
               Total
@@ -388,7 +403,9 @@ function TablePuestosQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">{valor}</p>
+                            <p className="w-[90px] text-center">
+                              {formatearNumero(valor)}
+                            </p>
                           ))}
                       </div>
                     </div>

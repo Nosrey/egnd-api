@@ -1,12 +1,12 @@
 /* eslint-disable no-lonely-if */
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import { Alert, FormContainer, Tabs } from 'components/ui';
+import { Cuentas } from 'constants/cuentas.constant';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getUser } from 'services/Requests';
-import { Cuentas } from 'constants/cuentas.constant';
 import { Link } from 'react-router-dom';
+import { getUser } from 'services/Requests';
 import TableGastosPorCC from './TableGastosPorCC';
 
 const { TabNav, TabList } = Tabs;
@@ -14,6 +14,8 @@ const { TabNav, TabList } = Tabs;
 function GastosPorCC() {
   const [info, setInfo] = useState(null);
   const [puestosQ, setPuestosQ] = useState([]);
+  const [puestosP, setPuestosP] = useState([]);
+  const [viewP, setViewP] = useState(false);
   const [cargaSocial, setCargaSocial] = useState(0);
   const [defaultCountry, setDefaultCountry] = useState('');
   const [infoForm, setInfoForm] = useState();
@@ -35,7 +37,7 @@ function GastosPorCC() {
           head.name = Cuentas[i];
           head.precioInicial = 0;
           head.tasa = 0;
-          head.incremento = "mensual";
+          head.incremento = 'mensual';
           heads.push(head);
           let h = {};
           h.visible = puestosQ[cc];
@@ -48,21 +50,30 @@ function GastosPorCC() {
     }
   }, [info]);
 
-
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.gastosGeneralData.length !== 0) { // carge info en assumption gastos
-          if (data.gastosPorCCData.length !== 0 ) { // tengo data precargada en este form
-            setInfoForm(() => ({... data?.gastosPorCCData[0].centroDeCostos[0]}));
-          } else { // uso la data de assumptions para construir
-            if (data?.gastosGeneralData[0].centroDeGastos.length !== 0)setInfo(data?.gastosGeneralData[0].centroDeGastos);
+        if (data?.gastosGeneralData.length !== 0) {
+          // carge info en assumption gastos
+          if (data.gastosPorCCData.length !== 0) {
+            // tengo data precargada en este form
+            setInfoForm(() => ({
+              ...data?.gastosPorCCData[0].centroDeCostos[0],
+            }));
+          } else {
+            // uso la data de assumptions para construir
+            if (data?.gastosGeneralData[0].centroDeGastos.length !== 0)
+              setInfo(data?.gastosGeneralData[0].centroDeGastos);
           }
           setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
           let def;
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
           );
+          if (data?.puestosPData[0]) {
+            setPuestosP(data?.puestosPData[0].puestosp[0]);
+            setViewP(true);
+          }
           setDefaultCountry(def);
           setCountry(def);
           setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
@@ -92,7 +103,7 @@ function GastosPorCC() {
         <div className="border-b-2 px-4 py-1">
           <h6>Centros de costo</h6>
         </div>
-        {infoForm ? (
+        {infoForm && viewP ? (
           <Tabs defaultValue={country}>
             <TabList>
               {puestosQ &&
@@ -117,6 +128,7 @@ function GastosPorCC() {
                     contenido={
                       <TableGastosPorCC
                         data={infoForm}
+                        puestosP={puestosP}
                         showAlertSuces={(boolean) =>
                           setShowSuccessAlert(boolean)
                         }
@@ -131,13 +143,27 @@ function GastosPorCC() {
               </div>
             )}
           </Tabs>
+        ) : !viewP ? (
+          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+            <span>
+              Para acceder a este formulario primero debe completar el
+              formulario{' '}
+              <Link className="text-indigo-700 underline" to="/salarios">
+                Salarios
+              </Link>{' '}
+              .
+            </span>
+          </div>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
             <span>
               Para acceder a este formulario primero debe completar el
-              formulario {' '}
-              <Link className="text-indigo-700 underline" to="/supuestos-gastos">
-              Supuesto de Gasto de Estructura
+              formulario{' '}
+              <Link
+                className="text-indigo-700 underline"
+                to="/supuestos-gastos"
+              >
+                Supuesto de Gasto de Estructura
               </Link>{' '}
               .
             </span>

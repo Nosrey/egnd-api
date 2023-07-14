@@ -40,10 +40,7 @@ function TableCapexPxQ(props) {
           for (let j = 0; j <= 11; j++) {
             total[i][j] +=
               Number(d.años[i].volMeses[MONTHS[j]]) *
-              (capexQ[index].precioInicial !== 0 ||
-              Number(capexQ[index].años[i].volMeses[MONTHS[j]]) !== 0
-                ? Number(capexQ[index].años[i].volMeses[MONTHS[j]])
-                : 0);
+              (Number(capexQ[index].años[i].volMeses[MONTHS[j]]) || 0);
           }
         }
       });
@@ -51,8 +48,22 @@ function TableCapexPxQ(props) {
       return total;
     }
   };
+  const calcHor = () => {
+    let tot = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    if (capexP && capexQ) {
+      capexP.map((d, index) => {
+        for (let i = 0; i <= 9; i++) {
+          for (let j = 0; j <= 11; j++) {
+            tot[i] +=
+              Number(d.años[i].volMeses[MONTHS[j]]) *
+              (Number(capexQ[index].años[i].volMeses[MONTHS[j]]) || 0);
+          }
+        }
+      });
+    }
 
-  const totals = calcTotals();
+    return tot;
+  };
 
   const calcTotal = () => {
     let tot = 0;
@@ -68,11 +79,20 @@ function TableCapexPxQ(props) {
     }
   };
 
+  const formatearNumero = (numero) => {
+    if (typeof numero !== 'string') {
+      numero = numero.toString();
+    }
+    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
+
+
+  const totals = calcTotals();
+
   const tot = calcTotal();
-
-  console.log('CQ', capexQ);
-  console.log('CP', capexP);
-
+  const totHor = calcHor();
   return (
     <>
       {capexP && (
@@ -107,7 +127,7 @@ function TableCapexPxQ(props) {
                   <div className="flex flex-col">
                     {index === 0 && (
                       <div className="titleRow min-w-[62px]">
-                        <p>Descripcion</p>
+                        <p>Descripción</p>
                       </div>
                     )}
                     <FormItem
@@ -122,7 +142,7 @@ function TableCapexPxQ(props) {
                         disabled
                         type="text"
                         name="name"
-                        value={cta.descripcion}
+                        value={formatearNumero(cta.descripcion)}
                       />
                     </FormItem>
                   </div>
@@ -171,32 +191,32 @@ function TableCapexPxQ(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={`${mes} - año ${indexYear + 1}`}
+                                  title={`$${
+                                    cta.años[indexYear].volMeses[
+                                      Object.keys(año.volMeses)[indexMes]
+                                    ] *
+                                    (Number(
+                                      capexQ[index].años[indexYear].volMeses[
+                                        Object.keys(año.volMeses)[indexMes]
+                                      ],
+                                    ) || 0)
+                                  }`}
                                 >
                                   <Input
                                     className="w-[90px]"
-                                    type="number"
+                                    type="text"
                                     disabled
-                                    value={
+                                    value={formatearNumero(
                                       cta.años[indexYear].volMeses[
                                         Object.keys(año.volMeses)[indexMes]
                                       ] *
-                                      (capexQ[index].precioInicial !== 0 ||
-                                      Number(
-                                        capexQ[index].años[indexYear].volMeses[
-                                          Object.keys(año.volMeses)[indexMes]
-                                        ],
-                                      ) !== 0
-                                        ? Number(
-                                            capexQ[index].años[indexYear]
-                                              .volMeses[
-                                              Object.keys(año.volMeses)[
-                                                indexMes
-                                              ]
-                                            ],
-                                          )
-                                        : 0)
-                                    }
+                                        (Number(
+                                          capexQ[index].años[indexYear]
+                                            .volMeses[
+                                            Object.keys(año.volMeses)[indexMes]
+                                          ],
+                                        ) || 0),
+                                    )}
                                     name="month"
                                     prefix={currency}
                                   />
@@ -206,9 +226,13 @@ function TableCapexPxQ(props) {
                           <FormItem className="mb-0">
                             <Input
                               className="w-[90px]"
-                              type="number"
-                              value={cta.años[indexYear].volTotal}
+                              type="text"
+                              value={formatearNumero(
+                                cta.años[indexYear].volTotal,
+                              )}
+
                               disabled
+                              prefix={currency}
                             />
                           </FormItem>
                         </div>
@@ -266,13 +290,20 @@ function TableCapexPxQ(props) {
                         props.capexP.length !== 0 &&
                         MONTHS.map((valor, index) => (
                           <p className="w-[90px] text-center">
-                            {totals[indexYear][index]}
+                            {currency}
+                            {formatearNumero(totals[indexYear][index])}
                           </p>
                         ))}
                       <p className="w-[90px] text-center font-bold">
-                        {totals[indexYear].reduce(
-                          (acumulador, numero) => acumulador + numero,
-                          0,
+                        {/* {currency} */}
+
+                        {indexYear === 0 && currency}
+
+                        {formatearNumero(
+                          totals[indexYear].reduce(
+                            (acumulador, numero) => acumulador + numero,
+                            0,
+                          ),
                         )}
                       </p>
                     </div>
@@ -283,7 +314,8 @@ function TableCapexPxQ(props) {
           </div>
 
           <p className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ">
-            TOTAL: {tot}
+            TOTAL: {currency}
+            {formatearNumero(tot)}
           </p>
         </div>
       )}

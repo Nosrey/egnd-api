@@ -78,7 +78,6 @@ function PuestosP() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log('data p ', data);
         let def;
         if (data?.puestosPData[0]) {
           setPuestosQ(data?.puestosPData[0].puestosp[0]);

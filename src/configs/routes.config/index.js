@@ -177,10 +177,28 @@ export const protectedRoutes = [
     authority: [],
   },
   {
+    key: 'margenbruto',
+    path: '/margenbruto',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeVentas/MargenBruto/MargenBruto'),
+    ),
+    authority: [],
+  },
+  {
     key: 'mercado',
     path: '/research',
     component: React.lazy(() =>
       import('views/FinancialPlan/AssumtionsGenerales/Mercado/Mercado'),
+    ),
+    authority: [],
+  },
+  {
+    key: 'dashboardVentas',
+    path: '/dashboardventas',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/PlanDeVentas/Dashboard Ventas/DashboardVentas'
+      ),
     ),
     authority: [],
   },

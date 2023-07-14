@@ -305,8 +305,8 @@ function ResumenDeGasto() {
             <span>
             Para acceder a este formulario primero debe completar el
               formulario de{' '}
-              <Link className="text-indigo-700 underline"  to="/supuestos-gastos">
-              Supuesto de Gasto de Estructura
+              <Link className="text-indigo-700 underline"  to="/gastos-por-cc">
+              Gastos por Centro de Costo
               </Link>{' '}
               .
             </span>
