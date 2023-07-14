@@ -37,6 +37,7 @@ function Costo() {
           prod.precioInicial = 0;
           prod.tasa = 0;
           prod.name = realProds[x].name;
+          prod.type = realProds[x].type;
           prod.inicioMes = 1;
           prod.fecha = '';
           prod['años'] = [...AÑOS];
