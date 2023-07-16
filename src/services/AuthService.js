@@ -4,7 +4,7 @@ const URL_API = 'http://localhost:4000';
 
 export async function apiSignIn(data) {
   return ApiService.fetchData({
-    url: '/sign-in',
+    url: '/iniciar-sesion',
     method: 'post',
     data,
   });
