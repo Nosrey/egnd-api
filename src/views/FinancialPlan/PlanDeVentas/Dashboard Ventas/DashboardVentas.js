@@ -66,7 +66,11 @@ const paisesData = [
 
 function DashboardVentas() {
   const currentState = useSelector((state) => state.auth.user);
-  const [yearSelected, setYearSelected] = useState({ value: '' });
+  const [yearSelected, setYearSelected] = useState({
+    value: 'año 1',
+    label: 'Año 1',
+    year: 0,
+  });
   const [dataAssump, setDataAssump] = useState([]);
   const [infoForm, setInfoForm] = useState();
   const [totalVentas, setTotalVentas] = useState(0);
@@ -116,7 +120,7 @@ function DashboardVentas() {
       setTotalProd(totProd);
       setTotalServ(totServ);
     } else {
-      selectYear({ value: '' });
+      selectYear({ value: 'año 1', label: 'Año 1', year: 0 });
     }
   };
 
