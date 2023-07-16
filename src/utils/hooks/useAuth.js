@@ -26,7 +26,7 @@ function useAuth() {
       if (resp.success) {
         const { response } = resp;
         const { id, token, mail } = response;
-        localStorage.setItem('userId', id)
+        localStorage.setItem('userId', id);
         console.log('id que viene', id);
         dispatch(onSignInSuccess(token));
         dispatch(
@@ -77,6 +77,7 @@ function useAuth() {
           );
         }
         const redirectUrl = query.get(REDIRECT_URL_KEY);
+        localStorage.clear();
         navigate(redirectUrl || appConfig.authenticatedEntryPath);
         return {
           status: 'success',
