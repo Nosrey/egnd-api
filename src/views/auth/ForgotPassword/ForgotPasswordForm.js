@@ -40,14 +40,18 @@ function ForgotPasswordForm(props) {
       <div className="mb-6">
         {emailSent ? (
           <>
-            <h3 className="mb-1">Check your email</h3>
-            <p>We have sent a password recovery instruction to your email</p>
+            <h3 className="mb-1">Verifica tu email</h3>
+            <p>
+              Hemos enviado una instrucción de recuperación de contraseña a su
+              email
+            </p>
           </>
         ) : (
           <>
-            <h3 className="mb-1">Forgot Password</h3>
+            <h3 className="mb-1">Olvidé mi contraseña</h3>
             <p>
-              Please enter your email address to receive a verification code
+              Por favor ingrese su email para recibir instrucciones para
+              reestablecerla
             </p>
           </>
         )}
@@ -93,11 +97,11 @@ function ForgotPasswordForm(props) {
                 variant="solid"
                 type="submit"
               >
-                {emailSent ? 'Resend Email' : 'Send Email'}
+                {emailSent ? 'Resend Email' : 'Enviar Email'}
               </Button>
               <div className="mt-4 text-center">
-                <span>Back to </span>
-                <ActionLink to={signInUrl}>Sign in</ActionLink>
+                <span>Volver a </span>
+                <ActionLink to={signInUrl}>Inicio de Sesión</ActionLink>
               </div>
             </FormContainer>
           </Form>
