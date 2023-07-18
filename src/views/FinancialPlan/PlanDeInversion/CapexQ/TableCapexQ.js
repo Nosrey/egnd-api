@@ -170,7 +170,7 @@ function TableCapexQ(props) {
                     >
                       <Input
                         name="descripcion"
-                        value={formatearNumero(cta.descripcion)}
+                        value={cta.descripcion}
                         onChange={(e) => handleChangeDesc(cta.id, e)}
                       />
                     </FormItem>
