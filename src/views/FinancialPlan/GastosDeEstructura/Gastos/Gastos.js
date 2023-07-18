@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Button, Input, Alert } from 'components/ui';
 import { createGastosGeneral, getUser } from 'services/Requests';
 import { useSelector } from 'react-redux';
-import { object } from 'prop-types';
 
 function Gastos() {
   const currentState = useSelector((state) => state.auth.user);
@@ -27,13 +26,17 @@ function Gastos() {
   });
 
   useEffect(() => {
-    getUser(currentState.id)
-      .then((data) => {
-        if (data?.gastosGeneralData.length !== 0) {
-          setInitialValues(data?.gastosGeneralData[0]);
-        }
-      })
-      .catch(console.log('error'));
+    if (currentState.id) {
+      getUser(currentState.id)
+        .then((data) => {
+          if (data?.gastosGeneralData.length !== 0) {
+            setInitialValues(data?.gastosGeneralData[0]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, []);
 
   const validarCheckbox = (objeto) => {
@@ -100,10 +103,10 @@ function Gastos() {
     e.preventDefault();
 
     if (validarCheckbox(initialValues.centroDeGastos)) {
-      const id= localStorage.getItem('userId')
-      const data = {...initialValues , id}
+      const id = localStorage.getItem('userId');
+      const data = { ...initialValues, id };
       createGastosGeneral(data)
-        .then(() => {
+        .then((data) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setShowSuccessAlert(true);
           setTimeout(() => {
@@ -111,6 +114,7 @@ function Gastos() {
           }, 5000);
         })
         .catch((error) => {
+          console.log(error);
           window.scrollTo({ top: 0, behavior: 'smooth' });
           setShowErrorAlert(true);
           setTimeout(() => {
@@ -187,8 +191,7 @@ function Gastos() {
                 ),
               )}
 
-              
-<p className=" pt-7">Crear nuevo CC :</p>
+              <p className=" pt-7">Crear nuevo CC :</p>
               <div className="flex items-center gap-x-4 ">
                 <Input
                   size="sm"
