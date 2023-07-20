@@ -131,7 +131,6 @@ function TablePuestosPxQ(props) {
     return nuevoNum;
   };
 
-
   return (
     <>
       {infoForm &&
@@ -341,14 +340,19 @@ function TablePuestosPxQ(props) {
                           ))}
                         <p className="w-[90px] text-center font-bold">
                           {index === 0 && currency}
-                          {index === 0 &&
-                            formatearNumero(
-                              volTotal[indexYear] &&
-                                volTotal[indexYear].values.reduce(
-                                  (total, current) =>
-                                    Math.round(total + current),
-                                ),
+                          {/* {index === 0 &&
+                            volTotal[indexYear] &&
+                            volTotal[indexYear].values.reduce(
+                              (total, current) => Math.round(total + current),
+                            )} */}
 
+                          {index === 0 &&
+                            volTotal[indexYear] &&
+                            formatearNumero(
+                              volTotal[indexYear].values.reduce(
+                                (total, current) => Math.round(total + current),
+                                0,
+                              ),
                             )}
                         </p>
                       </div>

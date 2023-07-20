@@ -24,13 +24,17 @@ function PuestosQ() {
   useEffect(() => {
     let estructura = {};
     if (info) {
+      let puestosCopy = [...puestos];
       Object.keys(puestosQ).map((cc, index) => {
+        if (puestos[0][cc] === undefined) {
+          puestosCopy[0] = { ...puestosCopy[0], [cc]: [] };
+        }
         let heads = [];
-        for (let i = 0; i < puestos[0][cc]?.length; i++) {
+        for (let i = 0; i < puestosCopy[0][cc]?.length; i++) {
           let head = {};
           head.id = i;
           head['años'] = [...AÑOS];
-          head.name = puestos[0][cc][i];
+          head.name = puestosCopy[0][cc][i];
           head.precioInicial = 0;
           head.incremento = 0;
           head.cargaSocial = 0;
@@ -41,6 +45,12 @@ function PuestosQ() {
           h.puestos = [...heads];
 
           estructura[cc] = { ...h };
+        }
+        if (puestosCopy[0][cc]?.length === 0) {
+          estructura[cc] = {
+            puestos: [],
+            visible: puestosQ[cc],
+          };
         }
       });
       setInfoForm(() => ({ ...estructura }));

@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 const authRoute = [
   {
     key: 'signIn',
-    path: `/sign-in`,
+    path: `/iniciar-sesion`,
     component: React.lazy(() => import('views/auth/SignIn')),
     authority: [],
   },
@@ -25,6 +25,6 @@ const authRoute = [
     component: React.lazy(() => import('views/auth/ResetPassword')),
     authority: [],
   },
-]
+];
 
-export default authRoute
+export default authRoute;

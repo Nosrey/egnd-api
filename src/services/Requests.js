@@ -544,40 +544,44 @@ export const createAssumpFinanciera = async (
 
 const updatePuestosQData = (estructura, centroDeGastos) => {
   const oldPuestosQData = JSON.parse(localStorage.getItem('puestoQData'));
-  let centrosC = oldPuestosQData[0].puestosq[0];
-  const newData = { ...estructura };
-  const keyArray = Object.keys(centroDeGastos);
-  for (let i = 0; i < keyArray.length; i++) {
-    if (centrosC[keyArray[i]]) {
-      // si existe este CC
-      if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
-        // tengo data de este cc me la traigo
-        newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
+  if (oldPuestosQData.length !== 0) {
+    let centrosC = oldPuestosQData[0].puestosq[0];
+    const newData = { ...estructura };
+    const keyArray = Object.keys(centroDeGastos);
+    for (let i = 0; i < keyArray.length; i++) {
+      if (centrosC[keyArray[i]]) {
+        // si existe este CC
+        if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
+          // tengo data de este cc me la traigo
+          newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
+        }
       }
     }
+    let idUser = localStorage.getItem('userId');
+    const info = { info: newData, idUser };
+    createPuestosq(info);
   }
-  let idUser = localStorage.getItem('userId');
-  const info = { info: newData, idUser };
-  createPuestosq(info);
 };
 
 const updatePuestosPData = (estructura, centroDeGastos) => {
   const oldPuestosPData = JSON.parse(localStorage.getItem('puestoPData'));
-  let centrosC = oldPuestosPData[0].puestosp[0];
-  const newData = { ...estructura };
-  const keyArray = Object.keys(centroDeGastos);
-  for (let i = 0; i < keyArray.length; i++) {
-    if (centrosC[keyArray[i]]) {
-      // si existe este CC
-      if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
-        // tengo data de este cc me la traigo
-        newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
+  if (oldPuestosPData.length !== 0) {
+    let centrosC = oldPuestosPData[0].puestosp[0];
+    const newData = { ...estructura };
+    const keyArray = Object.keys(centroDeGastos);
+    for (let i = 0; i < keyArray.length; i++) {
+      if (centrosC[keyArray[i]]) {
+        // si existe este CC
+        if (newData[keyArray[i]].visible && centrosC[keyArray[i]].visible) {
+          // tengo data de este cc me la traigo
+          newData[keyArray[i]].puestos = centrosC[keyArray[i]].puestos;
+        }
       }
     }
+    let idUser = localStorage.getItem('userId');
+    const info = { info: newData, idUser };
+    createPuestosp(info);
   }
-  let idUser = localStorage.getItem('userId');
-  const info = { info: newData, idUser };
-  createPuestosp(info);
 };
 
 export const createGastosGeneral = async ({
@@ -625,7 +629,7 @@ export const createGastosGeneral = async ({
       }
     });
 
-    // la lleno con la info correspopndiente para suplantar las tablas
+    // // la lleno con la info correspopndiente para suplantar las tablas
     updatePuestosQData(estructura, centroDeGastos);
     updatePuestosPData(estructura, centroDeGastos);
     const data = await response.json();
@@ -635,6 +639,7 @@ export const createGastosGeneral = async ({
     throw error;
   }
 };
+
 export const createGastosPorCC = async ({ body, idUser }) => {
   try {
     const response = await fetch(`${URL_API}/api/gastosporcc`, {
