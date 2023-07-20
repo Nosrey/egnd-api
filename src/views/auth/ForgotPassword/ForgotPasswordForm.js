@@ -50,7 +50,7 @@ function ForgotPasswordForm(props) {
           <>
             <h3 className="mb-1">Olvidé mi contraseña</h3>
             <p>
-              Por favor ingrese su email para recibir instrucciones para
+              Por favor ingrese su email y le enviaremos instrucciones para
               reestablecerla
             </p>
           </>
