@@ -1,6 +1,6 @@
 import ApiService from './ApiService';
 
-const URL_API = 'http://localhost:4000';
+const URL_API = 'https://api.egndfinance.com';
 
 export async function apiSignIn(data) {
   return ApiService.fetchData({

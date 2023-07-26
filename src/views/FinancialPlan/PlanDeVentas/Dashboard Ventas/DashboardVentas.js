@@ -3,7 +3,6 @@ import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';
 import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
-import SelectOptions from 'components/shared/dashboard/SelectOptions';
 import Total from 'components/shared/dashboard/Total';
 import { MenuItem, Select } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
@@ -11,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { showMultiplicacionPxQ } from 'utils/calcs';
+import formatNumber from 'utils/formatTotalsValues';
 
 const año = [
   { value: 'año 1', label: 'Año 1', year: 0 },
@@ -27,78 +27,107 @@ const año = [
 ];
 
 const periodo = [
-  { value: '1er mes', label: '1er mes' },
-  { value: '1er trimestre', label: '1er trimestre' },
-  { value: '1er semestre', label: '1er semestre' },
-  { value: '2do semestre', label: '2do semestre' },
+  { value: '1er mes', label: '1er mes', month: 0 },
+  { value: '1er trimestre', label: '1er trimestre', month: 4 },
+  { value: '1er semestre', label: '1er semestre', month: 6 },
+  { value: '2do semestre', label: '2do semestre', month: 12 },
   { value: 'todo el año', label: 'Todo el año' },
-];
-const data = [
-  {
-    data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380, 320],
-  },
-];
-
-const churnProducto = [
-  { nombre: 'Producto A', numero: 1 },
-  { nombre: 'Producto B', numero: 2 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-  { nombre: 'Producto C', numero: 3 },
-
-  // ...
-];
-
-const paisesData = [
-  { name: 'Country A', sales: 100 },
-  { name: 'Country B', sales: 200 },
-  { name: 'Country C', sales: 300 },
-  // ...
 ];
 
 function DashboardVentas() {
   const currentState = useSelector((state) => state.auth.user);
-  const [yearSelected, setYearSelected] = useState({ value: '' });
+  const [yearSelected, setYearSelected] = useState({
+    value: 'año 1',
+    label: 'Año 1',
+    year: 0,
+  });
+  const [periodoSelected, setPeriodoSelected] = useState({
+    value: '1er semestre',
+    label: '1er semestre',
+    month: 6,
+  });
   const [dataAssump, setDataAssump] = useState([]);
   const [infoForm, setInfoForm] = useState();
   const [totalVentas, setTotalVentas] = useState(0);
   const [totalServ, setTotalServ] = useState(0);
   const [totalProd, setTotalProd] = useState(0);
   const [volProd, setVolProd] = useState(0);
+  const [superTotal, setSuperTotal] = useState(0);
   const [volServ, setVolServ] = useState(0);
   const [totalClients, setTotalClients] = useState(0);
   const [totalsCacr, setTotalsCacr] = useState();
+  const [newClients, setNewClients] = useState(0);
 
   const selectYear = (event) => {
     setYearSelected(event);
+  };
+
+  const selectPeriodo = (event) => {
+    setPeriodoSelected(event);
   };
 
   const calcTotals = () => {
     let tot = 0;
     let totProd = 0;
     let totServ = 0;
+    let superTotal = 0;
     if (infoForm) {
       Object.values(infoForm).map((m) => {
         m.map((p) => {
           p.productos.map((o) => {
             o.años.map((a, indexY) => {
+              superTotal += Number(a.ventasTotal);
               if (yearSelected.year || yearSelected.year === 0) {
-                if (yearSelected.year === indexY) {
-                  if (o.type === 'producto') {
-                    totProd += Number(a.ventasTotal);
-                  } else {
-                    totServ += Number(a.ventasTotal);
+                MONTHS.map((s, indexM) => {
+                  if (yearSelected.year === indexY) {
+                    if (periodoSelected.month || periodoSelected.month === 0) {
+                      if (periodoSelected.month === 0) {
+                        if (indexM === 0) {
+                          if (o.type === 'producto') {
+                            totProd += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totServ += Number(a.volMeses[MONTHS[indexM]]);
+                          }
+                          tot += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      } else if (periodoSelected.month === 6) {
+                        if (indexM < 6) {
+                          if (o.type === 'producto') {
+                            totProd += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totServ += Number(a.volMeses[MONTHS[indexM]]);
+                          }
+                          tot += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      } else if (periodoSelected.month === 4) {
+                        if (indexM < 4) {
+                          if (o.type === 'producto') {
+                            totProd += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totServ += Number(a.volMeses[MONTHS[indexM]]);
+                          }
+                          tot += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      } else if (periodoSelected.month === 12) {
+                        if (indexM > 5 && indexM < 12) {
+                          if (o.type === 'producto') {
+                            totProd += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totServ += Number(a.volMeses[MONTHS[indexM]]);
+                          }
+                          tot += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      }
+                    } else {
+                      if (o.type === 'producto') {
+                        totProd += Number(a.ventasTotal);
+                      } else {
+                        totServ += Number(a.ventasTotal);
+                      }
+                      tot += Number(a.ventasTotal);
+                    }
                   }
-                  tot += Number(a.ventasTotal);
-                }
+                });
               } else {
                 if (o.type === 'producto') {
                   totProd += Number(a.ventasTotal);
@@ -111,12 +140,17 @@ function DashboardVentas() {
           });
         });
       });
-
+      setSuperTotal(superTotal);
       setTotalVentas(tot);
       setTotalProd(totProd);
       setTotalServ(totServ);
     } else {
-      selectYear({ value: '' });
+      selectYear({ value: 'año 1', label: 'Año 1', year: 0 });
+      selectPeriodo({
+        value: '1er semestre',
+        label: '1er semestre',
+        month: 6,
+      });
     }
   };
 
@@ -151,22 +185,88 @@ function DashboardVentas() {
 
   const calcClentes = () => {
     let tot = 0;
+    let newC = 0;
     if (infoForm && dataAssump) {
       Object.values(infoForm).map((d) => {
         d.map((i, indexChannel) => {
           i.productos.map((p, indexProd) => {
             p.años.map((a, indexY) => {
-              MONTHS.map((o, indexMes) => {
-                tot +=
-                  a.volMeses[MONTHS[11]] /
-                  dataAssump.canales[indexChannel].items[indexProd].volumen;
-              });
+              if (yearSelected.year || yearSelected.year === 0) {
+                if (yearSelected.year === indexY) {
+                  MONTHS.map((o, indexMes) => {
+                    if (indexMes === 11) {
+                      tot +=
+                        a.volMeses[MONTHS[indexMes]] /
+                        dataAssump.canales[indexChannel].items[indexProd]
+                          .volumen;
+                    }
+                    newC +=
+                      indexMes === 0
+                        ? 0
+                        : Number(
+                            formatNumber(
+                              p.años[indexY].volMeses[MONTHS[indexMes]] /
+                                dataAssump.canales[indexChannel].items[
+                                  indexProd
+                                ].volumen -
+                                (p.años[indexY].volMeses[MONTHS[indexMes - 1]] /
+                                  dataAssump.canales[indexChannel].items[
+                                    indexProd
+                                  ].volumen -
+                                  ((p.años[indexY].volMeses[
+                                    MONTHS[indexMes - 1]
+                                  ] /
+                                    dataAssump.canales[indexChannel].items[
+                                      indexProd
+                                    ].volumen) *
+                                    dataAssump.churns[indexChannel].items[
+                                      indexProd
+                                    ].porcentajeChurn) /
+                                    100),
+                            ),
+                          );
+                  });
+                }
+              } else {
+                MONTHS.map((o, indexMes) => {
+                  if (indexMes === 11) {
+                    tot +=
+                      a.volMeses[MONTHS[indexMes]] /
+                      dataAssump.canales[indexChannel].items[indexProd].volumen;
+                  }
+                  newC +=
+                    indexMes === 0
+                      ? 0
+                      : Number(
+                          formatNumber(
+                            p.años[indexY].volMeses[MONTHS[indexMes]] /
+                              dataAssump.canales[indexChannel].items[indexProd]
+                                .volumen -
+                              (p.años[indexY].volMeses[MONTHS[indexMes - 1]] /
+                                dataAssump.canales[indexChannel].items[
+                                  indexProd
+                                ].volumen -
+                                ((p.años[indexY].volMeses[
+                                  MONTHS[indexMes - 1]
+                                ] /
+                                  dataAssump.canales[indexChannel].items[
+                                    indexProd
+                                  ].volumen) *
+                                  dataAssump.churns[indexChannel].items[
+                                    indexProd
+                                  ].porcentajeChurn) /
+                                  100),
+                          ),
+                        );
+                });
+              }
             });
           });
         });
       });
     }
     setTotalClients(tot);
+    setNewClients(newC);
   };
 
   const calcCacr = (dataVolumen) => {
@@ -192,7 +292,6 @@ function DashboardVentas() {
           setDataAssump(data.assumptionData[0]);
         }
         if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
-          // tengo infoForm vol y precio precargada
           const datosPrecargados = {};
           let dataVentas = showMultiplicacionPxQ(
             data?.volumenData.sort((a, b) =>
@@ -213,7 +312,7 @@ function DashboardVentas() {
         }
       })
       .catch((error) => console.error(error));
-  }, [yearSelected]);
+  }, [yearSelected, periodoSelected]);
 
   return (
     <div>
@@ -232,16 +331,27 @@ function DashboardVentas() {
             >
               {año.map((a) => (
                 <MenuItem key={a.value} value={a.value}>
-                  {a.name}
+                  {a.label}
                 </MenuItem>
               ))}
             </Select>
             {yearSelected.value !== 'todo' && (
-              <SelectOptions options={periodo} placehol="Periodo" />
+              <Select
+                className="w-[12%]"
+                placeholder="Periodo"
+                options={periodo}
+                onChange={selectPeriodo}
+              >
+                {periodo.map((a) => (
+                  <MenuItem key={a.value} value={a.value}>
+                    {a.label}
+                  </MenuItem>
+                ))}
+              </Select>
             )}
           </div>
           <div className="mt-[30px] mb-[30px]">
-            <Total title="Total de Ventas" data={totalVentas} />
+            <Total title="Total d e Ventas" data={totalVentas} />
           </div>
           <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
             <CardNumerica
@@ -257,7 +367,7 @@ function DashboardVentas() {
             <CardNumerica
               type="default"
               title="Ticket medio por Producto"
-              cantidad={totalProd / volProd}
+              cantidad={volProd ? totalProd / volProd : 0}
             />
             <CardNumerica
               type="default"
@@ -272,7 +382,7 @@ function DashboardVentas() {
             <CardNumerica
               type="default"
               title="Ticket medio por Servicio"
-              cantidad={totalServ / volServ}
+              cantidad={volServ ? totalServ / volServ : 0}
             />
           </div>
           {infoForm && (
@@ -287,7 +397,7 @@ function DashboardVentas() {
               </div>
               <div className="w-[50%]">
                 <h5 className="mb-[30px]">Distribución de Ventas por País</h5>
-                <BarraDeProgreso data={infoForm} totalVentas={totalVentas} />
+                <BarraDeProgreso data={infoForm} totalVentas={superTotal} />
               </div>
             </div>
           )}
@@ -316,7 +426,8 @@ function DashboardVentas() {
           <div className="grid grid-cols-3 gap-[20px] mb-[40px]">
             <CardNumerica
               title="Clientes Nuevos"
-              cantidad={763}
+              type="clear"
+              cantidad={newClients}
               data={infoForm}
             />
             <CardNumerica

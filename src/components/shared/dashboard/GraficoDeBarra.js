@@ -3,34 +3,29 @@ import { BASIC_EMPTY, EMPTY_TOTALES, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 // import { COLORS } from '../../../configs/chart.config';
-const totals = JSON.parse(JSON.stringify(EMPTY_TOTALES));
-const superTotals = JSON.parse(JSON.stringify(BASIC_EMPTY));
+let totals = JSON.parse(JSON.stringify(EMPTY_TOTALES));
+let superTotals = JSON.parse(JSON.stringify(BASIC_EMPTY));
 
 function GraficoDeBarra({ data, selected }) {
-  const [view, setView] = useState(superTotals);
+  const [view, setView] = useState();
   const [typeView, setTypeView] = useState(year);
-  const [calls, setCalls] = useState(0);
 
   useEffect(() => {
-    if (calls === 0) {
-      setCalls(calls + 1);
-      Object.values(data).map((d) => {
-        d.map((m) => {
-          m.productos.map((p) => {
-            p.años.map((a, indexY) => {
-              MONTHS.map((u, indexM) => {
-                totals[indexY][indexM] +=
-                  Number(a.volMeses[MONTHS[indexM]]) / 2;
-              });
+    Object.values(data).map((d) => {
+      d.map((m) => {
+        m.productos.map((p) => {
+          p.años.map((a, indexY) => {
+            MONTHS.map((u, indexM) => {
+              totals[indexY][indexM] += Number(a.volMeses[MONTHS[indexM]]) / 2;
             });
           });
         });
       });
+    });
 
-      for (let i = 0; i <= 9; i++) {
-        for (let j = 0; j <= 11; j++) {
-          superTotals[i] += totals[i][j];
-        }
+    for (let i = 0; i <= 9; i++) {
+      for (let j = 0; j <= 11; j++) {
+        superTotals[i] += totals[i][j];
       }
     }
   }, []);
