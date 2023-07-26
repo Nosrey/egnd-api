@@ -1,9 +1,9 @@
 import React from 'react';
-import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import SelectOptions from 'components/shared/dashboard/SelectOptions';
 import Total from 'components/shared/dashboard/Total';
 import { Select } from 'components/ui';
 import GraficoDeBarraDos from 'components/shared/dashboard/GraficoDeBarraDos';
+import CardNumerica from 'components/shared/dashboard/CardNumerica';
 
 function DashboardCostos() {
   return (
