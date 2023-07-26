@@ -1,9 +1,9 @@
 import React from 'react';
-import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import SelectOptions from 'components/shared/dashboard/SelectOptions';
 import Total from 'components/shared/dashboard/Total';
 import { Select } from 'components/ui';
 import GraficoDeBarraDos from 'components/shared/dashboard/GraficoDeBarraDos';
+import CardNumerica from 'components/shared/dashboard/CardNumerica';
 
 function DashboardCostos() {
   return (
@@ -29,7 +29,7 @@ function DashboardCostos() {
             </Select>
             <SelectOptions options={1} placehol="Periodo" />
           </div>
-          <div className="mt-[30px] mb-[30px]">
+          <div className="mt-[30px] mb-[30px] cursor-default">
             <Total title="Costos Totales" data={12} />
           </div>
           <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
@@ -64,8 +64,8 @@ function DashboardCostos() {
               cantidad={56}
             />
           </div>
-          <div className="flex justify-between items-center mt-[100px]">
-            <h5>Representación de Costos sobre Ventas</h5>
+          <div className="flex justify-between items-center mt-[100px] pl-[20px]">
+            <h5 className='cursor-default'>Representación de Costos sobre Ventas</h5>
             <div className="flex gap-[20px]">
               <Select className="w-[100%]" placeholder="Producto" />
               <Select className="w-[100%]" placeholder="Canal" />
