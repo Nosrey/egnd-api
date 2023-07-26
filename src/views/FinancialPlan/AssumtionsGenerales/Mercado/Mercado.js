@@ -63,7 +63,7 @@ function Mercado() {
 
   const removePunctuation = (value) => value?.replace(/[.,]/g, '');
 
-  const MostrarNotacionUnidades = ({ numero }) => {
+  function MostrarNotacionUnidades({ numero }) {
     // Convertir el número de entrada a un tipo numérico
     let num = parseInt(numero.replace(/\./g, ''));
 
@@ -87,7 +87,7 @@ function Mercado() {
     const numeroFormateado = exp >= 3 ? num.toFixed(2) : num.toFixed(0);
 
     return <span>{`${numeroFormateado} ${sufijos[exp]}`}</span>;
-  };
+  }
 
   return (
     <div>

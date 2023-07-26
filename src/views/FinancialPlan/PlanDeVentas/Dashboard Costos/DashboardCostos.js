@@ -9,8 +9,8 @@ function DashboardCostos() {
   return (
     <div>
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Dashboard de Ventas</h4>
-        <span>Plan de Ventas</span>
+        <h4>Dashboard de Costos</h4>
+        <span>Costos directos</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="px-4 py-5">
@@ -50,21 +50,21 @@ function DashboardCostos() {
             />
             <CardNumerica
               type="default"
-              title="Costo de Servicios"
+              title="Costo de servicios"
               cantidad={34}
             />
             <CardNumerica
               type="default"
-              title="Volumen de Servicios"
+              title="Volumen de servicios"
               cantidad={56}
             />
             <CardNumerica
               type="default"
-              title="Costo medio por Servicio"
+              title="Costo medio por servicio"
               cantidad={56}
             />
           </div>
-          <div className="flex justify-between items-center mt-[20px]">
+          <div className="flex justify-between items-center mt-[100px]">
             <h5>Representación de Costos sobre Ventas</h5>
             <div className="flex gap-[20px]">
               <Select className="w-[100%]" placeholder="Producto" />
@@ -72,7 +72,7 @@ function DashboardCostos() {
               <Select className="w-[100%]" placeholder="País" />
             </div>
           </div>
-          <div className="mt-[50px]">
+          <div className="mt-[50px] mb-[50px]">
             <GraficoDeBarraDos />
           </div>
         </div>
