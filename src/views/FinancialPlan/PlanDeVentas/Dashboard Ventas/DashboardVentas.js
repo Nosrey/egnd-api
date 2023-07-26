@@ -354,7 +354,7 @@ function DashboardVentas() {
             )}
           </div>
           <div className="mt-[30px] mb-[30px]">
-            <Total title="Total d e Ventas" data={totalVentas} />
+            <Total title="Total de Ventas" data={totalVentas} />
           </div>
           <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
             <CardNumerica
