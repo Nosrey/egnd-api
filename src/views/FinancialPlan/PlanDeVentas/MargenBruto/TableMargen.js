@@ -19,7 +19,6 @@ function TableMargen(props) {
   const [totalesCanales, setTotalesCanales] = useState([]);
   const moneda = props.currency;
 
-
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
   // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las
@@ -103,7 +102,7 @@ function TableMargen(props) {
 
   const resolveResul = (vol, precio, div) => {
     div = parseInt(div);
-    vol = parseInt(vol) / 10;
+    vol = parseInt(vol);
     precio = parseInt(precio);
 
     let value = 0;
@@ -149,13 +148,67 @@ function TableMargen(props) {
                 ]);
               }
               for (let j = 0; j <= 11; j++) {
-                total[indexCountry][indexCanal][indexProd][i][j] =
-                  (Number(
+                console.log(
+                  'res',
+                  Number(
                     props.volumenData[indexCountry].stats[indexCanal].productos[
                       indexProd
                     ].años[i].volMeses[MONTHS[j]],
-                  ) /
-                    10) *
+                  ) *
+                    Number(
+                      props.precioData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+                    ),
+                  resolveResul(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+                    props.precioData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+
+                    props.costoData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].comision,
+                  ),
+                  resolveResul(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+                    props.precioData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+
+                    props.costoData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].impuesto,
+                  ),
+                  resolveResul(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+                    props.precioData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+
+                    props.costoData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].cargos,
+                  ),
+                  parseInt(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]] *
+                      props.precioData[indexCountry].stats[indexCanal]
+                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+                  ),
+                );
+                total[indexCountry][indexCanal][indexProd][i][j] =
+                  Number(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+                  ) *
                     Number(
                       props.precioData[indexCountry].stats[indexCanal]
                         .productos[indexProd].años[i].volMeses[MONTHS[j]],
@@ -242,7 +295,6 @@ function TableMargen(props) {
   const values = calcValues();
   const totals = calcTotals();
 
-
   return (
     <>
       {infoForm &&
@@ -307,23 +359,26 @@ function TableMargen(props) {
                                     año &&
                                     Object.keys(año.volMeses).map(
                                       (mes, indexMes) => (
-                                        <FormItem
-                                          className="mb-0"
-                                          key={indexMes}
-                                        >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="text"
-                                            value={formatNumber(
-                                              values[indexCountry][indexCanal][
-                                                indexP
-                                              ][indexYear][indexMes],
-                                            )}
-                                            disabled
-                                            prefix={moneda}
-                                            name="month"
-                                          />
-                                        </FormItem>
+                                        <div className="flex flex-col">
+                                          <FormItem
+                                            className="mb-0"
+                                            key={indexMes}
+                                          >
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              value={formatNumber(
+                                                values[indexCountry][
+                                                  indexCanal
+                                                ][indexP][indexYear][indexMes],
+                                              )}
+                                              disabled
+                                              prefix={moneda}
+                                              name="month"
+                                            />
+                                          </FormItem>
+                                          <p className="ml-4">%</p>
+                                        </div>
                                       ),
                                     )}
 
