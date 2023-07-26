@@ -215,8 +215,6 @@ function DashboardVentas() {
       .catch((error) => console.error(error));
   }, [yearSelected]);
 
-  console.log('sel', yearSelected);
-
   return (
     <div>
       <div className="border-b-2 mb-8 pb-1">
