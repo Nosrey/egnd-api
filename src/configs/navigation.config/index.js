@@ -170,7 +170,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseCostosDirectos.item3',
-            path: '/',
+            path: '/dashboard-costos',
             title: 'Dashboard Costos',
             translateKey: 'nav.collapseCostosDirectos.item3',
             icon: '',

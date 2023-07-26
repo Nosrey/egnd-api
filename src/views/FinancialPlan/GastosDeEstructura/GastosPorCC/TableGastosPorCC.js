@@ -156,7 +156,7 @@ function TablePuestosPxQ(props) {
       const newMeses = { ...newAños[i].volMeses };
       let volTotal = 0;
       for (let mes in newMeses) {
-        newMeses[mes] = parseInt(precioActual, 10);
+        newMeses[mes] = Math.round(parseInt(precioActual, 10));
         volTotal += parseInt(parseInt(precioActual, 10), 10);
         if (cuenta.incremento === 'mensual') {
           precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
@@ -196,6 +196,8 @@ function TablePuestosPxQ(props) {
     mes,
     indexYear,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...infoForm };
     const ctaIndex = newData[cc].cuentas.findIndex(
       (cta) => cta.id === idCuenta,
@@ -210,25 +212,25 @@ function TablePuestosPxQ(props) {
           cuenta,
           indexYear,
           mes,
-          newValue === ''
+          inputNumero === ''
             ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
+            : inputNumero[0] === '0'
+            ? inputNumero.substring(1)
+            : inputNumero,
         );
         break;
       case 'precioInicial':
-        cuenta.precioInicial = newValue;
+        cuenta.precioInicial = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
       case 'tasa':
-        cuenta.tasa = newValue;
+        cuenta.tasa = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
       case 'mesInicial':
-        cuenta.incremento = newValue;
+        cuenta.incremento = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
@@ -238,6 +240,11 @@ function TablePuestosPxQ(props) {
 
     newData[cc].cuentas[ctaIndex] = cuenta;
     setInfoForm(newData);
+  };
+
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
   };
 
   const submitInfoForm = () => {
@@ -313,11 +320,13 @@ function TablePuestosPxQ(props) {
                       }`}
                     >
                       <Input
-                        type="number"
+                        type="text"
                         name="precioInicial"
                         disabled={index === 0}
                         prefix={currency}
-                        value={infoForm[head].cuentas[cta].precioInicial}
+                        value={formatearNumero(
+                          infoForm[head].cuentas[cta].precioInicial,
+                        )}
                         onChange={(e) =>
                           handleOnChangeInitialValue(
                             head,
@@ -348,11 +357,13 @@ function TablePuestosPxQ(props) {
                     >
                       <Input
                         placeholder="0"
-                        type="number"
+                        type="text"
                         name="tasa"
                         disabled={index === 0}
                         prefix="%"
-                        value={parseInt(infoForm[head].cuentas[cta].tasa, 10)}
+                        value={formatearNumero(
+                          parseInt(infoForm[head].cuentas[cta].tasa, 10),
+                        )}
                         onChange={(e) =>
                           handleOnChangeInitialValue(
                             head,
@@ -462,17 +473,17 @@ function TablePuestosPxQ(props) {
                                 >
                                   <Input
                                     className="w-[90px]"
-                                    type="number"
+                                    type="text"
                                     disabled={index === 0}
-                                    value={
+                                    value={formatearNumero(
                                       index === 0
                                         ? volTotal[indexYear].values[indexMes]
                                         : infoForm[head].cuentas[cta].años[
                                             indexYear
                                           ].volMeses[
                                             Object.keys(año.volMeses)[indexMes]
-                                          ]
-                                    }
+                                          ],
+                                    )}
                                     name="month"
                                     prefix={currency}
                                     onChange={(e) => {
@@ -492,14 +503,14 @@ function TablePuestosPxQ(props) {
                           <FormItem className="mb-0">
                             <Input
                               className="w-[90px]"
-                              type="number"
+                              type="text"
                               disabled
                               prefix={currency}
-                              value={
+                              value={formatearNumero(
                                 infoForm[head].cuentas[cta].precioInicial
                                   ? año.volTotal
-                                  : 0
-                              }
+                                  : 0,
+                              )}
                             />
                           </FormItem>
                         </div>
@@ -557,13 +568,17 @@ function TablePuestosPxQ(props) {
                         sumVerticales[head].sum.length !== 0 &&
                         sumVerticales[head].sum[indexYear].map(
                           (valor, index) => (
-                            <p className="w-[90px] text-center">{valor}</p>
+                            <p className="w-[90px] text-center">
+                              {formatearNumero(valor)}
+                            </p>
                           ),
                         )}
                       <p className="w-[90px] text-center font-bold">
-                        {sumVerticales[head].sum[indexYear].reduce(
-                          (acumulador, numero) => acumulador + numero,
-                          0,
+                        {formatearNumero(
+                          sumVerticales[head].sum[indexYear].reduce(
+                            (acumulador, numero) => acumulador + numero,
+                            0,
+                          ),
                         )}
                       </p>
                     </div>

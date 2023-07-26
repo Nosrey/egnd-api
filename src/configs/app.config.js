@@ -1,10 +1,10 @@
 const appConfig = {
   apiPrefix: '/api',
   authenticatedEntryPath: '/home',
-  unAuthenticatedEntryPath: '/sign-in',
+  unAuthenticatedEntryPath: '/iniciar-sesion',
   tourPath: '/',
   locale: 'en',
   enableMock: true,
-}
+};
 
-export default appConfig
+export default appConfig;

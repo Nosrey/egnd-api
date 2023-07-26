@@ -134,7 +134,7 @@ function TablePuestosP(props) {
   };
 
   const formatearNumero = (numero) => {
-    const nuevoNum = numero.toLocaleString('es-AR');
+    const nuevoNum = numero?.toLocaleString('es-AR');
     return nuevoNum;
   };
 

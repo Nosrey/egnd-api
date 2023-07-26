@@ -15,6 +15,7 @@ function ProgresoCircularScroll({ title, churnProducto }) {
         );
       });
     });
+    console.log(churnProducto);
   }, []);
 
   return (

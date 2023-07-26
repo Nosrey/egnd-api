@@ -122,7 +122,14 @@ function TablePuestosPxQ(props) {
     return res;
   };
 
-  console.log(volTotal);
+  const formatearNumero = (numero) => {
+    if (typeof numero !== 'string') {
+      numero = numero?.toString();
+    }
+    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
 
   return (
     <>
@@ -223,9 +230,9 @@ function TablePuestosPxQ(props) {
                                             >
                                               <Input
                                                 className="w-[90px]"
-                                                type="number"
+                                                type="text"
                                                 disabled
-                                                value={
+                                                value={formatearNumero(
                                                   calcPercent(
                                                     infoForm[cc].puestos[head]
                                                       .total,
@@ -235,8 +242,8 @@ function TablePuestosPxQ(props) {
                                                     indexYear,
                                                     cc,
                                                     head,
-                                                  )[indexYear][indexMes]
-                                                }
+                                                  )[indexYear][indexMes],
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -247,13 +254,15 @@ function TablePuestosPxQ(props) {
                                     <FormItem className="mb-0">
                                       <Input
                                         className="w-[90px]"
-                                        type="number"
+                                        type="text"
                                         disabled
-                                        value={totHor(
-                                          infoForm[cc].puestos[head].total,
-                                          infoForm[cc].puestos[head].años[
-                                            indexYear
-                                          ].volTotal,
+                                        value={formatearNumero(
+                                          totHor(
+                                            infoForm[cc].puestos[head].total,
+                                            infoForm[cc].puestos[head].años[
+                                              indexYear
+                                            ].volTotal,
+                                          ),
                                         )}
                                       />
                                     </FormItem>
@@ -326,16 +335,24 @@ function TablePuestosPxQ(props) {
                           volTotal[indexYear].values.map((valor, index) => (
                             <p className="w-[90px] text-center">
                               {currency}
-                              {valor}
+                              {formatearNumero(valor)}
                             </p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
                           {index === 0 && currency}
-                          {index === 0 &&
+                          {/* {index === 0 &&
                             volTotal[indexYear] &&
                             volTotal[indexYear].values.reduce(
-                              (total, current) =>
-                                Math.round(Number(total) + Number(current)),
+                              (total, current) => Math.round(total + current),
+                            )} */}
+
+                          {index === 0 &&
+                            volTotal[indexYear] &&
+                            formatearNumero(
+                              volTotal[indexYear].values.reduce(
+                                (total, current) => Math.round(total + current),
+                                0,
+                              ),
                             )}
                         </p>
                       </div>

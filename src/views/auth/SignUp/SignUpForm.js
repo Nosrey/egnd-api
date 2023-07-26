@@ -46,7 +46,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function SignUpForm(props) {
-  const { className, signInUrl = '/sign-in' } = props;
+  const { className, signInUrl = '/iniciar-sesion' } = props;
   const navigate = useNavigate();
 
   const [message, setMessage] = useTimeOutMessage();
@@ -73,7 +73,7 @@ function SignUpForm(props) {
             .then((resp) => {
               localStorage.setItem('userId', resp.id);
               setSubmitting(false);
-              navigate('/sign-in');
+              navigate('/iniciar-sesion');
             })
             .catch((error) => {
               console.error('Error de API:', error);
@@ -83,7 +83,7 @@ function SignUpForm(props) {
         }}
       >
         {({ values, touched, errors, isSubmitting }) => (
-          <Form autoComplete='off'>
+          <Form autoComplete="off">
             <FormContainer>
               <FormItem
                 label="Correo electronico"

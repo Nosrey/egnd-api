@@ -27,45 +27,50 @@ function TableResumenDeGasto(props) {
   const currency = useSelector((state) => state.auth.user.currency);
   const [sumVerticales, setSumVerticales] = useState({});
 
-  // Logica para mostrar las SUMATORIAS VERTICALES , 
+  // Logica para mostrar las SUMATORIAS VERTICALES ,
   const generateSumVertical = () => {
     if (infoForm) {
-      const copy = {...infoForm}
-      const keyArray = Object.keys(copy)
-    for (let i = 0; i < keyArray.length; i++) {// admin
-      const suma=[]
-      for (let x = 0; x < copy[keyArray[i]].cuentas.length; x++) {
-        const sumacta = []
-        let cuenta = copy[keyArray[i]].cuentas[x];
-        for (let p = 0; p < cuenta.años.length; p++) {
-          for (let s = 0; s < MONTHS.length; s++) {
-            sumacta.push(cuenta.años[p].volMeses[MONTHS[s]]);
+      const copy = { ...infoForm };
+      const keyArray = Object.keys(copy);
+      for (let i = 0; i < keyArray.length; i++) {
+        // admin
+        const suma = [];
+        for (let x = 0; x < copy[keyArray[i]].cuentas.length; x++) {
+          const sumacta = [];
+          let cuenta = copy[keyArray[i]].cuentas[x];
+          for (let p = 0; p < cuenta.años.length; p++) {
+            for (let s = 0; s < MONTHS.length; s++) {
+              sumacta.push(cuenta.años[p].volMeses[MONTHS[s]]);
             }
-        }        
-        suma.push(sumacta)
+          }
+          suma.push(sumacta);
+        }
+        // obtengo un array de 120 nrs
+        const resultadoAcumulado = suma.reduce((acumulador, array) =>
+          acumulador.map(
+            (valor, índice) =>
+              parseInt(valor, 10) + parseInt(array[índice], 10),
+          ),
+        );
+        // obtengo 10 arrays de 12 num cda unos , osea uno por anio
+        const chunks = [];
+        let index = 0;
+        while (index < resultadoAcumulado.length) {
+          chunks.push(resultadoAcumulado.slice(index, index + 12));
+          index += 12;
+        }
+        copy[keyArray[i]].sum = chunks;
       }
-      // obtengo un array de 120 nrs
-      const resultadoAcumulado = suma.reduce((acumulador, array) => acumulador.map((valor, índice) => parseInt(valor,10) + parseInt(array[índice],10)));
-      // obtengo 10 arrays de 12 num cda unos , osea uno por anio
-      const chunks = [];
-      let index = 0;
-      while (index < resultadoAcumulado.length) {
-        chunks.push(resultadoAcumulado.slice(index, index + 12));
-        index += 12;
-      }
-      copy[keyArray[i]].sum = chunks
+      // eslint-disable-next-line arrow-body-style
+      setSumVerticales(() => {
+        return { ...copy };
+      });
     }
-    // eslint-disable-next-line arrow-body-style
-    setSumVerticales(()=>{
-      return {...copy}
-    })
-    }
-    
-  }
+  };
 
   useEffect(() => {
     if (infoForm && props.head) {
-      setHeads(props.head)
+      setHeads(props.head);
       generateSumVertical();
     }
   }, [infoForm]);
@@ -109,7 +114,7 @@ function TableResumenDeGasto(props) {
       const newMeses = { ...newAños[i].volMeses };
       let volTotal = 0;
       for (let mes in newMeses) {
-        newMeses[mes] = parseInt(precioActual, 10);
+        newMeses[mes] = Math.round(parseInt(precioActual, 10));
         volTotal += parseInt(parseInt(precioActual, 10), 10);
         if (cuenta.incremento === 'mensual') {
           precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
@@ -149,6 +154,8 @@ function TableResumenDeGasto(props) {
     mes,
     indexYear,
   ) => {
+    const inputNumero = Number(newValue.replace(/\D/g, ''));
+
     const newData = { ...infoForm };
     const ctaIndex = newData[cc].cuentas.findIndex(
       (cta) => cta.id === idCuenta,
@@ -163,25 +170,25 @@ function TableResumenDeGasto(props) {
           cuenta,
           indexYear,
           mes,
-          newValue === ''
+          inputNumero === ''
             ? 0
-            : newValue[0] === '0'
-            ? newValue.substring(1)
-            : newValue,
+            : inputNumero[0] === '0'
+            ? inputNumero.substring(1)
+            : inputNumero,
         );
         break;
       case 'precioInicial':
-        cuenta.precioInicial = newValue;
+        cuenta.precioInicial = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
       case 'tasa':
-        cuenta.tasa = newValue;
+        cuenta.tasa = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
       case 'mesInicial':
-        cuenta.incremento = newValue;
+        cuenta.incremento = inputNumero;
         cuenta.años = fillMonthsPrices(cuenta, -1);
         break;
 
@@ -193,27 +200,33 @@ function TableResumenDeGasto(props) {
     setInfoForm(newData);
   };
 
+  const formatearNumero = (numero) => {
+    const nuevoNum = numero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
+
   const submitInfoForm = () => {
-    let idUser = localStorage.getItem('userId')
+    let idUser = localStorage.getItem('userId');
     const body = [{ ...infoForm }];
     const data = { body, idUser };
 
-    createGastosPorCC(data).then(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      props.showAlertSuces(true);
-      setTimeout(() => {
-        props.showAlertSuces(false);
-      }, 5000);
-    })
-    .catch((error) => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      props.showAlertError(true);
+    createGastosPorCC(data)
+      .then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        props.showAlertSuces(true);
+        setTimeout(() => {
+          props.showAlertSuces(false);
+        }, 5000);
+      })
+      .catch((error) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        props.showAlertError(true);
         setTimeout(() => {
           props.showAlertError(false);
         }, 5000);
-    });
+      });
   };
-  
+
   return (
     <>
       {infoForm &&
@@ -269,11 +282,13 @@ function TableResumenDeGasto(props) {
                               }`}
                             >
                               <Input
-                                type="number"
+                                type="text"
                                 name="precioInicial"
                                 disabled={index === 0}
                                 prefix={currency}
-                                value={infoForm[cc].cuentas[head].precioInicial}
+                                value={formatearNumero(
+                                  infoForm[cc].cuentas[head].precioInicial,
+                                )}
                                 onChange={(e) =>
                                   handleOnChangeInitialValue(
                                     cc,
@@ -304,13 +319,12 @@ function TableResumenDeGasto(props) {
                             >
                               <Input
                                 placeholder="0"
-                                type="number"
+                                type="text"
                                 name="tasa"
                                 disabled={index === 0}
                                 prefix="%"
-                                value={parseInt(
-                                  infoForm[cc].cuentas[head].tasa,
-                                  10,
+                                value={formatearNumero(
+                                  parseInt(infoForm[cc].cuentas[head].tasa, 10),
                                 )}
                                 onChange={(e) =>
                                   handleOnChangeInitialValue(
@@ -339,32 +353,29 @@ function TableResumenDeGasto(props) {
                                   ? 'mt-[40px] w-[100px]'
                                   : 'mt-[20px] w-[100px]'
                               }`}
-                            >{index === 0 ?
-                              <Input
-                              type="number"
-                              disabled
-                            />
-                              :
-                              <Select
-                                name="incremento"
-                                placeholder="Inicio de Actividades"
-                                options={optionsIncremento}
-                                value={optionsIncremento.filter(
-                                  (option) =>
-                                    option.value ===
-                                    infoForm[cc].cuentas[head].incremento,
-                                )}
-                                onChange={(e) =>
-                                  handleOnChangeInitialValue(
-                                    cc,
-                                    infoForm[cc].cuentas[head].id,
-                                    e.value,
-                                    'mesInicial',
-                                  )
-                                }
-                              />
-                            }
-                              
+                            >
+                              {index === 0 ? (
+                                <Input type="number" disabled />
+                              ) : (
+                                <Select
+                                  name="incremento"
+                                  placeholder="Inicio de Actividades"
+                                  options={optionsIncremento}
+                                  value={optionsIncremento.filter(
+                                    (option) =>
+                                      option.value ===
+                                      infoForm[cc].cuentas[head].incremento,
+                                  )}
+                                  onChange={(e) =>
+                                    handleOnChangeInitialValue(
+                                      cc,
+                                      infoForm[cc].cuentas[head].id,
+                                      e.value,
+                                      'mesInicial',
+                                    )
+                                  }
+                                />
+                              )}
                             </FormItem>
                           </div>
 
@@ -428,15 +439,15 @@ function TableResumenDeGasto(props) {
                                             >
                                               <Input
                                                 className="w-[90px]"
-                                                type="number"
-                                                value={
+                                                type="text"
+                                                value={formatearNumero(
                                                   infoForm[cc].cuentas[head]
                                                     .años[indexYear].volMeses[
                                                     Object.keys(año.volMeses)[
                                                       indexMes
                                                     ]
-                                                  ]
-                                                }
+                                                  ],
+                                                )}
                                                 name="month"
                                                 prefix={currency}
                                                 onChange={(e) => {
@@ -458,14 +469,14 @@ function TableResumenDeGasto(props) {
                                     <FormItem className="mb-0">
                                       <Input
                                         className="w-[90px]"
-                                        type="number"
+                                        type="text"
                                         disabled
-                                        value={
+                                        value={formatearNumero(
                                           infoForm[cc].cuentas[head]
                                             .precioInicial
                                             ? año.volTotal
-                                            : 0
-                                        }
+                                            : 0,
+                                        )}
                                       />
                                     </FormItem>
                                   </div>
@@ -491,58 +502,60 @@ function TableResumenDeGasto(props) {
             </p>
           </div>
           <div className="w-fit pt-3 border border-neutral-600 border-x-0 border-b-0">
-            {sumVerticales[head].sum.length > 0 &&
-                <div
-                  className="flex gap-x-3 w-fit pt-3 ml-[520px] "
-                >
-                  {AÑOS.map((año, indexYear) => (
-                    <div className="flex flex-col" key={indexYear}>
-                      
-                        <div className="titleRowR min-w-[62px]">
-                          <p> Año {indexYear + 1}</p>
-                          <div
-                            className="iconYear"
-                            onClick={() => hideYear(indexYear)}
-                          >
-                            {visibleItems.includes(indexYear) ? (
-                              <FiMinus />
-                            ) : (
-                              <FiPlus />
-                            )}
-                          </div>
-                        </div>
-                      <div className="titleMonths gap-x-3 flex mb-3">
-                        {visibleItems.includes(indexYear) &&
-                          año &&
-                          MONTHS.map((mes, indexMes) => (
-                            <p
-                              key={indexMes}
-                              className="month w-[90px] capitalize"
-                            >
-                              {mes}
-                            </p>
-                          ))}
-                        <p className="month w-[90px]">Total</p>
-                      </div>
-                      <div className="flex gap-x-3 gap-y-3">
-                        {
-                          visibleItems.includes(indexYear) &&
-                          año &&
-                          sumVerticales[head].sum.length !== 0 && 
-                          sumVerticales[head].sum[indexYear].map((valor, index) => (
-                            <p className="w-[90px] text-center">{valor}</p>
-                          ))
-                        }
-                        <p className="w-[90px] text-center font-bold">
-                          {
-                            sumVerticales[head].sum[indexYear].reduce((acumulador, numero) => acumulador + numero, 0)
-                          }
-                        </p>
+            {sumVerticales[head].sum.length > 0 && (
+              <div className="flex gap-x-3 w-fit pt-3 ml-[520px] ">
+                {AÑOS.map((año, indexYear) => (
+                  <div className="flex flex-col" key={indexYear}>
+                    <div className="titleRowR min-w-[62px]">
+                      <p> Año {indexYear + 1}</p>
+                      <div
+                        className="iconYear"
+                        onClick={() => hideYear(indexYear)}
+                      >
+                        {visibleItems.includes(indexYear) ? (
+                          <FiMinus />
+                        ) : (
+                          <FiPlus />
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
-            }
+                    <div className="titleMonths gap-x-3 flex mb-3">
+                      {visibleItems.includes(indexYear) &&
+                        año &&
+                        MONTHS.map((mes, indexMes) => (
+                          <p
+                            key={indexMes}
+                            className="month w-[90px] capitalize"
+                          >
+                            {mes}
+                          </p>
+                        ))}
+                      <p className="month w-[90px]">Total</p>
+                    </div>
+                    <div className="flex gap-x-3 gap-y-3">
+                      {visibleItems.includes(indexYear) &&
+                        año &&
+                        sumVerticales[head].sum.length !== 0 &&
+                        sumVerticales[head].sum[indexYear].map(
+                          (valor, index) => (
+                            <p className="w-[90px] text-center">
+                              {formatearNumero(valor)}
+                            </p>
+                          ),
+                        )}
+                      <p className="w-[90px] text-center font-bold">
+                        {formatearNumero(
+                          sumVerticales[head].sum[indexYear].reduce(
+                            (acumulador, numero) => acumulador + numero,
+                            0,
+                          ),
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

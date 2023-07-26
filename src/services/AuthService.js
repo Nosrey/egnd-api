@@ -4,7 +4,7 @@ const URL_API = 'https://api.egndfinance.com';
 
 export async function apiSignIn(data) {
   return ApiService.fetchData({
-    url: '/sign-in',
+    url: '/iniciar-sesion',
     method: 'post',
     data,
   });

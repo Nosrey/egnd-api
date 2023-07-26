@@ -1,47 +1,51 @@
-import React, { useState } from 'react'
-import { Button, FormItem, FormContainer, Alert } from 'components/ui'
-import { PasswordInput, ActionLink } from 'components/shared'
-import { apiResetPassword } from 'services/AuthService'
-import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
-import { useNavigate } from 'react-router-dom'
-import { Field, Form, Formik } from 'formik'
-import * as Yup from 'yup'
+import React, { useState } from 'react';
+import { Button, FormItem, FormContainer, Alert } from 'components/ui';
+import { PasswordInput, ActionLink } from 'components/shared';
+import { apiResetPassword } from 'services/AuthService';
+import useTimeOutMessage from 'utils/hooks/useTimeOutMessage';
+import { useNavigate } from 'react-router-dom';
+import { Field, Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string().required('Please enter your password'),
   confirmPassword: Yup.string().oneOf(
     [Yup.ref('password'), null],
-    'Your passwords do not match'
+    'Your passwords do not match',
   ),
-})
+});
 
 function ResetPasswordForm(props) {
-  const { disableSubmit = false, className, signInUrl = '/sign-in' } = props
+  const {
+    disableSubmit = false,
+    className,
+    signInUrl = '/iniciar-sesion',
+  } = props;
 
-  const [resetComplete, setResetComplete] = useState(false)
+  const [resetComplete, setResetComplete] = useState(false);
 
-  const [message, setMessage] = useTimeOutMessage()
+  const [message, setMessage] = useTimeOutMessage();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onSubmit = async (values, setSubmitting) => {
-    const { password } = values
-    setSubmitting(true)
+    const { password } = values;
+    setSubmitting(true);
     try {
-      const resp = await apiResetPassword({ password })
+      const resp = await apiResetPassword({ password });
       if (resp.data) {
-        setSubmitting(false)
-        setResetComplete(true)
+        setSubmitting(false);
+        setResetComplete(true);
       }
     } catch (errors) {
-      setMessage(errors?.response?.data?.message || errors.toString())
-      setSubmitting(false)
+      setMessage(errors?.response?.data?.message || errors.toString());
+      setSubmitting(false);
     }
-  }
+  };
 
   const onContinue = () => {
-    navigate('/sign-in')
-  }
+    navigate('/iniciar-sesion');
+  };
 
   return (
     <div className={className}>
@@ -71,9 +75,9 @@ function ResetPasswordForm(props) {
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           if (!disableSubmit) {
-            onSubmit(values, setSubmitting)
+            onSubmit(values, setSubmitting);
           } else {
-            setSubmitting(false)
+            setSubmitting(false);
           }
         }}
       >
@@ -135,7 +139,7 @@ function ResetPasswordForm(props) {
         )}
       </Formik>
     </div>
-  )
+  );
 }
 
-export default ResetPasswordForm
+export default ResetPasswordForm;

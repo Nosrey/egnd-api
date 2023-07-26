@@ -31,6 +31,7 @@ const validationSchema = Yup.object().shape({
     .max(100, '¡Demasiado largo!')
     .required('Requerido'),
 });
+
 function Mercado() {
   const currency = useSelector((state) => state.auth.user.currency);
   const currentState = useSelector((state) => state.auth.user.id);
@@ -45,7 +46,6 @@ function Mercado() {
     getUser(currentState)
       .then((data) => {
         if (data.mercadoData.length !== 0) {
-          console.log(data.mercadoData[0]);
           setValueForm(data.mercadoData[0]);
           setIsInitialValuesSet(true);
         }
@@ -62,6 +62,32 @@ function Mercado() {
   };
 
   const removePunctuation = (value) => value?.replace(/[.,]/g, '');
+
+  function MostrarNotacionUnidades({ numero }) {
+    // Convertir el número de entrada a un tipo numérico
+    let num = parseInt(numero.replace(/\./g, ''));
+
+    const sufijos = {
+      0: '',
+      3: 'K',
+      6: 'M',
+      9: 'B',
+      12: 'T',
+      15: 'Qa',
+    };
+
+    let exp = 0;
+
+    while (num >= 1000 && exp < 15) {
+      num /= 1000;
+      exp += 3;
+    }
+
+    // Formatear el número con dos decimales si es igual o mayor a 1000
+    const numeroFormateado = exp >= 3 ? num.toFixed(2) : num.toFixed(0);
+
+    return <span>{`${numeroFormateado} ${sufijos[exp]}`}</span>;
+  }
 
   return (
     <div>
@@ -98,14 +124,17 @@ function Mercado() {
                     valorSom: valueForm?.valorSom || '',
                     som: valueForm?.som || '',
                   }
-                : {}
+                : {
+                    valorTam: '0',
+                    valorSam: '0',
+                    valorSom: '0',
+                  }
             }
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm, setSubmitting }) => {
               const newValorTam = removePunctuation(values.valorTam);
               const newValorSam = removePunctuation(values.valorSam);
               const newValorSom = removePunctuation(values.valorSom);
-              console.log(values);
               createMercado(
                 values.mercado,
                 values.definicion,
@@ -299,15 +328,35 @@ function Mercado() {
                       />
                       <span className="absolute right-[5%] top-[10%] text-[22px] text-[#181851]">
                         {currency}
-                        {formatearNumero(values?.valorTam)}
+                        <MostrarNotacionUnidades
+                          numero={
+                            values?.valorTam && values.valorTam.length > 0
+                              ? values.valorTam
+                              : '0'
+                          }
+                        />
                       </span>
                       <span className="absolute right-[5%] top-[47%] text-[22px] text-[#181851]">
                         {currency}
-                        {formatearNumero(values?.valorSam)}
+
+                        <MostrarNotacionUnidades
+                          numero={
+                            values?.valorSam && values.valorSam.length > 0
+                              ? values.valorSam
+                              : '0'
+                          }
+                        />
                       </span>
                       <span className="absolute right-[5%] top-[86%] text-[22px] text-[#181851]">
                         {currency}
-                        {formatearNumero(values?.valorSom)}
+
+                        <MostrarNotacionUnidades
+                          numero={
+                            values?.valorSom && values.valorSom.length > 0
+                              ? values.valorSom
+                              : '0'
+                          }
+                        />
                       </span>
                     </div>
                   </div>

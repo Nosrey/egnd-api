@@ -1,5 +1,4 @@
-
-import { ActionLink, PasswordInput } from 'components/shared'
+import { ActionLink, PasswordInput } from 'components/shared';
 import {
   Alert,
   Button,
@@ -7,11 +6,11 @@ import {
   FormContainer,
   FormItem,
   Input,
-} from 'components/ui'
-import { Field, Form, Formik } from 'formik'
-import useAuth from 'utils/hooks/useAuth'
-import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
-import * as Yup from 'yup'
+} from 'components/ui';
+import { Field, Form, Formik } from 'formik';
+import useAuth from 'utils/hooks/useAuth';
+import useTimeOutMessage from 'utils/hooks/useTimeOutMessage';
+import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 
 const validationSchema = Yup.object().shape({
@@ -20,7 +19,7 @@ const validationSchema = Yup.object().shape({
     .required('Por favor introduzca su correo electrónico'),
   password: Yup.string().required('Por favor introduzca su contraseña'),
   rememberMe: Yup.bool(),
-})
+});
 
 function SignInForm(props) {
   const {
@@ -28,14 +27,14 @@ function SignInForm(props) {
     className,
     forgotPasswordUrl = '/forgot-password',
     signUpUrl = '/sign-up',
-  } = props
+  } = props;
 
   SignInForm.defaultProps = {
     disableSubmit: false,
     className: '',
     forgotPasswordUrl: '/forgot-password',
     signUpUrl: '/sign-up',
-  }
+  };
 
   SignInForm.propTypes = {
     disableSubmit: PropTypes.bool,
@@ -44,25 +43,25 @@ function SignInForm(props) {
     signUpUrl: PropTypes.string,
   };
 
-  const [message, setMessage] = useTimeOutMessage()
-  const { signIn } = useAuth()
+  const [message, setMessage] = useTimeOutMessage();
+  const { signIn } = useAuth();
 
   const onSignIn = async (values, setSubmitting) => {
-    const { email, password } = values
-    setSubmitting(true)
+    const { email, password } = values;
+    setSubmitting(true);
 
-    const result = await signIn({ email, password })
+    const result = await signIn({ email, password });
 
     if (result.error) {
-      setMessage(result.message)
+      setMessage(result.message);
     }
 
     if (result.status === 'failed') {
-      setMessage(result.message)
+      setMessage(result.message);
     }
 
-    setSubmitting(false)
-  }
+    setSubmitting(false);
+  };
 
   return (
     <div className={className}>
@@ -81,9 +80,9 @@ function SignInForm(props) {
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           if (!disableSubmit) {
-            onSignIn(values, setSubmitting)
+            onSignIn(values, setSubmitting);
           } else {
-            setSubmitting(false)
+            setSubmitting(false);
           }
         }}
       >
@@ -115,15 +114,7 @@ function SignInForm(props) {
                   component={PasswordInput}
                 />
               </FormItem>
-              <div className="flex justify-between mb-6">
-                <Field
-                  className="mb-0"
-                  name="rememberMe"
-                  component={Checkbox}
-                  // children="Recordarme"
-                >
-                  Recordarme
-                </Field>
+              <div className="flex justify-end mb-6">
                 <ActionLink to={forgotPasswordUrl}>
                   Olvidaste la constraseña?
                 </ActionLink>
@@ -145,7 +136,7 @@ function SignInForm(props) {
         )}
       </Formik>
     </div>
-  )
+  );
 }
 
-export default SignInForm
+export default SignInForm;
