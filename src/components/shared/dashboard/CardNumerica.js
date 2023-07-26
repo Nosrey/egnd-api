@@ -7,7 +7,11 @@ function CardNumerica({ type, title, cantidad }) {
       <div className="flex flex-col items-center gap-[10px]">
         <span className="text-lg">{title} </span>
         <span className="font-bold text-2xl text-black">
-          {type === 'default' ? cantidad.toFixed(2) : cantidad.toFixed(0)}
+          {type === 'default'
+            ? cantidad.toFixed(2)
+            : type === 'clear'
+            ? cantidad
+            : cantidad.toFixed(0)}
         </span>
       </div>
     </Card>

@@ -37,7 +37,9 @@ function BarraDeProgreso({ data, totalVentas }) {
       {paises.map((country) => (
         <div key={country.name}>
           <span>{country.name.toUpperCase()}</span>
-          <Progress percent={country.total} />
+          <Progress
+            percent={((country.total * 100) / totalVentas).toFixed(0)}
+          />
         </div>
       ))}
     </div>
