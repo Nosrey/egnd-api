@@ -195,10 +195,11 @@ function DashboardVentas() {
                 if (yearSelected.year === indexY) {
                   MONTHS.map((o, indexMes) => {
                     if (indexMes === 11) {
-                      tot +=
+                      tot += Math.floor(
                         a.volMeses[MONTHS[indexMes]] /
-                        dataAssump.canales[indexChannel].items[indexProd]
-                          .volumen;
+                          dataAssump.canales[indexChannel].items[indexProd]
+                            .volumen,
+                      );
                     }
                     newC +=
                       indexMes === 0
@@ -281,6 +282,8 @@ function DashboardVentas() {
         });
       });
     });
+
+    console.log('cacr', tot[4], tot[0], yearSelected);
 
     setTotalsCacr(tot);
   };
@@ -416,7 +419,7 @@ function DashboardVentas() {
                     title="CAGR"
                     data={(
                       (totalsCacr[yearSelected.year] / totalsCacr[0]) **
-                      (1 / 5 - 1)
+                      (1 / (yearSelected.year + 1) - 1)
                     ).toFixed(2)}
                   />
                 )}
