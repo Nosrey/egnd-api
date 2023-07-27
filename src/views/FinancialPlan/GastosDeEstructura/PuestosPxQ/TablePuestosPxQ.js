@@ -26,8 +26,6 @@ function TablePuestosPxQ(props) {
     if (infoForm && props.head) {
       const head = { ...infoForm[props.head] };
 
-      console.log('info-headcount', head.puestos);
-
       let arrayvalores = [
         { id: 0, values: [] },
         { id: 1, values: [] },
@@ -99,11 +97,9 @@ function TablePuestosPxQ(props) {
         calcs[indexYear][indexMes] = total * q;
       }
     } else if (q !== 0) {
-      // c[indexYear][indexMes] = 20;
       calcs[indexYear][indexMes] = total * q;
       calcs[indexYear][indexMes] = calcs[indexYear][indexMes].toFixed(2);
     } else {
-      // c[indexYear][indexMes] = ((total * Number(percent)) / 100) * q;
       calcs[indexYear][indexMes] = total * q;
     }
 
@@ -232,7 +228,7 @@ function TablePuestosPxQ(props) {
                                                 className="w-[90px]"
                                                 type="text"
                                                 disabled
-                                                value={formatearNumero(
+                                                value={
                                                   calcPercent(
                                                     infoForm[cc].puestos[head]
                                                       .total,
@@ -242,8 +238,8 @@ function TablePuestosPxQ(props) {
                                                     indexYear,
                                                     cc,
                                                     head,
-                                                  )[indexYear][indexMes],
-                                                )}
+                                                  )[indexYear][indexMes]
+                                                }
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -256,13 +252,11 @@ function TablePuestosPxQ(props) {
                                         className="w-[90px]"
                                         type="text"
                                         disabled
-                                        value={formatearNumero(
-                                          totHor(
-                                            infoForm[cc].puestos[head].total,
-                                            infoForm[cc].puestos[head].años[
-                                              indexYear
-                                            ].volTotal,
-                                          ),
+                                        value={totHor(
+                                          infoForm[cc].puestos[head].total,
+                                          infoForm[cc].puestos[head].años[
+                                            indexYear
+                                          ].volTotal,
                                         )}
                                       />
                                     </FormItem>
@@ -335,22 +329,18 @@ function TablePuestosPxQ(props) {
                           volTotal[indexYear].values.map((valor, index) => (
                             <p className="w-[90px] text-center">
                               {currency}
-                              {formatearNumero(valor)}
+                              {valor}
                             </p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
                           {index === 0 && currency}
-                          {/* {index === 0 &&
-                            volTotal[indexYear] &&
-                            volTotal[indexYear].values.reduce(
-                              (total, current) => Math.round(total + current),
-                            )} */}
 
                           {index === 0 &&
                             volTotal[indexYear] &&
                             formatearNumero(
                               volTotal[indexYear].values.reduce(
-                                (total, current) => Math.round(total + current),
+                                (total, current) =>
+                                  Math.round(Number(total) + Number(current)),
                                 0,
                               ),
                             )}

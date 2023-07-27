@@ -27,7 +27,6 @@ function useAuth() {
         const { response } = resp;
         const { id, token, mail } = response;
         localStorage.setItem('userId', id);
-        console.log('id que viene', id);
         dispatch(onSignInSuccess(token));
         dispatch(
           setUser({

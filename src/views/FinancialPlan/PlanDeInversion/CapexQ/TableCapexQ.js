@@ -388,6 +388,7 @@ function TableCapexQ(props) {
                     </div>
                   </div>
                 ))}
+                /
               </div>
             )}
           </div>

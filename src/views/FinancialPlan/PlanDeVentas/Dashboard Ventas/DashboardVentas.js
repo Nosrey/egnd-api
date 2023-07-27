@@ -5,34 +5,13 @@ import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
 import Total from 'components/shared/dashboard/Total';
 import { MenuItem, Select } from 'components/ui';
+import { año, periodo } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { showMultiplicacionPxQ } from 'utils/calcs';
 import formatNumber from 'utils/formatTotalsValues';
-
-const año = [
-  { value: 'año 1', label: 'Año 1', year: 0 },
-  { value: 'año 2', label: 'Año 2', year: 1 },
-  { value: 'año 3', label: 'Año 3', year: 2 },
-  { value: 'año 4', label: 'Año 4', year: 3 },
-  { value: 'año 5', label: 'Año 5', year: 4 },
-  { value: 'año 6', label: 'Año 6', year: 5 },
-  { value: 'año 7', label: 'Año 7', year: 6 },
-  { value: 'año 8', label: 'Año 8', year: 7 },
-  { value: 'año 9', label: 'Año 9', year: 8 },
-  { value: 'año 10', label: 'Año 10', year: 9 },
-  { value: 'todo', label: 'Todo' },
-];
-
-const periodo = [
-  { value: '1er mes', label: '1er mes', month: 0 },
-  { value: '1er trimestre', label: '1er trimestre', month: 4 },
-  { value: '1er semestre', label: '1er semestre', month: 6 },
-  { value: '2do semestre', label: '2do semestre', month: 12 },
-  { value: 'todo el año', label: 'Todo el año' },
-];
 
 function DashboardVentas() {
   const currentState = useSelector((state) => state.auth.user);
@@ -109,7 +88,7 @@ function DashboardVentas() {
                           tot += Number(a.volMeses[MONTHS[indexM]]);
                         }
                       } else if (periodoSelected.month === 12) {
-                        if (indexM > 5 && indexM < 12) {
+                        if (indexM > 5) {
                           if (o.type === 'producto') {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
@@ -163,11 +142,47 @@ function DashboardVentas() {
           p.años.map((a, indexY) => {
             if (yearSelected.year || yearSelected.year === 0) {
               if (yearSelected.year === indexY) {
-                if (p.type === 'producto') {
-                  totV += Number(a.volTotal);
-                } else {
-                  totS += Number(a.volTotal);
-                }
+                MONTHS.map((m, indexM) => {
+                  if (periodoSelected.month || periodoSelected.month === 0) {
+                    if (periodoSelected.month === 0) {
+                      if (indexM === 0) {
+                        if (p.type === 'producto') {
+                          totV += Number(a.volMeses[MONTHS[indexM]]);
+                        } else {
+                          totS += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      }
+                    } else if (periodoSelected.month === 4) {
+                      if (indexM < 4) {
+                        if (p.type === 'producto') {
+                          totV += Number(a.volMeses[MONTHS[indexM]]);
+                        } else {
+                          totS += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      }
+                    } else if (periodoSelected.month === 6) {
+                      if (indexM < 6) {
+                        if (p.type === 'producto') {
+                          totV += Number(a.volMeses[MONTHS[indexM]]);
+                        } else {
+                          totS += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      }
+                    } else if (periodoSelected.month === 12) {
+                      if (indexM > 5) {
+                        if (p.type === 'producto') {
+                          totV += Number(a.volMeses[MONTHS[indexM]]);
+                        } else {
+                          totS += Number(a.volMeses[MONTHS[indexM]]);
+                        }
+                      }
+                    }
+                  } else if (p.type === 'producto') {
+                    totV += Number(a.volTotal);
+                  } else {
+                    totS += Number(a.volTotal);
+                  }
+                });
               }
             } else if (p.type === 'producto') {
               totV += Number(a.volTotal);
@@ -183,6 +198,21 @@ function DashboardVentas() {
     setVolServ(totS);
   };
 
+  const calcNewClients = (data, indexY, indexMes, indexChannel, indexProd) =>
+    Number(
+      formatNumber(
+        data.años[indexY].volMeses[MONTHS[indexMes]] /
+          dataAssump.canales[indexChannel].items[indexProd].volumen -
+          (data.años[indexY].volMeses[MONTHS[indexMes - 1]] /
+            dataAssump.canales[indexChannel].items[indexProd].volumen -
+            ((data.años[indexY].volMeses[MONTHS[indexMes - 1]] /
+              dataAssump.canales[indexChannel].items[indexProd].volumen) *
+              dataAssump.churns[indexChannel].items[indexProd]
+                .porcentajeChurn) /
+              100),
+      ),
+    );
+
   const calcClentes = () => {
     let tot = 0;
     let newC = 0;
@@ -194,38 +224,89 @@ function DashboardVentas() {
               if (yearSelected.year || yearSelected.year === 0) {
                 if (yearSelected.year === indexY) {
                   MONTHS.map((o, indexMes) => {
-                    if (indexMes === 11) {
-                      tot += Math.floor(
-                        a.volMeses[MONTHS[indexMes]] /
-                          dataAssump.canales[indexChannel].items[indexProd]
-                            .volumen,
-                      );
-                    }
-                    newC +=
-                      indexMes === 0
-                        ? 0
-                        : Number(
-                            formatNumber(
-                              p.años[indexY].volMeses[MONTHS[indexMes]] /
-                                dataAssump.canales[indexChannel].items[
-                                  indexProd
-                                ].volumen -
-                                (p.años[indexY].volMeses[MONTHS[indexMes - 1]] /
-                                  dataAssump.canales[indexChannel].items[
-                                    indexProd
-                                  ].volumen -
-                                  ((p.años[indexY].volMeses[
-                                    MONTHS[indexMes - 1]
-                                  ] /
-                                    dataAssump.canales[indexChannel].items[
-                                      indexProd
-                                    ].volumen) *
-                                    dataAssump.churns[indexChannel].items[
-                                      indexProd
-                                    ].porcentajeChurn) /
-                                    100),
-                            ),
+                    if (periodoSelected.month || periodoSelected.month === 0) {
+                      if (periodoSelected.month === 0) {
+                        tot += 0;
+                      } else if (periodoSelected.month === 4) {
+                        if (indexMes === 3) {
+                          tot += Math.floor(
+                            a.volMeses[MONTHS[indexMes]] /
+                              dataAssump.canales[indexChannel].items[indexProd]
+                                .volumen,
                           );
+                        }
+                        if (indexMes < 4) {
+                          newC +=
+                            indexMes === 0
+                              ? 0
+                              : calcNewClients(
+                                  p,
+                                  indexY,
+                                  indexMes,
+                                  indexChannel,
+                                  indexProd,
+                                );
+                        }
+                      } else if (periodoSelected.month === 6) {
+                        if (indexMes === 5) {
+                          tot += Math.floor(
+                            a.volMeses[MONTHS[indexMes]] /
+                              dataAssump.canales[indexChannel].items[indexProd]
+                                .volumen,
+                          );
+                        }
+                        if (indexMes < 6) {
+                          newC +=
+                            indexMes === 0
+                              ? 0
+                              : calcNewClients(
+                                  p,
+                                  indexY,
+                                  indexMes,
+                                  indexChannel,
+                                  indexProd,
+                                );
+                        }
+                      } else if (periodoSelected.month === 12) {
+                        if (indexMes === 11) {
+                          tot += Math.floor(
+                            a.volMeses[MONTHS[indexMes]] /
+                              dataAssump.canales[indexChannel].items[indexProd]
+                                .volumen,
+                          );
+                        }
+                        if (indexMes > 5) {
+                          newC +=
+                            indexMes === 0
+                              ? 0
+                              : calcNewClients(
+                                  p,
+                                  indexY,
+                                  indexMes,
+                                  indexChannel,
+                                  indexProd,
+                                );
+                        }
+                      }
+                    } else {
+                      if (indexMes === 11) {
+                        tot += Math.floor(
+                          a.volMeses[MONTHS[indexMes]] /
+                            dataAssump.canales[indexChannel].items[indexProd]
+                              .volumen,
+                        );
+                      }
+                      newC +=
+                        indexMes === 0
+                          ? 0
+                          : calcNewClients(
+                              p,
+                              indexY,
+                              indexMes,
+                              indexChannel,
+                              indexProd,
+                            );
+                    }
                   });
                 }
               } else {
@@ -238,26 +319,12 @@ function DashboardVentas() {
                   newC +=
                     indexMes === 0
                       ? 0
-                      : Number(
-                          formatNumber(
-                            p.años[indexY].volMeses[MONTHS[indexMes]] /
-                              dataAssump.canales[indexChannel].items[indexProd]
-                                .volumen -
-                              (p.años[indexY].volMeses[MONTHS[indexMes - 1]] /
-                                dataAssump.canales[indexChannel].items[
-                                  indexProd
-                                ].volumen -
-                                ((p.años[indexY].volMeses[
-                                  MONTHS[indexMes - 1]
-                                ] /
-                                  dataAssump.canales[indexChannel].items[
-                                    indexProd
-                                  ].volumen) *
-                                  dataAssump.churns[indexChannel].items[
-                                    indexProd
-                                  ].porcentajeChurn) /
-                                  100),
-                          ),
+                      : calcNewClients(
+                          p,
+                          indexY,
+                          indexMes,
+                          indexChannel,
+                          indexProd,
                         );
                 });
               }
@@ -282,8 +349,6 @@ function DashboardVentas() {
         });
       });
     });
-
-    console.log('cacr', tot[4], tot[0], yearSelected);
 
     setTotalsCacr(tot);
   };
@@ -360,6 +425,7 @@ function DashboardVentas() {
             <CardNumerica
               type="default"
               title="Venta de Productos"
+              hasCurrency
               cantidad={totalProd}
             />
             <CardNumerica
@@ -370,21 +436,25 @@ function DashboardVentas() {
             <CardNumerica
               type="default"
               title="Ticket medio por Producto"
+              hasCurrency
               cantidad={volProd ? totalProd / volProd : 0}
             />
             <CardNumerica
               type="default"
               title="Venta de Servicios"
+              hasCurrency
               cantidad={totalServ}
             />
             <CardNumerica
               type="default"
               title="Volumen de Servicios"
+              hasCurrency
               cantidad={volServ}
             />
             <CardNumerica
               type="default"
               title="Ticket medio por Servicio"
+              hasCurrency
               cantidad={volServ ? totalServ / volServ : 0}
             />
           </div>
@@ -396,11 +466,20 @@ function DashboardVentas() {
                 ) : (
                   <h5 className="mb-[30px]">Distribución de Ventas por Mes</h5>
                 )}
-                <GraficoDeBarra data={infoForm} selected={yearSelected} />
+                <GraficoDeBarra
+                  data={infoForm}
+                  yearSelected={yearSelected}
+                  periodoSelected={periodoSelected}
+                />
               </div>
               <div className="w-[50%]">
                 <h5 className="mb-[30px]">Distribución de Ventas por País</h5>
-                <BarraDeProgreso data={infoForm} totalVentas={superTotal} />
+                <BarraDeProgreso
+                  data={infoForm}
+                  totalVentas={totalVentas}
+                  selectYear={yearSelected}
+                  periodoSelected={periodoSelected}
+                />
               </div>
             </div>
           )}
@@ -441,6 +520,7 @@ function DashboardVentas() {
             <CardNumerica
               type="ticket"
               title="Ticket por cliente"
+              hasCurrency
               cantidad={totalVentas / totalClients}
             />
           </div>
