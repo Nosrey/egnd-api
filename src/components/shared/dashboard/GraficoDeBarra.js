@@ -10,7 +10,7 @@ import {
 import { BASIC_EMPTY, EMPTY_TOTALES, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
-// import { COLORS } from '../../../configs/chart.config';
+
 let totals = JSON.parse(JSON.stringify(EMPTY_TOTALES));
 let superTotals = JSON.parse(JSON.stringify(BASIC_EMPTY));
 
@@ -93,7 +93,6 @@ function GraficoDeBarra({ data, yearSelected, periodoSelected }) {
             horizontal: false,
           },
         },
-        // colors: COLORS,
         dataLabels: {
           enabled: true,
         },
