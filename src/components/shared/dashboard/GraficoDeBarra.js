@@ -95,7 +95,6 @@ function GraficoDeBarra({ data, yearSelected, periodoSelected }) {
             horizontal: false,
           },
         },
-        // colors: COLORS,
         dataLabels: {
           enabled: true,
           formatter: function (value) {
