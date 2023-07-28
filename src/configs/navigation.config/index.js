@@ -231,7 +231,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseHeadcount.item4',
-            path: '/',
+            path: '/dashboard-headcount',
             title: 'Dashboard Headcount',
             translateKey: 'nav.collapseHeadcount.item4',
             icon: '',

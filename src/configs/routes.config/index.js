@@ -212,4 +212,14 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'dashboardHeadcount',
+    path: '/dashboard-headcount',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/GastosDeEstructura/DashboardHeadcount/DashboardHeadcount'
+      ),
+    ),
+    authority: [],
+  },
 ];
