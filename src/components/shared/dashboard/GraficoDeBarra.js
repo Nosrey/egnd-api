@@ -10,13 +10,15 @@ import {
 import { BASIC_EMPTY, EMPTY_TOTALES, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
-
+import { useSelector } from 'react-redux';
+// import { COLORS } from '../../../configs/chart.config';
 let totals = JSON.parse(JSON.stringify(EMPTY_TOTALES));
 let superTotals = JSON.parse(JSON.stringify(BASIC_EMPTY));
 
 function GraficoDeBarra({ data, yearSelected, periodoSelected }) {
   const [view, setView] = useState();
   const [typeView, setTypeView] = useState(year);
+  const currency = useSelector((state) => state.auth.user.currency);
 
   useEffect(() => {
     let pSelMonth = [0];
@@ -95,9 +97,19 @@ function GraficoDeBarra({ data, yearSelected, periodoSelected }) {
         },
         dataLabels: {
           enabled: true,
+          formatter: function (value) {
+            return `${currency}${value}`;
+          },
         },
         xaxis: {
           categories: typeView,
+        },
+        yaxis: {
+          labels: {
+            formatter: function (value) {
+              return `${currency}${value}`;
+            },
+          },
         },
       }}
       series={[

@@ -2,7 +2,7 @@ import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import GraficoDeBarraDos from 'components/shared/dashboard/GraficoDeBarraDos';
 import Total from 'components/shared/dashboard/Total';
 import { MenuItem, Select } from 'components/ui';
-import { periodo } from 'constants/dashboard.constant';
+import { año, periodo } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,9 @@ function DashboardCostos() {
   const [canalesOptions, setCanalesOptions] = useState();
   const [paisesOptions, setPaisesOptions] = useState();
   const [productosOptions, setProductosOptions] = useState();
+  const [canalSelected, setCanalSelected] = useState();
+  const [paisSelected, setPaisSelected] = useState();
+  const [productoSelected, setProductoSelected] = useState();
   const [volServ, setVolServ] = useState(0);
   const [dataAssump, setDataAssump] = useState();
   const [totalServ, setTotalServ] = useState(0);
@@ -42,13 +45,16 @@ function DashboardCostos() {
   const selecOptions = (option, value) => {
     switch (option) {
       case 'pais':
+        setPaisSelected(value);
         console.log('pais', value);
         break;
       case 'canal':
+        setCanalSelected(value);
         console.log('canal', value);
         break;
 
       case 'producto':
+        setProductoSelected(value);
         console.log('producto', value);
         break;
 
@@ -517,20 +523,21 @@ function DashboardCostos() {
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="px-4 py-5">
           <div className="flex justify-end gap-[20px]">
-            <Select className="w-[12%]" placeholder="Año" onChange={selectYear}>
-              {dataAssump &&
-                dataAssump.paises.map((a) => (
-                  <MenuItem key={a.value} value={a.value}>
-                    {a.label}
-                  </MenuItem>
-                ))}
-            </Select>
+            <Select
+              className="w-[12%]"
+              placeholder="Año"
+              onChange={selectYear}
+              options={año}
+              value={yearSelected}
+            />
+
             {yearSelected.value !== 'todo' && (
               <Select
                 className="w-[12%]"
                 placeholder="Periodo"
                 options={periodo}
                 onChange={selectPeriodo}
+                value={periodoSelected}
               >
                 {periodo.map((a) => (
                   <MenuItem key={a.value} value={a.value}>
@@ -601,7 +608,7 @@ function DashboardCostos() {
               />
             </div>
           </div>
-          {canalesOptions && productosOptions && paisesOptions ? (
+          {canalSelected && productoSelected && paisSelected ? (
             <div className="mt-[50px] mb-[50px]">
               <GraficoDeBarraDos />
             </div>

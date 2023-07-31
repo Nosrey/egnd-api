@@ -1,18 +1,17 @@
-import React from 'react';
 import Chart from 'react-apexcharts';
 
 function GraficoDeBarraDos() {
   const data = [
     {
-      name: 'PRODUCT A',
+      name: 'Comisiones',
       data: [44, 55, 41, 67, 22, 43],
     },
     {
-      name: 'PRODUCT B',
+      name: 'Impuestos Comerciales',
       data: [13, 23, 20, 8, 13, 27],
     },
     {
-      name: 'PRODUCT C',
+      name: 'Cargas por pasarela de cobro',
       data: [11, 17, 15, 15, 21, 14],
     },
   ];

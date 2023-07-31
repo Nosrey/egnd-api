@@ -395,6 +395,7 @@ function DashboardVentas() {
               className="w-[12%]"
               placeholder="Año"
               options={año}
+              value={yearSelected}
               onChange={selectYear}
             >
               {año.map((a) => (
@@ -408,6 +409,7 @@ function DashboardVentas() {
                 className="w-[12%]"
                 placeholder="Periodo"
                 options={periodo}
+                value={periodoSelected}
                 onChange={selectPeriodo}
               >
                 {periodo.map((a) => (
@@ -448,7 +450,6 @@ function DashboardVentas() {
             <CardNumerica
               type="default"
               title="Volumen de Servicios"
-              hasCurrency
               cantidad={volServ}
             />
             <CardNumerica
