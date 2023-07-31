@@ -466,7 +466,6 @@ function DashboardVentas() {
                 ) : (
                   <h5 className="mb-[30px]">Distribución de Ventas por Mes</h5>
                 )}
-                {console.log(infoForm)}
                 <GraficoDeBarra
                   data={infoForm}
                   yearSelected={yearSelected}
