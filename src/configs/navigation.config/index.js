@@ -180,7 +180,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseCostosDirectos.item4',
-            path: '/margenbruto',
+            path: '/dashboard-margen-bruto',
             title: 'Dashboard CMG Bruta',
             translateKey: 'nav.collapseCostosDirectos.item4',
             icon: '',
