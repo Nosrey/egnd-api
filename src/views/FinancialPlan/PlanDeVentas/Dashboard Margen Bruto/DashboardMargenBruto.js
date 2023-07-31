@@ -39,7 +39,7 @@ function DashboardMargenBruto() {
           </div>
 
           <div className=" mt-[40px]">
-            <h5>Provección Margen Bruto Nominal</h5>
+            <h5>Proyección Margen Bruto Nominal</h5>
             <div className="flex w-[100%] gap-[30px] ">
               <div className="w-[50%]">
                 <GraficoDeBarra
@@ -50,7 +50,7 @@ function DashboardMargenBruto() {
               </div>
               <ProgresoCircular
                 className="h-[70%]"
-                title="Margen Bruto Porcentaul"
+                title="Margen Bruto Porcentual"
                 data={12}
               />
             </div>
