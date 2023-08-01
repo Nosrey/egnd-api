@@ -1,8 +1,16 @@
 import CardNumerica from 'components/shared/dashboard/CardNumerica';
-import GraficoDeBarraDos from 'components/shared/dashboard/GraficoDeBarraDos';
+import GraficoDeBarraCosto from 'components/shared/dashboard/GraficoDeBarraCosto';
 import Total from 'components/shared/dashboard/Total';
 import { MenuItem, Select } from 'components/ui';
-import { año, periodo } from 'constants/dashboard.constant';
+import {
+  año,
+  firstSem,
+  oneMonth,
+  periodo,
+  secondSem,
+  trimn,
+  year,
+} from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,6 +21,11 @@ function DashboardCostos() {
   const [totalCostos, setTotalCostos] = useState(0);
   const [totalProd, setTotalProd] = useState(0);
   const [volProd, setVolProd] = useState(0);
+  const [typeViewGraf, setTypeViewGraf] = useState();
+  const [volGrafico, setVolGrafico] = useState(0);
+  const [comisionGrafico, setComisionGrafico] = useState(0);
+  const [impuestoGrafico, setImpuestoGrafico] = useState(0);
+  const [cargasGrafico, setCargasGrafico] = useState(0);
   const [canalesOptions, setCanalesOptions] = useState();
   const [paisesOptions, setPaisesOptions] = useState();
   const [productosOptions, setProductosOptions] = useState();
@@ -46,16 +59,13 @@ function DashboardCostos() {
     switch (option) {
       case 'pais':
         setPaisSelected(value);
-        console.log('pais', value);
         break;
       case 'canal':
         setCanalSelected(value);
-        console.log('canal', value);
         break;
 
       case 'producto':
         setProductoSelected(value);
-        console.log('producto', value);
         break;
 
       default:
@@ -143,6 +153,22 @@ function DashboardCostos() {
     let tot = 0;
     let totProd = 0;
     let totServ = 0;
+    let volGraf = [0];
+    let comisionGraf = [0];
+    let impuestoGraf = [0];
+    let cargoGraf = [0];
+    let volGrafTrim = [0, 0, 0, 0];
+    let comisionGrafTrim = [0, 0, 0, 0];
+    let impuestoGrafTrim = [0, 0, 0, 0];
+    let cargoGrafTrim = [0, 0, 0, 0];
+    let volGrafSem = [0, 0, 0, 0, 0, 0];
+    let comisionGrafSem = [0, 0, 0, 0, 0, 0];
+    let impuestoGrafSem = [0, 0, 0, 0, 0, 0];
+    let cargoGrafSem = [0, 0, 0, 0, 0, 0];
+    let volGrafYear = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let comisionGrafYear = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let impuestoGrafYear = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let cargoGrafYear = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     Object.values(precioData).map((d, indexInicial) => {
       d.stats.map((s, indexStats) => {
@@ -154,6 +180,48 @@ function DashboardCostos() {
                   if (periodoSelected.month || periodoSelected.month === 0) {
                     if (periodoSelected.month === 0) {
                       if (indexM === 0) {
+                        if (canalSelected && productoSelected && paisSelected) {
+                          if (
+                            d.countryName === paisSelected.value &&
+                            s.canalName === canalSelected.value &&
+                            p.name === productoSelected.value
+                          ) {
+                            volGraf[indexM] +=
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m] *
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m];
+
+                            comisionGraf[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].comision,
+                            );
+
+                            impuestoGraf[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].impuesto,
+                            );
+
+                            cargoGraf[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].cargos,
+                            );
+                            setVolGrafico(volGraf);
+                            setComisionGrafico(comisionGraf);
+                            setImpuestoGrafico(impuestoGraf);
+                            setCargasGrafico(cargoGraf);
+                            setTypeViewGraf(oneMonth);
+                          }
+                        }
                         if (a.type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
@@ -212,6 +280,48 @@ function DashboardCostos() {
                       }
                     } else if (periodoSelected.month === 4) {
                       if (indexM < 4) {
+                        if (canalSelected && productoSelected && paisSelected) {
+                          if (
+                            d.countryName === paisSelected.value &&
+                            s.canalName === canalSelected.value &&
+                            p.name === productoSelected.value
+                          ) {
+                            volGrafTrim[indexM] +=
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m] *
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m];
+
+                            comisionGrafTrim[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].comision,
+                            );
+
+                            impuestoGrafTrim[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].impuesto,
+                            );
+
+                            cargoGrafTrim[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].cargos,
+                            );
+                            setVolGrafico(volGrafTrim);
+                            setComisionGrafico(comisionGrafTrim);
+                            setImpuestoGrafico(impuestoGrafTrim);
+                            setCargasGrafico(cargoGrafTrim);
+                            setTypeViewGraf(trimn);
+                          }
+                        }
                         if (a.type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
@@ -270,6 +380,48 @@ function DashboardCostos() {
                       }
                     } else if (periodoSelected.month === 6) {
                       if (indexM < 6) {
+                        if (canalSelected && productoSelected && paisSelected) {
+                          if (
+                            d.countryName === paisSelected.value &&
+                            s.canalName === canalSelected.value &&
+                            p.name === productoSelected.value
+                          ) {
+                            volGrafSem[indexM] +=
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m] *
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m];
+
+                            comisionGrafSem[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].comision,
+                            );
+
+                            impuestoGrafSem[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].impuesto,
+                            );
+
+                            cargoGrafSem[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].cargos,
+                            );
+                            setVolGrafico(volGrafSem);
+                            setComisionGrafico(comisionGrafSem);
+                            setImpuestoGrafico(impuestoGrafSem);
+                            setCargasGrafico(cargoGrafSem);
+                            setTypeViewGraf(firstSem);
+                          }
+                        }
                         if (a.type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
@@ -328,6 +480,48 @@ function DashboardCostos() {
                       }
                     } else if (periodoSelected.month === 12) {
                       if (indexM > 5) {
+                        if (canalSelected && productoSelected && paisSelected) {
+                          if (
+                            d.countryName === paisSelected.value &&
+                            s.canalName === canalSelected.value &&
+                            p.name === productoSelected.value
+                          ) {
+                            volGrafSem[indexM] +=
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m] *
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m];
+
+                            comisionGrafSem[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].comision,
+                            );
+
+                            impuestoGrafSem[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].impuesto,
+                            );
+
+                            cargoGrafSem[indexM] += resolveResul(
+                              a.volMeses[m],
+                              volumenData[indexInicial].stats[indexStats]
+                                .productos[indexP].años[indexYear].volMeses[m],
+                              costoData[indexInicial].stats[indexStats]
+                                .productos[indexP].cargos,
+                            );
+                            setVolGrafico(volGrafSem);
+                            setComisionGrafico(comisionGrafSem);
+                            setImpuestoGrafico(impuestoGrafSem);
+                            setCargasGrafico(cargoGrafSem);
+                            setTypeViewGraf(secondSem);
+                          }
+                        }
                         if (a.type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
@@ -388,6 +582,56 @@ function DashboardCostos() {
                   }
                 }
               } else {
+                if (canalSelected && productoSelected && paisSelected) {
+                  if (
+                    d.countryName === paisSelected.value &&
+                    s.canalName === canalSelected.value &&
+                    p.name === productoSelected.value
+                  ) {
+                    volGrafYear[indexYear] +=
+                      volumenData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].años[indexYear].volMeses[m] *
+                      costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].años[indexYear].volMeses[m];
+
+                    comisionGrafYear[indexYear] += resolveResul(
+                      a.volMeses[m],
+                      volumenData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].años[indexYear].volMeses[m],
+                      costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].comision,
+                    );
+
+                    impuestoGrafYear[indexYear] += resolveResul(
+                      a.volMeses[m],
+                      volumenData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].años[indexYear].volMeses[m],
+                      costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].impuesto,
+                    );
+
+                    cargoGrafYear[indexYear] += resolveResul(
+                      a.volMeses[m],
+                      volumenData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].años[indexYear].volMeses[m],
+                      costoData[indexInicial].stats[indexStats].productos[
+                        indexP
+                      ].cargos,
+                    );
+                    setVolGrafico(volGrafYear);
+                    setComisionGrafico(comisionGrafYear);
+                    setImpuestoGrafico(impuestoGrafYear);
+                    setCargasGrafico(cargoGrafYear);
+                    setTypeViewGraf(year);
+                  }
+                }
                 if (a.type === 'producto') {
                   totProd += calcCostos(
                     a.volMeses[m],
@@ -468,23 +712,26 @@ function DashboardCostos() {
     }
 
     if (dataAssump) {
-      dataAssump.paises.map((p) => {
+      dataAssump.paises.map((p, indexP) => {
         c.label = p.label.toUpperCase();
         c.value = p.value;
+        c.index = indexP;
 
         paises.push(p);
       });
 
-      dataAssump.canales.map((d) => {
+      dataAssump.canales.map((d, indexC) => {
         p.label = d.name.toUpperCase();
         p.value = d.name;
+        p.index = indexC;
 
         canales.push(p);
       });
 
-      dataAssump.productos.map((o) => {
+      dataAssump.productos.map((o, indexO) => {
         m.label = o.name.toUpperCase();
         m.value = o.name;
+        m.index = indexO;
 
         productos.push(m);
       });
@@ -512,7 +759,13 @@ function DashboardCostos() {
         }
       })
       .catch((error) => console.error(error));
-  }, [yearSelected, periodoSelected]);
+  }, [
+    yearSelected,
+    periodoSelected,
+    paisSelected,
+    canalSelected,
+    productoSelected,
+  ]);
 
   return (
     <div>
@@ -610,7 +863,13 @@ function DashboardCostos() {
           </div>
           {canalSelected && productoSelected && paisSelected ? (
             <div className="mt-[50px] mb-[50px]">
-              <GraficoDeBarraDos />
+              <GraficoDeBarraCosto
+                typeView={typeViewGraf}
+                volumen={volGrafico}
+                comision={comisionGrafico}
+                cargos={cargasGrafico}
+                impuesto={impuestoGrafico}
+              />
             </div>
           ) : (
             <p>Selecciona las tres opciones</p>
