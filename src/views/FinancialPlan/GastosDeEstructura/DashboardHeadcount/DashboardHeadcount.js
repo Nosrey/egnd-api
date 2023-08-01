@@ -1,7 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import { MenuItem, Select } from 'components/ui';
-
+import GraficoDeBarraDos from 'components/shared/dashboard/GraficoDeBarraDos';
+import Total from 'components/shared/dashboard/Total';
+import GraficoDeBarraTres from 'components/shared/dashboard/GraficoDeBarraTres';
+import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';
 import BarraDeProgreso from 'components/shared/dashboard/BarraDeProgreso';
 import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';
 import GraficoDeBarraHeadcountOne from 'components/shared/dashboard/GraficoDeBarraHeadcountOne';
@@ -22,6 +25,8 @@ import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
+
+import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 
 function DashboardHeadcount() {
   const currentState = useSelector((state) => state.auth.user);
