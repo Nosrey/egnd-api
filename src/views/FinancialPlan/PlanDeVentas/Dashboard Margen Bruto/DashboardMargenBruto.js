@@ -1,13 +1,9 @@
-import React from 'react';
-import { MenuItem, Select } from 'components/ui';
-import CardNumerica from 'components/shared/dashboard/CardNumerica';
-import GraficoDeBarraDos from 'components/shared/dashboard/GraficoDeBarraDos';
-
-import Total from 'components/shared/dashboard/Total';
-import GraficoDeBarraTres from 'components/shared/dashboard/GraficoDeBarraTres';
-import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';
 import BarraDeProgreso from 'components/shared/dashboard/BarraDeProgreso';
+import CardNumerica from 'components/shared/dashboard/CardNumerica';
+import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';
 import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
+import Total from 'components/shared/dashboard/Total';
+import { Select } from 'components/ui';
 
 function DashboardMargenBruto() {
   return (
