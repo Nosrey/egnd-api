@@ -31,7 +31,6 @@ function DashboardVentas() {
   const [totalServ, setTotalServ] = useState(0);
   const [totalProd, setTotalProd] = useState(0);
   const [volProd, setVolProd] = useState(0);
-  const [superTotal, setSuperTotal] = useState(0);
   const [volServ, setVolServ] = useState(0);
   const [totalClients, setTotalClients] = useState(0);
   const [totalsCacr, setTotalsCacr] = useState();
@@ -119,7 +118,6 @@ function DashboardVentas() {
           });
         });
       });
-      setSuperTotal(superTotal);
       setTotalVentas(tot);
       setTotalProd(totProd);
       setTotalServ(totServ);

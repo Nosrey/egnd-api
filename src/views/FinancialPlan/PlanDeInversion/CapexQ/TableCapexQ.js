@@ -243,9 +243,7 @@ function TableCapexQ(props) {
                                   <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={formatearNumero(
-                                      cta.años[indexYear].volMeses[mes],
-                                    )}
+                                    value={cta.años[indexYear].volMeses[mes]}
                                     name="month"
                                     onChange={(e) => {
                                       handleChangeValues(
