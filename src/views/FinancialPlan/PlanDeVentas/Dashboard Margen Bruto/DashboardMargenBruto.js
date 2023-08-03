@@ -1,3 +1,4 @@
+import React from 'react';
 import BarraDeProgreso from 'components/shared/dashboard/BarraDeProgreso';
 import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';

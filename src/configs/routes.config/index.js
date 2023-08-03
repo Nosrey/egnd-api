@@ -224,4 +224,14 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'dashboardInversiones',
+    path: '/dashboard-inversiones',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/PlanDeInversion/DashboardInversiones/DashboardInversiones'
+      ),
+    ),
+    authority: [],
+  },
 ];
