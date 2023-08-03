@@ -12,7 +12,7 @@ export async function apiSignIn(data) {
 
 export async function apiSignUp(data) {
   return ApiService.fetchData({
-    url: '/sign-up',
+    url: '/crear-cuenta',
     method: 'post',
     data,
   });
@@ -28,7 +28,7 @@ export async function apiSignOut(data) {
 
 export async function apiForgotPassword(data) {
   return ApiService.fetchData({
-    url: '/forgot-password',
+    url: '/olvidaste-tu-contraseña',
     method: 'post',
     data,
   });
