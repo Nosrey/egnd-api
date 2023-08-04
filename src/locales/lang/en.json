@@ -48,7 +48,8 @@
       "collapsePlanDeInversionesYAmortizaciones": "Inversiones y Amortizaciones",
       "item1": "Volumen de Inversiones",
       "item2": "Costo Inversiones",
-      "item3": "Inversiones y Amortizaciones"
+      "item3": "Inversiones y Amortizaciones",
+      "item4": "Dashboard Inversiones"
     },
     "collapseGastosFinancierosParaOperacion": {
       "collapseGastosFinancierosParaOperacion": "Gastos Financieros",
