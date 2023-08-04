@@ -354,6 +354,16 @@ const navigationConfig = [
             authority: [],
             subMenu: [],
           },
+          {
+            key: 'collapsePlanDeInversionesYAmortizaciones.item3',
+            path: '/dashboard-inversiones',
+            title: 'Dashboard Inversiones',
+            translateKey: 'nav.collapsePlanDeInversionesYAmortizaciones.item3',
+            icon: '',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [],
+            subMenu: [],
+          },
         ],
       },
       {

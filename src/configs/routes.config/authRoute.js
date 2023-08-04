@@ -9,13 +9,13 @@ const authRoute = [
   },
   {
     key: 'signUp',
-    path: `/sign-up`,
+    path: `/crear-cuenta`,
     component: React.lazy(() => import('views/auth/SignUp')),
     authority: [],
   },
   {
     key: 'forgotPassword',
-    path: `/forgot-password`,
+    path: `/olvidaste-tu-contraseña`,
     component: React.lazy(() => import('views/auth/ForgotPassword')),
     authority: [],
   },
