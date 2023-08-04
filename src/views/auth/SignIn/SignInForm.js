@@ -25,15 +25,15 @@ function SignInForm(props) {
   const {
     disableSubmit = false,
     className,
-    forgotPasswordUrl = '/forgot-password',
-    signUpUrl = '/sign-up',
+    forgotPasswordUrl = '/olvidaste-tu-contraseña',
+    signUpUrl = '/crear-cuenta',
   } = props;
 
   SignInForm.defaultProps = {
     disableSubmit: false,
     className: '',
-    forgotPasswordUrl: '/forgot-password',
-    signUpUrl: '/sign-up',
+    forgotPasswordUrl: '/olvidaste-tu-contraseña',
+    signUpUrl: '/crear-cuenta',
   };
 
   SignInForm.propTypes = {
