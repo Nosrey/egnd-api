@@ -90,15 +90,7 @@ function GraficoDeBarraHeadcountTwo({
       });
     });
     setDataView(head);
-    console.log('heads', head);
   }, [periodoSelected, yearSelected]);
-
-  const data = [
-    {
-      name: 'Comisiones',
-      data: [0],
-    },
-  ];
 
   return (
     <div>

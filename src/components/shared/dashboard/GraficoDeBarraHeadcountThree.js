@@ -11,7 +11,6 @@ function GraficoDeBarraHeadcountThree({
   const [dataView, setDataView] = useState([]);
   useEffect(() => {
     let head = [];
-    console.log('p', dataHeadcount);
     dataHeadcount.map((d, indexD) => {
       Object.values(d).map((p, indexP) => {
         if (p.visible) {
