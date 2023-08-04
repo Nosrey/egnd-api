@@ -355,10 +355,10 @@ const navigationConfig = [
             subMenu: [],
           },
           {
-            key: 'collapsePlanDeInversionesYAmortizaciones.item3',
+            key: 'collapsePlanDeInversionesYAmortizaciones.item4',
             path: '/dashboard-inversiones',
             title: 'Dashboard Inversiones',
-            translateKey: 'nav.collapsePlanDeInversionesYAmortizaciones.item3',
+            translateKey: 'nav.collapsePlanDeInversionesYAmortizaciones.item4',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,
             authority: [],
