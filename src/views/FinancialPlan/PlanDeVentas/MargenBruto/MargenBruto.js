@@ -116,8 +116,8 @@ function MargenBruto() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Ventas Totales</h4>
-        <span>Plan de ventas</span>
+        <h4>Margen Bruto</h4>
+        <span>Costos directos y Margen Bruto</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
