@@ -103,7 +103,7 @@ function Mercado() {
       )}
       <div className="border-b-2 mb-8 pb-1">
         <h4>Mercado</h4>
-        <span>Research</span>
+        <span>Supuestos del Modelo</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">
@@ -194,7 +194,7 @@ function Mercado() {
 
                     <FormItem
                       className="w-[40%] max-w-[480px]"
-                      label="Definicion de Mercado Target"
+                      label="Definición de Mercado Target"
                       invalid={errors.definicion && touched.definicion}
                       errorMessage={errors.definicion}
                     >
@@ -203,13 +203,12 @@ function Mercado() {
                         type="text"
                         autoComplete="off"
                         name="definicion"
-                        placeholder="Definicion"
+                        placeholder="Definición"
                         component={Input}
                       />
                       <span>
-                        * Lorem Ipsum ha sido el texto de relleno estándar de
-                        las industrias desde el año 1500, cuando un impresor (N.
-                        del T. persona que se dedica a la imprenta).
+                        * Defina el mercado al cual la compañía ve una
+                        oportunidad de ofrecer su producto o servicio.
                       </span>
                     </FormItem>
                   </div>
