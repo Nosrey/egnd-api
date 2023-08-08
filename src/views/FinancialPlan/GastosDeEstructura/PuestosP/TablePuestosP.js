@@ -170,6 +170,7 @@ function TablePuestosP(props) {
                                   ? 'capitalize mt-10'
                                   : 'capitalize mt-5'
                               }`}
+                              
                               disabled
                               type="text"
                               name="name"
