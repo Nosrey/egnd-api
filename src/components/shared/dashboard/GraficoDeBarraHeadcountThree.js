@@ -60,6 +60,11 @@ function GraficoDeBarraHeadcountThree({
                           }
                         }
                       }
+                    } else if (head[indexM] || head[indexM] === 0) {
+                      head[indexM] += a.volMeses[MONTHS[indexM]];
+                    } else {
+                      head.push(0);
+                      head[indexM] += a.volMeses[MONTHS[indexM]];
                     }
                   }
                 } else if (head[indexY] || head[indexY] === 0) {
