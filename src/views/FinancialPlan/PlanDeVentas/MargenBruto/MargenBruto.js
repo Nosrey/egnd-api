@@ -68,7 +68,11 @@ function MargenBruto() {
     getUser(currentState.id)
       .then((data) => {
         console.log('DATA', data);
-        if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
+        if (
+          data?.volumenData.length !== 0 &&
+          data?.precioData.length !== 0 &&
+          data?.costoData.length !== 0
+        ) {
           // tengo info vol y precio precargada
           setCostoData(data?.costoData);
           setVolumenData(data?.volumenData);
@@ -91,10 +95,7 @@ function MargenBruto() {
           setShowFaltaVolumenMssg(true);
         } else if (data?.precioData.length === 0) {
           setShowFaltaPrecioMssg(true);
-        } else if (
-          data?.precioData.length === 0 &&
-          data?.volumenData.length === 0
-        ) {
+        } else if (data?.costoData.length === 0) {
           setShowFaltaInfoMssg(true);
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
@@ -187,12 +188,8 @@ function MargenBruto() {
               <span className="text-center cursor-default">
                 Para acceder a este formulario primero debe completar los
                 formularios de{' '}
-                <Link className="text-indigo-700 underline" to="/volumen">
-                  Volumen
-                </Link>{' '}
-                y{' '}
-                <Link className="text-indigo-700 underline" to="/precio">
-                  Precio
+                <Link className="text-indigo-700 underline" to="/costo">
+                  Costo
                 </Link>
                 .
               </span>
