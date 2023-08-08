@@ -1,145 +1,71 @@
-import { MONTHS } from 'constants/forms.constants';
-import { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
 import Chart from 'react-apexcharts';
+import { useSelector } from 'react-redux';
 
-function GraficoDeBarraHeadcountFour({
-  typeView,
-  ventas,
-  dataHeadcount,
-  periodoSelected,
-  yearSelected,
-}) {
-  const [dataView, setDataView] = useState([]);
-
-  const calcFte = (totalVentas, cantPers) => {
-    let div = 0;
-
-    if (periodoSelected.month || periodoSelected.month === 0) {
-      if (periodoSelected.month === 0) {
-        return totalVentas / cantPers;
-      }
-      if (periodoSelected.month === 4) {
-        div = Math.floor(cantPers / 4);
-        return totalVentas / div;
-      }
-      if (periodoSelected.month === 6 || periodoSelected.month === 12) {
-        div = Math.floor(cantPers / 6);
-        return totalVentas / div;
-      }
-    } else {
-      div = Math.floor(cantPers / 12);
-      return totalVentas / div;
-    }
-  };
-
-  useEffect(() => {
-    let head = [];
-    let fte = [];
-    dataHeadcount.map((d, indexD) => {
-      Object.values(d).map((p, indexP) => {
-        if (p.visible) {
-          p.puestos.map((m) => {
-            m.años.map((a, indexY) => {
-              MONTHS.map((n, indexM) => {
-                if (yearSelected.year || yearSelected.year === 0) {
-                  if (yearSelected.year === indexY) {
-                    if (periodoSelected.month || periodoSelected.month === 0) {
-                      if (periodoSelected.month === 0) {
-                        if (indexM === 0) {
-                          if (fte[indexM] || fte[indexM] === 0) {
-                            fte[indexM] +=
-                              ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                          } else {
-                            fte.push(0);
-                            fte[indexM] +=
-                              ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                          }
-                        }
-                      }
-                      if (periodoSelected.month === 4) {
-                        console.log(
-                          ventas[(indexM, a.volMeses[MONTHS[indexM]])],
-                        );
-                        if (indexM < 4) {
-                          if (fte[indexM] || fte[indexM] === 0) {
-                            fte[indexM] +=
-                              ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                          } else {
-                            fte.push(0);
-                            // fte[indexM] +=
-                            //   ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                          }
-                        }
-                      }
-                      if (periodoSelected.month === 6) {
-                        if (fte[indexM] || fte[indexM] === 0) {
-                          fte[indexM] +=
-                            ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                        } else {
-                          fte.push(0);
-                          fte[indexM] +=
-                            ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                        }
-                      }
-
-                      if (periodoSelected.month === 12) {
-                        if (indexM > 5) {
-                          if (fte[indexM - 6] || fte[indexM] === 0) {
-                            fte[indexM - 6] +=
-                              ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                          } else {
-                            fte.push(0);
-                            fte[indexM - 6] +=
-                              ventas[indexM] / a.volMeses[MONTHS[indexM]];
-                          }
-                        }
-                      }
-                    }
-                  }
-                } else if (fte[indexY] || fte[indexY] === 0) {
-                  fte[indexY] += ventas[indexY] / a.volMeses[MONTHS[indexM]];
-                } else {
-                  fte.push(0);
-                  fte[indexY] += ventas[indexY] / a.volMeses[MONTHS[indexM]];
-                }
-              });
-            });
-          });
-        }
-      });
-    });
-
-    setDataView(fte);
-  }, [yearSelected, periodoSelected]);
-
+function GraficoDeBarraHeadcountFour({ typeView, ftes }) {
+  const currency = useSelector((state) => state.auth.user.currency);
   const data = [
     {
-      name: 'Cantidad de Personas',
-      data: dataView,
+      name: 'FTE',
+      data: ftes,
     },
   ];
   return (
     <Chart
       options={{
         chart: {
-          type: 'line',
+          stacked: true,
+          toolbar: {
+            show: true,
+          },
           zoom: {
-            enabled: false,
+            enabled: true,
+          },
+        },
+        // colors: COLORS,
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              legend: {
+                position: 'bottom',
+                offsetX: -10,
+                offsetY: 0,
+              },
+            },
+          },
+        ],
+        plotOptions: {
+          bar: {
+            horizontal: false,
           },
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
+          formatter(value) {
+            return `${currency}${value}`;
+          },
         },
-        stroke: {
-          curve: 'smooth',
-          width: 3,
-        },
-        // colors: [COLOR_2],
         xaxis: {
           categories: typeView,
         },
+        yaxis: {
+          labels: {
+            formatter(value) {
+              return `${currency}${value}`;
+            },
+          },
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40,
+        },
+        fill: {
+          opacity: 1,
+        },
       }}
       series={data}
+      type="bar"
       height={300}
     />
   );

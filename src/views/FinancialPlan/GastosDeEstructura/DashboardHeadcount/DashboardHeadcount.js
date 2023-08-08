@@ -28,9 +28,10 @@ function DashboardHeadcount() {
   const [total, setTotal] = useState(0);
   const [cantPers, setCantPers] = useState(0);
   const [infoForm, setInfoForm] = useState();
-  const [fte, setFte] = useState(0);
+  const [ftes, setFtes] = useState([]);
   const [totalVentas, setTotalVentas] = useState(0);
   const [totalsVentas, setTotalsVentas] = useState([]);
+  const [totalsPers, setTotalsPers] = useState([]);
   const [typeView, setTypeView] = useState();
   const [dataHeadcount, setDataHeadcount] = useState();
   const [yearSelected, setYearSelected] = useState({
@@ -100,7 +101,7 @@ function DashboardHeadcount() {
                           tot += Number(a.volMeses[MONTHS[indexM]]);
                         }
                       } else if (periodoSelected.month === 4) {
-                        if (indexM < 4) {
+                        if (indexM < 3) {
                           if (o.type === 'producto') {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
@@ -181,31 +182,57 @@ function DashboardHeadcount() {
   const calcFte = () => {
     let div = 0;
 
-    if (periodoSelected.month || periodoSelected.month === 0) {
-      if (periodoSelected.month === 0) {
-        // setFte(totalVentas / cantPers);
-        return totalVentas / cantPers;
-      }
-      if (periodoSelected.month === 4) {
-        div = Math.floor(cantPers / 4);
-        // setFte(totalVentas / div);
-        return totalVentas / div;
-      }
-      if (periodoSelected.month === 6 || periodoSelected.month === 12) {
-        div = Math.floor(cantPers / 6);
+    if (totalVentas !== 0 || cantPers !== 0) {
+      if (periodoSelected.month || periodoSelected.month === 0) {
+        if (periodoSelected.month === 0) {
+          // setFte(totalVentas / cantPers);
+          return totalVentas / cantPers;
+        }
+        if (periodoSelected.month === 4) {
+          div = Math.floor(cantPers / 3);
+
+          return totalVentas / div;
+        }
+        if (periodoSelected.month === 6 || periodoSelected.month === 12) {
+          div = Math.floor(cantPers / 6);
+          // setFte(totalVentas / div);
+          return totalVentas / div;
+        }
+      } else {
+        div = Math.floor(cantPers / 12);
         // setFte(totalVentas / div);
         return totalVentas / div;
       }
     } else {
-      div = Math.floor(cantPers / 12);
-      // setFte(totalVentas / div);
-      return totalVentas / div;
+      return 0;
+    }
+  };
+
+  const calcFtes = () => {
+    let fte = [];
+    if (totalsVentas.length !== 0 && totalsPers.length !== 0) {
+      totalsPers.map((p, indexP) => {
+        if (!fte[indexP]) {
+          if (p === 0 || totalsVentas[indexP] === 0) {
+            fte.push(0);
+            fte[indexP] = 0;
+          } else {
+            fte.push(0);
+            fte[indexP] = Number(totalsVentas[indexP]) / Number(p);
+          }
+        } else {
+          fte[indexP] = Number(totalsVentas[indexP]) / Number(p);
+        }
+      });
+
+      setFtes(fte);
     }
   };
 
   const calcTotals = (data) => {
     let tot = 0;
     let cantPers = 0;
+    let tots = [];
     Object.values(data).map((o) => {
       o.puestos.map((d) => {
         d.años.map((a, indexY) => {
@@ -217,13 +244,25 @@ function DashboardHeadcount() {
                     if (indexM === 0) {
                       tot += a.volMeses[MONTHS[indexM]] * d.total;
                       cantPers += a.volMeses[MONTHS[indexM]];
+                      if (tots[indexM] || tots[indexM] === 0) {
+                        tots[indexM] += a.volMeses[MONTHS[indexM]];
+                      } else {
+                        tots.push(0);
+                        tots[indexM] += a.volMeses[MONTHS[indexM]];
+                      }
                     }
                     setTypeView(oneMonth);
                   }
                   if (periodoSelected.month === 4) {
-                    if (indexM < 4) {
+                    if (indexM < 3) {
                       tot += a.volMeses[MONTHS[indexM]] * d.total;
                       cantPers += a.volMeses[MONTHS[indexM]];
+                      if (tots[indexM] || tots[indexM] === 0) {
+                        tots[indexM] += a.volMeses[MONTHS[indexM]];
+                      } else {
+                        tots.push(0);
+                        tots[indexM] += a.volMeses[MONTHS[indexM]];
+                      }
                     }
                     setTypeView(trimn);
                   }
@@ -231,6 +270,12 @@ function DashboardHeadcount() {
                     if (indexM < 6) {
                       tot += a.volMeses[MONTHS[indexM]] * d.total;
                       cantPers += a.volMeses[MONTHS[indexM]];
+                      if (tots[indexM] || tots[indexM] === 0) {
+                        tots[indexM] += a.volMeses[MONTHS[indexM]];
+                      } else {
+                        tots.push(0);
+                        tots[indexM] += a.volMeses[MONTHS[indexM]];
+                      }
                     }
                     setTypeView(firstSem);
                   }
@@ -238,6 +283,12 @@ function DashboardHeadcount() {
                     if (indexM > 5) {
                       tot += a.volMeses[MONTHS[indexM]] * d.total;
                       cantPers += a.volMeses[MONTHS[indexM]];
+                      if (tots[indexM - 6] || tots[indexM - 6] === 0) {
+                        tots[indexM - 6] += a.volMeses[MONTHS[indexM]];
+                      } else {
+                        tots.push(0);
+                        tots[indexM - 6] += a.volMeses[MONTHS[indexM]];
+                      }
                     }
                     setTypeView(secondSem);
                   }
@@ -245,12 +296,24 @@ function DashboardHeadcount() {
                   tot += a.volMeses[MONTHS[indexM]] * d.total;
                   cantPers += a.volMeses[MONTHS[indexM]];
                   setTypeView(month);
+                  if (tots[indexM] || tots[indexM] === 0) {
+                    tots[indexM] += a.volMeses[MONTHS[indexM]];
+                  } else {
+                    tots.push(0);
+                    tots[indexM] += a.volMeses[MONTHS[indexM]];
+                  }
                 }
               }
             } else if (!yearSelected.year) {
               tot += a.volMeses[MONTHS[indexM]] * d.total;
               cantPers += a.volMeses[MONTHS[indexM]];
               setTypeView(year);
+              if (tots[indexY] || tots[indexY] === 0) {
+                tots[indexY] += a.volMeses[MONTHS[indexM]];
+              } else {
+                tots.push(0);
+                tots[indexY] += a.volMeses[MONTHS[indexM]];
+              }
             }
           });
         });
@@ -259,12 +322,12 @@ function DashboardHeadcount() {
 
     setTotal(tot);
     setCantPers(cantPers);
+    setTotalsPers(tots);
   };
 
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log('[D]', data);
         if (data?.puestosPData.length !== 0) {
           setDataHeadcount(data.puestosPData[0].puestosp);
           data.puestosPData[0].puestosp.map((p) => {
@@ -287,12 +350,15 @@ function DashboardHeadcount() {
           setInfoForm(() => ({ ...datosPrecargados }));
           calcTotalsVentas();
           calcFte();
+          calcFtes();
         }
       })
       .catch((error) => console.error(error));
   }, [yearSelected, periodoSelected]);
 
-  console.log('t', totalVentas, cantPers);
+  useEffect(() => {
+    calcFtes();
+  }, [totalsPers, totalsVentas]);
 
   return (
     <div>
@@ -343,32 +409,33 @@ function DashboardHeadcount() {
             />
           </div>
 
-          <div className=" mb-[50px] flex flex-col gap-[30px] mt-[100px] ">
-            <h5 className="cursor-default pl-[20px]">
-              Distribución de Headcount Q por Centro de Costo
-            </h5>
-            {dataHeadcount && (
+          {dataHeadcount && (
+            <div className=" mb-[50px] flex flex-col gap-[30px] mt-[100px] ">
+              <h5 className="cursor-default pl-[20px]">
+                Distribución de Headcount Q por Centro de Costo
+              </h5>
               <GraficoDeBarraHeadcountOne
                 typeView={typeView}
                 dataHeadcount={dataHeadcount}
                 periodoSelected={periodoSelected}
                 yearSelected={yearSelected}
               />
-            )}
-          </div>
-          <div className="mt-[80px] mb-[50px] flex flex-col gap-[30px]">
-            <h5 className="cursor-default pl-[20px]">
-              Distribución del gasto en salario por Centro de Costo
-            </h5>
-            {dataHeadcount && (
+            </div>
+          )}
+
+          {dataHeadcount && (
+            <div className="mt-[80px] mb-[50px] flex flex-col gap-[30px]">
+              <h5 className="cursor-default pl-[20px]">
+                Distribución del gasto en salario por Centro de Costo
+              </h5>
               <GraficoDeBarraHeadcountTwo
                 typeView={typeView}
                 dataHeadcount={dataHeadcount}
                 periodoSelected={periodoSelected}
                 yearSelected={yearSelected}
               />
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="flex gap-[30px] mt-[100px]">
             <div className="w-[30%] flex flex-col gap-[30px]">
@@ -380,45 +447,42 @@ function DashboardHeadcount() {
                 cantidad={calcFte()}
               />
             </div>
-            <div className="w-[70%] flex flex-col gap-[30px] mt-[50px]">
-              <h5 className="cursor-default">Evolución de Headcount</h5>
-              {dataHeadcount && (
+
+            {dataHeadcount && (
+              <div className="w-[70%] flex flex-col gap-[30px] mt-[50px]">
+                <h5 className="cursor-default">Evolución de Headcount</h5>
                 <GraficoDeBarraHeadcountThree
                   typeView={typeView}
                   dataHeadcount={dataHeadcount}
                   periodoSelected={periodoSelected}
                   yearSelected={yearSelected}
                 />
-              )}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-[30px] mt-[60px]">
-            <h5 className="cursor-default pl-[20px]">Evolución FTE por mes</h5>
-            {dataHeadcount && totalsVentas.length !== 0 && (
-              <GraficoDeBarraHeadcountFour
-                typeView={typeView}
-                ventas={totalsVentas}
-                dataHeadcount={dataHeadcount}
-                periodoSelected={periodoSelected}
-                yearSelected={yearSelected}
-              />
+              </div>
             )}
           </div>
 
+          {ftes && (
+            <div className="flex flex-col gap-[30px] mt-[60px]">
+              <h5 className="cursor-default pl-[20px]">
+                Evolución FTE por mes
+              </h5>
+              <GraficoDeBarraHeadcountFour typeView={typeView} ftes={ftes} />
+            </div>
+          )}
+
           <div className="flex gap-[30px] mt-[100px] mb-[50px]">
-            <div className="w-[50%] flex flex-col gap-[30px]">
-              <h5>Gasto en personal por Centro de Costo</h5>
-              {dataHeadcount && (
+            {dataHeadcount && (
+              <div className="w-[50%] flex flex-col gap-[30px]">
+                <h5>Gasto en personal por Centro de Costo</h5>
                 <BarraDeProgresoHeadcount
-                  data={{ brasil: [] }}
                   dataHeadcount={dataHeadcount}
                   totalVentas={total}
                   yearSelected={yearSelected}
                   periodoSelected={periodoSelected}
                 />
-              )}
-            </div>
+              </div>
+            )}
+
             {/* <div className="w-[50%] flex flex-col gap-[30px]">
               <h5>Gasto en personal por país</h5>
               <BarraDeProgreso

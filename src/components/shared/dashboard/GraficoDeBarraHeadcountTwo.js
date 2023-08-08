@@ -74,6 +74,11 @@ function GraficoDeBarraHeadcountTwo({
                           }
                         }
                       }
+                    } else if (h.data[indexM] || h.data[indexM] === 0) {
+                      h.data[indexM] += a.volMeses[MONTHS[indexM]] * m.total;
+                    } else {
+                      h.data.push(0);
+                      h.data[indexM] += a.volMeses[MONTHS[indexM]] * m.total;
                     }
                   }
                 } else if (h.data[indexY] || h.data[indexY] === 0) {
@@ -94,7 +99,6 @@ function GraficoDeBarraHeadcountTwo({
 
   return (
     <div>
-      {' '}
       <Chart
         options={{
           chart: {

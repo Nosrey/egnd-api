@@ -31,7 +31,7 @@ function BarraDeProgresoHeadcount({
                         }
                       }
                       if (periodoSelected.month === 4) {
-                        if (indexM < 4) {
+                        if (indexM < 3) {
                           h.total += a.volMeses[MONTHS[indexM]] * m.total;
                         }
                       }
@@ -45,6 +45,8 @@ function BarraDeProgresoHeadcount({
                           h.total += a.volMeses[MONTHS[indexM]] * m.total;
                         }
                       }
+                    } else {
+                      h.total += a.volMeses[MONTHS[indexM]] * m.total;
                     }
                   }
                 } else {
