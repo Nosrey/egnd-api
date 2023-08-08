@@ -222,12 +222,12 @@ function AssumptionGeneral() {
                       }`}
                     >
                       Determina el modelo de negocio de tu compañía, si no lo
-                      sabes puedes usar la guia donde te mostraremos varios
+                      sabes puedes usar la guía donde te mostraremos varios
                       ejemplos.{' '}
                       {/* <Link className="underline decoration-solid text-blue-600">
                         Ver guia.
                       </Link> */}
-                      Ver guia.
+                      Ver guía.
                     </span>
 
                     <FormItem
@@ -259,14 +259,14 @@ function AssumptionGeneral() {
                         media === 'mobile' ? 'hidden' : ''
                       }`}
                     >
-                      Es la moneda para el armado del plan, luego podras
+                      Es la moneda para el armado del plan, luego podrás
                       convertir en otras monedas para entender mejor tu
                       compañía.
                     </span>
 
                     <FormItem
                       className="col-span-1 row-start-4"
-                      label="Subí tu logo"
+                      label="Sube tu logo"
                       invalid={Boolean(errors.upload && touched.upload)}
                       errorMessage={errors.upload}
                     >

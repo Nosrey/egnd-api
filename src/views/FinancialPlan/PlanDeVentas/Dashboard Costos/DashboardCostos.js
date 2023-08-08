@@ -872,7 +872,12 @@ function DashboardCostos() {
               />
             </div>
           ) : (
-            <p>Selecciona las tres opciones</p>
+            <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+              <span className="text-center cursor-default">
+                Para visualizar este gráfico es necesario seleccionar Producto,
+                Canal y País.
+              </span>
+            </div>
           )}
         </div>
       </div>
