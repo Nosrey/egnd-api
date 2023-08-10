@@ -294,8 +294,8 @@ const navigationConfig = [
           },
           {
             key: 'collapseGastosDeEstructura.item4',
-            path: '/',
-            title: 'Dashboard de Gasto',
+            path: '/dashboard-gastos-estructura',
+            title: 'Dashboard de Gastos de Estructura',
             translateKey: 'nav.collapseGastosDeEstructura.item4',
             icon: '',
             type: NAV_ITEM_TYPE_ITEM,

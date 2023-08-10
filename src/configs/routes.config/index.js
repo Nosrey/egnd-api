@@ -180,9 +180,7 @@ export const protectedRoutes = [
     key: 'margenbruto',
     path: '/margen-bruto',
     component: React.lazy(() =>
-      import(
-        'views/FinancialPlan/PlanDeVentas/MargenBruto/MargenBruto'
-      ),
+      import('views/FinancialPlan/PlanDeVentas/MargenBruto/MargenBruto'),
     ),
     authority: [],
   },
@@ -240,6 +238,16 @@ export const protectedRoutes = [
     component: React.lazy(() =>
       import(
         'views/FinancialPlan/PlanDeInversion/DashboardInversiones/DashboardInversiones'
+      ),
+    ),
+    authority: [],
+  },
+  {
+    key: 'dashboardInversiones',
+    path: '/dashboard-gastos-estructura',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/GastosDeEstructura/Dashboard Gastos/DashboardGastos'
       ),
     ),
     authority: [],
