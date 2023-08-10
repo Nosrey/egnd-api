@@ -102,7 +102,6 @@ function TablePuestosPxQ(props) {
     } else {
       calcs[indexYear][indexMes] = total * q;
     }
-
     return calcs;
   };
 
@@ -119,10 +118,11 @@ function TablePuestosPxQ(props) {
   };
 
   const formatearNumero = (numero) => {
-    if (typeof numero !== 'string') {
-      numero = numero?.toString();
-    }
-    const inputNumero = Number(numero.replace(/\D/g, ''));
+    // string con decimales
+    const numeroRedondeado = Math.round(Number(numero)); // paso a nuemro para quitarle los decimales
+
+    const inputNumero = Number(numeroRedondeado.toString().replace(/\D/g, '')); // pero necesito un string para ponerle puntos en los miles con replace
+    console.log(inputNumero);
     const nuevoNum = inputNumero.toLocaleString('es-AR');
     return nuevoNum;
   };
@@ -228,7 +228,7 @@ function TablePuestosPxQ(props) {
                                                 className="w-[90px]"
                                                 type="text"
                                                 disabled
-                                                value={
+                                                value={formatearNumero(
                                                   calcPercent(
                                                     infoForm[cc].puestos[head]
                                                       .total,
@@ -238,8 +238,8 @@ function TablePuestosPxQ(props) {
                                                     indexYear,
                                                     cc,
                                                     head,
-                                                  )[indexYear][indexMes]
-                                                }
+                                                  )[indexYear][indexMes],
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -252,11 +252,13 @@ function TablePuestosPxQ(props) {
                                         className="w-[90px]"
                                         type="text"
                                         disabled
-                                        value={totHor(
-                                          infoForm[cc].puestos[head].total,
-                                          infoForm[cc].puestos[head].años[
-                                            indexYear
-                                          ].volTotal,
+                                        value={formatearNumero(
+                                          totHor(
+                                            infoForm[cc].puestos[head].total,
+                                            infoForm[cc].puestos[head].años[
+                                              indexYear
+                                            ].volTotal,
+                                          ),
                                         )}
                                       />
                                     </FormItem>
@@ -329,7 +331,7 @@ function TablePuestosPxQ(props) {
                           volTotal[indexYear].values.map((valor, index) => (
                             <p className="w-[90px] text-center">
                               {currency}
-                              {valor}
+                              {formatearNumero(valor)}
                             </p>
                           ))}
                         <p className="w-[90px] text-center font-bold">

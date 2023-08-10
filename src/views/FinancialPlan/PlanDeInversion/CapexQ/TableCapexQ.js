@@ -52,9 +52,11 @@ function TableCapexQ(props) {
   };
 
   const handleChangeValues = (id, e, year, month) => {
+    const inputNumero = Number(e.target.value.replace(/\D/g, ''));
+
     const bien = props.data.findIndex((bien) => bien.id === id);
     const copyBien = [...props.data];
-    copyBien[bien].años[year].volMeses[month] = e.target.value;
+    copyBien[bien].años[year].volMeses[month] = inputNumero;
     copyBien[bien].años[year].volTotal = Object.values(
       copyBien[bien].años[year].volMeses,
     ).reduce(
@@ -97,11 +99,8 @@ function TableCapexQ(props) {
   };
 
   const formatearNumero = (numero) => {
-    if (typeof numero !== 'string') {
-      numero = numero.toString();
-    }
-    const inputNumero = Number(numero.replace(/\D/g, ''));
-    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    const numeroRedondeado = Math.round(numero);
+    const nuevoNum = numeroRedondeado.toLocaleString('es-AR');
     return nuevoNum;
   };
 
@@ -243,7 +242,9 @@ function TableCapexQ(props) {
                                   <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={cta.años[indexYear].volMeses[mes]}
+                                    value={formatearNumero(
+                                      cta.años[indexYear].volMeses[mes],
+                                    )}
                                     name="month"
                                     onChange={(e) => {
                                       handleChangeValues(
