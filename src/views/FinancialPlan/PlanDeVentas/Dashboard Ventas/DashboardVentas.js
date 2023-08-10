@@ -50,6 +50,8 @@ function DashboardVentas() {
     let totServ = 0;
     let superTotal = 0;
     if (infoForm) {
+      console.log('if', infoForm);
+      console.log('da', dataAssump);
       Object.values(infoForm).map((m) => {
         m.map((p) => {
           p.productos.map((o) => {
@@ -78,7 +80,7 @@ function DashboardVentas() {
                           tot += Number(a.volMeses[MONTHS[indexM]]);
                         }
                       } else if (periodoSelected.month === 4) {
-                        if (indexM < 4) {
+                        if (indexM < 3) {
                           if (o.type === 'producto') {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
@@ -151,7 +153,7 @@ function DashboardVentas() {
                         }
                       }
                     } else if (periodoSelected.month === 4) {
-                      if (indexM < 4) {
+                      if (indexM < 3) {
                         if (p.type === 'producto') {
                           totV += Number(a.volMeses[MONTHS[indexM]]);
                         } else {
@@ -233,7 +235,7 @@ function DashboardVentas() {
                                 .volumen,
                           );
                         }
-                        if (indexMes < 4) {
+                        if (indexMes < 3) {
                           newC +=
                             indexMes === 0
                               ? 0

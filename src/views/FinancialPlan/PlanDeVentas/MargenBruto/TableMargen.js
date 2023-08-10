@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -134,126 +135,29 @@ function TableMargen(props) {
 
   const calcValues = () => {
     let total = [];
+    let percent = [];
     if (props.volumenData[0]) {
       Object.values(props.volumenData).map((v, indexCountry) => {
         total.push([]);
+        percent.push([]);
         v.stats.map((s, indexCanal) => {
           total[indexCountry].push([]);
+          percent[indexCountry].push([]);
           s.productos.map((p, indexProd) => {
             total[indexCountry][indexCanal].push([]);
+            percent[indexCountry][indexCanal].push([]);
             for (let i = 0; i <= 9; i++) {
               if (!total[indexCountry][indexCanal][indexProd][i]) {
                 total[indexCountry][indexCanal][indexProd].push([
                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 ]);
               }
+              if (!percent[indexCountry][indexCanal][indexProd][i]) {
+                percent[indexCountry][indexCanal][indexProd].push([
+                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                ]);
+              }
               for (let j = 0; j <= 11; j++) {
-                console.log(
-                  v,
-                  s,
-                  p,
-
-                  Number(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                  ),
-                  Number(
-                    props.precioData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                  ),
-                  Number(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                  ),
-                  resolveResul(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                    props.precioData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-
-                    props.costoData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].comision,
-                  ),
-                  resolveResul(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                    props.precioData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-
-                    props.costoData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].impuesto,
-                  ),
-                  resolveResul(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                    props.precioData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-
-                    props.costoData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].cargos,
-                  ),
-                );
-                console.log(
-                  'resta',
-                  (Number(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                  ) /
-                    10) *
-                    Number(
-                      props.precioData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                    ) -
-                    (Number(
-                      props.volumenData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                    ) /
-                      10) *
-                      (Number(
-                        props.costoData[indexCountry].stats[indexCanal]
-                          .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                      ) +
-                        resolveResul(
-                          props.volumenData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                          props.precioData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].años[i].volMeses[MONTHS[j]],
-
-                          props.costoData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].comision,
-                        ) +
-                        resolveResul(
-                          props.volumenData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                          props.precioData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].años[i].volMeses[MONTHS[j]],
-
-                          props.costoData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].impuesto,
-                        ) +
-                        resolveResul(
-                          props.volumenData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                          props.precioData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].años[i].volMeses[MONTHS[j]],
-
-                          props.costoData[indexCountry].stats[indexCanal]
-                            .productos[indexProd].cargos,
-                        )),
-                );
                 total[indexCountry][indexCanal][indexProd][i][j] =
                   Number(
                     props.volumenData[indexCountry].stats[indexCanal].productos[
@@ -298,13 +202,21 @@ function TableMargen(props) {
                         indexProd
                       ].cargos,
                     ));
+
+                percent[indexCountry][indexCanal][indexProd][i][j] =
+                  (total[indexCountry][indexCanal][indexProd][i][j] * 100) /
+                  Number(
+                    props.volumenData[indexCountry].stats[indexCanal].productos[
+                      indexProd
+                    ].años[i].volMeses[MONTHS[j]],
+                  );
               }
             }
           });
         });
       });
 
-      return total;
+      return { total, percent };
     }
   };
 
@@ -328,7 +240,7 @@ function TableMargen(props) {
             for (let i = 0; i <= 9; i++) {
               for (let j = 0; j <= 11; j++) {
                 total[i][j] +=
-                  values[indexCountry][indexCanal][indexProd][i][j];
+                  values.total[indexCountry][indexCanal][indexProd][i][j];
               }
             }
           });
@@ -415,7 +327,7 @@ function TableMargen(props) {
                                               className="w-[90px]"
                                               type="text"
                                               value={formatNumber(
-                                                values[indexCountry][
+                                                values.total[indexCountry][
                                                   indexCanal
                                                 ][indexP][indexYear][indexMes],
                                               )}
@@ -427,109 +339,59 @@ function TableMargen(props) {
 
                                           <p className="ml-4">
                                             %
-                                            {((Number(
-                                              props.volumenData[indexCountry]
-                                                .stats[indexCanal].productos[
-                                                indexP
-                                              ].años[indexYear].volMeses[
-                                                MONTHS[indexMes]
-                                              ],
-                                            ) -
-                                              (Number(
-                                                props.precioData[indexCountry]
-                                                  .stats[indexCanal].productos[
-                                                  indexP
-                                                ].años[indexYear].volMeses[
-                                                  MONTHS[indexMes]
-                                                ],
-                                              ) *
-                                                props.costoData[indexCountry]
-                                                  .stats[indexCanal].productos[
-                                                  indexP
-                                                ].años[indexYear].volMeses[
-                                                  MONTHS[indexMes]
-                                                ] +
-                                                resolveResul(
-                                                  props.volumenData[
-                                                    indexCountry
-                                                  ].stats[indexCanal].productos[
-                                                    indexP
-                                                  ].años[indexYear].volMeses[
-                                                    MONTHS[indexMes]
-                                                  ],
-                                                  props.precioData[indexCountry]
-                                                    .stats[indexCanal]
-                                                    .productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[MONTHS[indexMes]],
-
-                                                  props.costoData[indexCountry]
-                                                    .stats[indexCanal]
-                                                    .productos[indexP].comision,
-                                                ) +
-                                                resolveResul(
-                                                  props.volumenData[
-                                                    indexCountry
-                                                  ].stats[indexCanal].productos[
-                                                    indexP
-                                                  ].años[indexYear].volMeses[
-                                                    MONTHS[indexMes]
-                                                  ],
-                                                  props.precioData[indexCountry]
-                                                    .stats[indexCanal]
-                                                    .productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[MONTHS[indexMes]],
-
-                                                  props.costoData[indexCountry]
-                                                    .stats[indexCanal]
-                                                    .productos[indexP].impuesto,
-                                                ) +
-                                                resolveResul(
-                                                  props.volumenData[
-                                                    indexCountry
-                                                  ].stats[indexCanal].productos[
-                                                    indexP
-                                                  ].años[indexYear].volMeses[
-                                                    MONTHS[indexMes]
-                                                  ],
-                                                  props.precioData[indexCountry]
-                                                    .stats[indexCanal]
-                                                    .productos[indexP].años[
-                                                    indexYear
-                                                  ].volMeses[MONTHS[indexMes]],
-
-                                                  props.costoData[indexCountry]
-                                                    .stats[indexCanal]
-                                                    .productos[indexP].cargos,
-                                                ))) *
-                                              100) /
-                                              props.volumenData[indexCountry]
-                                                .stats[indexCanal].productos[
-                                                indexP
-                                              ].años[indexYear].volMeses[
-                                                MONTHS[indexMes]
-                                              ]}
+                                            {isNaN(
+                                              values.percent[indexCountry][
+                                                indexCanal
+                                              ][indexP][indexYear][indexMes],
+                                            )
+                                              ? 0
+                                              : values.percent[indexCountry][
+                                                  indexCanal
+                                                ][indexP][indexYear][indexMes]}
                                           </p>
                                         </div>
                                       ),
                                     )}
 
-                                  <FormItem className="mb-0">
-                                    <Input
-                                      className="w-[90px]"
-                                      type="text"
-                                      disabled
-                                      value={formatNumber(
-                                        values[indexCountry][indexCanal][
-                                          indexP
-                                        ][indexYear].reduce(
-                                          (total, current) => total + current,
+                                  <div className="">
+                                    <FormItem className="mb-0">
+                                      <Input
+                                        className="w-[90px]"
+                                        type="text"
+                                        disabled
+                                        value={formatNumber(
+                                          values.total[indexCountry][
+                                            indexCanal
+                                          ][indexP][indexYear].reduce(
+                                            (total, current) => total + current,
+                                          ),
+                                        )}
+                                        prefix={moneda}
+                                      />
+                                    </FormItem>
+
+                                    <p className="ml-4">
+                                      %
+                                      {isNaN(
+                                        formatNumber(
+                                          values.percent[indexCountry][
+                                            indexCanal
+                                          ][indexP][indexYear].reduce(
+                                            (total, current) => total + current,
+                                          ) / 12,
                                         ),
-                                      )}
-                                      prefix={moneda}
-                                    />
-                                  </FormItem>
+                                      )
+                                        ? 0
+                                        : formatNumber(
+                                            values.percent[indexCountry][
+                                              indexCanal
+                                            ][indexP][indexYear].reduce(
+                                              (total, current) =>
+                                                total + current,
+                                            ) / 12,
+                                          )}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
