@@ -104,7 +104,7 @@ function DashboardCostos() {
                         }
                       }
                     } else if (periodoSelected.month === 4) {
-                      if (indexM < 4) {
+                      if (indexM < 3) {
                         if (p.type === 'producto') {
                           totV += Number(a.volMeses[MONTHS[indexM]]);
                         } else {
@@ -279,7 +279,7 @@ function DashboardCostos() {
                         );
                       }
                     } else if (periodoSelected.month === 4) {
-                      if (indexM < 4) {
+                      if (indexM < 3) {
                         if (canalSelected && productoSelected && paisSelected) {
                           if (
                             d.countryName === paisSelected.value &&
@@ -690,13 +690,9 @@ function DashboardCostos() {
 
   const createSelects = () => {
     let paises = [];
-    let c = {};
-
     let canales = [];
-    let p = {};
-
     let productos = [];
-    let m = {};
+
     if (!dataAssump) {
       setYearSelected({
         value: 'año 1',
@@ -713,14 +709,16 @@ function DashboardCostos() {
 
     if (dataAssump) {
       dataAssump.paises.map((p, indexP) => {
+        let c = {};
         c.label = p.label.toUpperCase();
         c.value = p.value;
         c.index = indexP;
 
-        paises.push(p);
+        paises.push(c);
       });
 
       dataAssump.canales.map((d, indexC) => {
+        let p = {};
         p.label = d.name.toUpperCase();
         p.value = d.name;
         p.index = indexC;
@@ -729,6 +727,7 @@ function DashboardCostos() {
       });
 
       dataAssump.productos.map((o, indexO) => {
+        let m = {};
         m.label = o.name.toUpperCase();
         m.value = o.name;
         m.index = indexO;
