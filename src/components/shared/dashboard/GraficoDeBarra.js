@@ -24,7 +24,7 @@ function GraficoDeBarra({ data, yearSelected, periodoSelected }) {
     let pSelMonth = [0];
     let pFirstSem = [0, 0, 0, 0, 0, 0];
     let pSecondSem = [0, 0, 0, 0, 0, 0];
-    let pFirstTrim = [0, 0, 0, 0];
+    let pFirstTrim = [0, 0, 0];
     Object.values(data).map((d) => {
       d.map((m) => {
         m.productos.map((p) => {

@@ -50,11 +50,9 @@ function DashboardVentas() {
     let totServ = 0;
     let superTotal = 0;
     if (infoForm) {
-      console.log('if', infoForm);
-      console.log('da', dataAssump);
       Object.values(infoForm).map((m) => {
         m.map((p) => {
-          p.productos.map((o) => {
+          p.productos.map((o, indexO) => {
             o.años.map((a, indexY) => {
               superTotal += Number(a.ventasTotal);
               if (yearSelected.year || yearSelected.year === 0) {
@@ -72,7 +70,9 @@ function DashboardVentas() {
                         }
                       } else if (periodoSelected.month === 6) {
                         if (indexM < 6) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -81,7 +81,9 @@ function DashboardVentas() {
                         }
                       } else if (periodoSelected.month === 4) {
                         if (indexM < 3) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -90,7 +92,9 @@ function DashboardVentas() {
                         }
                       } else if (periodoSelected.month === 12) {
                         if (indexM > 5) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -99,7 +103,7 @@ function DashboardVentas() {
                         }
                       }
                     } else {
-                      if (o.type === 'producto') {
+                      if (dataAssump.productos[indexO].type === 'producto') {
                         totProd += Number(a.ventasTotal);
                       } else {
                         totServ += Number(a.ventasTotal);
@@ -109,7 +113,7 @@ function DashboardVentas() {
                   }
                 });
               } else {
-                if (o.type === 'producto') {
+                if (dataAssump.productos[indexO].type === 'producto') {
                   totProd += Number(a.ventasTotal);
                 } else {
                   totServ += Number(a.ventasTotal);
@@ -138,7 +142,7 @@ function DashboardVentas() {
     let totS = 0;
     dataVolumen.map((d) => {
       d.stats.map((s) => {
-        s.productos.map((p) => {
+        s.productos.map((p, indexP) => {
           p.años.map((a, indexY) => {
             if (yearSelected.year || yearSelected.year === 0) {
               if (yearSelected.year === indexY) {
@@ -146,7 +150,7 @@ function DashboardVentas() {
                   if (periodoSelected.month || periodoSelected.month === 0) {
                     if (periodoSelected.month === 0) {
                       if (indexM === 0) {
-                        if (p.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totV += Number(a.volMeses[MONTHS[indexM]]);
                         } else {
                           totS += Number(a.volMeses[MONTHS[indexM]]);
@@ -154,7 +158,7 @@ function DashboardVentas() {
                       }
                     } else if (periodoSelected.month === 4) {
                       if (indexM < 3) {
-                        if (p.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totV += Number(a.volMeses[MONTHS[indexM]]);
                         } else {
                           totS += Number(a.volMeses[MONTHS[indexM]]);
@@ -162,7 +166,7 @@ function DashboardVentas() {
                       }
                     } else if (periodoSelected.month === 6) {
                       if (indexM < 6) {
-                        if (p.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totV += Number(a.volMeses[MONTHS[indexM]]);
                         } else {
                           totS += Number(a.volMeses[MONTHS[indexM]]);
@@ -170,21 +174,21 @@ function DashboardVentas() {
                       }
                     } else if (periodoSelected.month === 12) {
                       if (indexM > 5) {
-                        if (p.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totV += Number(a.volMeses[MONTHS[indexM]]);
                         } else {
                           totS += Number(a.volMeses[MONTHS[indexM]]);
                         }
                       }
                     }
-                  } else if (p.type === 'producto') {
+                  } else if (dataAssump.productos[indexP].type === 'producto') {
                     totV += Number(a.volTotal);
                   } else {
                     totS += Number(a.volTotal);
                   }
                 });
               }
-            } else if (p.type === 'producto') {
+            } else if (dataAssump.productos[indexP].type === 'producto') {
               totV += Number(a.volTotal);
             } else {
               totS += Number(a.volTotal);
