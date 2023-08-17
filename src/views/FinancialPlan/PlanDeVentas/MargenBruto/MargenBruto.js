@@ -122,7 +122,11 @@ function MargenBruto() {
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Carga de productos / servicios</h6>
+          <h6>Listado de productos / servicios</h6>
+        </div>
+        <div  className=" px-4 py-1">
+          <span className="text-xs">*Recuerde que si ve valores en 0 es posible que pare ese item le esté faltando cargar información de Precio, Cantidad y Volumen o Costos Unitarios para poder realizar los cálculos. 
+</span>
         </div>
         {infoForm ? (
           <Tabs defaultValue={defaultCountry}>
