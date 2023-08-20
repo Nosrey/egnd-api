@@ -1,9 +1,4 @@
 /* eslint-disable no-restricted-globals */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable no-return-assign */
 import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -20,6 +15,7 @@ function TableMargen(props) {
   const [totalesCanales, setTotalesCanales] = useState([]);
   const moneda = props.currency;
 
+  
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
   // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las
@@ -101,27 +97,10 @@ function TableMargen(props) {
     }
   };
 
-  const resolveResul = (vol, precio, div) => {
-    div = parseInt(div);
-    vol = parseInt(vol);
-    precio = parseInt(precio);
-
-    let value = 0;
-    const mult = vol * precio;
-
-    if (div !== 0) {
-      value = (div * mult) / 100;
-      value = value.toFixed(1);
-    }
-
-    return parseInt(value);
-  };
   useEffect(() => {
     initialConfig();
-  }, [infoForm]);
-  useEffect(() => {
-    initialConfig();
-  }, [props]);
+  }, [infoForm, props]);
+
 
   const hideYear = (index) => {
     setVisibleItems((prevItems) => {
@@ -133,130 +112,104 @@ function TableMargen(props) {
     });
   };
 
-  const calcValues = () => {
-    let total = [];
-    let percent = [];
-    if (props.volumenData[0]) {
-      Object.values(props.volumenData).map((v, indexCountry) => {
-        total.push([]);
-        percent.push([]);
-        v.stats.map((s, indexCanal) => {
-          total[indexCountry].push([]);
-          percent[indexCountry].push([]);
-          s.productos.map((p, indexProd) => {
-            total[indexCountry][indexCanal].push([]);
-            percent[indexCountry][indexCanal].push([]);
-            for (let i = 0; i <= 9; i++) {
-              if (!total[indexCountry][indexCanal][indexProd][i]) {
-                total[indexCountry][indexCanal][indexProd].push([
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                ]);
-              }
-              if (!percent[indexCountry][indexCanal][indexProd][i]) {
-                percent[indexCountry][indexCanal][indexProd].push([
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                ]);
-              }
-              for (let j = 0; j <= 11; j++) {
-                total[indexCountry][indexCanal][indexProd][i][j] =
-                  Number(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                  ) -
-                  (Number(
-                    props.precioData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                  ) *
-                    props.costoData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]] +
-                    resolveResul(
-                      props.volumenData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                      props.precioData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+  const getVentasResult = (indexCountry, indexCanal, indexP, indexYear, indexMonth) => { 
+    const pcio = props.precioData[indexCountry].stats[indexCanal].productos[indexP].años[indexYear].volMeses[MONTHS[indexMonth]];
+    const vol = props.volumenData[indexCountry].stats[indexCanal].productos[indexP].años[indexYear].volMeses[MONTHS[indexMonth]];
+    const ventas = pcio * vol;
+    return ventas;
+  }
 
-                      props.costoData[indexCountry].stats[indexCanal].productos[
-                        indexProd
-                      ].comision,
-                    ) +
-                    resolveResul(
-                      props.volumenData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                      props.precioData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+  const getMargenBrutoResult = (indexCountry, indexCanal, indexP, indexYear, indexMonth) => {
+    const vol = props.volumenData[indexCountry].stats[indexCanal].productos[indexP].años[indexYear].volMeses[MONTHS[indexMonth]];
 
-                      props.costoData[indexCountry].stats[indexCanal].productos[
-                        indexProd
-                      ].impuesto,
-                    ) +
-                    resolveResul(
-                      props.volumenData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
-                      props.precioData[indexCountry].stats[indexCanal]
-                        .productos[indexProd].años[i].volMeses[MONTHS[j]],
+    const costo = props.costoData[indexCountry].stats[indexCanal].productos[indexP].años[indexYear].volMeses[MONTHS[indexMonth]];
+    const comisionPercent = props.costoData[indexCountry].stats[indexCanal].productos[indexP].comision;
+    const cargosPercent = props.costoData[indexCountry].stats[indexCanal].productos[indexP].cargos;
+    const impuestoPercent = props.costoData[indexCountry].stats[indexCanal].productos[indexP].impuesto
 
-                      props.costoData[indexCountry].stats[indexCanal].productos[
-                        indexProd
-                      ].cargos,
-                    ));
+    const ventas = getVentasResult(indexCountry, indexCanal, indexP, indexYear, indexMonth);
+    
+    const comision = comisionPercent * ventas / 100;
+    const cargos = cargosPercent * ventas / 100;
+    const impuesto = impuestoPercent * ventas / 100;
 
-                percent[indexCountry][indexCanal][indexProd][i][j] =
-                  (total[indexCountry][indexCanal][indexProd][i][j] * 100) /
-                  Number(
-                    props.volumenData[indexCountry].stats[indexCanal].productos[
-                      indexProd
-                    ].años[i].volMeses[MONTHS[j]],
-                  );
-              }
-            }
-          });
-        });
-      });
+    const costoTot = (costo * vol) + impuesto + comision + cargos;
 
-      return { total, percent };
+    const rdo = ventas - costoTot;
+    return rdo; 
+  }
+
+  // TOTALES HORIZONTALES
+  const getTotMargenBrutoAnual = (indexCountry, indexCanal, indexP, indexYear) => {
+    const arrValoresYear = []
+    for (let i = 0; i < MONTHS.length; i++) {
+      arrValoresYear.push(getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, i));
     }
-  };
+    const totAnual = arrValoresYear.reduce((total, valor) => total + valor, 0);
+    return totAnual;
+  }
 
-  const calcTotals = () => {
-    let total = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ];
-    if (props.volumenData[0]) {
-      Object.values(props.volumenData).map((v, indexCountry) => {
-        v.stats.map((s, indexCanal) => {
-          s.productos.map((p, indexProd) => {
-            for (let i = 0; i <= 9; i++) {
-              for (let j = 0; j <= 11; j++) {
-                total[i][j] +=
-                  values.total[indexCountry][indexCanal][indexProd][i][j];
-              }
-            }
-          });
-        });
-      });
+  const getTotVentasAnual = (indexCountry, indexCanal, indexP, indexYear) => {
+    const arrValoresYear = []
+    for (let i = 0; i < MONTHS.length; i++) {
+      arrValoresYear.push(getVentasResult(indexCountry, indexCanal, indexP, indexYear, i));
     }
+    const totAnual = arrValoresYear.reduce((total, valor) => total + valor, 0);
+    return totAnual;
+  }
+//  FIN TOTALES HORIZONTALES
 
-    return total;
-  };
 
-  const values = calcValues();
-  const totals = calcTotals();
+    // TOTALES VERTICALES
+  const getSumVerticalPorMes = (indexCountry, indexYear, indexMes, idProd, country) => {
+    // identifico de que producto estoy hablando encontrandolo por su id
+    const indexProd = infoForm[country][0].productos.findIndex((prod) => prod.id === idProd);
 
+    const valoresDeMiProdEsteMes = [];
+    for (let i = 0; i <infoForm[country].length; i++) { // recorro mis canales
+      // por cada canal me traigo el MB de mi prod ese mes EJ: Enero para el B2B y B2C
+      valoresDeMiProdEsteMes.push(getMargenBrutoResult(indexCountry,i, indexProd, indexYear, indexMes))
+      
+    }
+    const totMensual = valoresDeMiProdEsteMes.reduce((total, valor) => total + valor, 0);
+    return totMensual;
+  }
+
+  const getSumVerticalAnual = (indexCountry, indexYear, idProd, country) => {
+    // identifico de que producto estoy hablando encontrandolo por su id
+    const indexProd = infoForm[country][0].productos.findIndex((prod) => prod.id === idProd);
+
+    const valoresDeMiProdEsteAño = [];
+    for (let i = 0; i <infoForm[country].length; i++) { // recorro mis canales
+      // por cada canal me traigo el MB de mi prod ese mes EJ: Enero para el B2B y B2C
+      valoresDeMiProdEsteAño.push(getTotMargenBrutoAnual(indexCountry,i, indexProd, indexYear))
+      
+    }
+    const totAnual = valoresDeMiProdEsteAño.reduce((total, valor) => total + valor, 0);
+    return totAnual;
+  }
+    // FIN TOTALES VERTICALES
+
+
+    // PORCENTAJES
+  const calculatePercent = (indexCountry, indexCanal, indexP, indexYear, indexMes) => {
+    // margen bruto x 100 / ventas 
+    const percent = (getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes) * 100 ) /
+    getVentasResult(indexCountry, indexCanal, indexP, indexYear, indexMes)
+     return isNaN(percent) ? 0 : percent
+  }
+
+  const calculateAnualPercent = (indexCountry, indexCanal, indexP, indexYear) => {
+    // margen bruto total x 100 / ventas totales
+    const percent = (getTotMargenBrutoAnual(indexCountry, indexCanal, indexP, indexYear) * 100 ) /
+     getTotVentasAnual(indexCountry, indexCanal, indexP, indexYear)
+     return isNaN(percent) ? 0 : percent
+  }
+  // FIN PORCENTAJES
+  
   return (
     <>
-      {infoForm &&
+      {infoForm && props.precioData && props.costoData && props.volumenData &&
         Object.keys(infoForm).map((pais, indexCountry) => (
           <TabContent value={pais} className="mb-[20px]" key={pais}>
             <FormContainer>
@@ -326,29 +279,29 @@ function TableMargen(props) {
                                             <Input
                                               className="w-[90px]"
                                               type="text"
-                                              value={formatNumber(
-                                                values.total[indexCountry][
-                                                  indexCanal
-                                                ][indexP][indexYear][indexMes],
-                                              )}
+                                              value={getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes)}
                                               disabled
                                               prefix={moneda}
                                               name="month"
                                             />
                                           </FormItem>
-
-                                          <p className="ml-4">
-                                            %
-                                            {isNaN(
-                                              values.percent[indexCountry][
-                                                indexCanal
-                                              ][indexP][indexYear][indexMes],
-                                            )
-                                              ? 0
-                                              : values.percent[indexCountry][
-                                                  indexCanal
-                                                ][indexP][indexYear][indexMes]}
-                                          </p>
+                                          {/* si es rdo positivo o negativo lo muestro con distinta clase */}
+                                           {calculatePercent(indexCountry, indexCanal, indexP, indexYear, indexMes)
+                                            >= 0 ?
+                                              <div className="rounded-lg bg-green-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
+                                                <p className="text-xs font-semibold text-center text-green-950">
+                                                  {calculatePercent(indexCountry, indexCanal, indexP, indexYear, indexMes)} 
+                                                      %
+                                                </p>
+                                              </div>
+                                              :
+                                              <div className="rounded-lg bg-rose-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
+                                                <p className="text-xs font-semibold text-center text-rose-950">
+                                                  {calculatePercent(indexCountry, indexCanal, indexP, indexYear, indexMes)} 
+                                                      %
+                                                </p>
+                                              </div>
+                                            }                                            
                                         </div>
                                       ),
                                     )}
@@ -359,38 +312,27 @@ function TableMargen(props) {
                                         className="w-[90px]"
                                         type="text"
                                         disabled
-                                        value={formatNumber(
-                                          values.total[indexCountry][
-                                            indexCanal
-                                          ][indexP][indexYear].reduce(
-                                            (total, current) => total + current,
-                                          ),
-                                        )}
+                                        value={getTotMargenBrutoAnual(indexCountry,indexCanal, indexP, indexYear)}
                                         prefix={moneda}
                                       />
                                     </FormItem>
-
-                                    <p className="ml-4">
-                                      %
-                                      {isNaN(
-                                        formatNumber(
-                                          values.percent[indexCountry][
-                                            indexCanal
-                                          ][indexP][indexYear].reduce(
-                                            (total, current) => total + current,
-                                          ) / 12,
-                                        ),
-                                      )
-                                        ? 0
-                                        : formatNumber(
-                                            values.percent[indexCountry][
-                                              indexCanal
-                                            ][indexP][indexYear].reduce(
-                                              (total, current) =>
-                                                total + current,
-                                            ) / 12,
-                                          )}
-                                    </p>
+                                    {/* si es rdo positivo o negativo lo muestro con distinta clase */}
+                                    {calculateAnualPercent(indexCountry, indexCanal, indexP, indexYear) 
+                                      >= 0 ?
+                                      <div className="rounded-lg bg-green-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
+                                        <p className="text-xs font-semibold text-center text-green-950">
+                                          {calculateAnualPercent(indexCountry, indexCanal, indexP, indexYear) } 
+                                              %
+                                        </p>
+                                      </div>
+                                      :
+                                      <div className="rounded-lg bg-rose-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
+                                        <p className="text-xs font-semibold text-center text-rose-950">
+                                          {calculateAnualPercent(indexCountry, indexCanal, indexP, indexYear) } 
+                                              %
+                                        </p>
+                                      </div>
+                                    }
                                   </div>
                                 </div>
                               </div>
@@ -403,85 +345,78 @@ function TableMargen(props) {
                 </section>
               ))}
             </FormContainer>
-          </TabContent>
-        ))}
+            
+            {/* SUMATORIA VERTICAL */}
+            <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
+              <div className="flex items-center">
+                <p className=" text-[#707470] font-bold mb-3 text-left w-[185px] ">
+                  Margen Bruto por item
+                </p>
+              </div>
+              <div className="w-fit pt-3 border border-neutral-600 border-x-0 border-b-0">
+                {infoProducts.length > 0 &&
+                  infoProducts.map((prod, index) => (
+                    <div key={index} className="flex gap-x-3 w-fit pt-3 ">
+                      <p
+                        className={`w-[185px]  pl-[45px] capitalize self-center ${
+                          index === 0 ? 'mt-[62px]' : ''
+                        }`}
+                      >
+                        {prod.name}
+                      </p>
+                      {prod.sum?.map((año, indexYear) => (
+                        <div className="flex flex-col" key={indexYear}>
+                          {index === 0 && (
+                            <div className="titleRowR min-w-[62px]">
+                              <p> Año {indexYear + 1}</p>
+                              <div
+                                className="iconYear"
+                                onClick={() => hideYear(indexYear)}
+                              >
+                                {visibleItems.includes(indexYear) ? (
+                                  <FiMinus />
+                                ) : (
+                                  <FiPlus />
+                                )}
+                              </div>
+                            </div>
+                          )}
 
-      {infoProducts && (
-        <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
-          <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[260px] ">
-              Venta por producto
-            </p>
-          </div>
-          <div className="w-fit pt-3 border border-neutral-600 border-x-0 border-b-0">
-            {infoProducts.length > 0 &&
-              infoProducts.map((prod, index) => (
-                <div key={index} className="flex gap-x-3 w-fit pt-3 ">
-                  <p
-                    className={`w-[260px]  pl-[45px] capitalize self-center ${
-                      index === 0 ? 'mt-[62px]' : ''
-                    }`}
-                  >
-                    {prod.name}
-                  </p>
-
-                  {prod.sum?.map((año, indexYear) => (
-                    <div className="flex flex-col" key={indexYear}>
-                      {index === 0 && (
-                        <div className="titleRowR min-w-[62px]">
-                          <p> Año {indexYear + 1}</p>
-                          <div
-                            className="iconYear"
-                            onClick={() => hideYear(indexYear)}
-                          >
-                            {visibleItems.includes(indexYear) ? (
-                              <FiMinus />
-                            ) : (
-                              <FiPlus />
-                            )}
+                          <div className="titleMonths gap-x-3 flex mb-3">
+                            {visibleItems.includes(indexYear) &&
+                              año &&
+                              index === 0 &&
+                              MONTHS.map((mes, indexMes) => (
+                                <p
+                                  key={indexMes}
+                                  className="month w-[90px] capitalize"
+                                >
+                                  {mes}
+                                </p>
+                              ))}
+                            {index === 0 && <p className="month w-[90px]">Total</p>}
+                            {index !== 0 && <p className="month w-[90px]" />}
+                          </div>
+                          <div className="flex gap-x-3 gap-y-3">
+                              {visibleItems.includes(indexYear) && MONTHS.map((mes, indexMes) => (
+                                <p className="w-[90px] text-center cursor-default">
+                                  {moneda}
+                                  {getSumVerticalPorMes(indexCountry, indexYear, indexMes, prod.uniqueId, pais)}
+                                </p>
+                              ))}
+                            <p className="w-[90px] text-center font-bold cursor-default">
+                                 {moneda}
+                                {getSumVerticalAnual(indexCountry, indexYear, prod.uniqueId, pais)}
+                            </p>{' '}
                           </div>
                         </div>
-                      )}
-
-                      <div className="titleMonths gap-x-3 flex mb-3">
-                        {visibleItems.includes(indexYear) &&
-                          año &&
-                          index === 0 &&
-                          MONTHS.map((mes, indexMes) => (
-                            <p
-                              key={indexMes}
-                              className="month w-[90px] capitalize"
-                            >
-                              {mes}
-                            </p>
-                          ))}
-                        {index === 0 && <p className="month w-[90px]">Total</p>}
-                        {index !== 0 && <p className="month w-[90px]" />}
-                      </div>
-                      <div className="flex gap-x-3 gap-y-3">
-                        {visibleItems.includes(indexYear) &&
-                          año &&
-                          año.numeros?.map((valor, index) => (
-                            <p className="w-[90px] text-center">
-                              {moneda}
-                              {formatNumber(totals[indexYear][index])}
-                            </p>
-                          ))}
-                        <p className="w-[90px] text-center font-bold">
-                          {formatNumber(
-                            totals[indexYear].reduce(
-                              (total, current) => total + current,
-                            ),
-                          )}
-                        </p>{' '}
-                      </div>
+                      ))}
                     </div>
                   ))}
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
+              </div>
+            </div>
+          </TabContent>
+        ))}
     </>
   );
 }

@@ -72,10 +72,24 @@ function MargenBruto() {
           data?.precioData.length !== 0 &&
           data?.costoData.length !== 0
         ) {
-          // tengo info vol y precio precargada
-          setCostoData(data?.costoData);
-          setVolumenData(data?.volumenData);
-          setPrecioData(data?.precioData);
+          // Para que no haya cruce de datos entre pais, ordeno alfabeticamente data de volumen antes de guardarla
+          const ordererCostoData = data?.costoData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          );
+          setCostoData(ordererCostoData);
+
+          // REVISAR PORQUE RAZON EN LA DATA ME LLEGA MAL LA INFO SOLO DE VOLUMEN, NO DEVUELVE LO MISMO QE EL ENDPOINT
+          const vol = JSON.parse(localStorage.getItem("volumenData"))
+          const ordererVolData = vol.sort((a, b) =>
+          a.countryName.localeCompare(b.countryName),
+          );
+          setVolumenData(ordererVolData);
+
+          const ordererPcioData = data?.precioData.sort((a, b) =>
+          a.countryName.localeCompare(b.countryName),
+          );
+          setPrecioData(ordererPcioData);
+          
           const datosPrecargados = {};
           let dataVentas = showMultiplicacionPxQ(
             data?.volumenData.sort((a, b) =>

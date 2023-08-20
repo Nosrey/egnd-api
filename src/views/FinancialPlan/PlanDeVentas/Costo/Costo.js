@@ -60,14 +60,26 @@ function Costo() {
     getUser(currentState.id)
       .then((data) => {
         if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
-          setVolumenData(data?.volumenData);
-          setPrecioData(data?.precioData);
+          // ORDENO LAS DATAS PARA QUE NO HAYA CRUCE ENTRE PAISES
+          const ordererVolData = data?.volumenData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          );
+          const ordererPcioData = data?.precioData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          );
+          setVolumenData(ordererVolData);
+          setPrecioData(ordererPcioData);
+
           setVolumenPrecio(true);
+          
           const datosPrecargados = {};
-          if (data?.costoData.length !== 0) {
-            for (let i = 0; i < data?.costoData.length; i++) {
-              datosPrecargados[data?.costoData[i].countryName] =
-                data?.costoData[i].stats;
+          const ordererData = data?.costoData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          );
+          if (ordererData.length !== 0) {
+            for (let i = 0; i < ordererData.length; i++) {
+              datosPrecargados[ordererData[i].countryName] =
+                ordererData[i].stats;
             }
             setInfoForm(() => ({ ...datosPrecargados }));
           } else {
