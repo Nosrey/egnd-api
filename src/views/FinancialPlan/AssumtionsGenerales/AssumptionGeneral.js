@@ -61,12 +61,15 @@ function AssumptionGeneral() {
     dispatch(setUser(newState));
   };
 
-  useEffect(() => {
+  const getInfo = () => {
     getUser(currentState.id)
-      .then((data) => {
-        setInfo(data);
-      })
-      .catch((error) => console.error(error));
+    .then((data) => {
+      setInfo(data);
+    })
+    .catch((error) => console.error(error));
+  }
+  useEffect(() => {
+   getInfo();
   }, []);
 
   const onSetFormFile = (form, field, files) => {
@@ -136,18 +139,16 @@ function AssumptionGeneral() {
                   values?.upload[0],
                 )
                   .then((data) => {
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth',
+                    });
+                    setShowSuccessAlert(true);
                     setTimeout(() => {
-                      window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth',
-                      });
-                      setShowSuccessAlert(true);
-                      setTimeout(() => {
-                        setShowSuccessAlert(false);
-                      }, 5000);
-                      setSubmitting(false);
-                      resetForm();
-                    }, 400);
+                      setShowSuccessAlert(false);
+                    }, 5000);
+                    onChangeCurrency(values?.moneda);
+                    window.location.reload();
                   })
                   .catch((error) => {
                     console.error('Error de API:', error.response.data.message);
