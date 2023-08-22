@@ -79,23 +79,22 @@ function CapexQ() {
       const info = { info: bienes, idUser };
 
       createCapexQ(info)
-        .then(() => {
+        .then((resp) => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
-          setShowSuccessAlert(true);
-          setTimeout(() => {
-            setShowSuccessAlert(false);
-          }, 5000);
-          validateData(info.info);
+          if (resp.success) {
+            setShowSuccessAlert(true);
+            setTimeout(() => {
+              setShowSuccessAlert(false);
+            }, 5000);
+            validateData(info.info);
+          } else {
+            setErrorMessage('Ha ocurrido un error');
+            setShowErrorAlert(true);
+            setTimeout(() => {
+              setShowErrorAlert(false);
+            }, 5000);
+          }
         })
-        .catch((error) => {
-          console.log('err', error);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          setErrorMessage('Ha ocurrido un error');
-          setShowErrorAlert(true);
-          setTimeout(() => {
-            setShowErrorAlert(false);
-          }, 5000);
-        });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setErrorMessage('Completa los campos vacios');

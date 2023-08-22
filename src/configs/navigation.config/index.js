@@ -35,7 +35,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseGeneral.item2',
-            path: '/research',
+            path: '/mercado',
             title: 'Mercado',
             translateKey:
               'nav.financialPlan.collapseMenu.collapseGeneral.item2',

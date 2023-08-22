@@ -196,7 +196,7 @@ export const protectedRoutes = [
   },
   {
     key: 'mercado',
-    path: '/research',
+    path: '/mercado',
     component: React.lazy(() =>
       import('views/FinancialPlan/AssumtionsGenerales/Mercado/Mercado'),
     ),

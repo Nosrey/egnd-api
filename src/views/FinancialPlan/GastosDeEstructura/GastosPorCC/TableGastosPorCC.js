@@ -257,21 +257,21 @@ function TablePuestosPxQ(props) {
     const body = [copy];
     const data = { body, idUser };
 
-    // createGastosPorCC(data)
-    //   .then(() => {
-    //     window.scrollTo({ top: 0, behavior: 'smooth' });
-    //     props.showAlertSuces(true);
-    //     setTimeout(() => {
-    //       props.showAlertSuces(false);
-    //     }, 5000);
-    //   })
-    //   .catch((error) => {
-    //     window.scrollTo({ top: 0, behavior: 'smooth' });
-    //     props.showAlertError(true);
-    //     setTimeout(() => {
-    //       props.showAlertError(false);
-    //     }, 5000);
-    //   });
+    createGastosPorCC(data)
+      .then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        props.showAlertSuces(true);
+        setTimeout(() => {
+          props.showAlertSuces(false);
+        }, 5000);
+      })
+      .catch((error) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        props.showAlertError(true);
+        setTimeout(() => {
+          props.showAlertError(false);
+        }, 5000);
+      });
   };
 
   return (

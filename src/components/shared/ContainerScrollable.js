@@ -12,7 +12,6 @@ function ContainerScrollable(props) {
   const media = useMedia();
   const location = useLocation();
   const currentPath = location.pathname;
-  console.log(currentPath);
 
   const [activeDrag, setActiveDrag] = useState(false);
 

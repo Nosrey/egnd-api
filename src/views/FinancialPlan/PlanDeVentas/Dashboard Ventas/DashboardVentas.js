@@ -25,7 +25,8 @@ function DashboardVentas() {
     label: '1er semestre',
     month: 6,
   });
-  const [dataAssump, setDataAssump] = useState([]);
+  const [dataAssump, setDataAssump] = useState();
+  const [dataVol, setDataVol] = useState();
   const [infoForm, setInfoForm] = useState();
   const [totalVentas, setTotalVentas] = useState(0);
   const [totalServ, setTotalServ] = useState(0);
@@ -50,11 +51,9 @@ function DashboardVentas() {
     let totServ = 0;
     let superTotal = 0;
     if (infoForm) {
-      console.log('if', infoForm);
-      console.log('da', dataAssump);
       Object.values(infoForm).map((m) => {
         m.map((p) => {
-          p.productos.map((o) => {
+          p.productos.map((o, indexO) => {
             o.años.map((a, indexY) => {
               superTotal += Number(a.ventasTotal);
               if (yearSelected.year || yearSelected.year === 0) {
@@ -72,7 +71,9 @@ function DashboardVentas() {
                         }
                       } else if (periodoSelected.month === 6) {
                         if (indexM < 6) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -81,7 +82,9 @@ function DashboardVentas() {
                         }
                       } else if (periodoSelected.month === 4) {
                         if (indexM < 3) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -90,7 +93,9 @@ function DashboardVentas() {
                         }
                       } else if (periodoSelected.month === 12) {
                         if (indexM > 5) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -99,7 +104,7 @@ function DashboardVentas() {
                         }
                       }
                     } else {
-                      if (o.type === 'producto') {
+                      if (dataAssump.productos[indexO].type === 'producto') {
                         totProd += Number(a.ventasTotal);
                       } else {
                         totServ += Number(a.ventasTotal);
@@ -109,7 +114,7 @@ function DashboardVentas() {
                   }
                 });
               } else {
-                if (o.type === 'producto') {
+                if (dataAssump.productos[indexO].type === 'producto') {
                   totProd += Number(a.ventasTotal);
                 } else {
                   totServ += Number(a.ventasTotal);
@@ -133,69 +138,82 @@ function DashboardVentas() {
     }
   };
 
-  const calcVols = (dataVolumen) => {
-    let totV = 0;
-    let totS = 0;
-    dataVolumen.map((d) => {
-      d.stats.map((s) => {
-        s.productos.map((p) => {
-          p.años.map((a, indexY) => {
-            if (yearSelected.year || yearSelected.year === 0) {
-              if (yearSelected.year === indexY) {
-                MONTHS.map((m, indexM) => {
-                  if (periodoSelected.month || periodoSelected.month === 0) {
-                    if (periodoSelected.month === 0) {
-                      if (indexM === 0) {
-                        if (p.type === 'producto') {
-                          totV += Number(a.volMeses[MONTHS[indexM]]);
-                        } else {
-                          totS += Number(a.volMeses[MONTHS[indexM]]);
+  const calcVols = (data) => {
+    console.log('[VOL]', data);
+    if (data && dataAssump) {
+      let totV = 0;
+      let totS = 0;
+      data.map((d) => {
+        d.stats.map((s, indexS) => {
+          s.productos.map((p, indexP) => {
+            p.años.map((a, indexY) => {
+              if (yearSelected.year || yearSelected.year === 0) {
+                if (yearSelected.year === indexY) {
+                  MONTHS.map((m, indexM) => {
+                    if (periodoSelected.month || periodoSelected.month === 0) {
+                      if (periodoSelected.month === 0) {
+                        if (indexM === 0) {
+                          if (
+                            dataAssump.productos[indexP].type === 'producto'
+                          ) {
+                            totV += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totS += Number(a.volMeses[MONTHS[indexM]]);
+                          }
+                        }
+                      } else if (periodoSelected.month === 4) {
+                        if (indexM < 3) {
+                          if (
+                            dataAssump.productos[indexP].type === 'producto'
+                          ) {
+                            totV += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totS += Number(a.volMeses[MONTHS[indexM]]);
+                          }
+                        }
+                      } else if (periodoSelected.month === 6) {
+                        if (indexM < 6) {
+                          if (
+                            dataAssump.productos[indexP].type === 'producto'
+                          ) {
+                            totV += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totS += Number(a.volMeses[MONTHS[indexM]]);
+                          }
+                        }
+                      } else if (periodoSelected.month === 12) {
+                        if (indexM > 5) {
+                          if (
+                            dataAssump.productos[indexP].type === 'producto'
+                          ) {
+                            totV += Number(a.volMeses[MONTHS[indexM]]);
+                          } else {
+                            totS += Number(a.volMeses[MONTHS[indexM]]);
+                          }
                         }
                       }
-                    } else if (periodoSelected.month === 4) {
-                      if (indexM < 3) {
-                        if (p.type === 'producto') {
-                          totV += Number(a.volMeses[MONTHS[indexM]]);
-                        } else {
-                          totS += Number(a.volMeses[MONTHS[indexM]]);
-                        }
-                      }
-                    } else if (periodoSelected.month === 6) {
-                      if (indexM < 6) {
-                        if (p.type === 'producto') {
-                          totV += Number(a.volMeses[MONTHS[indexM]]);
-                        } else {
-                          totS += Number(a.volMeses[MONTHS[indexM]]);
-                        }
-                      }
-                    } else if (periodoSelected.month === 12) {
-                      if (indexM > 5) {
-                        if (p.type === 'producto') {
-                          totV += Number(a.volMeses[MONTHS[indexM]]);
-                        } else {
-                          totS += Number(a.volMeses[MONTHS[indexM]]);
-                        }
-                      }
+                    } else if (
+                      dataAssump.productos[indexP].type === 'producto'
+                    ) {
+                      totV += Number(a.volTotal);
+                    } else {
+                      totS += Number(a.volTotal);
                     }
-                  } else if (p.type === 'producto') {
-                    totV += Number(a.volTotal);
-                  } else {
-                    totS += Number(a.volTotal);
-                  }
-                });
+                  });
+                }
+              } else if (dataAssump.productos[indexP].type === 'producto') {
+                totV += Number(a.volTotal);
+              } else {
+                totS += Number(a.volTotal);
               }
-            } else if (p.type === 'producto') {
-              totV += Number(a.volTotal);
-            } else {
-              totS += Number(a.volTotal);
-            }
+            });
           });
         });
       });
-    });
 
-    setVolProd(totV);
-    setVolServ(totS);
+      setVolProd(totV);
+      setVolServ(totS);
+    }
   };
 
   const calcNewClients = (data, indexY, indexMes, indexChannel, indexProd) =>
@@ -360,6 +378,8 @@ function DashboardVentas() {
           setDataAssump(data.assumptionData[0]);
         }
         if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
+          setDataVol(data?.volumenData);
+          calcVols(data?.volumenData);
           const datosPrecargados = {};
           let dataVentas = showMultiplicacionPxQ(
             data?.volumenData.sort((a, b) =>
@@ -374,7 +394,6 @@ function DashboardVentas() {
           }
           setInfoForm(() => ({ ...datosPrecargados }));
           calcTotals();
-          calcVols(data?.volumenData);
           calcCacr(data?.volumenData);
           calcClentes();
         }

@@ -6,3 +6,9 @@ export default function formatNumber(value) {
     }
     return value;
 };
+
+export const formatearNumero = (numero) => {
+  const inputNumero = Number(numero?.replace(/\D/g, ''));
+  const nuevoNum = inputNumero.toLocaleString('es-AR');
+  return nuevoNum;
+}

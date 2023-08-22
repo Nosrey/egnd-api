@@ -39,7 +39,7 @@ export const firstSem = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'];
 
 export const secondSem = ['Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-export const trimn = ['Ene', 'Feb', 'Mar', 'Abr'];
+export const trimn = ['Ene', 'Feb', 'Mar'];
 
 export const oneMonth = ['Ene'];
 

@@ -12,7 +12,7 @@ function AuthorityCheck(props) {
 
 AuthorityCheck.propTypes = {
   userAuthority: PropTypes.arrayOf(PropTypes.any),
-  authority: PropTypes.arrayOf(),
+  authority: PropTypes.arrayOf(PropTypes.any),
 }
 
 AuthorityCheck.defaultProps = {
