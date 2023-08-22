@@ -49,12 +49,12 @@ function DashboardGastos() {
               <div className="flex flex-col justify-center items-center gap-[20px] w-[50%]">
                 <ProgresoCircular
                   ancho={100}
-                  title="Margen Bruto Porcentual"
+                  title="Gasto en MKT sobre Ventas"
                   data={12}
                 />
                 <ProgresoCircular
                   ancho={100}
-                  title="Margen Bruto Porcentual"
+                  title="Costo de Adquisición por Cliente"
                   data={12}
                 />
               </div>
