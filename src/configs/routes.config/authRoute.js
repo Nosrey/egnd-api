@@ -9,13 +9,13 @@ const authRoute = [
   },
   {
     key: 'signUp',
-    path: `/sign-up`,
+    path: `/crear-cuenta`,
     component: React.lazy(() => import('views/auth/SignUp')),
     authority: [],
   },
   {
     key: 'forgotPassword',
-    path: `/forgot-password`,
+    path: `/olvidaste-tu-contraseña`,
     component: React.lazy(() => import('views/auth/ForgotPassword')),
     authority: [],
   },
@@ -25,6 +25,12 @@ const authRoute = [
     component: React.lazy(() => import('views/auth/ResetPassword')),
     authority: [],
   },
-];
+  {
+    key: 'construccion',
+    path: `/construccion`,
+    component: React.lazy(() => import('views/auth/Construccion')),
+    authority: [],
+  },
+]
 
 export default authRoute;

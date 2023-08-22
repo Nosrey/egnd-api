@@ -8,6 +8,7 @@ import Side from './Side'
 
 function AuthLayout(props) {
   const layoutType = useSelector((state) => state.theme.layout.type)
+  console.log({...props})
 
   return (
     <div className="app-layout-blank flex flex-auto flex-col h-[100vh]">

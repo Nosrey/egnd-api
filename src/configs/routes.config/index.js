@@ -178,6 +178,14 @@ export const protectedRoutes = [
   },
   {
     key: 'margenbruto',
+    path: '/margen-bruto',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/PlanDeVentas/MargenBruto/MargenBruto'),
+    ),
+    authority: [],
+  },
+  {
+    key: 'Dashboardmargenbruto',
     path: '/dashboard-margen-bruto',
     component: React.lazy(() =>
       import(
@@ -188,7 +196,7 @@ export const protectedRoutes = [
   },
   {
     key: 'mercado',
-    path: '/research',
+    path: '/mercado',
     component: React.lazy(() =>
       import('views/FinancialPlan/AssumtionsGenerales/Mercado/Mercado'),
     ),
@@ -220,6 +228,26 @@ export const protectedRoutes = [
     component: React.lazy(() =>
       import(
         'views/FinancialPlan/GastosDeEstructura/DashboardHeadcount/DashboardHeadcount'
+      ),
+    ),
+    authority: [],
+  },
+  {
+    key: 'dashboardInversiones',
+    path: '/dashboard-inversiones',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/PlanDeInversion/DashboardInversiones/DashboardInversiones'
+      ),
+    ),
+    authority: [],
+  },
+  {
+    key: 'dashboardInversiones',
+    path: '/dashboard-gastos-estructura',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/GastosDeEstructura/Dashboard Gastos/DashboardGastos'
       ),
     ),
     authority: [],

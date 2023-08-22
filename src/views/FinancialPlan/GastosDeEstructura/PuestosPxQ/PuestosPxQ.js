@@ -121,7 +121,7 @@ function PuestosPxQ() {
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Nomina x Salario</h6>
+          <h6>Nómina x Salario</h6>
         </div>
         {infoForm && visibleP ? (
           <Tabs defaultValue={country}>

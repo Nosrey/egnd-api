@@ -26,8 +26,9 @@
       "collapseCostosDirectos": "Costos Directos y Margen Bruto",
       "item1": "Costos Unitarios",
       "item2": "Costos Totales",
-      "item3": "Dashboard Costos",
-      "item4": "Dashboard CMG Bruta"
+      "item3": "Margen Bruto",
+      "item4": "Dashboard Costos",
+      "item5": "Dashboard CMG Bruta"
     },
     "collapseHeadcount": {
       "collapseHeadcount": "Headcount",
@@ -41,14 +42,15 @@
       "item1": "Supuesto de Gasto",
       "item2": "Proyección de Gastos por CC",
       "item3": "Consolidado de Gasto",
-      "item4": "Dashboard de Gasto",
+      "item4": "Dashboard de Gastos de Estructura",
       "item5": "CAC"
     },
     "collapsePlanDeInversionesYAmortizaciones": {
       "collapsePlanDeInversionesYAmortizaciones": "Inversiones y Amortizaciones",
       "item1": "Volumen de Inversiones",
       "item2": "Costo Inversiones",
-      "item3": "Inversiones y Amortizaciones"
+      "item3": "Inversiones y Amortizaciones",
+      "item4": "Dashboard de CAPEX"
     },
     "collapseGastosFinancierosParaOperacion": {
       "collapseGastosFinancierosParaOperacion": "Gastos Financieros",

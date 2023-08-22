@@ -79,15 +79,25 @@ function Costo() {
           data?.precioData.length !== 0 &&
           data?.costoData.length !== 0
         ) {
-          setVolumenData(data?.volumenData);
+          // Para que no haya cruce de datos entre pais, ordeno alfabeticamente data de volumen antes de guardarla
+          const ordererVolData = data?.volumenData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          );
+          setVolumenData(ordererVolData);
+
           setPrecioData(data?.precioData);
           setCostoData(data?.costoData);
           setVisibleData(true);
           const datosPrecargados = {};
-          if (data?.costoData.length !== 0) {
-            for (let i = 0; i < data?.costoData.length; i++) {
-              datosPrecargados[data?.costoData[i].countryName] =
-                data?.costoData[i].stats;
+          
+          // y tambien ordeno alfabeticamente mi data de costo , para que al multiplicar se que estoy multiplicando Argentina*Argentina por ejemplo
+          const ordererData = data?.costoData.sort((a, b) =>
+          a.countryName.localeCompare(b.countryName),
+        );
+          if (ordererData.length !== 0) {
+            for (let i = 0; i < ordererData.length; i++) {
+              datosPrecargados[ordererData[i].countryName] =
+                ordererData[i].stats;
             }
             setInfoForm(() => ({ ...datosPrecargados }));
           } else {
@@ -125,7 +135,10 @@ function Costo() {
         <div className="border-b-2 px-4 py-1">
           <h6>Carga de productos / servicios</h6>
         </div>
-
+        <div  className=" px-4 py-1">
+          <span className="text-xs">*Recuerde que si ve valores en 0 es posible que pare ese item le esté faltando cargar información en Cantidad y Volumen o Costos Unitarios para poder realizar los cálculos. 
+</span>
+        </div>
         {visibleData ? (
           <Tabs defaultValue={defaultCountry}>
             <TabList>

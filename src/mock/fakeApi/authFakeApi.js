@@ -26,7 +26,7 @@ export default function authFakeApi(server, apiPrefix) {
 
   server.post(`${apiPrefix}/sign-out`, () => true);
 
-  server.post(`${apiPrefix}/sign-up`, (schema, { requestBody }) => {
+  server.post(`${apiPrefix}/crear-cuenta`, (schema, { requestBody }) => {
     const { userName, password, email } = JSON.parse(requestBody);
     const userExist = schema.db.signInUserData.findBy({
       accountUserName: userName,
@@ -66,7 +66,7 @@ export default function authFakeApi(server, apiPrefix) {
     };
   });
 
-  server.post(`${apiPrefix}/forgot-password`, () => true);
+  server.post(`${apiPrefix}/olvidaste-tu-contraseña`, () => true);
 
   server.post(`${apiPrefix}/reset-password`, () => true);
 }

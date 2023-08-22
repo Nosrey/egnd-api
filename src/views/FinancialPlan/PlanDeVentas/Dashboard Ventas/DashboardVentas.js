@@ -25,8 +25,8 @@ function DashboardVentas() {
     label: '1er semestre',
     month: 6,
   });
-  const [dataAssump, setDataAssump] = useState([]);
-  const [dataVol, setDataVol] = useState([]);
+  const [dataAssump, setDataAssump] = useState();
+  const [dataVol, setDataVol] = useState();
   const [infoForm, setInfoForm] = useState();
   const [totalVentas, setTotalVentas] = useState(0);
   const [totalServ, setTotalServ] = useState(0);
@@ -138,12 +138,12 @@ function DashboardVentas() {
     }
   };
 
-  const calcVols = () => {
-    console.log('[VOL]', dataVol);
-    if (dataVol) {
+  const calcVols = (data) => {
+    console.log('[VOL]', data);
+    if (data && dataAssump) {
       let totV = 0;
       let totS = 0;
-      dataVol.map((d) => {
+      data.map((d) => {
         d.stats.map((s, indexS) => {
           s.productos.map((p, indexP) => {
             p.años.map((a, indexY) => {
@@ -176,18 +176,9 @@ function DashboardVentas() {
                           if (
                             dataAssump.productos[indexP].type === 'producto'
                           ) {
-                            totV += Math.ceil(
-                              Number(a.volMeses[MONTHS[indexM]]) / 10,
-                            );
+                            totV += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
-                            console.log(
-                              Number(a.volMeses[MONTHS[indexM]]) / 10,
-                              d.countryName,
-                              s.canalName,
-                            );
-                            totS += Math.ceil(
-                              Number(a.volMeses[MONTHS[indexM]]) / 10,
-                            );
+                            totS += Number(a.volMeses[MONTHS[indexM]]);
                           }
                         }
                       } else if (periodoSelected.month === 12) {
@@ -388,6 +379,7 @@ function DashboardVentas() {
         }
         if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
           setDataVol(data?.volumenData);
+          calcVols(data?.volumenData);
           const datosPrecargados = {};
           let dataVentas = showMultiplicacionPxQ(
             data?.volumenData.sort((a, b) =>
@@ -403,7 +395,6 @@ function DashboardVentas() {
           setInfoForm(() => ({ ...datosPrecargados }));
           calcTotals();
           calcCacr(data?.volumenData);
-          calcVols();
           calcClentes();
         }
       })

@@ -1,9 +1,9 @@
 import { Card, Progress } from 'components/ui';
 import React from 'react';
 
-function ProgresoCircular({ title, data }) {
+function ProgresoCircular({ title, data, ancho }) {
   return (
-    <Card className="w-[30%]">
+    <Card className={`${ancho ? `w-[${ancho}]` : 'w-[30%]'}`}>
       <div className="flex flex-col items-center">
         <span className="text-lg self-start mb-[10px]">{title}</span>
         <Progress
