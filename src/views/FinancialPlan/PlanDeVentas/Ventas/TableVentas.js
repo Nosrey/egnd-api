@@ -184,16 +184,35 @@ function TableVentas(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Tooltip
-                                            placement="top-end"
-                                            title={`${moneda}${formatNumber(
-                                              año.volMeses[
-                                                Object.keys(año.volMeses)[
-                                                  indexMes
-                                                ]
-                                              ],
-                                            )}`}
-                                          >
+                                          {año.volMeses[
+                                            Object.keys(año.volMeses)[indexMes]
+                                          ].toString().length > 3 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={`${moneda}${formatNumber(
+                                                año.volMeses[
+                                                  Object.keys(año.volMeses)[
+                                                    indexMes
+                                                  ]
+                                                ],
+                                              )}`}
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="text"
+                                                value={formatNumber(
+                                                  año.volMeses[
+                                                    Object.keys(año.volMeses)[
+                                                      indexMes
+                                                    ]
+                                                  ],
+                                                )}
+                                                disabled
+                                                prefix={moneda}
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
                                             <Input
                                               className="w-[90px]"
                                               type="text"
@@ -208,16 +227,28 @@ function TableVentas(props) {
                                               prefix={moneda}
                                               name="month"
                                             />
-                                          </Tooltip>
+                                          )}
                                         </FormItem>
                                       ),
                                     )}
 
                                   <FormItem className="mb-0">
-                                    <Tooltip
-                                      placement="top-end"
-                                      title={formatNumber(año.ventasTotal)}
-                                    >
+                                    {año.ventasTotal.toString().length > 3 ? (
+                                      <Tooltip
+                                        placement="top-end"
+                                        title={`${moneda}${formatNumber(
+                                          año.ventasTotal,
+                                        )}`}
+                                      >
+                                        <Input
+                                          className="w-[90px]"
+                                          type="text"
+                                          disabled
+                                          value={formatNumber(año.ventasTotal)}
+                                          prefix={moneda}
+                                        />
+                                      </Tooltip>
+                                    ) : (
                                       <Input
                                         className="w-[90px]"
                                         type="text"
@@ -225,7 +256,7 @@ function TableVentas(props) {
                                         value={formatNumber(año.ventasTotal)}
                                         prefix={moneda}
                                       />
-                                    </Tooltip>
+                                    )}
                                   </FormItem>
                                 </div>
                               </div>

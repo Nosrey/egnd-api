@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 import { useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -264,20 +264,54 @@ function TableChurn(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="text"
-                                            disabled
-                                            value={formatearNumero(
-                                              props.volumenData[indexPais]
-                                                .stats[indexCanal].productos[
-                                                indexProd
-                                              ].años[indexYear].volMeses[
-                                                MONTHS[indexMes]
-                                              ],
-                                            )}
-                                            name="month"
-                                          />
+                                          {props.volumenData[indexPais].stats[
+                                            indexCanal
+                                          ].productos[indexProd].años[
+                                            indexYear
+                                          ].volMeses[
+                                            MONTHS[indexMes]
+                                          ].toString().length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={formatearNumero(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                              )}
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="text"
+                                                disabled
+                                                value={formatearNumero(
+                                                  props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]],
+                                                )}
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              disabled
+                                              value={formatearNumero(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ],
+                                              )}
+                                              name="month"
+                                            />
+                                          )}
                                         </FormItem>
                                       ),
                                     )}
@@ -292,11 +326,787 @@ function TableChurn(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="text"
-                                            disabled
-                                            value={formatNumber(
+                                          {formatNumber(
+                                            props.volumenData[indexPais].stats[
+                                              indexCanal
+                                            ].productos[indexProd].años[
+                                              indexYear
+                                            ].volMeses[MONTHS[indexMes]] /
+                                              props.assumptionData[0].canales[
+                                                indexCanal
+                                              ].items[indexProd].volumen,
+                                          ).length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={formatNumber(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen,
+                                              )}
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="text"
+                                                disabled
+                                                value={formatNumber(
+                                                  props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[MONTHS[indexMes]] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd].volumen,
+                                                )}
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              disabled
+                                              value={formatNumber(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen,
+                                              )}
+                                            />
+                                          )}
+                                        </FormItem>
+                                      ),
+                                    )}
+                                </div>
+
+                                <div className="flex gap-x-3 gap-y-3">
+                                  {visibleItems.includes(indexYear) &&
+                                    año &&
+                                    Object.keys(año.volMeses).map(
+                                      (mes, indexMes) => (
+                                        <FormItem
+                                          className="mb-0"
+                                          key={indexMes}
+                                        >
+                                          {formatNumber(
+                                            ((props.volumenData[indexPais]
+                                              .stats[indexCanal].productos[
+                                              indexProd
+                                            ].años[indexYear].volMeses[
+                                              MONTHS[indexMes - 1]
+                                            ] /
+                                              props.assumptionData[0].canales[
+                                                indexCanal
+                                              ].items[indexProd].volumen) *
+                                              props.assumptionData[0].churns[
+                                                indexCanal
+                                              ].items[indexProd]
+                                                .porcentajeChurn) /
+                                              100,
+                                          ).length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={
+                                                indexMes === 0
+                                                  ? ''
+                                                  : formatNumber(
+                                                      ((props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes - 1]
+                                                      ] /
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
+                                                          .items[indexProd]
+                                                          .volumen) *
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
+                                                          .items[indexProd]
+                                                          .porcentajeChurn) /
+                                                        100,
+                                                    )
+                                              }
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="text"
+                                                disabled
+                                                value={
+                                                  indexMes === 0
+                                                    ? ''
+                                                    : formatNumber(
+                                                        ((props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen) *
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
+                                                            .items[indexProd]
+                                                            .porcentajeChurn) /
+                                                          100,
+                                                      )
+                                                }
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              disabled
+                                              value={
+                                                indexMes === 0
+                                                  ? ''
+                                                  : formatNumber(
+                                                      ((props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes - 1]
+                                                      ] /
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
+                                                          .items[indexProd]
+                                                          .volumen) *
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
+                                                          .items[indexProd]
+                                                          .porcentajeChurn) /
+                                                        100,
+                                                    )
+                                              }
+                                              name="month"
+                                            />
+                                          )}
+                                        </FormItem>
+                                      ),
+                                    )}
+                                </div>
+
+                                <div className="flex gap-x-3 gap-y-3">
+                                  {visibleItems.includes(indexYear) &&
+                                    año &&
+                                    Object.keys(año.volMeses).map(
+                                      (mes, indexMes) => (
+                                        <FormItem
+                                          className="mb-0"
+                                          key={indexMes}
+                                        >
+                                          {(indexMes === 0 || indexMes === 1
+                                            ? 0
+                                            : formatNumber(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes - 1]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen -
+                                                  (props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[
+                                                    MONTHS[indexMes - 2]
+                                                  ] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd]
+                                                      .volumen -
+                                                    ((props.volumenData[
+                                                      indexPais
+                                                    ].stats[indexCanal]
+                                                      .productos[indexProd]
+                                                      .años[indexYear].volMeses[
+                                                      MONTHS[indexMes - 2]
+                                                    ] /
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
+                                                        .items[indexProd]
+                                                        .volumen) *
+                                                      props.assumptionData[0]
+                                                        .churns[indexCanal]
+                                                        .items[indexProd]
+                                                        .porcentajeChurn) /
+                                                      100) -
+                                                  ((props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[
+                                                    MONTHS[indexMes - 2]
+                                                  ] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd]
+                                                      .volumen) *
+                                                    props.assumptionData[0]
+                                                      .churns[indexCanal].items[
+                                                      indexProd
+                                                    ].porcentajeChurn) /
+                                                    100,
+                                              ) < 0
+                                            ? 0
+                                            : formatNumber(
+                                                props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes - 1]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen -
+                                                  (props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[
+                                                    MONTHS[indexMes - 2]
+                                                  ] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd]
+                                                      .volumen -
+                                                    ((props.volumenData[
+                                                      indexPais
+                                                    ].stats[indexCanal]
+                                                      .productos[indexProd]
+                                                      .años[indexYear].volMeses[
+                                                      MONTHS[indexMes - 2]
+                                                    ] /
+                                                      props.assumptionData[0]
+                                                        .canales[indexCanal]
+                                                        .items[indexProd]
+                                                        .volumen) *
+                                                      props.assumptionData[0]
+                                                        .churns[indexCanal]
+                                                        .items[indexProd]
+                                                        .porcentajeChurn) /
+                                                      100) -
+                                                  ((props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[
+                                                    MONTHS[indexMes - 2]
+                                                  ] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd]
+                                                      .volumen) *
+                                                    props.assumptionData[0]
+                                                      .churns[indexCanal].items[
+                                                      indexProd
+                                                    ].porcentajeChurn) /
+                                                    100,
+                                              )
+                                          ).length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={
+                                                indexMes === 0 || indexMes === 1
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes - 1]
+                                                      ] /
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
+                                                          .items[indexProd]
+                                                          .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
+                                                        ((props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen) *
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
+                                                            .items[indexProd]
+                                                            .porcentajeChurn) /
+                                                          100,
+                                                    ) < 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes - 1]
+                                                      ] /
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
+                                                          .items[indexProd]
+                                                          .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
+                                                        ((props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen) *
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
+                                                            .items[indexProd]
+                                                            .porcentajeChurn) /
+                                                          100,
+                                                    )
+                                              }
+                                            >
+                                              <Input
+                                                className="w-[90px] border-2 border-solid border-gray-800"
+                                                type="text"
+                                                disabled
+                                                value={
+                                                  indexMes === 0 ||
+                                                  indexMes === 1
+                                                    ? 0
+                                                    : formatNumber(
+                                                        props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          (props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen -
+                                                            ((props.volumenData[
+                                                              indexPais
+                                                            ].stats[indexCanal]
+                                                              .productos[
+                                                              indexProd
+                                                            ].años[indexYear]
+                                                              .volMeses[
+                                                              MONTHS[
+                                                                indexMes - 2
+                                                              ]
+                                                            ] /
+                                                              props
+                                                                .assumptionData[0]
+                                                                .canales[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .volumen) *
+                                                              props
+                                                                .assumptionData[0]
+                                                                .churns[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .porcentajeChurn) /
+                                                              100) -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100,
+                                                      ) < 0
+                                                    ? 0
+                                                    : formatNumber(
+                                                        props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          (props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen -
+                                                            ((props.volumenData[
+                                                              indexPais
+                                                            ].stats[indexCanal]
+                                                              .productos[
+                                                              indexProd
+                                                            ].años[indexYear]
+                                                              .volMeses[
+                                                              MONTHS[
+                                                                indexMes - 2
+                                                              ]
+                                                            ] /
+                                                              props
+                                                                .assumptionData[0]
+                                                                .canales[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .volumen) *
+                                                              props
+                                                                .assumptionData[0]
+                                                                .churns[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .porcentajeChurn) /
+                                                              100) -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100,
+                                                      )
+                                                }
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px] border-2 border-solid border-gray-800"
+                                              type="text"
+                                              disabled
+                                              value={
+                                                indexMes === 0 || indexMes === 1
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes - 1]
+                                                      ] /
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
+                                                          .items[indexProd]
+                                                          .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
+                                                        ((props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen) *
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
+                                                            .items[indexProd]
+                                                            .porcentajeChurn) /
+                                                          100,
+                                                    ) < 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes - 1]
+                                                      ] /
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
+                                                          .items[indexProd]
+                                                          .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 2]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
+                                                        ((props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 2]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen) *
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
+                                                            .items[indexProd]
+                                                            .porcentajeChurn) /
+                                                          100,
+                                                    )
+                                              }
+                                              name="month"
+                                            />
+                                          )}
+                                        </FormItem>
+                                      ),
+                                    )}
+                                </div>
+                                <div className="flex gap-x-3 gap-y-3">
+                                  {visibleItems.includes(indexYear) &&
+                                    año &&
+                                    Object.keys(año.volMeses).map(
+                                      (mes, indexMes) => (
+                                        <FormItem
+                                          className="mb-0"
+                                          key={indexMes}
+                                        >
+                                          {indexMes === 0 ? (
+                                            0
+                                          ) : formatNumber(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -305,196 +1115,216 @@ function TableChurn(props) {
                                               ] /
                                                 props.assumptionData[0].canales[
                                                   indexCanal
-                                                ].items[indexProd].volumen,
-                                            )}
-                                          />
-                                        </FormItem>
-                                      ),
-                                    )}
-                                </div>
-
-                                <div className="flex gap-x-3 gap-y-3">
-                                  {visibleItems.includes(indexYear) &&
-                                    año &&
-                                    Object.keys(año.volMeses).map(
-                                      (mes, indexMes) => (
-                                        <FormItem
-                                          className="mb-0"
-                                          key={indexMes}
-                                        >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="text"
-                                            disabled
-                                            value={
-                                              indexMes === 0
-                                                ? ''
-                                                : formatNumber(
-                                                    ((props.volumenData[
-                                                      indexPais
-                                                    ].stats[indexCanal]
-                                                      .productos[indexProd]
-                                                      .años[indexYear].volMeses[
-                                                      MONTHS[indexMes - 1]
-                                                    ] /
-                                                      props.assumptionData[0]
-                                                        .canales[indexCanal]
-                                                        .items[indexProd]
-                                                        .volumen) *
-                                                      props.assumptionData[0]
-                                                        .churns[indexCanal]
-                                                        .items[indexProd]
-                                                        .porcentajeChurn) /
-                                                      100,
-                                                  )
-                                            }
-                                            name="month"
-                                          />
-                                        </FormItem>
-                                      ),
-                                    )}
-                                </div>
-
-                                <div className="flex gap-x-3 gap-y-3">
-                                  {visibleItems.includes(indexYear) &&
-                                    año &&
-                                    Object.keys(año.volMeses).map(
-                                      (mes, indexMes) => (
-                                        <FormItem
-                                          className="mb-0"
-                                          key={indexMes}
-                                        >
-                                          <Input
-                                            className="w-[90px] border-2 border-solid border-gray-800"
-                                            type="text"
-                                            disabled
-                                            value={
-                                              indexMes === 0 || indexMes === 1
-                                                ? 0
-                                                : formatNumber(
-                                                    props.volumenData[indexPais]
-                                                      .stats[indexCanal]
-                                                      .productos[indexProd]
-                                                      .años[indexYear].volMeses[
-                                                      MONTHS[indexMes - 1]
-                                                    ] /
-                                                      props.assumptionData[0]
-                                                        .canales[indexCanal]
-                                                        .items[indexProd]
-                                                        .volumen -
-                                                      (props.volumenData[
+                                                ].items[indexProd].volumen -
+                                                (props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes - 1]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen -
+                                                  ((props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[
+                                                    MONTHS[indexMes - 1]
+                                                  ] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd]
+                                                      .volumen) *
+                                                    props.assumptionData[0]
+                                                      .churns[indexCanal].items[
+                                                      indexProd
+                                                    ].porcentajeChurn) /
+                                                    100),
+                                            ).length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={
+                                                indexMes === 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
                                                         indexPais
                                                       ].stats[indexCanal]
                                                         .productos[indexProd]
                                                         .años[indexYear]
                                                         .volMeses[
-                                                        MONTHS[indexMes - 2]
+                                                        MONTHS[indexMes]
                                                       ] /
                                                         props.assumptionData[0]
                                                           .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
-                                                        ((props.volumenData[
+                                                        (props.volumenData[
                                                           indexPais
                                                         ].stats[indexCanal]
                                                           .productos[indexProd]
                                                           .años[indexYear]
                                                           .volMeses[
-                                                          MONTHS[indexMes - 2]
+                                                          MONTHS[indexMes - 1]
                                                         ] /
                                                           props
                                                             .assumptionData[0]
                                                             .canales[indexCanal]
                                                             .items[indexProd]
-                                                            .volumen) *
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100),
+                                                    )
+                                              }
+                                            >
+                                              <Input
+                                                className="w-[90px] border-2 border-solid border-gray-800"
+                                                type="text"
+                                                disabled
+                                                value={
+                                                  indexMes === 0
+                                                    ? 0
+                                                    : formatNumber(
+                                                        props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes]
+                                                        ] /
                                                           props
                                                             .assumptionData[0]
-                                                            .churns[indexCanal]
+                                                            .canales[indexCanal]
                                                             .items[indexProd]
-                                                            .porcentajeChurn) /
-                                                          100) -
-                                                      ((props.volumenData[
+                                                            .volumen -
+                                                          (props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen -
+                                                            ((props.volumenData[
+                                                              indexPais
+                                                            ].stats[indexCanal]
+                                                              .productos[
+                                                              indexProd
+                                                            ].años[indexYear]
+                                                              .volMeses[
+                                                              MONTHS[
+                                                                indexMes - 1
+                                                              ]
+                                                            ] /
+                                                              props
+                                                                .assumptionData[0]
+                                                                .canales[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .volumen) *
+                                                              props
+                                                                .assumptionData[0]
+                                                                .churns[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .porcentajeChurn) /
+                                                              100),
+                                                      )
+                                                }
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px] border-2 border-solid border-gray-800"
+                                              type="text"
+                                              disabled
+                                              value={
+                                                indexMes === 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
                                                         indexPais
                                                       ].stats[indexCanal]
                                                         .productos[indexProd]
                                                         .años[indexYear]
                                                         .volMeses[
-                                                        MONTHS[indexMes - 2]
-                                                      ] /
-                                                        props.assumptionData[0]
-                                                          .canales[indexCanal]
-                                                          .items[indexProd]
-                                                          .volumen) *
-                                                        props.assumptionData[0]
-                                                          .churns[indexCanal]
-                                                          .items[indexProd]
-                                                          .porcentajeChurn) /
-                                                        100,
-                                                  ) < 0
-                                                ? 0
-                                                : formatNumber(
-                                                    props.volumenData[indexPais]
-                                                      .stats[indexCanal]
-                                                      .productos[indexProd]
-                                                      .años[indexYear].volMeses[
-                                                      MONTHS[indexMes - 1]
-                                                    ] /
-                                                      props.assumptionData[0]
-                                                        .canales[indexCanal]
-                                                        .items[indexProd]
-                                                        .volumen -
-                                                      (props.volumenData[
-                                                        indexPais
-                                                      ].stats[indexCanal]
-                                                        .productos[indexProd]
-                                                        .años[indexYear]
-                                                        .volMeses[
-                                                        MONTHS[indexMes - 2]
+                                                        MONTHS[indexMes]
                                                       ] /
                                                         props.assumptionData[0]
                                                           .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
-                                                        ((props.volumenData[
+                                                        (props.volumenData[
                                                           indexPais
                                                         ].stats[indexCanal]
                                                           .productos[indexProd]
                                                           .años[indexYear]
                                                           .volMeses[
-                                                          MONTHS[indexMes - 2]
+                                                          MONTHS[indexMes - 1]
                                                         ] /
                                                           props
                                                             .assumptionData[0]
                                                             .canales[indexCanal]
                                                             .items[indexProd]
-                                                            .volumen) *
-                                                          props
-                                                            .assumptionData[0]
-                                                            .churns[indexCanal]
-                                                            .items[indexProd]
-                                                            .porcentajeChurn) /
-                                                          100) -
-                                                      ((props.volumenData[
-                                                        indexPais
-                                                      ].stats[indexCanal]
-                                                        .productos[indexProd]
-                                                        .años[indexYear]
-                                                        .volMeses[
-                                                        MONTHS[indexMes - 2]
-                                                      ] /
-                                                        props.assumptionData[0]
-                                                          .canales[indexCanal]
-                                                          .items[indexProd]
-                                                          .volumen) *
-                                                        props.assumptionData[0]
-                                                          .churns[indexCanal]
-                                                          .items[indexProd]
-                                                          .porcentajeChurn) /
-                                                        100,
-                                                  )
-                                            }
-                                            name="month"
-                                          />
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100),
+                                                    )
+                                              }
+                                              name="month"
+                                            />
+                                          )}
                                         </FormItem>
                                       ),
                                     )}
@@ -508,25 +1338,31 @@ function TableChurn(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px] border-2 border-solid border-gray-800"
-                                            type="text"
-                                            disabled
-                                            value={
-                                              indexMes === 0
-                                                ? 0
-                                                : formatNumber(
-                                                    props.volumenData[indexPais]
-                                                      .stats[indexCanal]
-                                                      .productos[indexProd]
-                                                      .años[indexYear].volMeses[
-                                                      MONTHS[indexMes]
-                                                    ] /
-                                                      props.assumptionData[0]
-                                                        .canales[indexCanal]
-                                                        .items[indexProd]
-                                                        .volumen -
-                                                      (props.volumenData[
+                                          {indexMes === 0 ? (
+                                            0
+                                          ) : formatNumber(
+                                              ((props.volumenData[indexPais]
+                                                .stats[indexCanal].productos[
+                                                indexProd
+                                              ].años[indexYear].volMeses[
+                                                MONTHS[indexMes - 1]
+                                              ] /
+                                                props.assumptionData[0].canales[
+                                                  indexCanal
+                                                ].items[indexProd].volumen) *
+                                                props.assumptionData[0].churns[
+                                                  indexCanal
+                                                ].items[indexProd]
+                                                  .porcentajeChurn) /
+                                                100,
+                                            ).length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={
+                                                indexMes === 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      ((props.volumenData[
                                                         indexPais
                                                       ].stats[indexCanal]
                                                         .productos[indexProd]
@@ -537,7 +1373,23 @@ function TableChurn(props) {
                                                         props.assumptionData[0]
                                                           .canales[indexCanal]
                                                           .items[indexProd]
-                                                          .volumen -
+                                                          .volumen) *
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
+                                                          .items[indexProd]
+                                                          .porcentajeChurn) /
+                                                        100,
+                                                    )
+                                              }
+                                            >
+                                              <Input
+                                                className="w-[90px] border-2 border-solid border-gray-800"
+                                                type="text"
+                                                disabled
+                                                value={
+                                                  indexMes === 0
+                                                    ? 0
+                                                    : formatNumber(
                                                         ((props.volumenData[
                                                           indexPais
                                                         ].stats[indexCanal]
@@ -556,84 +1408,22 @@ function TableChurn(props) {
                                                             .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
-                                                          100),
-                                                  )
-                                            }
-                                            name="month"
-                                          />
-                                        </FormItem>
-                                      ),
-                                    )}
-                                </div>
-                                <div className="flex gap-x-3 gap-y-3">
-                                  {visibleItems.includes(indexYear) &&
-                                    año &&
-                                    Object.keys(año.volMeses).map(
-                                      (mes, indexMes) => (
-                                        <FormItem
-                                          className="mb-0"
-                                          key={indexMes}
-                                        >
-                                          <Input
-                                            className="w-[90px] border-2 border-solid border-gray-800"
-                                            type="text"
-                                            disabled
-                                            value={
-                                              indexMes === 0
-                                                ? 0
-                                                : formatNumber(
-                                                    ((props.volumenData[
-                                                      indexPais
-                                                    ].stats[indexCanal]
-                                                      .productos[indexProd]
-                                                      .años[indexYear].volMeses[
-                                                      MONTHS[indexMes - 1]
-                                                    ] /
-                                                      props.assumptionData[0]
-                                                        .canales[indexCanal]
-                                                        .items[indexProd]
-                                                        .volumen) *
-                                                      props.assumptionData[0]
-                                                        .churns[indexCanal]
-                                                        .items[indexProd]
-                                                        .porcentajeChurn) /
-                                                      100,
-                                                  )
-                                            }
-                                            name="month"
-                                          />
-                                        </FormItem>
-                                      ),
-                                    )}
-                                </div>
-                                <div className="flex gap-x-3 gap-y-3">
-                                  {visibleItems.includes(indexYear) &&
-                                    año &&
-                                    Object.keys(año.volMeses).map(
-                                      (mes, indexMes) => (
-                                        <FormItem
-                                          className="mb-0"
-                                          key={indexMes}
-                                        >
-                                          <Input
-                                            className="w-[90px] border-2 border-solid border-gray-800"
-                                            type="text"
-                                            disabled
-                                            value={
-                                              indexMes === 0
-                                                ? 0
-                                                : formatNumber(
-                                                    props.volumenData[indexPais]
-                                                      .stats[indexCanal]
-                                                      .productos[indexProd]
-                                                      .años[indexYear].volMeses[
-                                                      MONTHS[indexMes]
-                                                    ] /
-                                                      props.assumptionData[0]
-                                                        .canales[indexCanal]
-                                                        .items[indexProd]
-                                                        .volumen -
-                                                      (props.volumenData[
+                                                          100,
+                                                      )
+                                                }
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px] border-2 border-solid border-gray-800"
+                                              type="text"
+                                              disabled
+                                              value={
+                                                indexMes === 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      ((props.volumenData[
                                                         indexPais
                                                       ].stats[indexCanal]
                                                         .productos[indexProd]
@@ -644,7 +1434,190 @@ function TableChurn(props) {
                                                         props.assumptionData[0]
                                                           .canales[indexCanal]
                                                           .items[indexProd]
+                                                          .volumen) *
+                                                        props.assumptionData[0]
+                                                          .churns[indexCanal]
+                                                          .items[indexProd]
+                                                          .porcentajeChurn) /
+                                                        100,
+                                                    )
+                                              }
+                                              name="month"
+                                            />
+                                          )}
+                                        </FormItem>
+                                      ),
+                                    )}
+                                </div>
+                                <div className="flex gap-x-3 gap-y-3">
+                                  {visibleItems.includes(indexYear) &&
+                                    año &&
+                                    Object.keys(año.volMeses).map(
+                                      (mes, indexMes) => (
+                                        <FormItem
+                                          className="mb-0"
+                                          key={indexMes}
+                                        >
+                                          {indexMes === 0 ? (
+                                            0
+                                          ) : formatNumber(
+                                              props.volumenData[indexPais]
+                                                .stats[indexCanal].productos[
+                                                indexProd
+                                              ].años[indexYear].volMeses[
+                                                MONTHS[indexMes]
+                                              ] /
+                                                props.assumptionData[0].canales[
+                                                  indexCanal
+                                                ].items[indexProd].volumen -
+                                                (props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes - 1]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen -
+                                                  ((props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[
+                                                    MONTHS[indexMes - 1]
+                                                  ] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd]
+                                                      .volumen) *
+                                                    props.assumptionData[0]
+                                                      .churns[indexCanal].items[
+                                                      indexProd
+                                                    ].porcentajeChurn) /
+                                                    100) -
+                                                ((props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes - 1]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen) *
+                                                  props.assumptionData[0]
+                                                    .churns[indexCanal].items[
+                                                    indexProd
+                                                  ].porcentajeChurn) /
+                                                  100,
+                                            ) < 0 ? (
+                                            0
+                                          ) : formatNumber(
+                                              props.volumenData[indexPais]
+                                                .stats[indexCanal].productos[
+                                                indexProd
+                                              ].años[indexYear].volMeses[
+                                                MONTHS[indexMes]
+                                              ] /
+                                                props.assumptionData[0].canales[
+                                                  indexCanal
+                                                ].items[indexProd].volumen -
+                                                (props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes - 1]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen -
+                                                  ((props.volumenData[indexPais]
+                                                    .stats[indexCanal]
+                                                    .productos[indexProd].años[
+                                                    indexYear
+                                                  ].volMeses[
+                                                    MONTHS[indexMes - 1]
+                                                  ] /
+                                                    props.assumptionData[0]
+                                                      .canales[indexCanal]
+                                                      .items[indexProd]
+                                                      .volumen) *
+                                                    props.assumptionData[0]
+                                                      .churns[indexCanal].items[
+                                                      indexProd
+                                                    ].porcentajeChurn) /
+                                                    100) -
+                                                ((props.volumenData[indexPais]
+                                                  .stats[indexCanal].productos[
+                                                  indexProd
+                                                ].años[indexYear].volMeses[
+                                                  MONTHS[indexMes - 1]
+                                                ] /
+                                                  props.assumptionData[0]
+                                                    .canales[indexCanal].items[
+                                                    indexProd
+                                                  ].volumen) *
+                                                  props.assumptionData[0]
+                                                    .churns[indexCanal].items[
+                                                    indexProd
+                                                  ].porcentajeChurn) /
+                                                  100,
+                                            ).length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={
+                                                indexMes === 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes]
+                                                      ] /
+                                                        props.assumptionData[0]
+                                                          .canales[indexCanal]
+                                                          .items[indexProd]
                                                           .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
                                                         ((props.volumenData[
                                                           indexPais
                                                         ].stats[indexCanal]
@@ -663,49 +1636,57 @@ function TableChurn(props) {
                                                             .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
-                                                          100) -
-                                                      ((props.volumenData[
+                                                          100,
+                                                    ) < 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
                                                         indexPais
                                                       ].stats[indexCanal]
                                                         .productos[indexProd]
                                                         .años[indexYear]
                                                         .volMeses[
-                                                        MONTHS[indexMes - 1]
-                                                      ] /
-                                                        props.assumptionData[0]
-                                                          .canales[indexCanal]
-                                                          .items[indexProd]
-                                                          .volumen) *
-                                                        props.assumptionData[0]
-                                                          .churns[indexCanal]
-                                                          .items[indexProd]
-                                                          .porcentajeChurn) /
-                                                        100,
-                                                  ) < 0
-                                                ? 0
-                                                : formatNumber(
-                                                    props.volumenData[indexPais]
-                                                      .stats[indexCanal]
-                                                      .productos[indexProd]
-                                                      .años[indexYear].volMeses[
-                                                      MONTHS[indexMes]
-                                                    ] /
-                                                      props.assumptionData[0]
-                                                        .canales[indexCanal]
-                                                        .items[indexProd]
-                                                        .volumen -
-                                                      (props.volumenData[
-                                                        indexPais
-                                                      ].stats[indexCanal]
-                                                        .productos[indexProd]
-                                                        .años[indexYear]
-                                                        .volMeses[
-                                                        MONTHS[indexMes - 1]
+                                                        MONTHS[indexMes]
                                                       ] /
                                                         props.assumptionData[0]
                                                           .canales[indexCanal]
                                                           .items[indexProd]
                                                           .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
                                                         ((props.volumenData[
                                                           indexPais
                                                         ].stats[indexCanal]
@@ -724,28 +1705,323 @@ function TableChurn(props) {
                                                             .churns[indexCanal]
                                                             .items[indexProd]
                                                             .porcentajeChurn) /
-                                                          100) -
-                                                      ((props.volumenData[
+                                                          100,
+                                                    )
+                                              }
+                                            >
+                                              <Input
+                                                className="w-[90px] border-2 border-solid border-gray-800"
+                                                type="text"
+                                                disabled
+                                                value={
+                                                  indexMes === 0
+                                                    ? 0
+                                                    : formatNumber(
+                                                        props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          (props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen -
+                                                            ((props.volumenData[
+                                                              indexPais
+                                                            ].stats[indexCanal]
+                                                              .productos[
+                                                              indexProd
+                                                            ].años[indexYear]
+                                                              .volMeses[
+                                                              MONTHS[
+                                                                indexMes - 1
+                                                              ]
+                                                            ] /
+                                                              props
+                                                                .assumptionData[0]
+                                                                .canales[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .volumen) *
+                                                              props
+                                                                .assumptionData[0]
+                                                                .churns[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .porcentajeChurn) /
+                                                              100) -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100,
+                                                      ) < 0
+                                                    ? 0
+                                                    : formatNumber(
+                                                        props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          (props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen -
+                                                            ((props.volumenData[
+                                                              indexPais
+                                                            ].stats[indexCanal]
+                                                              .productos[
+                                                              indexProd
+                                                            ].años[indexYear]
+                                                              .volMeses[
+                                                              MONTHS[
+                                                                indexMes - 1
+                                                              ]
+                                                            ] /
+                                                              props
+                                                                .assumptionData[0]
+                                                                .canales[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .volumen) *
+                                                              props
+                                                                .assumptionData[0]
+                                                                .churns[
+                                                                indexCanal
+                                                              ].items[indexProd]
+                                                                .porcentajeChurn) /
+                                                              100) -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100,
+                                                      )
+                                                }
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px] border-2 border-solid border-gray-800"
+                                              type="text"
+                                              disabled
+                                              value={
+                                                indexMes === 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
                                                         indexPais
                                                       ].stats[indexCanal]
                                                         .productos[indexProd]
                                                         .años[indexYear]
                                                         .volMeses[
-                                                        MONTHS[indexMes - 1]
+                                                        MONTHS[indexMes]
                                                       ] /
                                                         props.assumptionData[0]
                                                           .canales[indexCanal]
                                                           .items[indexProd]
-                                                          .volumen) *
+                                                          .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
+                                                        ((props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen) *
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
+                                                            .items[indexProd]
+                                                            .porcentajeChurn) /
+                                                          100,
+                                                    ) < 0
+                                                  ? 0
+                                                  : formatNumber(
+                                                      props.volumenData[
+                                                        indexPais
+                                                      ].stats[indexCanal]
+                                                        .productos[indexProd]
+                                                        .años[indexYear]
+                                                        .volMeses[
+                                                        MONTHS[indexMes]
+                                                      ] /
                                                         props.assumptionData[0]
-                                                          .churns[indexCanal]
+                                                          .canales[indexCanal]
                                                           .items[indexProd]
-                                                          .porcentajeChurn) /
-                                                        100,
-                                                  )
-                                            }
-                                            name="month"
-                                          />
+                                                          .volumen -
+                                                        (props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen -
+                                                          ((props.volumenData[
+                                                            indexPais
+                                                          ].stats[indexCanal]
+                                                            .productos[
+                                                            indexProd
+                                                          ].años[indexYear]
+                                                            .volMeses[
+                                                            MONTHS[indexMes - 1]
+                                                          ] /
+                                                            props
+                                                              .assumptionData[0]
+                                                              .canales[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .volumen) *
+                                                            props
+                                                              .assumptionData[0]
+                                                              .churns[
+                                                              indexCanal
+                                                            ].items[indexProd]
+                                                              .porcentajeChurn) /
+                                                            100) -
+                                                        ((props.volumenData[
+                                                          indexPais
+                                                        ].stats[indexCanal]
+                                                          .productos[indexProd]
+                                                          .años[indexYear]
+                                                          .volMeses[
+                                                          MONTHS[indexMes - 1]
+                                                        ] /
+                                                          props
+                                                            .assumptionData[0]
+                                                            .canales[indexCanal]
+                                                            .items[indexProd]
+                                                            .volumen) *
+                                                          props
+                                                            .assumptionData[0]
+                                                            .churns[indexCanal]
+                                                            .items[indexProd]
+                                                            .porcentajeChurn) /
+                                                          100,
+                                                    )
+                                              }
+                                              name="month"
+                                            />
+                                          )}
                                         </FormItem>
                                       ),
                                     )}
