@@ -326,30 +326,70 @@ function TablePrecio(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="text"
-                                            prefix={moneda}
-                                            value={formatearNumero(
-                                              año.volMeses[
-                                                Object.keys(año.volMeses)[
-                                                  indexMes
-                                                ]
-                                              ],
-                                            )}
-                                            onChange={(e) => {
-                                              handleOnChangeInitialValue(
-                                                pais,
-                                                canal.canalName,
-                                                producto,
-                                                e.target.value,
-                                                'mes',
-                                                mes,
-                                                indexYear,
-                                              );
-                                            }}
-                                            name="month"
-                                          />
+                                          {año.volMeses[
+                                            Object.keys(año.volMeses)[indexMes]
+                                          ].toString().length > 3 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={formatearNumero(
+                                                año.volMeses[
+                                                  Object.keys(año.volMeses)[
+                                                    indexMes
+                                                  ]
+                                                ],
+                                              )}
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="text"
+                                                prefix={moneda}
+                                                value={formatearNumero(
+                                                  año.volMeses[
+                                                    Object.keys(año.volMeses)[
+                                                      indexMes
+                                                    ]
+                                                  ],
+                                                )}
+                                                onChange={(e) => {
+                                                  handleOnChangeInitialValue(
+                                                    pais,
+                                                    canal.canalName,
+                                                    producto,
+                                                    e.target.value,
+                                                    'mes',
+                                                    mes,
+                                                    indexYear,
+                                                  );
+                                                }}
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              prefix={moneda}
+                                              value={formatearNumero(
+                                                año.volMeses[
+                                                  Object.keys(año.volMeses)[
+                                                    indexMes
+                                                  ]
+                                                ],
+                                              )}
+                                              onChange={(e) => {
+                                                handleOnChangeInitialValue(
+                                                  pais,
+                                                  canal.canalName,
+                                                  producto,
+                                                  e.target.value,
+                                                  'mes',
+                                                  mes,
+                                                  indexYear,
+                                                );
+                                              }}
+                                              name="month"
+                                            />
+                                          )}
                                         </FormItem>
                                       ),
                                     )}

@@ -426,40 +426,93 @@ function TableVolumen(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          <Input
-                                            className="w-[90px]"
-                                            type="text"
-                                            value={formatearNumero(
-                                              año.volMeses[
-                                                Object.keys(año.volMeses)[
-                                                  indexMes
-                                                ]
-                                              ],
-                                            )}
-                                            onChange={(e) => {
-                                              handleOnChangeInitialValue(
-                                                pais,
-                                                canal.canalName,
-                                                producto,
-                                                e.target.value,
-                                                'mes',
-                                                mes,
-                                                indexYear,
-                                              );
-                                            }}
-                                            name="month"
-                                          />
+                                          {año.volMeses[
+                                            Object.keys(año.volMeses)[indexMes]
+                                          ].toString().length > 7 ? (
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={formatearNumero(
+                                                año.volMeses[
+                                                  Object.keys(año.volMeses)[
+                                                    indexMes
+                                                  ]
+                                                ],
+                                              )}
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="text"
+                                                value={formatearNumero(
+                                                  año.volMeses[
+                                                    Object.keys(año.volMeses)[
+                                                      indexMes
+                                                    ]
+                                                  ],
+                                                )}
+                                                onChange={(e) => {
+                                                  handleOnChangeInitialValue(
+                                                    pais,
+                                                    canal.canalName,
+                                                    producto,
+                                                    e.target.value,
+                                                    'mes',
+                                                    mes,
+                                                    indexYear,
+                                                  );
+                                                }}
+                                                name="month"
+                                              />
+                                            </Tooltip>
+                                          ) : (
+                                            <Input
+                                              className="w-[90px]"
+                                              type="text"
+                                              value={formatearNumero(
+                                                año.volMeses[
+                                                  Object.keys(año.volMeses)[
+                                                    indexMes
+                                                  ]
+                                                ],
+                                              )}
+                                              onChange={(e) => {
+                                                handleOnChangeInitialValue(
+                                                  pais,
+                                                  canal.canalName,
+                                                  producto,
+                                                  e.target.value,
+                                                  'mes',
+                                                  mes,
+                                                  indexYear,
+                                                );
+                                              }}
+                                              name="month"
+                                            />
+                                          )}
                                         </FormItem>
                                       ),
                                     )}
 
                                   <FormItem className="mb-0">
-                                    <Input
-                                      className="w-[90px]"
-                                      type="text"
-                                      disabled
-                                      value={formatNumber(año.volTotal)}
-                                    />
+                                    {año.volTotal.toString().length > 7 ? (
+                                      <Tooltip
+                                        placement="top-end"
+                                        title={formatNumber(año.volTotal)}
+                                      >
+                                        <Input
+                                          className="w-[90px]"
+                                          type="text"
+                                          disabled
+                                          value={formatNumber(año.volTotal)}
+                                        />
+                                      </Tooltip>
+                                    ) : (
+                                      <Input
+                                        className="w-[90px]"
+                                        type="text"
+                                        disabled
+                                        value={formatNumber(año.volTotal)}
+                                      />
+                                    )}
                                   </FormItem>
                                 </div>
                               </div>
