@@ -201,7 +201,7 @@ function AssumptionVentas() {
         isEmpty = true;
       }
       c.items.forEach((i) => {
-        if (i.volumen === '') {
+        if (i.porcentajeChurn === '') {
           isEmpty = true;
         }
       });
