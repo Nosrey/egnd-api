@@ -9,7 +9,6 @@ import TableAssumptionVentas from './TableAssumptionVentas';
 
 function AssumptionVentas() {
   const [showRemoveProd, setShowRemoveProd] = useState(false);
-  const [inputEmpty, setImputEmpty] = useState(false);
   const [showRemoveChannel, setShowRemoveChannel] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
@@ -33,9 +32,22 @@ function AssumptionVentas() {
       }, 5000);
     } else {
       setProductos([...productos, newProduct]);
+      churn.forEach((ch) => {
+        ch.items.push({
+          prodId: newProduct.id,
+          porcentajeChurn: '',
+        });
+      });
+      channels.forEach((channel) => {
+        channel.items.push({
+          prodId: newProduct.id,
+          volumen: '',
+        });
+      });
       buttonSaveStatus();
     }
   };
+
   const addChurn = (newChurn) => {
     setChurn([...churn, newChurn]);
   };
@@ -82,9 +94,9 @@ function AssumptionVentas() {
     );
 
     churn.forEach(
-      (channel) =>
+      (ch) =>
         // eslint-disable-next-line no-param-reassign
-        (channel.items = churn[0].items.filter((item) => item.prodId !== id)),
+        (ch.items = churn[0].items.filter((item) => item.prodId !== id)),
     );
   };
 
@@ -176,6 +188,9 @@ function AssumptionVentas() {
 
   const validateEmptyInputs = () => {
     let isEmpty = false;
+    console.log('p', productos);
+    console.log('c', channels);
+    console.log('ch', churn);
     productos.forEach((p) => {
       if (p.name === '' || p.model === '' || p.type === '') {
         isEmpty = true;
@@ -206,6 +221,8 @@ function AssumptionVentas() {
         }
       });
     });
+
+    if (countries.length === 0) isEmpty = true;
 
     return isEmpty;
   };
