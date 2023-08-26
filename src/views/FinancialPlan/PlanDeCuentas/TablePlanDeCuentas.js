@@ -36,7 +36,7 @@ function TablePlanDeCuentas({
               cuentas.map((cta, index) => (
                 <div
                   className={`grid grid-cols-12 items-center gap-x-3 mb-6 auto-cols-max ${
-                    media === 'mobile' ? 'w-[600px]' : ''
+                    media === 'mobile' ? 'w-[900px]' : ''
                   }`}
                   key={index}
                 >

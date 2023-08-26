@@ -2,6 +2,7 @@ import ContainerScrollable from 'components/shared/ContainerScrollable';
 import { Alert, FormContainer, Tabs } from 'components/ui';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getUser } from 'services/Requests';
@@ -21,6 +22,7 @@ function Churn() {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const currency = useSelector((state) => state.auth.user.currency);
   const currentState = useSelector((state) => state.auth.user);
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     const estructura = {};
@@ -83,6 +85,8 @@ function Churn() {
           setVolumenPrecio(false);
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
+        setShowLoader(false);
+
       })
       .catch((error) => console.error(error));
   }, []);
@@ -99,78 +103,86 @@ function Churn() {
           No se pudieron guardar los datos.
         </Alert>
       )}
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Costos Unitarios</h4>
-        <span>Costos Directos</span>
-      </div>
 
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-        <div className="border-b-2 px-4 py-1">
-          <h6>Carga de productos / servicios</h6>
-        </div>
-        {infoForm && volumenPrecio ? (
-          <Tabs defaultValue={defaultCountry}>
-            <TabList>
-              {infoForm &&
-                Object.keys(infoForm).map((pais, index) => (
-                  <TabNav key={index} value={pais}>
-                    <div className="capitalize">{pais}</div>
-                  </TabNav>
-                ))}
-            </TabList>
-            {infoForm && (
-              <div className="container-countries">
-                <FormContainer className="cont-countries">
-                  <ContainerScrollable
-                    contenido={
-                      <TableCosto
-                        data={infoForm}
-                        volumenData={volumenData}
-                        assumptionData={assumptionData}
-                        precioData={precioData}
-                        showAlertSuces={(boolean) =>
-                          setShowSuccessAlert(boolean)
-                        }
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        currency={currency}
-                      />
-                    }
-                  />
-                </FormContainer>
+      {showLoader ?
+              <MySpinner/>
+        : (
+          <>
+            <div className="border-b-2 mb-8 pb-1">
+              <h4>Clientes</h4>
+              <span>Plan de ventas</span>
+            </div>
+
+            <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+              <div className="border-b-2 px-4 py-1">
+                <h6>Resumen de Alta y Churn</h6>
               </div>
-            )}
-          </Tabs>
-        ) : (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            {!volumenPrecio ? (
-              <span className="text-center cursor-default">
-                Para acceder a este formulario primero debe completar los
-                formularios de{' '}
-                <Link className="text-indigo-700 underline" to="/volumen">
-                  Volumen
-                </Link>{' '}
-                y{' '}
-                <Link className="text-indigo-700 underline" to="/precio">
-                  Precio
-                </Link>
-                .
-              </span>
-            ) : (
-              <span className="text-center cursor-default">
-                Para acceder a este formulario primero debe completar el
-                formulario de{' '}
-                <Link
-                  className="text-indigo-700 underline"
-                  to="/supuestos-ventas"
-                >
-                  Supuestos de Ventas
-                </Link>
-                .
-              </span>
-            )}
-          </div>
+              {infoForm && volumenPrecio ? (
+                <Tabs defaultValue={defaultCountry}>
+                  <TabList>
+                    {infoForm &&
+                      Object.keys(infoForm).map((pais, index) => (
+                        <TabNav key={index} value={pais}>
+                          <div className="capitalize">{pais}</div>
+                        </TabNav>
+                      ))}
+                  </TabList>
+                  {infoForm && (
+                    <div className="container-countries">
+                      <FormContainer className="cont-countries">
+                        <ContainerScrollable
+                          contenido={
+                            <TableCosto
+                              data={infoForm}
+                              volumenData={volumenData}
+                              assumptionData={assumptionData}
+                              precioData={precioData}
+                              showAlertSuces={(boolean) =>
+                                setShowSuccessAlert(boolean)
+                              }
+                              showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                              currency={currency}
+                            />
+                          }
+                        />
+                      </FormContainer>
+                    </div>
+                  )}
+                </Tabs>
+              ) : (
+                <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                  {!volumenPrecio ? (
+                    <span className="text-center cursor-default">
+                      Para acceder a este formulario primero debe completar los
+                      formularios de{' '}
+                      <Link className="text-indigo-700 underline" to="/volumen">
+                        Volumen
+                      </Link>{' '}
+                      y{' '}
+                      <Link className="text-indigo-700 underline" to="/precio">
+                        Precio
+                      </Link>
+                      .
+                    </span>
+                  ) : (
+                    <span className="text-center cursor-default">
+                      Para acceder a este formulario primero debe completar el
+                      formulario de{' '}
+                      <Link
+                        className="text-indigo-700 underline"
+                        to="/supuestos-ventas"
+                      >
+                        Supuestos de Ventas
+                      </Link>
+                      .
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          </>
         )}
-      </div>
+      
     </div>
   );
 }

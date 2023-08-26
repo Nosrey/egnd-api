@@ -3,23 +3,27 @@ import classNames from 'classnames'
 import { Container } from 'components/shared'
 import { APP_NAME } from 'constants/app.constant'
 import { PAGE_CONTAINER_GUTTER_X } from 'constants/theme.constant'
+import { useMedia } from 'utils/hooks/useMedia'
+
+
 
 function FooterContent() {
+  const media = useMedia();
+
   return (
-    <div className="flex items-center justify-between flex-auto w-full">
+    <div className={`flex ${media === "mobile" ?  "flex-col": " items-center justify-between flex-auto w-full" }`}>
       <span>
-        Copyright &copy; {`${new Date().getFullYear()}`}{' '}
-        <span className="font-semibold">{`${APP_NAME}`}</span> All rights
-        reserved.
+      <span className="font-semibold">{`${APP_NAME}`}</span> &copy; {`${new Date().getFullYear()}`}{' '}
+        
       </span>
       <div className="">
-        <a className="text-gray" href="/#" onClick={(e) => e.preventDefault()}>
-          Term & Conditions
+          <span>
+           Desarrollado por {' '}
+           <a className="text-gray font-semibold" href="https://yellowpatito.com/inicio" target='_blank' rel="noreferrer">
+          Yellow Patito
         </a>
-        <span className="mx-2 text-muted"> | </span>
-        <a className="text-gray" href="/#" onClick={(e) => e.preventDefault()}>
-          Privacy & Policy
-        </a>
+          </span>
+        
       </div>
     </div>
   )

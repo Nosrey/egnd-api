@@ -4,6 +4,7 @@ import GraficoDeBarra from 'components/shared/dashboard/GraficoDeBarra';
 import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
 import Total from 'components/shared/dashboard/Total';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { MenuItem, Select } from 'components/ui';
 import { año, periodo } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
@@ -36,6 +37,7 @@ function DashboardVentas() {
   const [totalClients, setTotalClients] = useState(0);
   const [totalsCacr, setTotalsCacr] = useState();
   const [newClients, setNewClients] = useState(0);
+  const [showLoader, setShowLoader] = useState(true);
 
   const selectYear = (event) => {
     setYearSelected(event);
@@ -139,7 +141,6 @@ function DashboardVentas() {
   };
 
   const calcVols = (data) => {
-    console.log('[VOL]', data);
     if (data && dataAssump) {
       let totV = 0;
       let totS = 0;
@@ -397,156 +398,167 @@ function DashboardVentas() {
           calcCacr(data?.volumenData);
           calcClentes();
         }
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, [yearSelected, periodoSelected]);
 
   return (
-    <div>
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Dashboard de Ventas</h4>
-        <span>Plan de Ventas</span>
-      </div>
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg">
-        <div className="px-4 py-5">
-          <div className="flex justify-end gap-[20px]">
-            <Select
-              className="w-[12%]"
-              placeholder="Año"
-              options={año}
-              value={yearSelected}
-              onChange={selectYear}
-            >
-              {año.map((a) => (
-                <MenuItem key={a.value} value={a.value}>
-                  {a.label}
-                </MenuItem>
-              ))}
-            </Select>
-            {yearSelected.value !== 'todo' && (
-              <Select
-                className="w-[12%]"
-                placeholder="Periodo"
-                options={periodo}
-                value={periodoSelected}
-                onChange={selectPeriodo}
-              >
-                {periodo.map((a) => (
-                  <MenuItem key={a.value} value={a.value}>
-                    {a.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          </div>
-          <div className="mt-[30px] mb-[30px]">
-            <Total title="Total de Ventas" data={totalVentas} />
-          </div>
-          <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
-            <CardNumerica
-              type="default"
-              title="Venta de Productos"
-              hasCurrency
-              cantidad={totalProd}
-            />
-            <CardNumerica
-              type="default"
-              title="Cantidad de productos"
-              cantidad={volProd}
-            />
-            <CardNumerica
-              type="default"
-              title="Ticket medio por Producto"
-              hasCurrency
-              cantidad={volProd ? totalProd / volProd : 0}
-            />
-            <CardNumerica
-              type="default"
-              title="Venta de Servicios"
-              hasCurrency
-              cantidad={totalServ}
-            />
-            <CardNumerica
-              type="default"
-              title="Volumen de Servicios"
-              cantidad={volServ}
-            />
-            <CardNumerica
-              type="default"
-              title="Ticket medio por Servicio"
-              hasCurrency
-              cantidad={volServ ? totalServ / volServ : 0}
-            />
-          </div>
-          {infoForm && (
-            <div className="flex justify-center gap-[50px] mt-[50px] mb-[40px]">
-              <div className="w-[50%]">
-                {yearSelected.value === 'todo' ? (
-                  <h5 className="mb-[30px]">Distribución de Ventas por Año</h5>
-                ) : (
-                  <h5 className="mb-[30px]">Distribución de Ventas por Mes</h5>
-                )}
-                <GraficoDeBarra
-                  data={infoForm}
-                  yearSelected={yearSelected}
-                  periodoSelected={periodoSelected}
-                />
-              </div>
-              <div className="w-[50%]">
-                <h5 className="mb-[30px]">Distribución de Ventas por País</h5>
-                <BarraDeProgreso
-                  data={infoForm}
-                  totalVentas={totalVentas}
-                  selectYear={yearSelected}
-                  periodoSelected={periodoSelected}
-                />
-              </div>
+    <>
+      {showLoader ?
+        <MySpinner/>
+      : (
+        <>
+          <div>
+            <div className="border-b-2 mb-8 pb-1">
+              <h4>Dashboard de Ventas</h4>
+              <span>Plan de Ventas</span>
             </div>
-          )}
-          {infoForm && (
-            <div className="flex justify-center gap-[50px] mb-[40px]">
-              {dataAssump.length !== 0 && (
-                <ProgresoCircularScroll
-                  title="Churn Promedio"
-                  churnProducto={dataAssump}
-                />
-              )}
-              {yearSelected.value !== 'año 1' &&
-                yearSelected.value !== '' &&
-                yearSelected.value !== 'todo' && (
-                  <ProgresoCircular
-                    title="CAGR"
-                    data={(
-                      (totalsCacr[yearSelected.year] / totalsCacr[0]) **
-                      (1 / (yearSelected.year + 1) - 1)
-                    ).toFixed(2)}
+            <div className="border-solid border-2 border-#e5e7eb rounded-lg">
+              <div className="px-4 py-5">
+                <div className="flex justify-end gap-[20px]">
+                  <Select
+                    className="w-[12%]"
+                    placeholder="Año"
+                    options={año}
+                    value={yearSelected}
+                    onChange={selectYear}
+                  >
+                    {año.map((a) => (
+                      <MenuItem key={a.value} value={a.value}>
+                        {a.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {yearSelected.value !== 'todo' && (
+                    <Select
+                      className="w-[12%]"
+                      placeholder="Periodo"
+                      options={periodo}
+                      value={periodoSelected}
+                      onChange={selectPeriodo}
+                    >
+                      {periodo.map((a) => (
+                        <MenuItem key={a.value} value={a.value}>
+                          {a.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                </div>
+                <div className="mt-[30px] mb-[30px]">
+                  <Total title="Total de Ventas" data={totalVentas} />
+                </div>
+                <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
+                  <CardNumerica
+                    type="default"
+                    title="Venta de Productos"
+                    hasCurrency
+                    cantidad={totalProd}
                   />
+                  <CardNumerica
+                    type="default"
+                    title="Cantidad de productos"
+                    cantidad={volProd}
+                  />
+                  <CardNumerica
+                    type="default"
+                    title="Ticket medio por Producto"
+                    hasCurrency
+                    cantidad={volProd ? totalProd / volProd : 0}
+                  />
+                  <CardNumerica
+                    type="default"
+                    title="Venta de Servicios"
+                    hasCurrency
+                    cantidad={totalServ}
+                  />
+                  <CardNumerica
+                    type="default"
+                    title="Volumen de Servicios"
+                    cantidad={volServ}
+                  />
+                  <CardNumerica
+                    type="default"
+                    title="Ticket medio por Servicio"
+                    hasCurrency
+                    cantidad={volServ ? totalServ / volServ : 0}
+                  />
+                </div>
+                {infoForm && (
+                  <div className="flex justify-center gap-[50px] mt-[50px] mb-[40px]">
+                    <div className="w-[50%]">
+                      {yearSelected.value === 'todo' ? (
+                        <h5 className="mb-[30px]">Distribución de Ventas por Año</h5>
+                      ) : (
+                        <h5 className="mb-[30px]">Distribución de Ventas por Mes</h5>
+                      )}
+                      <GraficoDeBarra
+                        data={infoForm}
+                        yearSelected={yearSelected}
+                        periodoSelected={periodoSelected}
+                      />
+                    </div>
+                    <div className="w-[50%]">
+                      <h5 className="mb-[30px]">Distribución de Ventas por País</h5>
+                      <BarraDeProgreso
+                        data={infoForm}
+                        totalVentas={totalVentas}
+                        selectYear={yearSelected}
+                        periodoSelected={periodoSelected}
+                      />
+                    </div>
+                  </div>
                 )}
+                {infoForm && (
+                  <div className="flex justify-center gap-[50px] mb-[40px]">
+                    {dataAssump.length !== 0 && (
+                      <ProgresoCircularScroll
+                        title="Churn Promedio"
+                        churnProducto={dataAssump}
+                      />
+                    )}
+                    {yearSelected.value !== 'año 1' &&
+                      yearSelected.value !== '' &&
+                      yearSelected.value !== 'todo' && (
+                        <ProgresoCircular
+                          title="CAGR"
+                          data={(
+                            (totalsCacr[yearSelected.year] / totalsCacr[0]) **
+                            (1 / (yearSelected.year + 1) - 1)
+                          ).toFixed(2)}
+                        />
+                      )}
+                  </div>
+                )}
+                <h5 className="mb-[20px]">Clientes</h5>
+                <div className="grid grid-cols-3 gap-[20px] mb-[40px]">
+                  <CardNumerica
+                    title="Clientes Nuevos"
+                    type="clear"
+                    cantidad={newClients}
+                    data={infoForm}
+                  />
+                  <CardNumerica
+                    type="totalC"
+                    title="Clientes Totales"
+                    cantidad={totalClients}
+                  />
+                  <CardNumerica
+                    type="ticket"
+                    title="Ticket por cliente"
+                    hasCurrency
+                    cantidad={totalVentas / totalClients}
+                  />
+                </div>
+              </div>
             </div>
-          )}
-          <h5 className="mb-[20px]">Clientes</h5>
-          <div className="grid grid-cols-3 gap-[20px] mb-[40px]">
-            <CardNumerica
-              title="Clientes Nuevos"
-              type="clear"
-              cantidad={newClients}
-              data={infoForm}
-            />
-            <CardNumerica
-              type="totalC"
-              title="Clientes Totales"
-              cantidad={totalClients}
-            />
-            <CardNumerica
-              type="ticket"
-              title="Ticket por cliente"
-              hasCurrency
-              cantidad={totalVentas / totalClients}
-            />
           </div>
-        </div>
-      </div>
-    </div>
+        </>
+      )}
+    </>
+
+    
   );
 }
 
