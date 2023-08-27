@@ -3,6 +3,7 @@ import ContainerScrollable from 'components/shared/ContainerScrollable';
 import { Alert } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { createAssumpVenta, getUser } from 'services/Requests';
 import { useMedia } from 'utils/hooks/useMedia';
 import TableAssumptionVentas from './TableAssumptionVentas';
@@ -21,6 +22,7 @@ function AssumptionVentas() {
   const currentState = useSelector((state) => state.auth.user);
   const [channels, setChannels] = useState([]);
   const [churn, setChurn] = useState([]);
+  const [showLoader, setShowLoader] = useState(true);
 
   const addProduct = (newProduct) => {
     if (productos.length === 10) {
@@ -51,6 +53,7 @@ function AssumptionVentas() {
   const addChurn = (newChurn) => {
     setChurn([...churn, newChurn]);
   };
+
   const addChannel = (newChannel) => {
     if (channels.length === 5) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -67,12 +70,16 @@ function AssumptionVentas() {
       });
     }
   };
+
   useEffect(() => {
     getUser(currentState.id).then((d) => {
       setProductos(d.assumptionData && d.assumptionData[0].productos);
       setCountries(() => d.assumptionData && d.assumptionData[0].paises);
       setChannels(d.assumptionData && d.assumptionData[0].canales);
       setChurn(d.assumptionData && d.assumptionData[0].churns);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 500);
     });
   }, []);
 
@@ -142,6 +149,7 @@ function AssumptionVentas() {
     }
     setChannels(() => [...copyChannels]);
   };
+
   const handleEditChurn = (nameChannel, value, prodId) => {
     const position = churn.findIndex((c) => c.channel === nameChannel);
     const copyChurn = [...churn];
@@ -168,6 +176,7 @@ function AssumptionVentas() {
       e.preventDefault();
     }
   };
+
   const handleKeyPressChurn = (e) => {
     if (e.key === '-') {
       e.preventDefault();
@@ -188,9 +197,7 @@ function AssumptionVentas() {
 
   const validateEmptyInputs = () => {
     let isEmpty = false;
-    console.log('p', productos);
-    console.log('c', channels);
-    console.log('ch', churn);
+    
     productos.forEach((p) => {
       if (p.name === '' || p.model === '' || p.type === '') {
         isEmpty = true;
@@ -283,72 +290,80 @@ function AssumptionVentas() {
           {errorMessage}
         </Alert>
       )}
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Supuestos de Ventas</h4>
-        <span>Plan de ventas</span>
-      </div>
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg">
-        <div className="border-b-2 px-4 py-1">
-          <h6>Carga de productos / servicios</h6>
-        </div>
-        {media === 'mobile' ? (
-          <ContainerScrollable
-            contenido={
-              <TableAssumptionVentas
-                countries={countries}
-                setCountries={setCountries}
-                productos={productos}
-                errors={errors}
-                removeProd={removeProd}
-                removeChannel={removeChannel}
-                addProduct={addProduct}
-                addChannel={addChannel}
-                channels={channels}
-                handleEditProduct={handleEditProduct}
-                handleEditChannel={handleEditChannel}
-                handleKeyPressVolumen={handleKeyPressVolumen}
-                churn={churn}
-                handleEditChurn={handleEditChurn}
-                handleKeyPressChurn={handleKeyPressChurn}
-                onSubmit={onSubmit}
-                showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
-                showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                activeButton={activeButton}
-                showRemoveProd={showRemoveProd}
-                setShowRemoveProd={setShowRemoveProd}
-                showRemoveChannel={showRemoveChannel}
-                setShowRemoveChannel={setShowRemoveChannel}
-              />
-            }
-          />
-        ) : (
-          <TableAssumptionVentas
-            countries={countries}
-            setCountries={setCountries}
-            productos={productos}
-            errors={errors}
-            removeProd={removeProd}
-            removeChannel={removeChannel}
-            addProduct={addProduct}
-            addChannel={addChannel}
-            channels={channels}
-            handleEditProduct={handleEditProduct}
-            handleEditChannel={handleEditChannel}
-            handleKeyPressVolumen={handleKeyPressVolumen}
-            churn={churn}
-            handleEditChurn={handleEditChurn}
-            handleKeyPressChurn={handleKeyPressChurn}
-            onSubmit={onSubmit}
-            showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
-            showAlertError={(boolean) => setShowErrorAlert(boolean)}
-            activeButton={activeButton}
-            showRemoveProd={showRemoveProd}
-            setShowRemoveProd={setShowRemoveProd}
-            showRemoveChannel={showRemoveChannel}
-            setShowRemoveChannel={setShowRemoveChannel}
-          />
+
+        {showLoader ?
+          <MySpinner/>
+        : (
+          <>
+              <div className="border-b-2 mb-8 pb-1">
+                <h4>Supuestos de Ventas</h4>
+                <span>Plan de ventas</span>
+              </div>
+              <div className="border-solid border-2 border-#e5e7eb rounded-lg">
+                <div className="border-b-2 px-4 py-1">
+                  <h6>Carga de productos / servicios</h6>
+                </div>
+                {media === 'mobile' ? (
+                  <ContainerScrollable
+                    contenido={
+                      <TableAssumptionVentas
+                        countries={countries}
+                        setCountries={setCountries}
+                        productos={productos}
+                        errors={errors}
+                        removeProd={removeProd}
+                        removeChannel={removeChannel}
+                        addProduct={addProduct}
+                        addChannel={addChannel}
+                        channels={channels}
+                        handleEditProduct={handleEditProduct}
+                        handleEditChannel={handleEditChannel}
+                        handleKeyPressVolumen={handleKeyPressVolumen}
+                        churn={churn}
+                        handleEditChurn={handleEditChurn}
+                        handleKeyPressChurn={handleKeyPressChurn}
+                        onSubmit={onSubmit}
+                        showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
+                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                        activeButton={activeButton}
+                        showRemoveProd={showRemoveProd}
+                        setShowRemoveProd={setShowRemoveProd}
+                        showRemoveChannel={showRemoveChannel}
+                        setShowRemoveChannel={setShowRemoveChannel}
+                      />
+                    }
+                  />
+                ) : (
+                  <TableAssumptionVentas
+                    countries={countries}
+                    setCountries={setCountries}
+                    productos={productos}
+                    errors={errors}
+                    removeProd={removeProd}
+                    removeChannel={removeChannel}
+                    addProduct={addProduct}
+                    addChannel={addChannel}
+                    channels={channels}
+                    handleEditProduct={handleEditProduct}
+                    handleEditChannel={handleEditChannel}
+                    handleKeyPressVolumen={handleKeyPressVolumen}
+                    churn={churn}
+                    handleEditChurn={handleEditChurn}
+                    handleKeyPressChurn={handleKeyPressChurn}
+                    onSubmit={onSubmit}
+                    showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
+                    showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                    activeButton={activeButton}
+                    showRemoveProd={showRemoveProd}
+                    setShowRemoveProd={setShowRemoveProd}
+                    showRemoveChannel={showRemoveChannel}
+                    setShowRemoveChannel={setShowRemoveChannel}
+                  />
+                )}
+              </div>
+          </>
         )}
-      </div>
+      
     </div>
   );
 }
