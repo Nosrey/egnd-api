@@ -3,6 +3,7 @@
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import { Alert, FormContainer, Tabs } from 'components/ui';
 import { useEffect, useState } from 'react';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getUser } from 'services/Requests';
@@ -23,6 +24,7 @@ function Ventas() {
   const [showFaltaPrecioMssg, setShowFaltaPrecioMssg] = useState(false);
   const [showFaltaVolumenMssg, setShowFaltaVolumenMssg] = useState(false);
   const [showFaltaInfoMssg, setShowFaltaInfoMssg] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     getUser(currentState.id)
@@ -55,6 +57,7 @@ function Ventas() {
         }
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
         setCountry(data?.assumptionData[0]?.paises[0]?.value);
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -71,88 +74,96 @@ function Ventas() {
           No se pudieron guardar los datos.
         </Alert>
       )}
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Ventas Totales</h4>
-        <span>Plan de ventas</span>
-      </div>
+      {showLoader ? (
+        <MySpinner />
+      ) : (
+        <>
+          <div className="border-b-2 mb-8 pb-1">
+            <h4>Ventas Totales</h4>
+            <span>Plan de ventas</span>
+          </div>
 
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-        <div className="border-b-2 px-4 py-1">
-          <h6>Carga de productos / servicios</h6>
-        </div>
-        {infoForm ? (
-          <Tabs defaultValue={defaultCountry}>
-            <TabList>
-              {infoForm &&
-                Object.keys(infoForm).map((pais, index) => (
-                  <TabNav key={index} value={pais}>
-                    <div
-                      className="capitalize"
-                      onClick={() => setCountry(pais)}
-                    >
-                      {pais}
-                    </div>
-                  </TabNav>
-                ))}
-            </TabList>
-            {infoForm && (
-              <div className="container-countries">
-                <FormContainer className="cont-countries">
-                  <ContainerScrollable
-                    contenido={
-                      <TableVentas
-                        data={infoForm}
-                        productos={products}
-                        showAlertSuces={(boolean) =>
-                          setShowSuccessAlert(boolean)
+          <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+            <div className="border-b-2 px-4 py-1">
+              <h6>Carga de productos / servicios</h6>
+            </div>
+            {infoForm ? (
+              <Tabs defaultValue={defaultCountry}>
+                <TabList>
+                  {infoForm &&
+                    Object.keys(infoForm).map((pais, index) => (
+                      <TabNav key={index} value={pais}>
+                        <div
+                          className="capitalize"
+                          onClick={() => setCountry(pais)}
+                        >
+                          {pais}
+                        </div>
+                      </TabNav>
+                    ))}
+                </TabList>
+                {infoForm && (
+                  <div className="container-countries">
+                    <FormContainer className="cont-countries">
+                      <ContainerScrollable
+                        contenido={
+                          <TableVentas
+                            data={infoForm}
+                            productos={products}
+                            showAlertSuces={(boolean) =>
+                              setShowSuccessAlert(boolean)
+                            }
+                            showAlertError={(boolean) =>
+                              setShowErrorAlert(boolean)
+                            }
+                            country={country}
+                            currency={currency}
+                          />
                         }
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        country={country}
-                        currency={currency}
                       />
-                    }
-                  />
-                </FormContainer>
+                    </FormContainer>
+                  </div>
+                )}
+              </Tabs>
+            ) : (
+              <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                {showFaltaPrecioMssg && (
+                  <span className="text-center cursor-default">
+                    Para ver esta información debe completar el formulario de{' '}
+                    <Link className="text-indigo-700 underline" to="/precio">
+                      Precio
+                    </Link>
+                    .
+                  </span>
+                )}
+                {showFaltaVolumenMssg && (
+                  <span className="text-center cursor-default">
+                    Para ver esta información debe completar el formulario de{' '}
+                    <Link className="text-indigo-700 underline" to="/volumen">
+                      Volumen
+                    </Link>
+                    .
+                  </span>
+                )}
+                {showFaltaInfoMssg && (
+                  <span className="text-center cursor-default">
+                    Para acceder a este formulario primero debe completar los
+                    formularios de{' '}
+                    <Link className="text-indigo-700 underline" to="/volumen">
+                      Volumen
+                    </Link>{' '}
+                    y{' '}
+                    <Link className="text-indigo-700 underline" to="/precio">
+                      Precio
+                    </Link>
+                    .
+                  </span>
+                )}
               </div>
             )}
-          </Tabs>
-        ) : (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            {showFaltaPrecioMssg && (
-              <span className="text-center cursor-default">
-                Para ver esta información debe completar el formulario de{' '}
-                <Link className="text-indigo-700 underline" to="/precio">
-                  Precio
-                </Link>
-                .
-              </span>
-            )}
-            {showFaltaVolumenMssg && (
-              <span className="text-center cursor-default">
-                Para ver esta información debe completar el formulario de{' '}
-                <Link className="text-indigo-700 underline" to="/volumen">
-                  Volumen
-                </Link>
-                .
-              </span>
-            )}
-            {showFaltaInfoMssg && (
-              <span className="text-center cursor-default">
-                Para acceder a este formulario primero debe completar los
-                formularios de{' '}
-                <Link className="text-indigo-700 underline" to="/volumen">
-                  Volumen
-                </Link>{' '}
-                y{' '}
-                <Link className="text-indigo-700 underline" to="/precio">
-                  Precio
-                </Link>
-                .
-              </span>
-            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }

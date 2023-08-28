@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { createPuestosp, getUser } from 'services/Requests';
+import { useMedia } from 'utils/hooks/useMedia';
 import TablePuestosP from './TablePuestosP';
 
 const { TabNav, TabList } = Tabs;
@@ -21,6 +22,8 @@ function PuestosP() {
   const [errorMessage, setErrorMessage] = useState('');
   const [country, setCountry] = useState(defaultCountry);
   const currentState = useSelector((state) => state.auth.user);
+  const media = useMedia();
+
 
   useEffect(() => {
     let estructura = {};
@@ -107,6 +110,8 @@ function PuestosP() {
       .catch((error) => console.error(error));
   }, []);
 
+ 
+
   return (
     <div>
       {showSuccessAlert && (
@@ -146,7 +151,26 @@ function PuestosP() {
                     ),
                 )}
             </TabList>
-            {infoForm && (
+            {infoForm &&  media !== "mobile" && media !== "tablet" &&(
+              <div className="container-countries p-[40px]">
+                <FormContainer className="cont-countries">
+                    <TablePuestosP
+                      data={infoForm}
+                      puestosQ={puestosQ}
+                      showAlertSuces={(boolean) =>
+                        setShowSuccessAlert(boolean)
+                      }
+                      postPuestoPData={postPuestosPData}
+                      showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                      errorMessage={(error) => setErrorMessage(error)}
+                      head={country}
+                      cargaSocial={cargaSocial}
+                      handleEditPuesto={handleEditPuesto}
+                    />
+                </FormContainer>
+              </div>
+            )}
+              {infoForm && ( media === "mobile" || media === "tablet") && (
               <div className="container-countries">
                 <FormContainer className="cont-countries">
                   <ContainerScrollable
@@ -168,7 +192,7 @@ function PuestosP() {
                   />
                 </FormContainer>
               </div>
-            )}
+            )} 
           </Tabs>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">

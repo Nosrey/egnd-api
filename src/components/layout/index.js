@@ -42,7 +42,7 @@ function Layout() {
     <Suspense
       fallback={
         <div className="flex flex-auto flex-col h-[100vh]">
-          <Loading loading />
+          {/* <Loading loading /> */}
         </div>
       }
     >
