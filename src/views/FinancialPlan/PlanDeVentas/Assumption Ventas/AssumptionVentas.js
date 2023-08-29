@@ -1,9 +1,9 @@
 /* eslint-disable no-return-assign */
 import ContainerScrollable from 'components/shared/ContainerScrollable';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { Alert } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import MySpinner from 'components/shared/loaders/MySpinner';
 import { createAssumpVenta, getUser } from 'services/Requests';
 import { useMedia } from 'utils/hooks/useMedia';
 import TableAssumptionVentas from './TableAssumptionVentas';
@@ -73,10 +73,13 @@ function AssumptionVentas() {
 
   useEffect(() => {
     getUser(currentState.id).then((d) => {
-      setProductos(d.assumptionData && d.assumptionData[0].productos);
-      setCountries(() => d.assumptionData && d.assumptionData[0].paises);
-      setChannels(d.assumptionData && d.assumptionData[0].canales);
-      setChurn(d.assumptionData && d.assumptionData[0].churns);
+      if (d.assumptionData.length !== 0) {
+        setProductos(d.assumptionData && d.assumptionData[0].productos);
+        setCountries(() => d.assumptionData && d.assumptionData[0].paises);
+        setChannels(d.assumptionData && d.assumptionData[0].canales);
+        setChurn(d.assumptionData && d.assumptionData[0].churns);
+      }
+
       setTimeout(() => {
         setShowLoader(false);
       }, 500);
@@ -197,7 +200,7 @@ function AssumptionVentas() {
 
   const validateEmptyInputs = () => {
     let isEmpty = false;
-    
+
     productos.forEach((p) => {
       if (p.name === '' || p.model === '' || p.type === '') {
         isEmpty = true;
@@ -291,49 +294,21 @@ function AssumptionVentas() {
         </Alert>
       )}
 
-        {showLoader ?
-          <MySpinner/>
-        : (
-          <>
-              <div className="border-b-2 mb-8 pb-1">
-                <h4>Supuestos de Ventas</h4>
-                <span>Plan de ventas</span>
-              </div>
-              <div className="border-solid border-2 border-#e5e7eb rounded-lg">
-                <div className="border-b-2 px-4 py-1">
-                  <h6>Carga de productos / servicios</h6>
-                </div>
-                {media === 'mobile' ? (
-                  <ContainerScrollable
-                    contenido={
-                      <TableAssumptionVentas
-                        countries={countries}
-                        setCountries={setCountries}
-                        productos={productos}
-                        errors={errors}
-                        removeProd={removeProd}
-                        removeChannel={removeChannel}
-                        addProduct={addProduct}
-                        addChannel={addChannel}
-                        channels={channels}
-                        handleEditProduct={handleEditProduct}
-                        handleEditChannel={handleEditChannel}
-                        handleKeyPressVolumen={handleKeyPressVolumen}
-                        churn={churn}
-                        handleEditChurn={handleEditChurn}
-                        handleKeyPressChurn={handleKeyPressChurn}
-                        onSubmit={onSubmit}
-                        showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        activeButton={activeButton}
-                        showRemoveProd={showRemoveProd}
-                        setShowRemoveProd={setShowRemoveProd}
-                        showRemoveChannel={showRemoveChannel}
-                        setShowRemoveChannel={setShowRemoveChannel}
-                      />
-                    }
-                  />
-                ) : (
+      {showLoader ? (
+        <MySpinner />
+      ) : (
+        <>
+          <div className="border-b-2 mb-8 pb-1">
+            <h4>Supuestos de Ventas</h4>
+            <span>Plan de ventas</span>
+          </div>
+          <div className="border-solid border-2 border-#e5e7eb rounded-lg">
+            <div className="border-b-2 px-4 py-1">
+              <h6>Carga de productos / servicios</h6>
+            </div>
+            {media === 'mobile' ? (
+              <ContainerScrollable
+                contenido={
                   <TableAssumptionVentas
                     countries={countries}
                     setCountries={setCountries}
@@ -359,11 +334,38 @@ function AssumptionVentas() {
                     showRemoveChannel={showRemoveChannel}
                     setShowRemoveChannel={setShowRemoveChannel}
                   />
-                )}
-              </div>
-          </>
-        )}
-      
+                }
+              />
+            ) : (
+              <TableAssumptionVentas
+                countries={countries}
+                setCountries={setCountries}
+                productos={productos}
+                errors={errors}
+                removeProd={removeProd}
+                removeChannel={removeChannel}
+                addProduct={addProduct}
+                addChannel={addChannel}
+                channels={channels}
+                handleEditProduct={handleEditProduct}
+                handleEditChannel={handleEditChannel}
+                handleKeyPressVolumen={handleKeyPressVolumen}
+                churn={churn}
+                handleEditChurn={handleEditChurn}
+                handleKeyPressChurn={handleKeyPressChurn}
+                onSubmit={onSubmit}
+                showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
+                showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                activeButton={activeButton}
+                showRemoveProd={showRemoveProd}
+                setShowRemoveProd={setShowRemoveProd}
+                showRemoveChannel={showRemoveChannel}
+                setShowRemoveChannel={setShowRemoveChannel}
+              />
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
