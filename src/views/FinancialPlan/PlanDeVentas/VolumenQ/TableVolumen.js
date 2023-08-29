@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import {
   Button,
   FormContainer,
@@ -335,6 +336,7 @@ function TableVolumen(props) {
                                   />
                                 </Tooltip>
                               </FormItem>
+
                               <FormItem className="mb-0 w-[90px]">
                                 <Tooltip
                                   placement="top-end"
@@ -359,6 +361,7 @@ function TableVolumen(props) {
                                 </Tooltip>
                               </FormItem>
                             </div>
+
                             <FormItem className=" mb-0 w-[230px] mt-[12px]">
                               <Tooltip
                                 placement="top-end"
@@ -584,17 +587,34 @@ function TableVolumen(props) {
                           año &&
                           año.numeros?.map((valor, index) => (
                             <p className="w-[90px] text-center">
-                              {formatNumber(valor)}
+                              <Tooltip
+                                placement="top-end"
+                                title={formatNumber(valor)}
+                              >
+                                <ShortNumberNotation numero={valor} />
+                              </Tooltip>
                             </p>
                           ))}
                         {año.numeros?.length !== 0 && (
                           <p className="w-[90px] text-center font-bold">
-                            {formatNumber(
-                              año.numeros?.length !== 0 &&
-                                año?.numeros?.reduce(
-                                  (total, current) => total + current,
-                                ),
-                            )}
+                            <Tooltip
+                              placement="top-end"
+                              title={formatNumber(
+                                año.numeros?.length !== 0 &&
+                                  año?.numeros?.reduce(
+                                    (total, current) => total + current,
+                                  ),
+                              )}
+                            >
+                              <ShortNumberNotation
+                                numero={
+                                  año.numeros?.length !== 0 &&
+                                  año?.numeros?.reduce(
+                                    (total, current) => total + current,
+                                  )
+                                }
+                              />
+                            </Tooltip>
                           </p>
                         )}
                       </div>
@@ -612,13 +632,19 @@ function TableVolumen(props) {
               className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
               key={i}
             >
-              VOLUMEN CANAL '{canal.name}': {formatNumber(canal.sum)}
+              <Tooltip placement="top-end" title={formatNumber(canal.sum)}>
+                VOLUMEN CANAL '{canal.name}': &nbsp;
+                <ShortNumberNotation numero={canal.sum} />
+              </Tooltip>
             </p>
           ))}
 
           <br />
           <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            VOLUMEN TOTAL: {formatNumber(volTotal)}
+            <Tooltip placement="top-end" title={formatNumber(volTotal)}>
+              VOLUMEN TOTAL: &nbsp;
+              <ShortNumberNotation numero={volTotal} />
+            </Tooltip>
           </p>
         </div>
       )}
