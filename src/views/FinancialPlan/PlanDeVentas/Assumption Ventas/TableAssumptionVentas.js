@@ -94,7 +94,7 @@ function TableAssumptionVentas({
             <span className="col-start-9 col-end-13">Tipo</span>
           </div>
           <div>
-            {productos && productos.length > 0 ? (
+            {productos && productos?.length > 0 ? (
               productos.map((prod, index) => (
                 <div
                   className={`grid grid-cols-12 items-center gap-x-3 mb-6 auto-cols-max ${
@@ -204,7 +204,7 @@ function TableAssumptionVentas({
                   }`}
                 >
                   <div className="flex justify-between gap-x-2">
-                    {productos.length > 0 ? (
+                    {productos?.length > 0 ? (
                       <Button
                         style={{
                           width: '47%',
@@ -313,7 +313,7 @@ function TableAssumptionVentas({
             >
               Canal
             </span>
-            {channels.length !== 0 && (
+            {channels?.length !== 0 && (
               <>
                 <span
                   className={` ${
@@ -346,7 +346,7 @@ function TableAssumptionVentas({
           </div>
 
           <div>
-            {channels && channels.length > 0
+            {channels && channels?.length > 0
               ? channels.map((channel, index) => (
                   <div
                     className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max ${
@@ -427,7 +427,7 @@ function TableAssumptionVentas({
                         onClick={() => removeChannel(channel.name)}
                       />
                     )}
-                    {productos && productos.length > 0
+                    {productos && productos?.length > 0
                       ? productos.map((prod, index) => (
                           <div
                             className="grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max"
@@ -493,7 +493,7 @@ function TableAssumptionVentas({
                   </div>
                 ))
               : null}
-            {channels.length === 0 && (
+            {channels?.length === 0 && (
               <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
                 <span>
                   No hay canales creados. Créalos con el botón de Agregar.
@@ -519,7 +519,7 @@ function TableAssumptionVentas({
                   }`}
                 >
                   <div className="flex justify-between gap-x-2">
-                    {channels.length > 0 ? (
+                    {channels?.length > 0 ? (
                       <Button
                         style={{
                           width: '47%',
@@ -585,7 +585,7 @@ function TableAssumptionVentas({
             >
               Churns
             </span>
-            {channels.length !== 0 && (
+            {channels?.length !== 0 && (
               <span
                 className={` ${
                   media === 'mobile'
@@ -602,7 +602,7 @@ function TableAssumptionVentas({
             )}
           </div>
           <div>
-            {channels && channels.length > 0
+            {channels && channels?.length > 0
               ? channels.map((channel, index) => (
                   <div
                     className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 mb-6 auto-cols-max ${
@@ -632,7 +632,7 @@ function TableAssumptionVentas({
                         name="name"
                       />
                     </FormItem>
-                    {productos && productos.length > 0
+                    {productos && productos?.length > 0
                       ? productos.map((prod, index) => (
                           <div
                             className="grid grid-cols-12 col-start-1 col-end-13 items-center gap-x-3 mb-6 auto-cols-max"
@@ -699,7 +699,7 @@ function TableAssumptionVentas({
                   </div>
                 ))
               : null}
-            {channels.length === 0 && (
+            {channels?.length === 0 && (
               <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
                 <span>
                   No hay canales creados. Créalos con el botón de Agregar en la
