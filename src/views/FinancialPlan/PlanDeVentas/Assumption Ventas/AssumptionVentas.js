@@ -73,10 +73,10 @@ function AssumptionVentas() {
 
   useEffect(() => {
     getUser(currentState.id).then((d) => {
-      setProductos(d.assumptionData && d.assumptionData[0].productos);
-      setCountries(() => d.assumptionData && d.assumptionData[0].paises);
-      setChannels(d.assumptionData && d.assumptionData[0].canales);
-      setChurn(d.assumptionData && d.assumptionData[0].churns);
+      setProductos(d.assumptionData && d.assumptionData[0]?.productos);
+      setCountries(() => d.assumptionData && d.assumptionData[0]?.paises);
+      setChannels(d.assumptionData && d.assumptionData[0]?.canales);
+      setChurn(d.assumptionData && d.assumptionData[0]?.churns);
       setTimeout(() => {
         setShowLoader(false);
       }, 500);
@@ -84,7 +84,7 @@ function AssumptionVentas() {
   }, []);
 
   useEffect(() => {
-    if (productos.length !== 0 && channels.length !== 0) {
+    if (productos?.length !== 0 && channels?.length !== 0) {
       buttonSaveStatus();
     }
   }, [productos, channels]);
@@ -219,7 +219,7 @@ function AssumptionVentas() {
     });
 
     churn.forEach((c) => {
-      if (c.items.length === 0) {
+      if (c.items?.length === 0) {
         isEmpty = true;
       }
       c.items.forEach((i) => {
@@ -362,7 +362,7 @@ function AssumptionVentas() {
                 )}
               </div>
           </>
-        )}
+        )} 
       
     </div>
   );
