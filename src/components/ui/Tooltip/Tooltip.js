@@ -1,21 +1,21 @@
 /* eslint-disable no-return-assign */
-import React, { useState, useCallback, useRef, useEffect } from 'react'
-import classNames from 'classnames'
-import { Popper, Reference, Manager } from 'react-popper'
-import { motion, AnimatePresence } from 'framer-motion'
-import PropTypes from 'prop-types'
-import { Portal } from 'react-portal'
-import Arrow from './Arrow'
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import classNames from 'classnames';
+import { Popper, Reference, Manager } from 'react-popper';
+import { motion, AnimatePresence } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { Portal } from 'react-portal';
+import Arrow from './Arrow';
 
 function PopperElement(props) {
-  const { title, forceUpdate, open } = props
+  const { title, forceUpdate, open } = props;
   useEffect(() => {
     if (open) {
-      forceUpdate()
+      forceUpdate();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open])
-  return <span>{title}</span>
+  }, [open]);
+  return <span>{title}</span>;
 }
 
 function Tooltip(props) {
@@ -27,24 +27,24 @@ function Tooltip(props) {
     wrapperClass,
     isOpen,
     ...rest
-  } = props
+  } = props;
 
-  const [tooltipOpen, setTooltipOpen] = useState(isOpen)
-  const tooltipNode = useRef()
+  const [tooltipOpen, setTooltipOpen] = useState(isOpen);
+  const tooltipNode = useRef();
 
-  const tooltipBackground = 'gray-800'
-  const tooltipDarkBackground = 'black'
+  const tooltipBackground = 'gray-800';
+  const tooltipDarkBackground = 'black';
 
-  const defaultTooltipClass = `tooltip bg-${tooltipBackground} dark:bg-${tooltipDarkBackground}`
+  const defaultTooltipClass = `tooltip bg-${tooltipBackground} dark:bg-${tooltipDarkBackground}`;
 
   const toggleTooltip = useCallback(
     (bool) => {
       if (!isOpen) {
-        setTooltipOpen(bool)
+        setTooltipOpen(bool);
       }
     },
-    [isOpen]
-  )
+    [isOpen],
+  );
 
   return (
     <Manager>
@@ -115,7 +115,7 @@ function Tooltip(props) {
         </Portal>
       )}
     </Manager>
-  )
+  );
 }
 
 Tooltip.propTypes = {
@@ -136,11 +136,11 @@ Tooltip.propTypes = {
   ]),
   wrapperClass: PropTypes.string,
   isOpen: PropTypes.bool,
-}
+};
 
 Tooltip.defaultProps = {
   placement: 'top',
   isOpen: false,
-}
+};
 
-export default Tooltip
+export default Tooltip;

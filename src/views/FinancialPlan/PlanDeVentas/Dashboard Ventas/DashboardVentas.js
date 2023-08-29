@@ -5,7 +5,8 @@ import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
 import Total from 'components/shared/dashboard/Total';
 import MySpinner from 'components/shared/loaders/MySpinner';
-import { MenuItem, Select } from 'components/ui';
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
+import { MenuItem, Select, Tooltip } from 'components/ui';
 import { año, periodo } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -405,9 +406,9 @@ function DashboardVentas() {
 
   return (
     <>
-      {showLoader ?
-        <MySpinner/>
-      : (
+      {showLoader ? (
+        <MySpinner />
+      ) : (
         <>
           <div>
             <div className="border-b-2 mb-8 pb-1">
@@ -489,9 +490,13 @@ function DashboardVentas() {
                   <div className="flex justify-center gap-[50px] mt-[50px] mb-[40px]">
                     <div className="w-[50%]">
                       {yearSelected.value === 'todo' ? (
-                        <h5 className="mb-[30px]">Distribución de Ventas por Año</h5>
+                        <h5 className="mb-[30px]">
+                          Distribución de Ventas por Año
+                        </h5>
                       ) : (
-                        <h5 className="mb-[30px]">Distribución de Ventas por Mes</h5>
+                        <h5 className="mb-[30px]">
+                          Distribución de Ventas por Mes
+                        </h5>
                       )}
                       <GraficoDeBarra
                         data={infoForm}
@@ -500,7 +505,9 @@ function DashboardVentas() {
                       />
                     </div>
                     <div className="w-[50%]">
-                      <h5 className="mb-[30px]">Distribución de Ventas por País</h5>
+                      <h5 className="mb-[30px]">
+                        Distribución de Ventas por País
+                      </h5>
                       <BarraDeProgreso
                         data={infoForm}
                         totalVentas={totalVentas}
@@ -557,8 +564,6 @@ function DashboardVentas() {
         </>
       )}
     </>
-
-    
   );
 }
 
