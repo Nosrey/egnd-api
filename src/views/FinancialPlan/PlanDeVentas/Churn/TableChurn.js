@@ -806,7 +806,13 @@ function TableChurn(props) {
                                                 indexMes,
                                               ),
                                             ) < 0 ? (
-                                            0
+                                            <Input
+                                              className="w-[90px] border-2 border-solid border-gray-800"
+                                              type="text"
+                                              disabled
+                                              value={0}
+                                              name="month"
+                                            />
                                           ) : formatNumber(
                                               getFinal(
                                                 indexPais,
