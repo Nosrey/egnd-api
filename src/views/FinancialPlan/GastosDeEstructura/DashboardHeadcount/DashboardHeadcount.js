@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { showMultiplicacionPxQ } from 'utils/calcs';
+import { useMedia } from 'utils/hooks/useMedia';
 
 function DashboardHeadcount() {
   const currentState = useSelector((state) => state.auth.user);
@@ -36,6 +37,7 @@ function DashboardHeadcount() {
   const [typeView, setTypeView] = useState();
   const [dataHeadcount, setDataHeadcount] = useState();
   const [showLoader, setShowLoader] = useState(true);
+  const media = useMedia();
 
   const [yearSelected, setYearSelected] = useState({
     value: 'año 1',
@@ -377,7 +379,7 @@ function DashboardHeadcount() {
               <div className="px-4 py-5">
                 <div className="flex justify-end gap-[20px]">
                   <Select
-                    className="w-[12%]"
+                    className="w-[12%] min-w-[115px]"
                     placeholder="Año"
                     onChange={selectYear}
                     options={año}
@@ -386,7 +388,7 @@ function DashboardHeadcount() {
 
                   {yearSelected.value !== 'todo' && (
                     <Select
-                      className="w-[12%]"
+                      className="w-[12%] min-w-[115px]"
                       placeholder="Periodo"
                       options={periodo}
                       onChange={selectPeriodo}
@@ -401,9 +403,9 @@ function DashboardHeadcount() {
                   )}
                 </div>
                 <div className="mt-[30px] mb-[30px] cursor-default">
-                  <Total title="Monto Totales" data={total} />
+                  <Total title="Monto Total" data={total} />
                 </div>
-                <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
+                <div className={` ${media === "mobile" ? " flex flex-col gap-y-4" : "grid grid-cols-3 gap-[20px]"} mt-[20px]`}>
                   <CardNumerica
                     type="default"
                     title="Cantidad de Personal"
@@ -445,8 +447,8 @@ function DashboardHeadcount() {
                   </div>
                 )}
 
-                <div className="flex gap-[30px] mt-[100px]">
-                  <div className="w-[30%] flex flex-col gap-[30px]">
+                <div className={` ${media === "mobile" ? "flex flex-col" : "flex gap-[30px] mt-[100px]" }` }>
+                  <div className={` ${media === "mobile" ? "w-full" : "w-[30%] "} flex flex-col gap-[30px]` }>
                     <h5 className="cursor-default pl-[20px]">FTE</h5>
                     <CardNumerica
                       type="default"
@@ -457,7 +459,7 @@ function DashboardHeadcount() {
                   </div>
 
                   {dataHeadcount && (
-                    <div className="w-[70%] flex flex-col gap-[30px] mt-[50px]">
+                    <div className={` ${media === "mobile" ? "w-full" : "w-[70%] " } flex flex-col gap-[30px] mt-[50px]` }>
                       <h5 className="cursor-default">Evolución de Headcount</h5>
                       <GraficoDeBarraHeadcountThree
                         typeView={typeView}
@@ -480,7 +482,7 @@ function DashboardHeadcount() {
 
                 <div className="flex gap-[30px] mt-[100px] mb-[50px]">
                   {dataHeadcount && (
-                    <div className="w-[50%] flex flex-col gap-[30px]">
+                    <div className={` ${media === "mobile" ? "w-full" : "w-[50%]"} flex flex-col gap-[30px]` }>
                       <h5>Gasto en personal por Centro de Costo</h5>
                       <BarraDeProgresoHeadcount
                         dataHeadcount={dataHeadcount}
