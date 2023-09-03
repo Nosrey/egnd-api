@@ -6,6 +6,7 @@ import GraficoDeBarraHeadcountOne from 'components/shared/dashboard/GraficoDeBar
 import GraficoDeBarraHeadcountThree from 'components/shared/dashboard/GraficoDeBarraHeadcountThree';
 import GraficoDeBarraHeadcountTwo from 'components/shared/dashboard/GraficoDeBarraHeadcountTwo';
 import Total from 'components/shared/dashboard/Total';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { MenuItem, Select } from 'components/ui';
 import {
   año,
@@ -34,6 +35,8 @@ function DashboardHeadcount() {
   const [totalsPers, setTotalsPers] = useState([]);
   const [typeView, setTypeView] = useState();
   const [dataHeadcount, setDataHeadcount] = useState();
+  const [showLoader, setShowLoader] = useState(true);
+
   const [yearSelected, setYearSelected] = useState({
     value: 'año 1',
     label: 'Año 1',
@@ -185,7 +188,6 @@ function DashboardHeadcount() {
     if (totalVentas !== 0 || cantPers !== 0) {
       if (periodoSelected.month || periodoSelected.month === 0) {
         if (periodoSelected.month === 0) {
-          // setFte(totalVentas / cantPers);
           return totalVentas / cantPers;
         }
         if (periodoSelected.month === 4) {
@@ -195,7 +197,6 @@ function DashboardHeadcount() {
         }
         if (periodoSelected.month === 6 || periodoSelected.month === 12) {
           div = Math.floor(cantPers / 6);
-          // setFte(totalVentas / div);
           return totalVentas / div;
         }
       } else {
@@ -352,6 +353,7 @@ function DashboardHeadcount() {
           calcFte();
           calcFtes();
         }
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, [yearSelected, periodoSelected]);
@@ -361,141 +363,140 @@ function DashboardHeadcount() {
   }, [totalsPers, totalsVentas]);
 
   return (
-    <div>
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Dashboard de Headcount</h4>
-        <span>Headcount</span>
-      </div>
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg">
-        <div className="px-4 py-5">
-          <div className="flex justify-end gap-[20px]">
-            <Select
-              className="w-[12%]"
-              placeholder="Año"
-              onChange={selectYear}
-              options={año}
-              value={yearSelected}
-            />
-
-            {yearSelected.value !== 'todo' && (
-              <Select
-                className="w-[12%]"
-                placeholder="Periodo"
-                options={periodo}
-                onChange={selectPeriodo}
-                value={periodoSelected}
-              >
-                {periodo.map((a) => (
-                  <MenuItem key={a.value} value={a.value}>
-                    {a.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          </div>
-          <div className="mt-[30px] mb-[30px] cursor-default">
-            <Total title="Monto Totales" data={total} />
-          </div>
-          <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
-            <CardNumerica
-              type="default"
-              title="Cantidad de Personal"
-              cantidad={cantPers}
-            />
-            <CardNumerica
-              type="default"
-              title="Costo medio por Recurso"
-              cantidad={total > 0 && cantPers > 0 ? total / cantPers : 0}
-            />
-          </div>
-
-          {dataHeadcount && (
-            <div className=" mb-[50px] flex flex-col gap-[30px] mt-[100px] ">
-              <h5 className="cursor-default pl-[20px]">
-                Distribución de Headcount Q por Centro de Costo
-              </h5>
-              <GraficoDeBarraHeadcountOne
-                typeView={typeView}
-                dataHeadcount={dataHeadcount}
-                periodoSelected={periodoSelected}
-                yearSelected={yearSelected}
-              />
+    <>
+    {showLoader ? (
+        <MySpinner />
+      ) : (
+        <>
+          <div>
+            <div className="border-b-2 mb-8 pb-1">
+              <h4>Dashboard de Headcount</h4>
+              <span>Headcount</span>
             </div>
-          )}
+            <div className="border-solid border-2 border-#e5e7eb rounded-lg">
+              <div className="px-4 py-5">
+                <div className="flex justify-end gap-[20px]">
+                  <Select
+                    className="w-[12%]"
+                    placeholder="Año"
+                    onChange={selectYear}
+                    options={año}
+                    value={yearSelected}
+                  />
 
-          {dataHeadcount && (
-            <div className="mt-[80px] mb-[50px] flex flex-col gap-[30px]">
-              <h5 className="cursor-default pl-[20px]">
-                Distribución del gasto en salario por Centro de Costo
-              </h5>
-              <GraficoDeBarraHeadcountTwo
-                typeView={typeView}
-                dataHeadcount={dataHeadcount}
-                periodoSelected={periodoSelected}
-                yearSelected={yearSelected}
-              />
-            </div>
-          )}
+                  {yearSelected.value !== 'todo' && (
+                    <Select
+                      className="w-[12%]"
+                      placeholder="Periodo"
+                      options={periodo}
+                      onChange={selectPeriodo}
+                      value={periodoSelected}
+                    >
+                      {periodo.map((a) => (
+                        <MenuItem key={a.value} value={a.value}>
+                          {a.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                </div>
+                <div className="mt-[30px] mb-[30px] cursor-default">
+                  <Total title="Monto Totales" data={total} />
+                </div>
+                <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
+                  <CardNumerica
+                    type="default"
+                    title="Cantidad de Personal"
+                    cantidad={cantPers}
+                  />
+                  <CardNumerica
+                    type="default"
+                    hasCurrency
+                    title="Costo medio por Recurso"
+                    cantidad={total > 0 && cantPers > 0 ? total / cantPers : 0}
+                  />
+                </div>
 
-          <div className="flex gap-[30px] mt-[100px]">
-            <div className="w-[30%] flex flex-col gap-[30px]">
-              <h5 className="cursor-default pl-[20px]">FTE</h5>
-              <CardNumerica
-                type="default"
-                title="FTE"
-                hasCurrency
-                cantidad={calcFte()}
-              />
-            </div>
+                {dataHeadcount && (
+                  <div className=" mb-[50px] flex flex-col gap-[30px] mt-[100px] ">
+                    <h5 className="cursor-default pl-[20px]">
+                      Distribución de Headcount Q por Centro de Costo
+                    </h5>
+                    <GraficoDeBarraHeadcountOne
+                      typeView={typeView}
+                      dataHeadcount={dataHeadcount}
+                      periodoSelected={periodoSelected}
+                      yearSelected={yearSelected}
+                    />
+                  </div>
+                )}
 
-            {dataHeadcount && (
-              <div className="w-[70%] flex flex-col gap-[30px] mt-[50px]">
-                <h5 className="cursor-default">Evolución de Headcount</h5>
-                <GraficoDeBarraHeadcountThree
-                  typeView={typeView}
-                  dataHeadcount={dataHeadcount}
-                  periodoSelected={periodoSelected}
-                  yearSelected={yearSelected}
-                />
+                {dataHeadcount && (
+                  <div className="mt-[80px] mb-[50px] flex flex-col gap-[30px]">
+                    <h5 className="cursor-default pl-[20px]">
+                      Distribución del gasto en salario por Centro de Costo
+                    </h5>
+                    <GraficoDeBarraHeadcountTwo
+                      typeView={typeView}
+                      dataHeadcount={dataHeadcount}
+                      periodoSelected={periodoSelected}
+                      yearSelected={yearSelected}
+                    />
+                  </div>
+                )}
+
+                <div className="flex gap-[30px] mt-[100px]">
+                  <div className="w-[30%] flex flex-col gap-[30px]">
+                    <h5 className="cursor-default pl-[20px]">FTE</h5>
+                    <CardNumerica
+                      type="default"
+                      title="FTE"
+                      hasCurrency
+                      cantidad={calcFte()}
+                    />
+                  </div>
+
+                  {dataHeadcount && (
+                    <div className="w-[70%] flex flex-col gap-[30px] mt-[50px]">
+                      <h5 className="cursor-default">Evolución de Headcount</h5>
+                      <GraficoDeBarraHeadcountThree
+                        typeView={typeView}
+                        dataHeadcount={dataHeadcount}
+                        periodoSelected={periodoSelected}
+                        yearSelected={yearSelected}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {ftes && (
+                  <div className="flex flex-col gap-[30px] mt-[60px]">
+                    <h5 className="cursor-default pl-[20px]">
+                      Evolución FTE por mes
+                    </h5>
+                    <GraficoDeBarraHeadcountFour typeView={typeView} ftes={ftes} />
+                  </div>
+                )}
+
+                <div className="flex gap-[30px] mt-[100px] mb-[50px]">
+                  {dataHeadcount && (
+                    <div className="w-[50%] flex flex-col gap-[30px]">
+                      <h5>Gasto en personal por Centro de Costo</h5>
+                      <BarraDeProgresoHeadcount
+                        dataHeadcount={dataHeadcount}
+                        totalVentas={total}
+                        yearSelected={yearSelected}
+                        periodoSelected={periodoSelected}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-
-          {ftes && (
-            <div className="flex flex-col gap-[30px] mt-[60px]">
-              <h5 className="cursor-default pl-[20px]">
-                Evolución FTE por mes
-              </h5>
-              <GraficoDeBarraHeadcountFour typeView={typeView} ftes={ftes} />
             </div>
-          )}
-
-          <div className="flex gap-[30px] mt-[100px] mb-[50px]">
-            {dataHeadcount && (
-              <div className="w-[50%] flex flex-col gap-[30px]">
-                <h5>Gasto en personal por Centro de Costo</h5>
-                <BarraDeProgresoHeadcount
-                  dataHeadcount={dataHeadcount}
-                  totalVentas={total}
-                  yearSelected={yearSelected}
-                  periodoSelected={periodoSelected}
-                />
-              </div>
-            )}
-
-            {/* <div className="w-[50%] flex flex-col gap-[30px]">
-              <h5>Gasto en personal por país</h5>
-              <BarraDeProgreso
-                data={{ brasil: [] }}
-                totalVentas={12}
-                selectYear="año 1"
-                periodoSelected="1er mes"
-              />
-            </div> */}
           </div>
-        </div>
-      </div>
-    </div>
+        </>)}
+    </>
+    
   );
 }
 

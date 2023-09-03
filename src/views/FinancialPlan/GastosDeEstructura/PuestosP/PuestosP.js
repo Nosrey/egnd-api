@@ -5,6 +5,7 @@ import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { createPuestosp, getUser } from 'services/Requests';
 import { useMedia } from 'utils/hooks/useMedia';
 import TablePuestosP from './TablePuestosP';
@@ -22,6 +23,7 @@ function PuestosP() {
   const [errorMessage, setErrorMessage] = useState('');
   const [country, setCountry] = useState(defaultCountry);
   const currentState = useSelector((state) => state.auth.user);
+  const [showLoader, setShowLoader] = useState(true);
   const media = useMedia();
 
 
@@ -106,6 +108,7 @@ function PuestosP() {
         setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
         setDefaultCountry(def);
         setCountry(def);
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -113,104 +116,111 @@ function PuestosP() {
  
 
   return (
-    <div>
-      {showSuccessAlert && (
-        <Alert className="mb-4" type="success" showIcon>
-          Los datos se guardaron satisfactoriamente.
-        </Alert>
-      )}
-      {showErrorAlert && (
-        <Alert className="mb-4" type="danger" showIcon>
-          {errorMessage}
-        </Alert>
-      )}
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Salarios</h4>
-        <span>Headcount</span>
-      </div>
-
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-        <div className="border-b-2 px-4 py-1">
-          <h6>Salarios</h6>
-        </div>
-        {infoForm ? (
-          <Tabs defaultValue={country}>
-            <TabList>
-              {puestosQ &&
-                Object.keys(infoForm).map(
-                  (cc, index) =>
-                    infoForm[cc].visible && (
-                      <TabNav key={index} value={cc}>
-                        <div
-                          className="capitalize"
-                          onClick={() => setCountry(cc)}
-                        >
-                          {cc}
-                        </div>
-                      </TabNav>
-                    ),
-                )}
-            </TabList>
-            {infoForm &&  media !== "mobile" && media !== "tablet" &&(
-              <div className="container-countries p-[40px]">
-                <FormContainer className="cont-countries">
-                    <TablePuestosP
-                      data={infoForm}
-                      puestosQ={puestosQ}
-                      showAlertSuces={(boolean) =>
-                        setShowSuccessAlert(boolean)
-                      }
-                      postPuestoPData={postPuestosPData}
-                      showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                      errorMessage={(error) => setErrorMessage(error)}
-                      head={country}
-                      cargaSocial={cargaSocial}
-                      handleEditPuesto={handleEditPuesto}
-                    />
-                </FormContainer>
-              </div>
+    <>
+      {showLoader ? (
+        <MySpinner />
+      ) : (
+        <>
+          <div>
+            {showSuccessAlert && (
+              <Alert className="mb-4" type="success" showIcon>
+                Los datos se guardaron satisfactoriamente.
+              </Alert>
             )}
-              {infoForm && ( media === "mobile" || media === "tablet") && (
-              <div className="container-countries">
-                <FormContainer className="cont-countries">
-                  <ContainerScrollable
-                    contenido={
-                      <TablePuestosP
-                        data={infoForm}
-                        puestosQ={puestosQ}
-                        showAlertSuces={(boolean) =>
-                          setShowSuccessAlert(boolean)
-                        }
-                        postPuestoPData={postPuestosPData}
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        errorMessage={(error) => setErrorMessage(error)}
-                        head={country}
-                        cargaSocial={cargaSocial}
-                        handleEditPuesto={handleEditPuesto}
-                      />
-                    }
-                  />
-                </FormContainer>
+            {showErrorAlert && (
+              <Alert className="mb-4" type="danger" showIcon>
+                {errorMessage}
+              </Alert>
+            )}
+            <div className="border-b-2 mb-8 pb-1">
+              <h4>Salarios</h4>
+              <span>Headcount</span>
+            </div>
+
+            <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+              <div className="border-b-2 px-4 py-1">
+                <h6>Salarios</h6>
               </div>
-            )} 
-          </Tabs>
-        ) : (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span className="text-center cursor-default">
-              Para acceder a este formulario primero debe completar el
-              formulario{' '}
-              <Link
-                className="text-indigo-700 underline"
-                to="/supuestos-gastos"
-              >
-                Supuesto de Gasto de Estructura
-              </Link>
-              .
-            </span>
+              {infoForm ? (
+                <Tabs defaultValue={country}>
+                  <TabList>
+                    {puestosQ &&
+                      Object.keys(infoForm).map(
+                        (cc, index) =>
+                          infoForm[cc].visible && (
+                            <TabNav key={index} value={cc}>
+                              <div
+                                className="capitalize"
+                                onClick={() => setCountry(cc)}
+                              >
+                                {cc}
+                              </div>
+                            </TabNav>
+                          ),
+                      )}
+                  </TabList>
+                  {infoForm &&  media !== "mobile" && media !== "tablet" &&(
+                    <div className="container-countries p-[40px]">
+                      <FormContainer className="cont-countries">
+                          <TablePuestosP
+                            data={infoForm}
+                            puestosQ={puestosQ}
+                            showAlertSuces={(boolean) =>
+                              setShowSuccessAlert(boolean)
+                            }
+                            postPuestoPData={postPuestosPData}
+                            showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                            errorMessage={(error) => setErrorMessage(error)}
+                            head={country}
+                            cargaSocial={cargaSocial}
+                            handleEditPuesto={handleEditPuesto}
+                          />
+                      </FormContainer>
+                    </div>
+                  )}
+                    {infoForm && ( media === "mobile" || media === "tablet") && (
+                    <div className="container-countries">
+                      <FormContainer className="cont-countries">
+                        <ContainerScrollable
+                          contenido={
+                            <TablePuestosP
+                              data={infoForm}
+                              puestosQ={puestosQ}
+                              showAlertSuces={(boolean) =>
+                                setShowSuccessAlert(boolean)
+                              }
+                              postPuestoPData={postPuestosPData}
+                              showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                              errorMessage={(error) => setErrorMessage(error)}
+                              head={country}
+                              cargaSocial={cargaSocial}
+                              handleEditPuesto={handleEditPuesto}
+                            />
+                          }
+                        />
+                      </FormContainer>
+                    </div>
+                  )} 
+                </Tabs>
+              ) : (
+                <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                  <span className="text-center cursor-default">
+                    Para acceder a este formulario primero debe completar el
+                    formulario{' '}
+                    <Link
+                      className="text-indigo-700 underline"
+                      to="/supuestos-gastos"
+                    >
+                      Supuesto de Gasto de Estructura
+                    </Link>
+                    .
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-    </div>
+        </> )}
+    </>
   );
 }
 

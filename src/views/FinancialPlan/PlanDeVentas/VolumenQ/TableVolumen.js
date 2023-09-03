@@ -53,7 +53,7 @@ function TableVolumen(props) {
             // año
             for (let s = 0; s < MONTHS.length; s++) {
               const valor = myProd?.años[j]?.volMeses[MONTHS[s]];
-              arrayvalores.push(parseInt(valor, 10));
+              arrayvalores.push(Math.round(valor));
             }
           }
           canalInfo.sum += arrayvalores.reduce(
@@ -148,7 +148,7 @@ function TableVolumen(props) {
       for (let mes in newMeses) {
         if (currentMonth >= producto.inicioMes) {
           newMeses[mes] = Math.round(volumenActual);
-          volTotal += parseInt(volumenActual, 10);
+          volTotal += Math.round(volumenActual)
           volumenActual *= 1 + producto.tasa / 100;
         } else {
           newMeses[mes] = 0;
@@ -168,7 +168,7 @@ function TableVolumen(props) {
     const newMeses = { ...newAños[indexYear].volMeses };
     newMeses[mes] = value !== '' ? value : null;
     const volTotal = Object.values(newMeses).reduce(
-      (acc, curr) => acc + parseInt(curr, 10),
+      (acc, curr) => acc + Math.round(curr),
       0,
     );
     newAños[indexYear] = {
@@ -189,7 +189,12 @@ function TableVolumen(props) {
     mes,
     indexYear,
   ) => {
-    const inputNumero = Number(newValue.replace(/\D/g, ''));
+    let inputNumero;
+    if (typeof newValue === "string") {
+      inputNumero = Number(newValue.replace(/\D/g, ''));
+    } else {
+      inputNumero = newValue
+    }
 
     const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
@@ -301,9 +306,6 @@ function TableVolumen(props) {
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
-                          {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                            {producto.id.toString()}
-                          </Avatar> */}
                           <FormItem className=" mb-1 w-[210px] mt-[81px]">
                             <Input
                               disabled
@@ -534,7 +536,7 @@ function TableVolumen(props) {
       {infoProducts && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
+            <p className=" text-[#707470] font-bold mb-3 text-left w-[435px] ">
               Volumen por producto
             </p>
           </div>
@@ -543,7 +545,7 @@ function TableVolumen(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[500px]  pl-[45px] capitalize self-center ${
+                    className={`w-[435px]  pl-[45px] capitalize self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >
@@ -629,7 +631,7 @@ function TableVolumen(props) {
           <br />
           {totalesCanales.map((canal, i) => (
             <p
-              className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
+              className=" pl-[45px] text-[#707470]  mb-3 text-left w-[435px] "
               key={i}
             >
               <Tooltip placement="top-end" title={formatNumber(canal.sum)}>
@@ -640,7 +642,7 @@ function TableVolumen(props) {
           ))}
 
           <br />
-          <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
+          <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[435px] ">
             <Tooltip placement="top-end" title={formatNumber(volTotal)}>
               VOLUMEN TOTAL: &nbsp;
               <ShortNumberNotation numero={volTotal} />

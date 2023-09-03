@@ -44,9 +44,9 @@ function TablePuestosQ(props) {
           for (let s = 0; s < MONTHS.length; s++) {
             const valor = head.puestos[i].años[j].volMeses[MONTHS[s]];
             if (arrayvalores[j].values[s] >= 0) {
-              arrayvalores[j].values[s] += parseInt(valor, 10);
+              arrayvalores[j].values[s] += Math.round(valor);
             } else {
-              arrayvalores[j].values.push(parseInt(valor, 10));
+              arrayvalores[j].values.push(Math.round(valor));
             }
           }
         }
@@ -79,7 +79,7 @@ function TablePuestosQ(props) {
     const newMeses = { ...newAños[indexYear].volMeses };
     newMeses[mes] = value !== '' ? value : null;
     const volTotal = Object.values(newMeses).reduce(
-      (acc, curr) => acc + parseInt(curr, 10),
+      (acc, curr) => acc + Math.round(curr),
       0,
     );
     newAños[indexYear] = {

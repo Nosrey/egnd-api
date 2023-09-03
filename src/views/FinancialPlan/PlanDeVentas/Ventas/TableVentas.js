@@ -43,7 +43,7 @@ function TableVentas(props) {
             // año
             for (let s = 0; s < MONTHS.length; s++) {
               const valor = myProd?.años[j]?.volMeses[MONTHS[s]];
-              arrayvalores.push(parseInt(valor, 10));
+              arrayvalores.push(Math.round(valor));
             }
           }
           canalInfo.sum += arrayvalores.reduce(
@@ -276,7 +276,7 @@ function TableVentas(props) {
       {infoProducts && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[260px] ">
+            <p className=" text-[#707470] font-bold mb-3 text-left w-[185px] ">
               Venta por producto
             </p>
           </div>
@@ -285,7 +285,7 @@ function TableVentas(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[260px]  pl-[45px] capitalize self-center ${
+                    className={`w-[185px]  pl-[45px] capitalize self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >

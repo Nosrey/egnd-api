@@ -8,6 +8,7 @@ import { AÑOS, EMPTY_CARGOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
+import formatNumber from 'utils/formatTotalsValues';
 
 const { TabContent } = Tabs;
 
@@ -17,7 +18,7 @@ function TablePuestosPxQ(props) {
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
   const currency = useSelector((state) => state.auth.user.currency);
-
+  
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
   // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las
@@ -122,7 +123,6 @@ function TablePuestosPxQ(props) {
     const numeroRedondeado = Math.round(Number(numero)); // paso a nuemro para quitarle los decimales
 
     const inputNumero = Number(numeroRedondeado.toString().replace(/\D/g, '')); // pero necesito un string para ponerle puntos en los miles con replace
-    console.log(inputNumero);
     const nuevoNum = inputNumero.toLocaleString('es-AR');
     return nuevoNum;
   };
@@ -150,7 +150,7 @@ function TablePuestosPxQ(props) {
                                   ? 'capitalize mt-10'
                                   : 'capitalize mt-5'
                               }`}
-                              disabled={!infoForm[cc].puestos[head].isNew}
+                              disabled
                               type="text"
                               name="name"
                               value={infoForm[cc].puestos[head].name}
@@ -211,7 +211,8 @@ function TablePuestosPxQ(props) {
                                           >
                                             <Tooltip
                                               placement="top-end"
-                                              title={
+                                              title={currency +
+                                                formatNumber(
                                                 calcPercent(
                                                   infoForm[cc].puestos[head]
                                                     .total,
@@ -221,13 +222,14 @@ function TablePuestosPxQ(props) {
                                                   indexYear,
                                                   cc,
                                                   head,
-                                                )[indexYear][indexMes]
+                                                )[indexYear][indexMes])
                                               }
                                             >
                                               <Input
                                                 className="w-[90px]"
                                                 type="text"
                                                 disabled
+                                                prefix={currency}
                                                 value={formatearNumero(
                                                   calcPercent(
                                                     infoForm[cc].puestos[head]
