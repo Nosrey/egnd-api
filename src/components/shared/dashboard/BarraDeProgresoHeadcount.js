@@ -79,6 +79,7 @@ function BarraDeProgresoHeadcount({
           <span>{country.name.toUpperCase()}</span>
           <Progress
             percent={((country.total * 100) / totalVentas).toFixed(0)}
+            color="lime-400"
           />
         </div>
       ))}

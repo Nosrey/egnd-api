@@ -76,6 +76,8 @@ function BarraDeProgreso({ data, totalVentas, selectYear, periodoSelected }) {
           <span>{country.name.toUpperCase()}</span>
           <Progress
             percent={((country.total * 100) / totalVentas).toFixed(0)}
+            color="amber-400"
+
           />
         </div>
       ))}

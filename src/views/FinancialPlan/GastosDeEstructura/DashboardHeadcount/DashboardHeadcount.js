@@ -221,10 +221,10 @@ function DashboardHeadcount() {
             fte[indexP] = 0;
           } else {
             fte.push(0);
-            fte[indexP] = Number(totalsVentas[indexP]) / Number(p);
+            fte[indexP] = (Number(totalsVentas[indexP]) / Number(p)).toFixed(2);
           }
         } else {
-          fte[indexP] = Number(totalsVentas[indexP]) / Number(p);
+          fte[indexP] = (Number(totalsVentas[indexP]) / Number(p)).toFixed(2);
         }
       });
 

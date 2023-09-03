@@ -84,7 +84,7 @@ function GraficoDeBarraHeadcountThree({
 
   const data = [
     {
-      name: 'Cantidad de Personas',
+      name: 'Cantidad de RRHH',
       data: dataView,
     },
   ];
@@ -104,7 +104,7 @@ function GraficoDeBarraHeadcountThree({
           curve: 'smooth',
           width: 3,
         },
-        // colors: [COLOR_2],
+        colors: ["#10B981"],
         xaxis: {
           categories: typeView,
         },
