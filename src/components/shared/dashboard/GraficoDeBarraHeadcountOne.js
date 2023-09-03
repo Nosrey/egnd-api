@@ -87,6 +87,44 @@ function GraficoDeBarraHeadcountOne({
     setDataView(head);
   }, [periodoSelected, yearSelected]);
 
+  const formatDataValues = (info) => {
+    const data = [...info]
+    const sufijos = {
+      0: '',
+      3: 'K',
+      6: 'M',
+      9: 'B',
+      12: 'T',
+      15: 'Qa',
+    };
+    for (let i = 0; i < data.length; i++) {
+      // Itera sobre cada número en la propiedad 'data' del objeto
+      for (let j = 0; j < data[i].data.length; j++) {
+          // Convierte el número en una cadena (string)
+          // data[i].data[j] = data[i].data[j].toString();
+          let num;
+          if (typeof data[i].data[j] === 'string') {
+            num = parseInt(data[i].data[j].replace(/\./g, ''));
+          } else {
+            num = data[i].data[j];
+          }
+
+          let exp = 0;
+
+          while (num >= 1000 && exp < 15) {
+            num /= 1000;
+            exp += 3;
+          }
+
+          // Formatear el número con dos decimales si es igual o mayor a 1000
+          const numeroFormateado = exp >= 3 ? num.toFixed(2) : num.toFixed(0);
+          data[i].data[j] = `${numeroFormateado} ${sufijos[exp]}`
+      }
+    }
+
+    return data;
+  }
+
   return (
     <div>
       <Chart
