@@ -16,7 +16,7 @@ function CardNumerica({ type, title, cantidad, hasCurrency }) {
           {hasCurrency && currency}
           <Tooltip
             placement="top-end"
-            title={currency + formatearNumero(Math.round(cantidad).toString())}
+            title={hasCurrency ? currency + formatearNumero(Math.round(cantidad).toString()) :formatearNumero(Math.round(cantidad).toString()) }
           >
             {isNull
               ? 0 : 

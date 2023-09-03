@@ -518,7 +518,9 @@ function DashboardVentas() {
                   </div>
                 )}
                 {infoForm && (
-                  <div className="flex justify-center gap-[50px] mb-[40px]">
+                  <div className={`flex ${yearSelected.value === 'año 1'||
+                  yearSelected.value === '' ||
+                  yearSelected.value === 'todo'  ? "" : "justify-between"} gap-[50px] mb-[40px]`}>
                     {dataAssump.length !== 0 && (
                       <ProgresoCircularScroll
                         title="Churn Promedio"
