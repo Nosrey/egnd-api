@@ -5,8 +5,7 @@ import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
 import Total from 'components/shared/dashboard/Total';
 import MySpinner from 'components/shared/loaders/MySpinner';
-import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
-import { MenuItem, Select, Tooltip } from 'components/ui';
+import { MenuItem, Select } from 'components/ui';
 import { año, periodo } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -16,6 +15,7 @@ import { showMultiplicacionPxQ } from 'utils/calcs';
 import formatNumber from 'utils/formatTotalsValues';
 
 function DashboardVentas() {
+  const [volumenData, setVolumenData] = useState();
   const currentState = useSelector((state) => state.auth.user);
   const [yearSelected, setYearSelected] = useState({
     value: 'año 1',
@@ -48,6 +48,26 @@ function DashboardVentas() {
     setPeriodoSelected(event);
   };
 
+  const getValueMes = (indexPais, indexCanal, indexProd, indexYear, indexMes) =>
+    volumenData[indexPais].stats[indexCanal].productos[indexProd].años[
+      indexYear
+    ].volMeses[MONTHS[indexMes]];
+
+  const getClientes = (
+    indexPais,
+    indexCanal,
+    indexProd,
+    indexYear,
+    indexMes,
+  ) => {
+    const vtasXCliente =
+      dataAssump.canales[indexCanal].items[indexProd].volumen;
+    const rdo =
+      getValueMes(indexPais, indexCanal, indexProd, indexYear, indexMes) /
+      vtasXCliente;
+    return rdo;
+  };
+
   const calcTotals = () => {
     let tot = 0;
     let totProd = 0;
@@ -65,7 +85,9 @@ function DashboardVentas() {
                     if (periodoSelected.month || periodoSelected.month === 0) {
                       if (periodoSelected.month === 0) {
                         if (indexM === 0) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -237,7 +259,7 @@ function DashboardVentas() {
     let tot = 0;
     let newC = 0;
     if (infoForm && dataAssump) {
-      Object.values(infoForm).map((d) => {
+      Object.values(infoForm).map((d, indexPais) => {
         d.map((i, indexChannel) => {
           i.productos.map((p, indexProd) => {
             p.años.map((a, indexY) => {
@@ -310,6 +332,16 @@ function DashboardVentas() {
                       }
                     } else {
                       if (indexMes === 11) {
+                        console.log(
+                          '+',
+                          getClientes(
+                            indexPais,
+                            indexChannel,
+                            indexProd,
+                            indexY,
+                            indexMes,
+                          ),
+                        );
                         tot += Math.floor(
                           a.volMeses[MONTHS[indexMes]] /
                             dataAssump.canales[indexChannel].items[indexProd]
@@ -381,6 +413,7 @@ function DashboardVentas() {
         }
         if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
           setDataVol(data?.volumenData);
+          setVolumenData(data?.volumenData);
           calcVols(data?.volumenData);
           const datosPrecargados = {};
           let dataVentas = showMultiplicacionPxQ(
@@ -518,9 +551,15 @@ function DashboardVentas() {
                   </div>
                 )}
                 {infoForm && (
-                  <div className={`flex ${yearSelected.value === 'año 1'||
-                  yearSelected.value === '' ||
-                  yearSelected.value === 'todo'  ? "" : "justify-between"} gap-[50px] mb-[40px]`}>
+                  <div
+                    className={`flex ${
+                      yearSelected.value === 'año 1' ||
+                      yearSelected.value === '' ||
+                      yearSelected.value === 'todo'
+                        ? ''
+                        : 'justify-between'
+                    } gap-[50px] mb-[40px]`}
+                  >
                     {dataAssump.length !== 0 && (
                       <ProgresoCircularScroll
                         title="Churn Promedio"
