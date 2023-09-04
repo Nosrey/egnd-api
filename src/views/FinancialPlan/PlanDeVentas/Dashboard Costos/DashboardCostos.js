@@ -13,11 +13,14 @@ import {
 } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
+import { useMedia } from 'utils/hooks/useMedia';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { resolveResul } from 'services/TotalProductsService';
 
 function DashboardCostos() {
+  const media = useMedia();
+
   const [totalCostos, setTotalCostos] = useState(0);
   const [totalProd, setTotalProd] = useState(0);
   const [volProd, setVolProd] = useState(0);
@@ -171,7 +174,6 @@ function DashboardCostos() {
     let cargoGrafYear = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     Object.values(precioData).map((d, indexInicial) => {
-      console.log('[DA]', dataAssump);
       d.stats.map((s, indexStats) => {
         s.productos.map((p, indexP) => {
           p.años.map((a, indexYear) => {
@@ -778,7 +780,7 @@ function DashboardCostos() {
         <div className="px-4 py-5">
           <div className="flex justify-end gap-[20px]">
             <Select
-              className="w-[12%]"
+              className="w-[12%] min-w-[115px]"
               placeholder="Año"
               onChange={selectYear}
               options={año}
@@ -787,7 +789,7 @@ function DashboardCostos() {
 
             {yearSelected.value !== 'todo' && (
               <Select
-                className="w-[12%]"
+                className="w-[12%] min-w-[115px]"
                 placeholder="Periodo"
                 options={periodo}
                 onChange={selectPeriodo}
@@ -804,7 +806,7 @@ function DashboardCostos() {
           <div className="mt-[30px] mb-[30px] cursor-default">
             <Total title="Costos Totales" data={totalCostos} />
           </div>
-          <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
+          <div className={` ${media === "mobile" ? " flex flex-col gap-y-4" : "grid grid-cols-3 gap-[20px]"} mt-[20px]`}>
             <CardNumerica
               type="default"
               hasCurrency
@@ -840,7 +842,7 @@ function DashboardCostos() {
               cantidad={volServ ? totalServ / volServ : 0}
             />
           </div>
-          <div className="flex justify-between items-center mt-[100px] pl-[20px]">
+          <div className={`flex ${media === "mobile" ? " flex-col mt-[30px]  pl-[10px] gap-y-3.5" : "justify-between items-center mt-[100px]  pl-[20px]"} ` }  >
             <h5 className="cursor-default">
               Representación de Costos sobre Ventas
             </h5>
