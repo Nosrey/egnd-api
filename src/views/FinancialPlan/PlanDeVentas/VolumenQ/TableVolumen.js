@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import {
   Button,
   FormContainer,
@@ -52,7 +53,7 @@ function TableVolumen(props) {
             // año
             for (let s = 0; s < MONTHS.length; s++) {
               const valor = myProd?.años[j]?.volMeses[MONTHS[s]];
-              arrayvalores.push(parseInt(valor, 10));
+              arrayvalores.push(Math.round(valor));
             }
           }
           canalInfo.sum += arrayvalores.reduce(
@@ -147,7 +148,7 @@ function TableVolumen(props) {
       for (let mes in newMeses) {
         if (currentMonth >= producto.inicioMes) {
           newMeses[mes] = Math.round(volumenActual);
-          volTotal += parseInt(volumenActual, 10);
+          volTotal += Math.round(volumenActual)
           volumenActual *= 1 + producto.tasa / 100;
         } else {
           newMeses[mes] = 0;
@@ -167,7 +168,7 @@ function TableVolumen(props) {
     const newMeses = { ...newAños[indexYear].volMeses };
     newMeses[mes] = value !== '' ? value : null;
     const volTotal = Object.values(newMeses).reduce(
-      (acc, curr) => acc + parseInt(curr, 10),
+      (acc, curr) => acc + Math.round(curr),
       0,
     );
     newAños[indexYear] = {
@@ -188,7 +189,12 @@ function TableVolumen(props) {
     mes,
     indexYear,
   ) => {
-    const inputNumero = Number(newValue.replace(/\D/g, ''));
+    let inputNumero;
+    if (typeof newValue === "string") {
+      inputNumero = Number(newValue.replace(/\D/g, ''));
+    } else {
+      inputNumero = newValue
+    }
 
     const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
@@ -300,9 +306,6 @@ function TableVolumen(props) {
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
-                          {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                            {producto.id.toString()}
-                          </Avatar> */}
                           <FormItem className=" mb-1 w-[210px] mt-[81px]">
                             <Input
                               disabled
@@ -335,6 +338,7 @@ function TableVolumen(props) {
                                   />
                                 </Tooltip>
                               </FormItem>
+
                               <FormItem className="mb-0 w-[90px]">
                                 <Tooltip
                                   placement="top-end"
@@ -359,6 +363,7 @@ function TableVolumen(props) {
                                 </Tooltip>
                               </FormItem>
                             </div>
+
                             <FormItem className=" mb-0 w-[230px] mt-[12px]">
                               <Tooltip
                                 placement="top-end"
@@ -531,7 +536,7 @@ function TableVolumen(props) {
       {infoProducts && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
+            <p className=" text-[#707470] cursor-default  font-bold mb-3 text-left w-[435px] ">
               Volumen por producto
             </p>
           </div>
@@ -540,7 +545,7 @@ function TableVolumen(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[500px]  pl-[45px] capitalize self-center ${
+                    className={`w-[435px]  pl-[45px] cursor-default  capitalize self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >
@@ -550,7 +555,7 @@ function TableVolumen(props) {
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
-                          <p> Año {indexYear + 1}</p>
+                          <p className='cursor-default '> Año {indexYear + 1}</p>
                           <div
                             className="iconYear"
                             onClick={() => hideYear(indexYear)}
@@ -571,7 +576,7 @@ function TableVolumen(props) {
                           MONTHS.map((mes, indexMes) => (
                             <p
                               key={indexMes}
-                              className="month w-[90px] capitalize"
+                              className="month w-[90px] capitalize cursor-default "
                             >
                               {mes}
                             </p>
@@ -583,18 +588,35 @@ function TableVolumen(props) {
                         {visibleItems?.includes(indexYear) &&
                           año &&
                           año.numeros?.map((valor, index) => (
-                            <p className="w-[90px] text-center">
-                              {formatNumber(valor)}
+                            <p className="cursor-default w-[90px] text-center">
+                              <Tooltip
+                                placement="top-end"
+                                title={formatNumber(valor)}
+                              >
+                                <ShortNumberNotation numero={valor} />
+                              </Tooltip>
                             </p>
                           ))}
                         {año.numeros?.length !== 0 && (
-                          <p className="w-[90px] text-center font-bold">
-                            {formatNumber(
-                              año.numeros?.length !== 0 &&
-                                año?.numeros?.reduce(
-                                  (total, current) => total + current,
-                                ),
-                            )}
+                          <p className="cursor-default w-[90px] text-center font-bold">
+                            <Tooltip
+                              placement="top-end"
+                              title={formatNumber(
+                                año.numeros?.length !== 0 &&
+                                  año?.numeros?.reduce(
+                                    (total, current) => total + current,
+                                  ),
+                              )}
+                            >
+                              <ShortNumberNotation
+                                numero={
+                                  año.numeros?.length !== 0 &&
+                                  año?.numeros?.reduce(
+                                    (total, current) => total + current,
+                                  )
+                                }
+                              />
+                            </Tooltip>
                           </p>
                         )}
                       </div>
@@ -609,16 +631,22 @@ function TableVolumen(props) {
           <br />
           {totalesCanales.map((canal, i) => (
             <p
-              className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
+              className=" pl-[45px] text-[#707470] cursor-default   mb-3 text-left w-[435px] "
               key={i}
             >
-              VOLUMEN CANAL '{canal.name}': {formatNumber(canal.sum)}
+              <Tooltip placement="top-end" title={formatNumber(canal.sum)}>
+                VOLUMEN CANAL '{canal.name}': &nbsp;
+                <ShortNumberNotation numero={canal.sum} />
+              </Tooltip>
             </p>
           ))}
 
           <br />
-          <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            VOLUMEN TOTAL: {formatNumber(volTotal)}
+          <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[435px] ">
+            <Tooltip placement="top-end" title={formatNumber(volTotal)}>
+              VOLUMEN TOTAL: &nbsp;
+              <ShortNumberNotation numero={volTotal} />
+            </Tooltip>
           </p>
         </div>
       )}

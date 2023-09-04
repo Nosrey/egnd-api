@@ -88,7 +88,7 @@ function TablePuestosPxQ(props) {
         const resultadoAcumulado = suma.reduce((acumulador, array) =>
           acumulador.map(
             (valor, índice) =>
-              parseInt(valor, 10) + parseInt(array[índice], 10),
+              Math.round(valor) + Math.round(array[índice]),
           ),
         );
         // obtengo 10 arrays de 12 num cda unos , osea uno por anio
@@ -136,7 +136,7 @@ function TablePuestosPxQ(props) {
     const newMeses = { ...newAños[indexYear].volMeses };
     newMeses[mes] = value !== '' ? value : null;
     const volTotal = Object.values(newMeses).reduce(
-      (acc, curr) => acc + parseInt(curr, 10),
+      (acc, curr) => acc + Math.round(curr),
       0,
     );
     newAños[indexYear] = {

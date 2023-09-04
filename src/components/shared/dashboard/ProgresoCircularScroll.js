@@ -26,6 +26,7 @@ function ProgresoCircularScroll({ title, churnProducto }) {
           <Progress
             className="md:mb-0 md:mr-4 mb-4 contents"
             variant="circle"
+            color="emerald-400"
             percent={percent}
           />
           <div className="max-h-[200px] overflow-y-auto custom-scrollbar pr-[8px]">

@@ -5,6 +5,7 @@ import { puestos } from 'constants/puestos.constant';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { createPuestosp, createPuestosq, getUser } from 'services/Requests';
 import TablePuestosQ from './TablePuestosQ';
 
@@ -20,6 +21,7 @@ function PuestosQ() {
   const [errorMessage, setErrorMessage] = useState('');
   const [country, setCountry] = useState(defaultCountry);
   const currentState = useSelector((state) => state.auth.user);
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     let estructura = {};
@@ -128,6 +130,7 @@ function PuestosQ() {
 
         setDefaultCountry(def);
         setCountry(def);
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -161,86 +164,93 @@ function PuestosQ() {
   };
 
   return (
-    <div>
-      {showSuccessAlert && (
-        <Alert className="mb-4" type="success" showIcon>
-          Los datos se guardaron satisfactoriamente.
-        </Alert>
-      )}
-      {showErrorAlert && (
-        <Alert className="mb-4" type="danger" showIcon>
-          {errorMessage}
-        </Alert>
-      )}
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Proyección nomina</h4>
-        <span>Headcount</span>
-      </div>
+    <>
+    {showLoader ? (
+      <MySpinner />
+    ) : (
+      <>
+        <div>
+          {showSuccessAlert && (
+            <Alert className="mb-4" type="success" showIcon>
+              Los datos se guardaron satisfactoriamente.
+            </Alert>
+          )}
+          {showErrorAlert && (
+            <Alert className="mb-4" type="danger" showIcon>
+              {errorMessage}
+            </Alert>
+          )}
+          <div className="border-b-2 mb-8 pb-1">
+            <h4>Proyección nomina</h4>
+            <span>Headcount</span>
+          </div>
 
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-        <div className="border-b-2 px-4 py-1">
-          <h6>Cantidad por puesto</h6>
-        </div>
-        {infoForm ? (
-          <Tabs defaultValue={country}>
-            <TabList>
-              {puestosQ &&
-                Object.keys(puestosQ).map(
-                  (cc, index) =>
-                    infoForm[cc].visible && (
-                      <TabNav key={index} value={cc}>
-                        <div
-                          className="capitalize"
-                          onClick={() => setCountry(cc)}
-                        >
-                          {cc}
-                        </div>
-                      </TabNav>
-                    ),
-                )}
-            </TabList>
-            {infoForm && (
-              <div className="container-countries">
-                <FormContainer className="cont-countries">
-                  <ContainerScrollable
-                    contenido={
-                      <TablePuestosQ
-                        data={infoForm}
-                        puestosQ={puestosQ}
-                        showAlertSuces={(boolean) =>
-                          setShowSuccessAlert(boolean)
+          <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+            <div className="border-b-2 px-4 py-1">
+              <h6>Cantidad por puesto</h6>
+            </div>
+            {infoForm ? (
+              <Tabs defaultValue={country}>
+                <TabList>
+                  {puestosQ &&
+                    Object.keys(puestosQ).map(
+                      (cc, index) =>
+                        infoForm[cc].visible && (
+                          <TabNav key={index} value={cc}>
+                            <div
+                              className="capitalize"
+                              onClick={() => setCountry(cc)}
+                            >
+                              {cc}
+                            </div>
+                          </TabNav>
+                        ),
+                    )}
+                </TabList>
+                {infoForm && (
+                  <div className="container-countries">
+                    <FormContainer className="cont-countries">
+                      <ContainerScrollable
+                        contenido={
+                          <TablePuestosQ
+                            data={infoForm}
+                            puestosQ={puestosQ}
+                            showAlertSuces={(boolean) =>
+                              setShowSuccessAlert(boolean)
+                            }
+                            postPuestoQData={postPuestoQData}
+                            addPuesto={addPuesto}
+                            removePuesto={removePuesto}
+                            showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                            errorMessage={(error) => setErrorMessage(error)}
+                            head={country}
+                            handleEditPuesto={handleEditPuesto}
+                          />
                         }
-                        postPuestoQData={postPuestoQData}
-                        addPuesto={addPuesto}
-                        removePuesto={removePuesto}
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        errorMessage={(error) => setErrorMessage(error)}
-                        head={country}
-                        handleEditPuesto={handleEditPuesto}
                       />
-                    }
-                  />
-                </FormContainer>
+                    </FormContainer>
+                  </div>
+                )}
+              </Tabs>
+            ) : (
+              <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                <span>
+                  Para acceder a este formulario primero debe completar el
+                  formulario{' '}
+                  <Link
+                    className="text-indigo-700 underline"
+                    to="/supuestos-gastos"
+                  >
+                    Supuesto de Gasto de Estructura
+                  </Link>
+                  .
+                </span>
               </div>
             )}
-          </Tabs>
-        ) : (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
-              Para acceder a este formulario primero debe completar el
-              formulario{' '}
-              <Link
-                className="text-indigo-700 underline"
-                to="/supuestos-gastos"
-              >
-                Supuesto de Gasto de Estructura
-              </Link>
-              .
-            </span>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </>)}
+    </>
   );
 }
 

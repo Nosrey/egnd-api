@@ -5,7 +5,8 @@ import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
 import Total from 'components/shared/dashboard/Total';
 import MySpinner from 'components/shared/loaders/MySpinner';
-import { MenuItem, Select } from 'components/ui';
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
+import { MenuItem, Select, Tooltip } from 'components/ui';
 import { año, periodo } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -551,7 +552,9 @@ function DashboardVentas() {
                   </div>
                 )}
                 {infoForm && (
-                  <div className="flex justify-center gap-[50px] mb-[40px]">
+                  <div className={`flex ${yearSelected.value === 'año 1'||
+                  yearSelected.value === '' ||
+                  yearSelected.value === 'todo'  ? "" : "justify-between"} gap-[50px] mb-[40px]`}>
                     {dataAssump.length !== 0 && (
                       <ProgresoCircularScroll
                         title="Churn Promedio"

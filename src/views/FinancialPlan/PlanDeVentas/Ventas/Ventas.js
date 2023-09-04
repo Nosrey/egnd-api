@@ -74,9 +74,9 @@ function Ventas() {
           No se pudieron guardar los datos.
         </Alert>
       )}
-      {showLoader ?
-            <MySpinner/>
-      : (
+      {showLoader ? (
+        <MySpinner />
+      ) : (
         <>
           <div className="border-b-2 mb-8 pb-1">
             <h4>Ventas Totales</h4>
@@ -113,7 +113,9 @@ function Ventas() {
                             showAlertSuces={(boolean) =>
                               setShowSuccessAlert(boolean)
                             }
-                            showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                            showAlertError={(boolean) =>
+                              setShowErrorAlert(boolean)
+                            }
                             country={country}
                             currency={currency}
                           />
@@ -162,7 +164,6 @@ function Ventas() {
           </div>
         </>
       )}
-      
     </div>
   );
 }

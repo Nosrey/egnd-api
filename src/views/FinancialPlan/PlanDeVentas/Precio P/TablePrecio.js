@@ -90,8 +90,12 @@ function TablePrecio(props) {
     mes,
     indexYear,
   ) => {
-    const inputNumero = Number(newValue.replace(/\D/g, ''));
-
+    let inputNumero;
+    if (typeof newValue === "string") {
+      inputNumero = Number(newValue.replace(/\D/g, ''));
+    } else {
+      inputNumero = newValue
+    }
     const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
       (canal) => canal.canalName === canalName,

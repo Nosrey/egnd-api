@@ -66,7 +66,7 @@ function Gastos() {
   const handleInputNumberChange = (value) => {
     setInitialValues({
       ...initialValues,
-      cargasSociales: parseInt(value, 10),
+      cargasSociales: Math.round(value),
     });
   };
 

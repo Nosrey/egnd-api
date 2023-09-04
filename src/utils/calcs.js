@@ -23,7 +23,7 @@ export const showMultiplicacionPxQ = (dataVolumen, dataPrecio) => {
               dataPrecio[i].stats[x].productos[j].años[t].volMeses[month];
             const ventaMes = (dataVolumen[i].stats[x].productos[j].años[
               t
-            ].volMeses[month] = parseInt(volMes, 10) * parseInt(precioMes, 10));
+            ].volMeses[month] = Math.round(volMes) * Math.round(precioMes));
             totalesAnio.push(ventaMes);
             return ventaMes;
           });

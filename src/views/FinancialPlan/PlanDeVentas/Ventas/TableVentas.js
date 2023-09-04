@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-return-assign */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -42,7 +43,7 @@ function TableVentas(props) {
             // año
             for (let s = 0; s < MONTHS.length; s++) {
               const valor = myProd?.años[j]?.volMeses[MONTHS[s]];
-              arrayvalores.push(parseInt(valor, 10));
+              arrayvalores.push(Math.round(valor));
             }
           }
           canalInfo.sum += arrayvalores.reduce(
@@ -275,7 +276,7 @@ function TableVentas(props) {
       {infoProducts && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[260px] ">
+            <p className=" text-[#707470] font-bold mb-3 text-left w-[185px] ">
               Venta por producto
             </p>
           </div>
@@ -284,7 +285,7 @@ function TableVentas(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[260px]  pl-[45px] capitalize self-center ${
+                    className={`w-[185px]  pl-[45px] capitalize self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >
@@ -329,17 +330,32 @@ function TableVentas(props) {
                           año &&
                           año.numeros?.map((valor, index) => (
                             <p className="w-[90px] text-center">
-                              {moneda}
-                              {formatNumber(valor)}
+                              <Tooltip
+                                placement="top-end"
+                                title={formatNumber(valor)}
+                              >
+                                {moneda}
+                                <ShortNumberNotation numero={valor} />
+                              </Tooltip>
                             </p>
                           ))}
                         <p className="w-[90px] text-center font-bold">
-                          {formatNumber(
-                            año.numeros.reduce(
-                              (total, current) => total + current,
-                            ),
-                          )}
-                        </p>{' '}
+                          <Tooltip
+                            placement="top-end"
+                            title={formatNumber(
+                              año.numeros.reduce(
+                                (total, current) => total + current,
+                              ),
+                            )}
+                          >
+                            {moneda}
+                            <ShortNumberNotation
+                              numero={año.numeros.reduce(
+                                (total, current) => total + current,
+                              )}
+                            />
+                          </Tooltip>
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -355,15 +371,19 @@ function TableVentas(props) {
               className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
               key={i}
             >
-              VENTA CANAL '{canal.name}': {moneda}
-              {formatNumber(canal.sum)}
+              <Tooltip placement="top-end" title={formatNumber(canal.sum)}>
+                VENTA CANAL '{canal.name}': {moneda}
+                <ShortNumberNotation numero={canal.sum} />
+              </Tooltip>
             </p>
           ))}
 
           <br />
           <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            VENTA TOTAL: {moneda}
-            {formatNumber(volTotal)}
+            <Tooltip placement="top-end" title={formatNumber(volTotal)}>
+              VENTA TOTAL: {moneda}
+              <ShortNumberNotation numero={volTotal} />
+            </Tooltip>
           </p>
         </div>
       )}

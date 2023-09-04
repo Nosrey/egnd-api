@@ -22,7 +22,7 @@ function GraficoDeBarraHeadcountFour({ typeView, ftes }) {
             enabled: true,
           },
         },
-        // colors: COLORS,
+        colors: ["#4F46E5"],
         responsive: [
           {
             breakpoint: 480,

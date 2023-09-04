@@ -23,9 +23,9 @@ const configIncial = (vol) => {
 };
 
 export const resolveResul = (vol, precio, div) => {
-  div = parseInt(div);
-  vol = parseInt(vol);
-  precio = parseInt(precio);
+  div = Math.round(div);
+  vol = Math.round(vol);
+  precio = Math.round(precio);
 
   let value = 0;
   const mult = vol * precio;
@@ -34,13 +34,12 @@ export const resolveResul = (vol, precio, div) => {
     value = (div * mult) / 100;
     value = value.toFixed(1);
   }
-  return parseInt(value);
+  return Math.round(value);
 };
 
 export const calcTotal = (costoData, volumenData) => {
   configIncial(costoData);
 
-  console.log('cf', configIncial(costoData));
 
   if (costoData.length !== 0 && volumenData.length !== 0) {
     costoData.map((p, indexInicial) => {
@@ -82,7 +81,7 @@ export const calcTotal = (costoData, volumenData) => {
                     costoData[indexInicial].stats[indexStats].productos[indexP]
                       .cargos,
                   ) +
-                  parseInt(
+                  Math.round(
                     volumenData[indexInicial].stats[indexStats].productos[
                       indexP
                     ].años[indexYear].volMeses[m] *
@@ -121,7 +120,7 @@ export const calcTotal = (costoData, volumenData) => {
                     costoData[indexInicial].stats[indexStats].productos[indexP]
                       .cargos,
                   ) +
-                  parseInt(
+                  Math.round(
                     volumenData[indexInicial].stats[indexStats].productos[
                       indexP
                     ].años[indexYear].volMeses[m] *

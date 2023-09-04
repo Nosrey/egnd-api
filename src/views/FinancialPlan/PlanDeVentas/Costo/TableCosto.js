@@ -140,8 +140,12 @@ function TableCosto(props) {
     mes,
     indexYear,
   ) => {
-    const inputNumero = Number(newValue.replace(/\D/g, ''));
-
+    let inputNumero;
+    if (typeof newValue === "string") {
+      inputNumero = Number(newValue.replace(/\D/g, ''));
+    } else {
+      inputNumero = newValue
+    }
     const newData = { ...infoForm };
     const channelIndex = newData[pais].findIndex(
       (canal) => canal.canalName === canalName,
@@ -204,7 +208,7 @@ function TableCosto(props) {
               {infoForm[pais].map((canal, indexCanal) => (
                 <section key={canal.canalName} className="contenedor">
                   <div className="titleChannel">
-                    <p className="canal">{canal.canalName}</p>
+                    <p className="canal cursor-default">{canal.canalName}</p>
                   </div>
                   <div>
                     <div>
@@ -213,9 +217,6 @@ function TableCosto(props) {
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
-                          {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                            {producto.id.toString()}
-                          </Avatar> */}
                           <FormItem className=" mb-1 w-[210px] mt-[81px]">
                             <Input
                               disabled
@@ -223,19 +224,19 @@ function TableCosto(props) {
                               className="capitalize"
                               value={producto.name}
                             />
-                            <p className="mt-20">Comisiones</p>
-                            <p className="mt-8">Impuestos Comerciales</p>
-                            <p className="mt-8">Cargos por pasarela cobro</p>
+                            <p className="mt-20 cursor-default">Comisiones</p>
+                            <p className="mt-8 cursor-default">Impuestos Comerciales</p>
+                            <p className="mt-8 cursor-default">Cargos por pasarela cobro</p>
                           </FormItem>
                           <div className="flex flex-col w-[240px] mt-[81px]">
                             <div className="flex w-[240px]  gap-x-2">
                               <FormItem className=" mb-0 w-[130px] ">
                                 <Tooltip
                                   placement="top-end"
-                                  title="Precio Inicial"
+                                  title="Costo inicial"
                                 >
                                   <Input
-                                    placeholder="Precio inicial"
+                                    placeholder="Costo inicial"
                                     type="text"
                                     name="precioInicial"
                                     prefix={moneda}
@@ -363,7 +364,7 @@ function TableCosto(props) {
                           {producto.años.map((año, indexYear) => (
                             <div className="flex flex-col" key={indexYear}>
                               <div className="titleRow min-w-[62px]">
-                                <p> Año {año.año}</p>
+                                <p className='cursor-default'> Año {año.año}</p>
                                 <div
                                   className="iconYear"
                                   onClick={() => hideYear(indexYear)}
@@ -383,7 +384,7 @@ function TableCosto(props) {
                                       (mes, indexMes) => (
                                         <p
                                           key={indexMes}
-                                          className="month w-[90px] capitalize"
+                                          className="month w-[90px] cursor-default capitalize"
                                         >
                                           {Object.keys(año.volMeses)[indexMes]}
                                         </p>

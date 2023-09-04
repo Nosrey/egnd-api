@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { MONTHS, OPTIONS_COUNTRY } from 'constants/forms.constants';
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { resolveResul } from '../../../../services/TotalProductsService';
@@ -57,7 +58,7 @@ function TableCosto(props) {
       value = value.toFixed(1);
     }
 
-    return parseInt(value);
+    return Math.round(value);
   };
 
   const resolveTotalYear = (indexPais, indexCanal, indexProd, indexYear) => {
@@ -137,7 +138,7 @@ function TableCosto(props) {
                         indexP
                       ].cargos,
                     ) +
-                    parseInt(
+                    Math.round(
                       props.volumenData[indexInicial].stats[indexStats]
                         .productos[indexP].años[indexYear].volMeses[m] *
                         props.costoData[indexInicial].stats[indexStats]
@@ -172,7 +173,7 @@ function TableCosto(props) {
                         indexP
                       ].cargos,
                     ) +
-                    parseInt(
+                    Math.round(
                       props.volumenData[indexInicial].stats[indexStats]
                         .productos[indexP].años[indexYear].volMeses[m] *
                         props.costoData[indexInicial].stats[indexStats]
@@ -215,7 +216,7 @@ function TableCosto(props) {
               const valor =
                 myProd.años[j].volMeses[MONTHS[s]] *
                 prodChannel.años[j].volMeses[MONTHS[s]];
-              arrayvalores.push(parseInt(valor, 10));
+              arrayvalores.push(Math.round(valor));
             }
           }
           canalInfo.sum += arrayvalores.reduce(
@@ -301,7 +302,7 @@ function TableCosto(props) {
               {infoForm[pais].map((canal, indexCanal) => (
                 <section key={canal.canalName} className="contenedor">
                   <div className="titleChannel">
-                    <p className="canal">{canal.canalName}</p>
+                    <p className="canal cursor-default">{canal.canalName}</p>
                   </div>
                   <div>
                     <div>
@@ -310,9 +311,6 @@ function TableCosto(props) {
                           className="flex  gap-x-3 gap-y-3  mb-6 "
                           key={producto.id}
                         >
-                          {/* <Avatar className="w-[50px] mt-[81px] mb-1 bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-100">
-                            {producto.id.toString()}
-                          </Avatar> */}
                           <FormItem className=" mb-1 w-[210px] mt-[81px]">
                             <Input
                               disabled
@@ -320,9 +318,9 @@ function TableCosto(props) {
                               className="capitalize"
                               value={producto.name}
                             />
-                            <p className="mt-8">Comisiones</p>
-                            <p className="mt-8">Impuestos Comerciales</p>
-                            <p className="mt-8">Cargos por pasarela cobro</p>
+                            <p className="mt-8 cursor-default">Comisiones</p>
+                            <p className="mt-8 cursor-default">Impuestos Comerciales</p>
+                            <p className="mt-8 cursor-default">Cargos por pasarela cobro</p>
                           </FormItem>
                           <div className="flex flex-col w-[240px] mt-[138px]">
                             <FormItem className="mb-0 mt-2 w-[90px]">
@@ -359,7 +357,7 @@ function TableCosto(props) {
                           {producto.años.map((año, indexYear) => (
                             <div className="flex flex-col" key={indexYear}>
                               <div className="titleRow min-w-[62px]">
-                                <p> Año {año.año}</p>
+                                <p className='cursor-default'> Año {año.año}</p>
                                 <div
                                   className="iconYear"
                                   onClick={() => hideYear(indexYear)}
@@ -379,13 +377,13 @@ function TableCosto(props) {
                                       (mes, indexMes) => (
                                         <p
                                           key={indexMes}
-                                          className="month w-[90px] capitalize"
+                                          className="month w-[90px] capitalize cursor-default"
                                         >
                                           {Object.keys(año.volMeses)[indexMes]}
                                         </p>
                                       ),
                                     )}
-                                  <p className="month w-[90px]">Total</p>
+                                  <p className="month w-[90px] cursor-default">Total</p>
                                 </div>
                                 <div className="flex gap-x-3 gap-y-3">
                                   {visibleItems.includes(indexYear) &&
@@ -398,7 +396,7 @@ function TableCosto(props) {
                                         >
                                           <Tooltip
                                             placement="top-end"
-                                            title={
+                                            title={moneda + formatearNumero(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -409,7 +407,7 @@ function TableCosto(props) {
                                                 indexCanal
                                               ].productos[indexProd].años[
                                                 indexYear
-                                              ].volMeses[MONTHS[indexMes]]
+                                              ].volMeses[MONTHS[indexMes]])
                                             }
                                           >
                                             <Input
@@ -436,20 +434,31 @@ function TableCosto(props) {
                                       ),
                                     )}
                                   <FormItem className="mb-0">
-                                    <Input
-                                      className="w-[90px]"
-                                      type="text"
-                                      disabled
-                                      prefix={moneda}
-                                      value={formatearNumero(
+                                  <Tooltip
+                                      placement="top-end"
+                                      title={moneda + formatearNumero(
                                         resolveTotalYear(
                                           indexPais,
                                           indexCanal,
                                           indexProd,
                                           indexYear,
-                                        ),
-                                      )}
-                                    />
+                                        ))}
+                                    > 
+                                      <Input
+                                        className="w-[90px]"
+                                        type="text"
+                                        disabled
+                                        prefix={moneda}
+                                        value={formatearNumero(
+                                          resolveTotalYear(
+                                            indexPais,
+                                            indexCanal,
+                                            indexProd,
+                                            indexYear,
+                                          ),
+                                        )}
+                                      />
+                                    </Tooltip>
                                   </FormItem>
                                 </div>
 
@@ -464,7 +473,7 @@ function TableCosto(props) {
                                         >
                                           <Tooltip
                                             placement="top-end"
-                                            title={resolveResul(
+                                            title={moneda + formatearNumero(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -477,7 +486,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.comision,
-                                            )}
+                                            ))}
                                           >
                                             <Input
                                               className="w-[90px]"
@@ -506,21 +515,33 @@ function TableCosto(props) {
                                       ),
                                     )}
                                   <FormItem className="mb-0">
-                                    <Input
-                                      className="w-[90px]"
-                                      type="text"
-                                      disabled
-                                      prefix={moneda}
-                                      value={formatearNumero(
+                                    <Tooltip
+                                      placement="top-end"
+                                      title={moneda + formatearNumero(
                                         resolveTotalYearPercent(
                                           indexPais,
                                           indexCanal,
                                           indexProd,
                                           indexYear,
                                           producto.comision,
-                                        ),
-                                      )}
-                                    />
+                                        ))}
+                                    > 
+                                      <Input
+                                        className="w-[90px]"
+                                        type="text"
+                                        disabled
+                                        prefix={moneda}
+                                        value={formatearNumero(
+                                          resolveTotalYearPercent(
+                                            indexPais,
+                                            indexCanal,
+                                            indexProd,
+                                            indexYear,
+                                            producto.comision,
+                                          ),
+                                        )}
+                                      />
+                                    </Tooltip>
                                   </FormItem>
                                 </div>
 
@@ -535,7 +556,7 @@ function TableCosto(props) {
                                         >
                                           <Tooltip
                                             placement="top-end"
-                                            title={resolveResul(
+                                            title={moneda + formatearNumero(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -548,7 +569,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.impuesto,
-                                            )}
+                                            ))}
                                           >
                                             <Input
                                               className="w-[90px]"
@@ -576,21 +597,33 @@ function TableCosto(props) {
                                       ),
                                     )}
                                   <FormItem className="mb-0">
-                                    <Input
-                                      className="w-[90px]"
-                                      type="number"
-                                      disabled
-                                      prefix={moneda}
-                                      value={formatearNumero(
+                                  <Tooltip
+                                      placement="top-end"
+                                      title={moneda + formatearNumero(
                                         resolveTotalYearPercent(
                                           indexPais,
                                           indexCanal,
                                           indexProd,
                                           indexYear,
                                           producto.impuesto,
-                                        ),
-                                      )}
-                                    />
+                                        ))}
+                                    > 
+                                      <Input
+                                        className="w-[90px]"
+                                        type="number"
+                                        disabled
+                                        prefix={moneda}
+                                        value={formatearNumero(
+                                          resolveTotalYearPercent(
+                                            indexPais,
+                                            indexCanal,
+                                            indexProd,
+                                            indexYear,
+                                            producto.impuesto,
+                                          ),
+                                        )}
+                                      />
+                                    </Tooltip>
                                   </FormItem>
                                 </div>
 
@@ -605,7 +638,7 @@ function TableCosto(props) {
                                         >
                                           <Tooltip
                                             placement="top-end"
-                                            title={resolveResul(
+                                            title={moneda + formatearNumero(resolveResul(
                                               props.volumenData[indexPais]
                                                 .stats[indexCanal].productos[
                                                 indexProd
@@ -618,7 +651,7 @@ function TableCosto(props) {
                                                 indexYear
                                               ].volMeses[MONTHS[indexMes]],
                                               producto.cargos,
-                                            )}
+                                      ))}
                                           >
                                             <Input
                                               className="w-[90px]"
@@ -647,21 +680,33 @@ function TableCosto(props) {
                                       ),
                                     )}
                                   <FormItem className="mb-0">
-                                    <Input
-                                      className="w-[90px]"
-                                      type="text"
-                                      disabled
-                                      prefix={moneda}
-                                      value={formatearNumero(
+                                    <Tooltip
+                                      placement="top-end"
+                                      title={moneda + formatearNumero(
                                         resolveTotalYearPercent(
                                           indexPais,
                                           indexCanal,
                                           indexProd,
                                           indexYear,
                                           producto.cargos,
-                                        ),
-                                      )}
-                                    />
+                                        ))}
+                                    >
+                                      <Input
+                                        className="w-[90px]"
+                                        type="text"
+                                        disabled
+                                        prefix={moneda}
+                                        value={formatearNumero(
+                                          resolveTotalYearPercent(
+                                            indexPais,
+                                            indexCanal,
+                                            indexProd,
+                                            indexYear,
+                                            producto.cargos,
+                                          ),
+                                        )}
+                                      />
+                                    </Tooltip>
                                   </FormItem>
                                 </div>
                               </div>
@@ -679,7 +724,7 @@ function TableCosto(props) {
       {infoProducts && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
+            <p className=" text-[#707470]  cursor-default font-bold mb-3 text-left w-[500px] ">
               Costo por producto
             </p>
           </div>
@@ -688,7 +733,7 @@ function TableCosto(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[437px]  pl-[45px] capitalize self-center ${
+                    className={`w-[437px] cursor-default  pl-[45px] capitalize self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >
@@ -704,7 +749,7 @@ function TableCosto(props) {
                               className="titleRowR min-w-[62px]"
                               key={indexYear * 1000}
                             >
-                              <p> Año {indexYear + 1}</p>
+                              <p className='cursor-default '> Año {indexYear + 1}</p>
                               <div
                                 className="iconYear"
                                 onClick={() => hideYear(indexYear)}
@@ -725,7 +770,7 @@ function TableCosto(props) {
                               MONTHS.map((mes, indexMes) => (
                                 <p
                                   key={indexMes}
-                                  className="month w-[90px] capitalize"
+                                  className="cursor-default month w-[90px] capitalize"
                                 >
                                   {mes}
                                 </p>
@@ -739,23 +784,38 @@ function TableCosto(props) {
                             {visibleItems.includes(indexYear) &&
                               año &&
                               MONTHS.map((valor, indexNum) => (
-                                <p className="w-[90px] text-center">
-                                  {moneda}
-                                  {formatearNumero(
-                                    viewTotals[props.country][prod.name][
-                                      indexYear
-                                    ][indexNum],
-                                  )}
+                                <p className="cursor-default w-[90px] text-center">
+                                  <Tooltip
+                                    placement="top-end"
+                                    title={moneda + formatearNumero(
+                                      viewTotals[props.country][prod.name][
+                                        indexYear
+                                      ][indexNum],
+                                    )}
+                                  >
+                                    {moneda}
+                                    <ShortNumberNotation numero={viewTotals[props.country][prod.name][
+                                        indexYear
+                                      ][indexNum]} />
+                                  </Tooltip>
                                 </p>
                               ))}
-                            <p className="w-[90px] text-center font-bold">
-                              {moneda}{' '}
-                              {formatearNumero(
-                                año.reduce(
-                                  (total, current) =>
-                                    parseInt(total) + parseInt(current),
-                                ),
-                              )}
+                            <p className="cursor-default w-[90px] text-center font-bold">
+                              <Tooltip
+                                placement="top-end"
+                                title={moneda + formatearNumero(
+                                  año.reduce(
+                                    (total, current) =>
+                                      Math.round(total) + Math.round(current),
+                                  ),
+                                )}
+                              >
+                                  {moneda}
+                                  <ShortNumberNotation numero={año.reduce(
+                                    (total, current) =>
+                                      Math.round(total) + Math.round(current),
+                                  )} />
+                              </Tooltip>
                             </p>
                           </div>
                         </div>
@@ -770,17 +830,23 @@ function TableCosto(props) {
           <br />
           {totalesCanales.map((canal, i) => (
             <p
-              className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] "
+              className=" pl-[45px] cursor-default  text-[#707470]  mb-3 text-left w-[500px] "
               key={i}
             >
-              COSTO CANAL '{canal.name}': {moneda}
-              {formatearNumero(canal.sum)}
+
+              <Tooltip placement="top-end" title={formatearNumero(canal.sum)}>
+                COSTO CANAL '{canal.name}': &nbsp; {moneda}
+                <ShortNumberNotation numero={canal.sum} />
+              </Tooltip>
             </p>
           ))}
 
           <br />
           <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[500px] ">
-            COSTO TOTAL: {moneda} {formatearNumero(volTotal)}
+            <Tooltip placement="top-end" title={formatearNumero(volTotal)}>
+               COSTO TOTAL:  &nbsp; {moneda}
+                <ShortNumberNotation numero={volTotal} />
+              </Tooltip>
           </p>
         </div>
       )}

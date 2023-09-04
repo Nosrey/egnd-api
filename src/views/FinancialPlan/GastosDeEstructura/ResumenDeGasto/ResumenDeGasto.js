@@ -32,7 +32,7 @@ function ResumenDeGasto() {
           let sumanios = []
           for (let p = 0; p < copy[keyArray[i]].cuentas[x].años.length; p++) {
             for (let s = 0; s < MONTHS.length; s++) {
-              sumanios.push(parseInt(copy[keyArray[i]].cuentas[x].años[p].volMeses[MONTHS[s]]));
+              sumanios.push(Math.round(copy[keyArray[i]].cuentas[x].años[p].volMeses[MONTHS[s]]));
             }
           }
           sumacta.push(sumanios)
@@ -86,7 +86,7 @@ function ResumenDeGasto() {
     const arrayKeys = Object.keys(infoForm)
     let sum = 0
     for (let i = 0; i < arrayKeys.length; i++) {
-      sum += parseInt(infoForm[arrayKeys[i]].cuentas[cta].años[year].volMeses[mes])
+      sum += Math.round(infoForm[arrayKeys[i]].cuentas[cta].años[year].volMeses[mes])
     }
     return sum;
                                                       
