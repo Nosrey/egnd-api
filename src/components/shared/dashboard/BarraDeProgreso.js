@@ -27,7 +27,7 @@ function BarraDeProgreso({ data, totalVentas, selectYear, periodoSelected }) {
                     );
                   }
                 } else if (periodoSelected.month === 4) {
-                  if (indexMes < 4) {
+                  if (indexMes < 3) {
                     paises[indexD].total += Number(
                       a.volMeses[MONTHS[indexMes]],
                     );

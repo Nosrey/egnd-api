@@ -15,6 +15,7 @@ import { showMultiplicacionPxQ } from 'utils/calcs';
 import formatNumber from 'utils/formatTotalsValues';
 
 function DashboardVentas() {
+  const [volumenData, setVolumenData] = useState();
   const currentState = useSelector((state) => state.auth.user);
   const [yearSelected, setYearSelected] = useState({
     value: 'año 1',
@@ -45,6 +46,26 @@ function DashboardVentas() {
 
   const selectPeriodo = (event) => {
     setPeriodoSelected(event);
+  };
+
+  const getValueMes = (indexPais, indexCanal, indexProd, indexYear, indexMes) =>
+    volumenData[indexPais].stats[indexCanal].productos[indexProd].años[
+      indexYear
+    ].volMeses[MONTHS[indexMes]];
+
+  const getClientes = (
+    indexPais,
+    indexCanal,
+    indexProd,
+    indexYear,
+    indexMes,
+  ) => {
+    const vtasXCliente =
+      dataAssump.canales[indexCanal].items[indexProd].volumen;
+    const rdo =
+      getValueMes(indexPais, indexCanal, indexProd, indexYear, indexMes) /
+      vtasXCliente;
+    return rdo;
   };
 
   const calcTotals = () => {
@@ -236,7 +257,7 @@ function DashboardVentas() {
     let tot = 0;
     let newC = 0;
     if (infoForm && dataAssump) {
-      Object.values(infoForm).map((d) => {
+      Object.values(infoForm).map((d, indexPais) => {
         d.map((i, indexChannel) => {
           i.productos.map((p, indexProd) => {
             p.años.map((a, indexY) => {
@@ -309,6 +330,16 @@ function DashboardVentas() {
                       }
                     } else {
                       if (indexMes === 11) {
+                        console.log(
+                          '+',
+                          getClientes(
+                            indexPais,
+                            indexChannel,
+                            indexProd,
+                            indexY,
+                            indexMes,
+                          ),
+                        );
                         tot += Math.floor(
                           a.volMeses[MONTHS[indexMes]] /
                             dataAssump.canales[indexChannel].items[indexProd]
@@ -372,6 +403,8 @@ function DashboardVentas() {
     setTotalsCacr(tot);
   };
 
+  console.log('[M', infoForm);
+
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
@@ -380,6 +413,7 @@ function DashboardVentas() {
         }
         if (data?.volumenData.length !== 0 && data?.precioData.length !== 0) {
           setDataVol(data?.volumenData);
+          setVolumenData(data?.volumenData);
           calcVols(data?.volumenData);
           const datosPrecargados = {};
           let dataVentas = showMultiplicacionPxQ(
