@@ -171,6 +171,7 @@ function DashboardCostos() {
     let cargoGrafYear = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     Object.values(precioData).map((d, indexInicial) => {
+      console.log('[DA]', dataAssump);
       d.stats.map((s, indexStats) => {
         s.productos.map((p, indexP) => {
           p.años.map((a, indexYear) => {
@@ -379,7 +380,6 @@ function DashboardCostos() {
                         );
                       }
                     } else if (periodoSelected.month === 6) {
-                      console.log('A', p);
                       if (indexM < 6) {
                         if (canalSelected && productoSelected && paisSelected) {
                           if (
@@ -745,6 +745,11 @@ function DashboardCostos() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
+        console.log('[DATA]', data);
+        if (data?.assumptionData[0]) {
+          setDataAssump(data?.assumptionData[0]);
+          createSelects();
+        }
         if (
           data?.volumenData.length !== 0 &&
           data?.costoData.length !== 0 &&
@@ -752,10 +757,6 @@ function DashboardCostos() {
         ) {
           calcTotals(data?.volumenData, data?.costoData, data?.precioData);
           calcVols(data?.volumenData);
-        }
-        if (data?.assumptionData[0]) {
-          setDataAssump(data?.assumptionData[0]);
-          createSelects();
         }
       })
       .catch((error) => console.error(error));
