@@ -807,6 +807,7 @@ function DashboardCostos() {
           <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
             <CardNumerica
               type="default"
+              hasCurrency
               title="Costo total productos"
               cantidad={totalProd}
             />
@@ -817,11 +818,13 @@ function DashboardCostos() {
             />
             <CardNumerica
               type="default"
+              hasCurrency
               title="Costo medio por producto"
               cantidad={volProd ? totalProd / volProd : 0}
             />
             <CardNumerica
               type="default"
+              hasCurrency
               title="Costo de servicios"
               cantidad={totalServ}
             />
@@ -833,6 +836,7 @@ function DashboardCostos() {
             <CardNumerica
               type="default"
               title="Costo medio por servicio"
+              hasCurrency
               cantidad={volServ ? totalServ / volServ : 0}
             />
           </div>

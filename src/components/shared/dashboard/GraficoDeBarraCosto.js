@@ -23,7 +23,7 @@ function GraficoDeBarraCosto({
       data: cargos,
     },
     {
-      name: 'Volumen',
+      name: 'Costo x Volumen',
       data: volumen,
     },
   ];
