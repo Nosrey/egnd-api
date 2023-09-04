@@ -361,7 +361,7 @@ function TablePuestosPxQ(props) {
                           <Tooltip
                             placement="top-end"
                             title={currency + formatearNumero(
-                              volTotal[indexYear].values.reduce(
+                              volTotal[indexYear]?.values.reduce(
                                 (total, current) =>
                                   Math.round(Number(total) + Number(current)),
                                 0,
@@ -374,7 +374,7 @@ function TablePuestosPxQ(props) {
                           {index === 0 &&
                             volTotal[indexYear] &&
                             formatearNumero(
-                              volTotal[indexYear].values.reduce(
+                              volTotal[indexYear]?.values.reduce(
                                 (total, current) =>
                                   Math.round(Number(total) + Number(current)),
                                 0,
