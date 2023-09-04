@@ -162,7 +162,7 @@ function TablePuestosPxQ(props) {
                               <div className="flex flex-col" key={indexYear}>
                                 {index === 0 && (
                                   <div className="titleRow min-w-[62px]">
-                                    <p> Año {año.año}</p>
+                                    <p className='cursor-default'> Año {año.año}</p>
                                     <div
                                       className="iconYear"
                                       onClick={() => hideYear(indexYear)}
@@ -185,7 +185,7 @@ function TablePuestosPxQ(props) {
                                           (mes, indexMes) => (
                                             <p
                                               key={indexMes}
-                                              className="month w-[90px] capitalize"
+                                              className="month w-[90px] capitalize cursor-default"
                                             >
                                               {
                                                 Object.keys(año.volMeses)[
@@ -195,7 +195,7 @@ function TablePuestosPxQ(props) {
                                             </p>
                                           ),
                                         )}
-                                      <p className="month w-[90px]">Total</p>
+                                      <p className="month w-[90px] cursor-default">Total</p>
                                     </div>
                                   )}
                                   <div className="flex gap-x-3 gap-y-3">
@@ -250,10 +250,24 @@ function TablePuestosPxQ(props) {
                                       )}
 
                                     <FormItem className="mb-0">
-                                      <Input
+                                    <Tooltip
+                                      placement="top-end"
+                                      title={currency +
+                                        formatearNumero(
+                                          totHor(
+                                            infoForm[cc].puestos[head].total,
+                                            infoForm[cc].puestos[head].años[
+                                              indexYear
+                                            ].volTotal,
+                                          ),
+                                        )
+                                      }
+                                    >
+                                    <Input
                                         className="w-[90px]"
                                         type="text"
                                         disabled
+                                        prefix={currency}
                                         value={formatearNumero(
                                           totHor(
                                             infoForm[cc].puestos[head].total,
@@ -263,6 +277,7 @@ function TablePuestosPxQ(props) {
                                           ),
                                         )}
                                       />
+                                    </Tooltip>
                                     </FormItem>
                                   </div>
                                 </div>
@@ -282,7 +297,7 @@ function TablePuestosPxQ(props) {
       {infoForm && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px] h-[230px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
+            <p className=" text-[#707470] font-bold mb-3 text-left cursor-default w-[500px] ">
               Total
             </p>
           </div>
@@ -297,7 +312,7 @@ function TablePuestosPxQ(props) {
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
-                          <p> Año {indexYear + 1}</p>
+                          <p className='cursor-default'> Año {indexYear + 1}</p>
                           <div
                             className="iconYear"
                             onClick={() => hideYear(indexYear)}
@@ -317,12 +332,12 @@ function TablePuestosPxQ(props) {
                           MONTHS.map((mes, indexMes) => (
                             <p
                               key={indexMes}
-                              className="month w-[90px] capitalize"
+                              className="month w-[90px] cursor-default capitalize"
                             >
                               {mes}
                             </p>
                           ))}
-                        {index === 0 && <p className="month w-[90px]">Total</p>}
+                        {index === 0 && <p className="month w-[90px] cursor-default">Total</p>}
                         {index !== 0 && <p className="month w-[90px]" />}
                       </div>
                       <div className="flex gap-x-3 gap-y-3">
@@ -331,12 +346,29 @@ function TablePuestosPxQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">
-                              {currency}
+                            <p className="w-[90px] text-center cursor-default">
+                              <Tooltip
+                                placement="top-end"
+                                title={currency + formatearNumero(valor)}
+                              >
+                                {currency}
                               {formatearNumero(valor)}
+                              </Tooltip>
+                              
                             </p>
                           ))}
-                        <p className="w-[90px] text-center font-bold">
+                        <p className="w-[90px] text-center font-bold cursor-default">
+                          <Tooltip
+                            placement="top-end"
+                            title={currency + formatearNumero(
+                              volTotal[indexYear].values.reduce(
+                                (total, current) =>
+                                  Math.round(Number(total) + Number(current)),
+                                0,
+                              ),
+                            )}
+                          >
+
                           {index === 0 && currency}
 
                           {index === 0 &&
@@ -348,6 +380,8 @@ function TablePuestosPxQ(props) {
                                 0,
                               ),
                             )}
+                          </Tooltip>
+                         
                         </p>
                       </div>
                     </div>
