@@ -5,8 +5,7 @@ import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import ProgresoCircularScroll from 'components/shared/dashboard/ProgresoCircularScroll';
 import Total from 'components/shared/dashboard/Total';
 import MySpinner from 'components/shared/loaders/MySpinner';
-import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
-import { MenuItem, Select, Tooltip } from 'components/ui';
+import { MenuItem, Select } from 'components/ui';
 import { año, periodo } from 'constants/dashboard.constant';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -86,7 +85,9 @@ function DashboardVentas() {
                     if (periodoSelected.month || periodoSelected.month === 0) {
                       if (periodoSelected.month === 0) {
                         if (indexM === 0) {
-                          if (o.type === 'producto') {
+                          if (
+                            dataAssump.productos[indexO].type === 'producto'
+                          ) {
                             totProd += Number(a.volMeses[MONTHS[indexM]]);
                           } else {
                             totServ += Number(a.volMeses[MONTHS[indexM]]);
@@ -404,8 +405,6 @@ function DashboardVentas() {
     setTotalsCacr(tot);
   };
 
-  console.log('[M', infoForm);
-
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
@@ -552,9 +551,15 @@ function DashboardVentas() {
                   </div>
                 )}
                 {infoForm && (
-                  <div className={`flex ${yearSelected.value === 'año 1'||
-                  yearSelected.value === '' ||
-                  yearSelected.value === 'todo'  ? "" : "justify-between"} gap-[50px] mb-[40px]`}>
+                  <div
+                    className={`flex ${
+                      yearSelected.value === 'año 1' ||
+                      yearSelected.value === '' ||
+                      yearSelected.value === 'todo'
+                        ? ''
+                        : 'justify-between'
+                    } gap-[50px] mb-[40px]`}
+                  >
                     {dataAssump.length !== 0 && (
                       <ProgresoCircularScroll
                         title="Churn Promedio"

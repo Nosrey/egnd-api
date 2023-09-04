@@ -222,7 +222,7 @@ function DashboardCostos() {
                             setTypeViewGraf(oneMonth);
                           }
                         }
-                        if (a.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
                             volumenData[indexInicial].stats[indexStats]
@@ -322,7 +322,7 @@ function DashboardCostos() {
                             setTypeViewGraf(trimn);
                           }
                         }
-                        if (a.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
                             volumenData[indexInicial].stats[indexStats]
@@ -379,6 +379,7 @@ function DashboardCostos() {
                         );
                       }
                     } else if (periodoSelected.month === 6) {
+                      console.log('A', p);
                       if (indexM < 6) {
                         if (canalSelected && productoSelected && paisSelected) {
                           if (
@@ -422,7 +423,7 @@ function DashboardCostos() {
                             setTypeViewGraf(firstSem);
                           }
                         }
-                        if (a.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
                             volumenData[indexInicial].stats[indexStats]
@@ -522,7 +523,7 @@ function DashboardCostos() {
                             setTypeViewGraf(secondSem);
                           }
                         }
-                        if (a.type === 'producto') {
+                        if (dataAssump.productos[indexP].type === 'producto') {
                           totProd += calcCostos(
                             a.volMeses[m],
                             volumenData[indexInicial].stats[indexStats]
@@ -632,7 +633,7 @@ function DashboardCostos() {
                     setTypeViewGraf(year);
                   }
                 }
-                if (a.type === 'producto') {
+                if (dataAssump.productos[indexP].type === 'producto') {
                   totProd += calcCostos(
                     a.volMeses[m],
                     volumenData[indexInicial].stats[indexStats].productos[
@@ -752,7 +753,7 @@ function DashboardCostos() {
           calcTotals(data?.volumenData, data?.costoData, data?.precioData);
           calcVols(data?.volumenData);
         }
-        if (data?.assumptionData.length !== 0) {
+        if (data?.assumptionData[0]) {
           setDataAssump(data?.assumptionData[0]);
           createSelects();
         }
