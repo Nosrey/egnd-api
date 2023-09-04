@@ -536,7 +536,7 @@ function TableVolumen(props) {
       {infoProducts && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[435px] ">
+            <p className=" text-[#707470] cursor-default  font-bold mb-3 text-left w-[435px] ">
               Volumen por producto
             </p>
           </div>
@@ -545,7 +545,7 @@ function TableVolumen(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[435px]  pl-[45px] capitalize self-center ${
+                    className={`w-[435px]  pl-[45px] cursor-default  capitalize self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >
@@ -555,7 +555,7 @@ function TableVolumen(props) {
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
-                          <p> Año {indexYear + 1}</p>
+                          <p className='cursor-default '> Año {indexYear + 1}</p>
                           <div
                             className="iconYear"
                             onClick={() => hideYear(indexYear)}
@@ -576,7 +576,7 @@ function TableVolumen(props) {
                           MONTHS.map((mes, indexMes) => (
                             <p
                               key={indexMes}
-                              className="month w-[90px] capitalize"
+                              className="month w-[90px] capitalize cursor-default "
                             >
                               {mes}
                             </p>
@@ -588,7 +588,7 @@ function TableVolumen(props) {
                         {visibleItems?.includes(indexYear) &&
                           año &&
                           año.numeros?.map((valor, index) => (
-                            <p className="w-[90px] text-center">
+                            <p className="cursor-default w-[90px] text-center">
                               <Tooltip
                                 placement="top-end"
                                 title={formatNumber(valor)}
@@ -598,7 +598,7 @@ function TableVolumen(props) {
                             </p>
                           ))}
                         {año.numeros?.length !== 0 && (
-                          <p className="w-[90px] text-center font-bold">
+                          <p className="cursor-default w-[90px] text-center font-bold">
                             <Tooltip
                               placement="top-end"
                               title={formatNumber(
@@ -631,7 +631,7 @@ function TableVolumen(props) {
           <br />
           {totalesCanales.map((canal, i) => (
             <p
-              className=" pl-[45px] text-[#707470]  mb-3 text-left w-[435px] "
+              className=" pl-[45px] text-[#707470] cursor-default   mb-3 text-left w-[435px] "
               key={i}
             >
               <Tooltip placement="top-end" title={formatNumber(canal.sum)}>

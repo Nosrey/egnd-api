@@ -3,6 +3,7 @@ import { Alert, FormContainer, Tabs } from 'components/ui';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { Link } from 'react-router-dom';
 import { getUser } from 'services/Requests';
 import TableCosto from './TableCosto';
@@ -21,6 +22,7 @@ function Costo() {
   const [products, setProducts] = useState([]);
   const [costoData, setCostoData] = useState();
   const [infoForm, setInfoForm] = useState();
+  const [showLoader, setShowLoader] = useState(true);
   const [indexCountry, setIndexCountry] = useState(0);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
@@ -110,110 +112,120 @@ function Costo() {
 
         setProducts(data?.assumptionData[0].productos);
         setDefaultCountry(data?.assumptionData[0]?.paises[0]?.value);
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
 
   return (
-    <div>
-      {showSuccessAlert && (
-        <Alert className="mb-4" type="success" showIcon>
-          Los datos se guardaron satisfactoriamente.
-        </Alert>
-      )}
-      {showErrorAlert && (
-        <Alert className="mb-4" type="danger" showIcon>
-          No se pudieron guardar los datos.
-        </Alert>
-      )}
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Costos Totales</h4>
-        <span>Costos directos</span>
-      </div>
+    <>
+    {
+      showLoader ? (
+        <MySpinner />
+      ) : (
+        <>
+          <div>
+            {showSuccessAlert && (
+              <Alert className="mb-4" type="success" showIcon>
+                Los datos se guardaron satisfactoriamente.
+              </Alert>
+            )}
+            {showErrorAlert && (
+              <Alert className="mb-4" type="danger" showIcon>
+                No se pudieron guardar los datos.
+              </Alert>
+            )}
+            <div className="border-b-2 mb-8 pb-1">
+              <h4>Costos Totales</h4>
+              <span>Costos directos</span>
+            </div>
 
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-        <div className="border-b-2 px-4 py-1">
-          <h6>Carga de productos / servicios</h6>
-        </div>
-        <div  className=" px-4 py-1">
-          <span className="text-xs">*Recuerde que si ve valores en 0 es posible que pare ese item le esté faltando cargar información en Cantidad y Volumen o Costos Unitarios para poder realizar los cálculos. 
-</span>
-        </div>
-        {visibleData ? (
-          <Tabs defaultValue={defaultCountry}>
-            <TabList>
-              {visibleData &&
-                Object.keys(infoForm).map((pais, index) => (
-                  <TabNav key={index} value={pais}>
-                    <div
-                      className="capitalize"
-                      onClick={() => {
-                        defineCountry(pais, index);
-                      }}
-                    >
-                      {pais}
-                    </div>
-                  </TabNav>
-                ))}
-            </TabList>
-            {visibleData && (
-              <div className="container-countries">
-                <FormContainer className="cont-countries">
-                  <ContainerScrollable
-                    contenido={
-                      <TableCosto
-                        data={infoForm}
-                        productos={products}
-                        country={defaultCountry}
-                        indexCountry={indexCountry}
-                        volumenData={volumenData}
-                        precioData={precioData}
-                        costoData={costoData}
-                        showAlertSuces={(boolean) =>
-                          setShowSuccessAlert(boolean)
-                        }
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        currency={currency}
-                      />
-                    }
-                  />
-                </FormContainer>
+            <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+              <div className="border-b-2 px-4 py-1">
+                <h6>Carga de productos / servicios</h6>
               </div>
-            )}
-          </Tabs>
-        ) : (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            {!visibleVolume ? (
-              <span className="text-center cursor-default">
-                Para acceder a este formulario primero debe completar los
-                formulario de{' '}
-                <Link className="text-indigo-700 underline" to="/volumen">
-                  Volumen.
-                </Link>
-              </span>
-            ) : !visiblePrecio ? (
-              <span className="text-center cursor-default">
-                Para acceder a este formulario primero debe completar los
-                formulario de{' '}
-                <Link className="text-indigo-700 underline" to="/preciop">
-                  Precio.
-                </Link>
-              </span>
-            ) : (
-              !visibleCosto && (
-                <span className="text-center cursor-default">
-                  Para acceder a este formulario primero debe completar los
-                  formulario de{' '}
-                  <Link className="text-indigo-700 underline" to="/costo">
-                    Costo.
-                  </Link>
-                </span>
-              )
-            )}
+              <div  className=" px-4 py-1">
+                <span className="text-xs">*Recuerde que si ve valores en 0 es posible que pare ese item le esté faltando cargar información en Cantidad y Volumen o Costos Unitarios para poder realizar los cálculos. 
+      </span>
+              </div>
+              {visibleData ? (
+                <Tabs defaultValue={defaultCountry}>
+                  <TabList>
+                    {visibleData &&
+                      Object.keys(infoForm).map((pais, index) => (
+                        <TabNav key={index} value={pais}>
+                          <div
+                            className="capitalize"
+                            onClick={() => {
+                              defineCountry(pais, index);
+                            }}
+                          >
+                            {pais}
+                          </div>
+                        </TabNav>
+                      ))}
+                  </TabList>
+                  {visibleData && (
+                    <div className="container-countries">
+                      <FormContainer className="cont-countries">
+                        <ContainerScrollable
+                          contenido={
+                            <TableCosto
+                              data={infoForm}
+                              productos={products}
+                              country={defaultCountry}
+                              indexCountry={indexCountry}
+                              volumenData={volumenData}
+                              precioData={precioData}
+                              costoData={costoData}
+                              showAlertSuces={(boolean) =>
+                                setShowSuccessAlert(boolean)
+                              }
+                              showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                              currency={currency}
+                            />
+                          }
+                        />
+                      </FormContainer>
+                    </div>
+                  )}
+                </Tabs>
+              ) : (
+                <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                  {!visibleVolume ? (
+                    <span className="text-center cursor-default">
+                      Para acceder a este formulario primero debe completar los
+                      formulario de{' '}
+                      <Link className="text-indigo-700 underline" to="/volumen">
+                        Volumen.
+                      </Link>
+                    </span>
+                  ) : !visiblePrecio ? (
+                    <span className="text-center cursor-default">
+                      Para acceder a este formulario primero debe completar los
+                      formulario de{' '}
+                      <Link className="text-indigo-700 underline" to="/preciop">
+                        Precio.
+                      </Link>
+                    </span>
+                  ) : (
+                    !visibleCosto && (
+                      <span className="text-center cursor-default">
+                        Para acceder a este formulario primero debe completar los
+                        formulario de{' '}
+                        <Link className="text-indigo-700 underline" to="/costo">
+                          Costo.
+                        </Link>
+                      </span>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-    </div>
+        </>)
+    }
+    </>
   );
 }
 

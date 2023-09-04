@@ -188,7 +188,7 @@ function TablePuestosP(props) {
                           <div className="flex flex-col">
                             {index === 0 && (
                               <div className="titleRow min-w-[62px]">
-                                <p> Rem</p>
+                                <p className='cursor-default'> Rem</p>
                               </div>
                             )}
 
@@ -199,7 +199,6 @@ function TablePuestosP(props) {
                                   : 'mt-[20px] w-[100px]'
                               }`}
                             >
-                              <Tooltip placement="top-end" title="Rem">
                                 <Input
                                   placeholder="Rem"
                                   type="text"
@@ -219,6 +218,43 @@ function TablePuestosP(props) {
                                     )
                                   }
                                 />
+                            </FormItem>
+                          </div>
+
+                          <div className="flex flex-col">
+                            {index === 0 && (
+                              <div className="titleRow min-w-[62px]">
+                                <p className='cursor-default'> Cargas S.</p>
+                              </div>
+                            )}
+
+                            <FormItem
+                              className={`${
+                                index === 0
+                                  ? 'mt-[40px] w-[100px]'
+                                  : 'mt-[20px] w-[100px]'
+                              }`}
+                            >
+                              <Tooltip
+                                placement="top-end"
+                                title={currency + formatearNumero(
+                                  Math.round(
+                                    infoForm[cc].puestos[head].cargaSocial || 0,
+                                  ),
+                                )}
+                              >
+                                <Input
+                                  placeholder="Precio inicial"
+                                  type="text"
+                                  disabled
+                                  name="cargaSocial"
+                                  prefix={currency}
+                                  value={formatearNumero(
+                                    Math.round(
+                                      infoForm[cc].puestos[head].cargaSocial || 0,
+                                    ),
+                                  )}
+                                />
                               </Tooltip>
                             </FormItem>
                           </div>
@@ -226,7 +262,7 @@ function TablePuestosP(props) {
                           <div className="flex flex-col">
                             {index === 0 && (
                               <div className="titleRow min-w-[62px]">
-                                <p> Cargas S.</p>
+                                <p className='cursor-default'>TOTAL</p>
                               </div>
                             )}
 
@@ -237,53 +273,34 @@ function TablePuestosP(props) {
                                   : 'mt-[20px] w-[100px]'
                               }`}
                             >
-                              <Input
-                                placeholder="Precio inicial"
-                                type="text"
-                                disabled
-                                name="cargaSocial"
-                                prefix={currency}
-                                value={formatearNumero(
-                                  Math.round(
-                                    infoForm[cc].puestos[head].cargaSocial || 0,
-                                  ),
-                                )}
-                              />
-                            </FormItem>
-                          </div>
-
-                          <div className="flex flex-col">
-                            {index === 0 && (
-                              <div className="titleRow min-w-[62px]">
-                                <p>TOTAL</p>
-                              </div>
-                            )}
-
-                            <FormItem
-                              className={`${
-                                index === 0
-                                  ? 'mt-[40px] w-[100px]'
-                                  : 'mt-[20px] w-[100px]'
-                              }`}
-                            >
-                              <Input
-                                type="text"
-                                name="total"
-                                disabled
-                                prefix={currency}
-                                value={formatearNumero(
+                              <Tooltip
+                                placement="top-end"
+                                title={currency + formatearNumero(
                                   Math.round(
                                     infoForm[cc].puestos[head].total || 0,
                                   ),
                                 )}
-                              />
+                              >
+                                <Input
+                                  type="text"
+                                  name="total"
+                                  disabled
+                                  prefix={currency}
+                                  value={formatearNumero(
+                                    Math.round(
+                                      infoForm[cc].puestos[head].total || 0,
+                                    ),
+                                  )}
+                                />
+
+                              </Tooltip>
                             </FormItem>
                           </div>
 
                           <div className="flex flex-col">
                             {index === 0 && (
                               <div className="titleRow min-w-[100px]">
-                                <p>Incremento anual</p>
+                                <p className='cursor-default'>Incremento anual</p>
                               </div>
                             )}
 

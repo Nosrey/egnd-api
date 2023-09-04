@@ -1,9 +1,10 @@
 /* eslint-disable no-restricted-globals */
-import { FormContainer, FormItem, Input, Tabs } from 'components/ui';
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
+import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
-import formatNumber from 'utils/formatTotalsValues';
+import formatNumber, { formatearNumero } from 'utils/formatTotalsValues';
 
 const { TabContent } = Tabs;
 
@@ -143,7 +144,7 @@ function TableMargen(props) {
   const getTotMargenBrutoAnual = (indexCountry, indexCanal, indexP, indexYear) => {
     const arrValoresYear = []
     for (let i = 0; i < MONTHS.length; i++) {
-      arrValoresYear.push(getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, i));
+      arrValoresYear.push(Math.round(getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, i)));
     }
     const totAnual = arrValoresYear.reduce((total, valor) => total + valor, 0);
     return totAnual;
@@ -196,14 +197,14 @@ function TableMargen(props) {
     // margen bruto x 100 / ventas 
     const percent = (getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes) * 100 ) /
     getVentasResult(indexCountry, indexCanal, indexP, indexYear, indexMes)
-     return isNaN(percent) ? 0 : percent
+     return isNaN(percent) ? 0 : Math.round(percent)
   }
 
   const calculateAnualPercent = (indexCountry, indexCanal, indexP, indexYear) => {
     // margen bruto total x 100 / ventas totales
     const percent = (getTotMargenBrutoAnual(indexCountry, indexCanal, indexP, indexYear) * 100 ) /
      getTotVentasAnual(indexCountry, indexCanal, indexP, indexYear)
-     return isNaN(percent) ? 0 : percent
+     return isNaN(percent) ? 0 : Math.round(percent)
   }
   // FIN PORCENTAJES
   
@@ -216,7 +217,7 @@ function TableMargen(props) {
               {infoForm[pais].map((canal, indexCanal) => (
                 <section key={canal.canalName} className="contenedor">
                   <div className="titleChannel">
-                    <p className="canal">{canal.canalName}</p>
+                    <p className="canal cursor-default">{canal.canalName}</p>
                   </div>
                   <div>
                     <div>
@@ -236,7 +237,7 @@ function TableMargen(props) {
                           {producto.años.map((año, indexYear) => (
                             <div className="flex flex-col" key={indexYear}>
                               <div className="titleRow min-w-[62px]">
-                                <p> Año {año.año}</p>
+                                <p className='cursor-default'> Año {año.año}</p>
                                 <div
                                   className="iconYear"
                                   onClick={() => hideYear(indexYear)}
@@ -256,14 +257,14 @@ function TableMargen(props) {
                                       (mes, indexMes) => (
                                         <p
                                           key={indexMes}
-                                          className="month w-[90px] capitalize"
+                                          className="month w-[90px] cursor-default capitalize"
                                         >
                                           {Object.keys(año.volMeses)[indexMes]}
                                         </p>
                                       ),
                                     )}
 
-                                  <p className="month w-[90px]">Total</p>
+                                  <p className="month w-[90px] cursor-default">Total</p>
                                 </div>
                                 {}
                                 <div className="flex gap-x-3 gap-y-3">
@@ -276,27 +277,32 @@ function TableMargen(props) {
                                             className="mb-0"
                                             key={indexMes}
                                           >
-                                            <Input
+                                            <Tooltip
+                                              placement="top-end"
+                                              title={moneda + formatearNumero(Math.round(getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes)).toString()) }
+                                            >
+                                              <Input
                                               className="w-[90px]"
                                               type="text"
-                                              value={getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes)}
+                                              value={formatearNumero(Math.round(getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes)).toString())}
                                               disabled
                                               prefix={moneda}
                                               name="month"
                                             />
+                                            </Tooltip>
                                           </FormItem>
                                           {/* si es rdo positivo o negativo lo muestro con distinta clase */}
                                            {calculatePercent(indexCountry, indexCanal, indexP, indexYear, indexMes)
                                             >= 0 ?
                                               <div className="rounded-lg bg-green-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
-                                                <p className="text-xs font-semibold text-center text-green-950">
+                                                <p className="text-xs cursor-default font-semibold text-center text-green-950">
                                                   {calculatePercent(indexCountry, indexCanal, indexP, indexYear, indexMes)} 
                                                       %
                                                 </p>
                                               </div>
                                               :
                                               <div className="rounded-lg bg-rose-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
-                                                <p className="text-xs font-semibold text-center text-rose-950">
+                                                <p className="text-xs cursor-default font-semibold text-center text-rose-950">
                                                   {calculatePercent(indexCountry, indexCanal, indexP, indexYear, indexMes)} 
                                                       %
                                                 </p>
@@ -308,26 +314,32 @@ function TableMargen(props) {
 
                                   <div className="">
                                     <FormItem className="mb-0">
-                                      <Input
-                                        className="w-[90px]"
-                                        type="text"
-                                        disabled
-                                        value={getTotMargenBrutoAnual(indexCountry,indexCanal, indexP, indexYear)}
-                                        prefix={moneda}
-                                      />
+                                       <Tooltip
+                                          placement="top-end"
+                                          title={moneda + formatearNumero(Math.round(getTotMargenBrutoAnual(indexCountry,indexCanal, indexP, indexYear)).toString()) }
+                                        >
+                                          <Input
+                                            className="w-[90px]"
+                                            type="text"
+                                            disabled
+                                            value={formatearNumero(Math.round(getTotMargenBrutoAnual(indexCountry,indexCanal, indexP, indexYear)).toString())}
+                                            prefix={moneda}
+                                          />
+                                        </Tooltip>
+                                      
                                     </FormItem>
                                     {/* si es rdo positivo o negativo lo muestro con distinta clase */}
                                     {calculateAnualPercent(indexCountry, indexCanal, indexP, indexYear) 
                                       >= 0 ?
                                       <div className="rounded-lg bg-green-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
-                                        <p className="text-xs font-semibold text-center text-green-950">
+                                        <p className="text-xs cursor-default font-semibold text-center text-green-950">
                                           {calculateAnualPercent(indexCountry, indexCanal, indexP, indexYear) } 
                                               %
                                         </p>
                                       </div>
                                       :
-                                      <div className="rounded-lg bg-rose-200 w-[55px] ml-[auto] mr-[auto] mt-[6px]">
-                                        <p className="text-xs font-semibold text-center text-rose-950">
+                                      <div className="rounded-lg bg-rose-200  cursor-default w-[55px] ml-[auto] mr-[auto] mt-[6px]">
+                                        <p className="text-xs font-semibold  cursor-default  text-center text-rose-950">
                                           {calculateAnualPercent(indexCountry, indexCanal, indexP, indexYear) } 
                                               %
                                         </p>
@@ -349,7 +361,7 @@ function TableMargen(props) {
             {/* SUMATORIA VERTICAL */}
             <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
               <div className="flex items-center">
-                <p className=" text-[#707470] font-bold mb-3 text-left w-[185px] ">
+                <p className="cursor-default text-[#707470] font-bold mb-3 text-left w-[185px] ">
                   Margen Bruto por item
                 </p>
               </div>
@@ -358,7 +370,7 @@ function TableMargen(props) {
                   infoProducts.map((prod, index) => (
                     <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                       <p
-                        className={`w-[185px]  pl-[45px] capitalize self-center ${
+                        className={`w-[185px] cursor-default  pl-[45px] capitalize self-center ${
                           index === 0 ? 'mt-[62px]' : ''
                         }`}
                       >
@@ -368,7 +380,7 @@ function TableMargen(props) {
                         <div className="flex flex-col" key={indexYear}>
                           {index === 0 && (
                             <div className="titleRowR min-w-[62px]">
-                              <p> Año {indexYear + 1}</p>
+                              <p className='cursor-default'> Año {indexYear + 1}</p>
                               <div
                                 className="iconYear"
                                 onClick={() => hideYear(indexYear)}
@@ -389,24 +401,36 @@ function TableMargen(props) {
                               MONTHS.map((mes, indexMes) => (
                                 <p
                                   key={indexMes}
-                                  className="month w-[90px] capitalize"
+                                  className="month cursor-default w-[90px] capitalize"
                                 >
                                   {mes}
                                 </p>
                               ))}
-                            {index === 0 && <p className="month w-[90px]">Total</p>}
+                            {index === 0 && <p className="month w-[90px]  cursor-default ">Total</p>}
                             {index !== 0 && <p className="month w-[90px]" />}
                           </div>
                           <div className="flex gap-x-3 gap-y-3">
                               {visibleItems.includes(indexYear) && MONTHS.map((mes, indexMes) => (
-                                <p className="w-[90px] text-center cursor-default">
-                                  {moneda}
-                                  {getSumVerticalPorMes(indexCountry, indexYear, indexMes, prod.uniqueId, pais)}
+                                <p className="w-[90px] cursor-default text-center cursor-default">
+                                  <Tooltip
+                                    placement="top-end"
+                                    title={moneda + formatearNumero(getSumVerticalPorMes(indexCountry, indexYear, indexMes, prod.uniqueId, pais).toString())}
+                                  >
+                                      {moneda}
+                                      <ShortNumberNotation numero={getSumVerticalPorMes(indexCountry, indexYear, indexMes, prod.uniqueId, pais)} />
+                                  </Tooltip>
+                                  
                                 </p>
                               ))}
-                            <p className="w-[90px] text-center font-bold cursor-default">
-                                 {moneda}
-                                {getSumVerticalAnual(indexCountry, indexYear, prod.uniqueId, pais)}
+                            <p className="w-[90px] cursor-default text-center font-bold cursor-default">
+                              <Tooltip
+                                placement="top-end"
+                                title={moneda + formatearNumero(getSumVerticalAnual(indexCountry, indexYear, prod.uniqueId, pais).toString())}
+                              >
+                                  {moneda}
+                                  <ShortNumberNotation numero={getSumVerticalAnual(indexCountry, indexYear, prod.uniqueId, pais)} />
+                              </Tooltip>
+                                
                             </p>{' '}
                           </div>
                         </div>
