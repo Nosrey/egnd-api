@@ -808,7 +808,7 @@ function DashboardCostos() {
             <CardNumerica
               type="default"
               title="Costo total productos"
-              cantidad={totalServ}
+              cantidad={totalProd}
             />
             <CardNumerica
               type="default"
@@ -818,12 +818,12 @@ function DashboardCostos() {
             <CardNumerica
               type="default"
               title="Costo medio por producto"
-              cantidad={volProd ? totalServ / volProd : 0}
+              cantidad={volProd ? totalProd / volProd : 0}
             />
             <CardNumerica
               type="default"
               title="Costo de servicios"
-              cantidad={totalProd}
+              cantidad={totalServ}
             />
             <CardNumerica
               type="default"
@@ -833,7 +833,7 @@ function DashboardCostos() {
             <CardNumerica
               type="default"
               title="Costo medio por servicio"
-              cantidad={volServ ? totalProd / volServ : 0}
+              cantidad={volServ ? totalServ / volServ : 0}
             />
           </div>
           <div className="flex justify-between items-center mt-[100px] pl-[20px]">
