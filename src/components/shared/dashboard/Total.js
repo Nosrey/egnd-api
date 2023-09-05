@@ -1,7 +1,7 @@
-import { useMedia } from 'utils/hooks/useMedia';
 import { Card, Tooltip } from 'components/ui';
-import  { formatearNumero } from 'utils/formatTotalsValues';
 import { useSelector } from 'react-redux';
+import { formatearNumero } from 'utils/formatTotalsValues';
+import { useMedia } from 'utils/hooks/useMedia';
 import ShortNumberNotation from '../shortNumberNotation/ShortNumberNotation';
 
 function Total({ title, data }) {
@@ -10,8 +10,12 @@ function Total({ title, data }) {
 
   return (
     <Card>
-      <div className={`flex ${media === "mobile" ? "flex-col items-center": "justify-between"} cursor-default`}>
-        <h3 className='cursor-default'>{title}</h3>
+      <div
+        className={`flex ${
+          media === 'mobile' ? 'flex-col items-center' : 'justify-between'
+        } cursor-default`}
+      >
+        <h3 className="cursor-default">{title}</h3>
         <span className="text-[#4f46e5] font-bold text-4xl">
           {currency}
           <Tooltip
