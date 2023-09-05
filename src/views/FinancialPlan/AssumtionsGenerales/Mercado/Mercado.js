@@ -4,6 +4,7 @@ import { Input, Button, FormItem, FormContainer, Alert } from 'components/ui';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { createMercado, getUser } from 'services/Requests';
+import { useMedia } from 'utils/hooks/useMedia';
 import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import { formatearNumero } from 'utils/formatTotalsValues';
 import ImageMercado from '../../../../assets/image/Mercado.png';
@@ -35,6 +36,8 @@ const validationSchema = Yup.object().shape({
 });
 
 function Mercado() {
+  const media = useMedia();
+
   const currency = useSelector((state) => state.auth.user.currency);
   const currentState = useSelector((state) => state.auth.user.id);
 
@@ -143,9 +146,9 @@ function Mercado() {
             {({ touched, errors, resetForm, values }) => (
               <Form>
                 <FormContainer>
-                  <div className="flex gap-[16px]">
+                  <div className={`flex ${media === "mobile" ?  "flex-col" : ""} gap-[16px]`}>
                     <FormItem
-                      className="w-[40%] max-w-[480px]"
+                      className={`${media === "mobile" ?  "w-[100%]" : "w-[40%]"}   max-w-[480px] `}
                       label="Mercado"
                       invalid={errors.mercado && touched.mercado}
                       errorMessage={errors.mercado}
@@ -160,7 +163,7 @@ function Mercado() {
                     </FormItem>
 
                     <FormItem
-                      className="w-[40%] max-w-[480px]"
+                      className={`${media === "mobile" ?  "w-[100%]" : "w-[40%]"}   max-w-[480px] `}
                       label="Definición de Mercado Target"
                       invalid={errors.definicion && touched.definicion}
                       errorMessage={errors.definicion}
@@ -182,8 +185,8 @@ function Mercado() {
 
                   <h4 className="mt-[20px]">Tamaño de Mercado</h4>
 
-                  <div className="flex gap-[50px] items-center mt-[20px]">
-                    <div className="w-[50%]">
+                  <div className={`flex ${media === "mobile" ?  "flex-col-reverse" : ""}   gap-[50px] items-center mt-[20px]`}>
+                    <div className={`${media === "mobile" ?  "w-[100%]" : "w-[50%]"}`}>
                       <div>
                         <span>TAM</span>
                         <div className="flex gap-[16px] mt-2.5 w-[100%]">
@@ -286,7 +289,7 @@ function Mercado() {
                         </div>
                       </div>
                     </div>
-                    <div className=" w-[50%] relative">
+                    <div className={`${media === "mobile" ?  "w-[100%] mt-[30px]" : "w-[50%]"} relative`}>
                       <img
                         className="w-[100%] max-w-[860px] "
                         src={ImageMercado}
