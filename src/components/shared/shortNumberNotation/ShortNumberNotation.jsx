@@ -26,7 +26,7 @@ function ShortNumberNotation({ numero }) {
   // Formatear el número con dos decimales si es igual o mayor a 1000
   const numeroFormateado = exp >= 3 ? num.toFixed(2) : num.toFixed(0);
 
-  return <span>{`${numeroFormateado} ${sufijos[exp]}`}</span>;
+  return <span className="cursor-default">{`${numeroFormateado} ${sufijos[exp]}`}</span>;
 }
 
 export default ShortNumberNotation;

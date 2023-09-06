@@ -136,7 +136,7 @@ function CalendarView(props) {
                   )}
                 />
               )}
-              {!(isEnd && !isStart) && <span>{arg.timeText}</span>}
+              {!(isEnd && !isStart) && <span className="cursor-default">{arg.timeText}</span>}
               <span className="font-semibold ml-1 rtl:mr-1">
                 {arg.event.title}
               </span>

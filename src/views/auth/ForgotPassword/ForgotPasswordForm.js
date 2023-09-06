@@ -106,7 +106,7 @@ function ForgotPasswordForm(props) {
               </Button>
               {!emailSent &&
                 <div className="  mb-4 text-center">
-                  <span>Volver a </span>
+                  <span className="cursor-default">Volver a </span>
                   <ActionLink to={signInUrl}>Inicio de sesión</ActionLink>
                 </div>
               }

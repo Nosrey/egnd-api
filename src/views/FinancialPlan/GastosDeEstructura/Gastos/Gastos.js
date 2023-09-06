@@ -158,12 +158,12 @@ function Gastos() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Supuesto de Gasto de Estructura</h4>
-        <span>Gastos de Estructura</span>
+        <h4 className="cursor-default">Supuesto de Gasto de Estructura</h4>
+        <span className="cursor-default">Gastos de Estructura</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">
-          <h6>Seleccione sus Centros de Costos</h6>
+          <h6 className="cursor-default">Seleccione sus Centros de Costos</h6>
         </div>
         <form onSubmit={handleSubmit} className="p-8">
           <div className="flex">
@@ -208,7 +208,7 @@ function Gastos() {
             </div>
             <div className="w-1/2 pl-8">
               <div className="flex flex-col gap-y-3">
-                <span>Incremento cargas sociales</span>
+                <span className="cursor-default">Incremento cargas sociales</span>
                 <div className="w-[30%]">
                   <Input
                     type="number"
@@ -217,7 +217,7 @@ function Gastos() {
                     onChange={(e) => handleInputNumberChange(e.target.value)}
                   />
                 </div>
-                <span>
+                <span className="cursor-default">
                   *Es el aumento sobre el sueldo en concepto de cargas sociales
                   para determinar el costo empresa de cada recurso
                 </span>

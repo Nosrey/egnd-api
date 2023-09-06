@@ -12,15 +12,15 @@ function ThemeConfigurator({ callBackClose }) {
       <div className="flex flex-col gap-y-10 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h6>Dark Mode</h6>
-            <span>Switch theme to dark mode</span>
+            <h6 className="cursor-default">Dark Mode</h6>
+            <span className="cursor-default">Switch theme to dark mode</span>
           </div>
           <ModeSwitcher />
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <h6>Direction</h6>
-            <span>Select a direction</span>
+            <h6 className="cursor-default">Direction</h6>
+            <span className="cursor-default">Select a direction</span>
           </div>
           <DirectionSwitcher callBackClose={callBackClose} />
         </div>

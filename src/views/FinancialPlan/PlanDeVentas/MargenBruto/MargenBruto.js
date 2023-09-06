@@ -140,16 +140,16 @@ function MargenBruto() {
               </Alert>
             )}
             <div className="border-b-2 mb-8 pb-1">
-              <h4>Margen Bruto</h4>
-              <span>Costos directos y Margen Bruto</span>
+              <h4 className='cursor-default'>Margen Bruto</h4>
+              <span className='cursor-default'>Costos directos y Margen Bruto</span>
             </div>
 
             <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
               <div className="border-b-2 px-4 py-1">
-                <h6>Listado de productos / servicios</h6>
+                <h6 className="cursor-default">Listado de productos / servicios</h6>
               </div>
               <div  className=" px-4 py-1">
-                <span className="text-xs">*Recuerde que si ve valores en 0 es posible que pare ese item le esté faltando cargar información de Precio, Cantidad y Volumen o Costos Unitarios para poder realizar los cálculos. 
+                <span className="text-xs cursor-default">*Recuerde que si ve valores en 0 es posible que pare ese item le esté faltando cargar información de Precio, Cantidad y Volumen o Costos Unitarios para poder realizar los cálculos. 
       </span>
               </div>
               {infoForm ? (

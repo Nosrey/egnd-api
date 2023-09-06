@@ -15,7 +15,7 @@ function DefaultItem({ nav, onLinkClick, userAuthority }) {
         label={
           <>
             <VerticalMenuIcon icon={nav.icon} />
-            <span>
+            <span className="cursor-default">
               <Trans i18nKey={nav.translateKey} defaults={nav.title} />
             </span>
           </>
@@ -47,7 +47,7 @@ function DefaultItem({ nav, onLinkClick, userAuthority }) {
                   }
                   to={subNav.path}
                 >
-                  <span>
+                  <span className="cursor-default">
                     <Trans
                       i18nKey={subNav.translateKey}
                       defaults={subNav.title}
@@ -55,7 +55,7 @@ function DefaultItem({ nav, onLinkClick, userAuthority }) {
                   </span>
                 </Link>
               ) : (
-                <span>
+                <span className="cursor-default">
                   <Trans
                     i18nKey={subNav.translateKey}
                     defaults={subNav.title}

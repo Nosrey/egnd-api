@@ -297,7 +297,7 @@ function TableVolumen(props) {
               {infoForm[pais].map((canal) => (
                 <section key={canal.canalName} className="contenedor">
                   <div className="titleChannel">
-                    <p className="canal">{canal.canalName}</p>
+                    <p className="canal cursor-default">{canal.canalName}</p>
                   </div>
                   <div>
                     <div>
@@ -393,7 +393,7 @@ function TableVolumen(props) {
                           {producto.años.map((año, indexYear) => (
                             <div className="flex flex-col" key={indexYear}>
                               <div className="titleRow min-w-[62px]">
-                                <p> Año {año.año}</p>
+                                <p className='cursor-default'> Año {año.año}</p>
                                 <div
                                   className="iconYear"
                                   onClick={() => hideYear(indexYear)}
@@ -413,7 +413,7 @@ function TableVolumen(props) {
                                       (mes, indexMes) => (
                                         <p
                                           key={indexMes}
-                                          className="month w-[90px] capitalize"
+                                          className="month cursor-default w-[90px] capitalize"
                                         >
                                           {Object.keys(año.volMeses)[indexMes]}
                                         </p>
@@ -642,7 +642,7 @@ function TableVolumen(props) {
           ))}
 
           <br />
-          <p className=" pl-[45px] text-[#707470] font-bold mb-3 text-left w-[435px] ">
+          <p className=" pl-[45px] text-[#707470] font-bold mb-3 cursor-default text-left w-[435px] ">
             <Tooltip placement="top-end" title={formatNumber(volTotal)}>
               VOLUMEN TOTAL: &nbsp;
               <ShortNumberNotation numero={volTotal} />

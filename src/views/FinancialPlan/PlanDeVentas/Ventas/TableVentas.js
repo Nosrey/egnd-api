@@ -124,7 +124,7 @@ function TableVentas(props) {
               {infoForm[pais].map((canal) => (
                 <section key={canal.canalName} className="contenedor">
                   <div className="titleChannel">
-                    <p className="canal">{canal.canalName}</p>
+                    <p className="canal cursor-default">{canal.canalName}</p>
                   </div>
                   <div>
                     <div>
@@ -147,7 +147,7 @@ function TableVentas(props) {
                           {producto.años.map((año, indexYear) => (
                             <div className="flex flex-col" key={indexYear}>
                               <div className="titleRow min-w-[62px]">
-                                <p> Año {año.año}</p>
+                                <p className="cursor-default"> Año {año.año}</p>
                                 <div
                                   className="iconYear"
                                   onClick={() => hideYear(indexYear)}
@@ -167,7 +167,7 @@ function TableVentas(props) {
                                       (mes, indexMes) => (
                                         <p
                                           key={indexMes}
-                                          className="month w-[90px] capitalize"
+                                          className="month w-[90px] capitalize cursor-default"
                                         >
                                           {Object.keys(año.volMeses)[indexMes]}
                                         </p>
@@ -276,8 +276,8 @@ function TableVentas(props) {
       {infoProducts && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[185px] ">
-              Venta por producto
+            <p className=" text-[#707470] font-bold mb-3 cursor-default text-left w-[185px] ">
+              Ventas
             </p>
           </div>
           <div className="w-fit pt-3 border border-neutral-600 border-x-0 border-b-0">
@@ -285,7 +285,7 @@ function TableVentas(props) {
               infoProducts.map((prod, index) => (
                 <div key={index} className="flex gap-x-3 w-fit pt-3 ">
                   <p
-                    className={`w-[185px]  pl-[45px] capitalize self-center ${
+                    className={`w-[185px]  pl-[45px] capitalize cursor-default self-center ${
                       index === 0 ? 'mt-[62px]' : ''
                     }`}
                   >
@@ -296,7 +296,7 @@ function TableVentas(props) {
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
-                          <p> Año {indexYear + 1}</p>
+                          <p className="cursor-default"> Año {indexYear + 1}</p>
                           <div
                             className="iconYear"
                             onClick={() => hideYear(indexYear)}
@@ -317,19 +317,19 @@ function TableVentas(props) {
                           MONTHS.map((mes, indexMes) => (
                             <p
                               key={indexMes}
-                              className="month w-[90px] capitalize"
+                              className="month w-[90px] capitalize cursor-default"
                             >
                               {mes}
                             </p>
                           ))}
-                        {index === 0 && <p className="month w-[90px]">Total</p>}
+                        {index === 0 && <p className="month w-[90px] cursor-default">Total</p>}
                         {index !== 0 && <p className="month w-[90px]" />}
                       </div>
                       <div className="flex gap-x-3 gap-y-3">
                         {visibleItems.includes(indexYear) &&
                           año &&
                           año.numeros?.map((valor, index) => (
-                            <p className="w-[90px] text-center">
+                            <p className="w-[90px] text-center cursor-default">
                               <Tooltip
                                 placement="top-end"
                                 title={formatNumber(valor)}
@@ -339,7 +339,7 @@ function TableVentas(props) {
                               </Tooltip>
                             </p>
                           ))}
-                        <p className="w-[90px] text-center font-bold">
+                        <p className="w-[90px] text-center font-bold cursor-default">
                           <Tooltip
                             placement="top-end"
                             title={formatNumber(

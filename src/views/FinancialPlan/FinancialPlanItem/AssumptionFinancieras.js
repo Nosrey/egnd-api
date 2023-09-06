@@ -114,12 +114,12 @@ function AssumptionsFinancieras() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Assumption Gastos Financieros</h4>
-        <span>Gastos Financieros para Operación</span>
+        <h4 className="cursor-default">Assumption Gastos Financieros</h4>
+        <span className="cursor-default">Gastos Financieros para Operación</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">
-          <h6>Carga de Plazos</h6>
+          <h6 className="cursor-default">Carga de Plazos</h6>
         </div>
         <ContainerScrollable
           contenido={

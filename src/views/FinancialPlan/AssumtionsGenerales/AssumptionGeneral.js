@@ -113,12 +113,12 @@ function AssumptionGeneral() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Supuestos Generales del Modelo</h4>
-        <span>Supuestos Generales</span>
+        <h4 className="cursor-default">Supuestos Generales del Modelo</h4>
+        <span className="cursor-default">Supuestos Generales</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">
-          <h6>Carga de datos</h6>
+          <h6 className="cursor-default">Carga de datos</h6>
         </div>
         <div className="px-4 py-5">
           {info && (

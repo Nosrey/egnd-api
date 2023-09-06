@@ -4,7 +4,7 @@ function Total(props) {
   const { total } = props
   return (
     <div className="pagination-total">
-      Total <span>{total}</span> Items
+      Total <span className="cursor-default">{total}</span> Items
     </div>
   )
 }

@@ -131,7 +131,7 @@ function ResetPasswordForm(props) {
               )}
 
               <div className="mt-4 text-center">
-                <span>Back to </span>
+                <span className="cursor-default">Back to </span>
                 <ActionLink to={signInUrl}>Sign in</ActionLink>
               </div>
             </FormContainer>

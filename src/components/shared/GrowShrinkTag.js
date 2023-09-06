@@ -19,9 +19,9 @@ const GrowShrinkTag = forwardRef((props, ref) => {
       )}
     >
       {value !== 0 && (
-        <span>{showIcon && (value > 0 ? <HiArrowUp /> : <HiArrowDown />)}</span>
+        <span className="cursor-default">{showIcon && (value > 0 ? <HiArrowUp /> : <HiArrowDown />)}</span>
       )}
-      <span>
+      <span className="cursor-default">
         {prefix}
         {value}
         {suffix}

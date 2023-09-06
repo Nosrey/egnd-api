@@ -181,7 +181,7 @@ function TableAssumptionVentas({
               ))
             ) : (
               <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
-                <span>
+                <span className='cursor-default'>
                   No hay productos creados. Créalos con el botón de Agregar.
                 </span>
               </div>
@@ -259,7 +259,7 @@ function TableAssumptionVentas({
           {/*****************************************************************************************************/}
           <div className="grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max">
             <span
-              className={`font-bold ${
+              className={`font-bold cursor-default${
                 media === 'mobile'
                   ? 'col-start-1 col-end-13'
                   : 'col-start-1 col-end-6'
@@ -270,7 +270,7 @@ function TableAssumptionVentas({
           </div>
 
           <div
-            className={`grid grid-cols-12 items-center gap-x-3 gap-y-4 auto-cols-max mb-[30px] ${
+            className={`grid grid-cols-12 items-centercursor-default gap-x-3 gap-y-4 auto-cols-max mb-[30px] ${
               media === 'mobile' ? 'w-[600px]' : ''
             }`}
           >
@@ -305,7 +305,7 @@ function TableAssumptionVentas({
             }`}
           >
             <span
-              className={`font-bold ${
+              className={`font-bold cursor-default ${
                 media === 'mobile'
                   ? 'col-start-1 col-end-3'
                   : 'col-start-1 col-end-6'
@@ -316,7 +316,7 @@ function TableAssumptionVentas({
             {channels?.length !== 0 && (
               <>
                 <span
-                  className={` ${
+                  className={` cursor-default${ 
                     media === 'mobile'
                       ? 'col-start-3 col-end-7'
                       : media === 'tablet'
@@ -329,7 +329,7 @@ function TableAssumptionVentas({
                   Volumen por cliente
                 </span>
                 <span
-                  className={` ${
+                  className={`cursor-default ${
                     media === 'mobile'
                       ? 'col-start-7 col-end-12 text-center'
                       : media === 'tablet'
@@ -495,7 +495,7 @@ function TableAssumptionVentas({
               : null}
             {channels?.length === 0 && (
               <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
-                <span>
+                <span className='cursor-default'>
                   No hay canales creados. Créalos con el botón de Agregar.
                 </span>
               </div>
@@ -701,7 +701,7 @@ function TableAssumptionVentas({
               : null}
             {channels?.length === 0 && (
               <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
-                <span>
+                <span className="cursor-default">
                   No hay canales creados. Créalos con el botón de Agregar en la
                   sección superior.
                 </span>

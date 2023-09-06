@@ -15,7 +15,7 @@ function PopperElement(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
-  return <span>{title}</span>;
+  return <span className="cursor-default">{title}</span>;
 }
 
 function Tooltip(props) {

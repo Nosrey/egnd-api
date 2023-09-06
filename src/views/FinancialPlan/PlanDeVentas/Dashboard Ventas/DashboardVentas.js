@@ -445,14 +445,14 @@ function DashboardVentas() {
         <>
           <div>
             <div className="border-b-2 mb-8 pb-1">
-              <h4>Dashboard de Ventas</h4>
-              <span>Plan de Ventas</span>
+              <h4 className="cursor-default">Dashboard de Ventas</h4>
+              <span className="cursor-default">Plan de Ventas</span>
             </div>
             <div className="border-solid border-2 border-#e5e7eb rounded-lg">
               <div className="px-4 py-5">
                 <div className="flex justify-end gap-[20px]">
                   <Select
-                    className="w-[12%]"
+                    className="w-[12%] min-w-[115px]"
                     placeholder="Año"
                     options={año}
                     value={yearSelected}
@@ -466,7 +466,7 @@ function DashboardVentas() {
                   </Select>
                   {yearSelected.value !== 'todo' && (
                     <Select
-                      className="w-[12%]"
+                      className="w-[12%] min-w-[115px]"
                       placeholder="Periodo"
                       options={periodo}
                       value={periodoSelected}

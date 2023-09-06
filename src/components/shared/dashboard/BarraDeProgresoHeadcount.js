@@ -76,7 +76,7 @@ function BarraDeProgresoHeadcount({
     <div>
       {dataView.map((country) => (
         <div key={country.name}>
-          <span>{country.name.toUpperCase()}</span>
+          <span className="cursor-default">{country.name.toUpperCase()}</span>
           <Progress
             percent={((country.total * 100) / totalVentas).toFixed(0)}
             color="lime-400"

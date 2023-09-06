@@ -32,10 +32,10 @@ const StepItem = forwardRef((props, ref) => {
 
   const color = `${themeColor}-${primaryColorLevel}`
 
-  let stepIcon = <span>{STEP_STATUS_ICON[status] ?? stepNumber}</span>
+  let stepIcon = <span className="cursor-default">{STEP_STATUS_ICON[status] ?? stepNumber}</span>
 
   if (customIcon) {
-    stepIcon = <span>{customIcon}</span>
+    stepIcon = <span className="cursor-default">{customIcon}</span>
   }
 
   const stepItemClass = classNames(

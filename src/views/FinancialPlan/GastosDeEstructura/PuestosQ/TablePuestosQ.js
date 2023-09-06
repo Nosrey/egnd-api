@@ -219,7 +219,7 @@ function TablePuestosQ(props) {
                               <div className="flex flex-col" key={indexYear}>
                                 {index === 0 && (
                                   <div className="titleRow min-w-[62px]">
-                                    <p> Año {año.año}</p>
+                                    <p className="cursor-default"> Año {año.año}</p>
                                     <div
                                       className="iconYear"
                                       onClick={() => hideYear(indexYear)}
@@ -369,7 +369,7 @@ function TablePuestosQ(props) {
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
-                          <p> Año {indexYear + 1}</p>
+                          <p className="cursor-default"> Año {indexYear + 1}</p>
                           <div
                             className="iconYear"
                             onClick={() => hideYear(indexYear)}
@@ -390,7 +390,7 @@ function TablePuestosQ(props) {
                           MONTHS.map((mes, indexMes) => (
                             <p
                               key={indexMes}
-                              className="month w-[90px] capitalize"
+                              className="month w-[90px] capitalize cursor-default"
                             >
                               {mes}
                             </p>
@@ -403,7 +403,7 @@ function TablePuestosQ(props) {
                           año &&
                           volTotal.length !== 0 &&
                           volTotal[indexYear].values.map((valor, index) => (
-                            <p className="w-[90px] text-center">
+                            <p className="w-[90px] text-center cursor-default">
                               {formatearNumero(valor)}
                             </p>
                           ))}

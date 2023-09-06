@@ -12,12 +12,12 @@ function FooterContent() {
 
   return (
     <div className={`flex ${media === "mobile" ?  "flex-col": " items-center justify-between flex-auto w-full" }`}>
-      <span>
+      <span className="cursor-default">
       <span className="font-semibold">{`${APP_NAME}`}</span> &copy; {`${new Date().getFullYear()}`}{' '}
         
       </span>
       <div className="">
-          <span>
+          <span className="cursor-default">
            Desarrollado por {' '}
            <a className="text-gray font-semibold" href="https://yellowpatito.com/inicio" target='_blank' rel="noreferrer">
           Yellow Patito
