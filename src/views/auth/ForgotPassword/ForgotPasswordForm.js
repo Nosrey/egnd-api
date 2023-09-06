@@ -3,8 +3,10 @@ import { Input, Button, FormItem, FormContainer, Alert } from 'components/ui';
 import { ActionLink } from 'components/shared';
 import { apiForgotPassword } from 'services/AuthService';
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage';
+import {AiOutlineCheckCircle} from "react-icons/ai";
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import checkImg from '../../../assets/image/check.png';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required('Please enter your email'),
@@ -40,18 +42,17 @@ function ForgotPasswordForm(props) {
       <div className="mb-6">
         {emailSent ? (
           <>
-            <h3 className="mb-1">Verifica tu email</h3>
-            <p>
-              Hemos enviado una instrucción de recuperación de contraseña a su
-              email
+            <img  src={checkImg} className='mb-[13px] ml-[auto] mr-[auto]' alt="done"/>
+            <h3 className="mb-1 text-[#292929] text-[25px] text-center font-bold">Recuperar contraseña</h3>
+            <p className="text-[#292929] text-[16px] text-center font-normal">
+            Te hemos enviado un correo para restablecer la contraseña 
             </p>
           </>
         ) : (
           <>
-            <h3 className="mb-1">Olvidé mi contraseña</h3>
-            <p>
-              Por favor ingrese su email y le enviaremos instrucciones para
-              reestablecerla
+            <h3 className="mb-1 text-[#292929] text-[25px] text-center font-bold">Recuperar contraseña</h3>
+            <p className="text-[#292929] text-[16px] text-center font-normal">
+            Ingrese su correo para restablecer la contraseña
             </p>
           </>
         )}
@@ -81,6 +82,8 @@ function ForgotPasswordForm(props) {
                 <FormItem
                   invalid={errors.email && touched.email}
                   errorMessage={errors.email}
+                  label="Correo electronico"
+                    labelClass="text-[#292929] text-[14px] font-bold cursor-default"
                 >
                   <Field
                     type="email"
@@ -88,21 +91,26 @@ function ForgotPasswordForm(props) {
                     name="email"
                     placeholder="Email"
                     component={Input}
+                    
                   />
                 </FormItem>
               </div>
               <Button
+              className="mb-8 "
                 block
                 loading={isSubmitting}
                 variant="solid"
                 type="submit"
               >
-                {emailSent ? 'Resend Email' : 'Enviar Email'}
+                {emailSent ? 'Iniciar sesión' : 'Restablecer'}
               </Button>
-              <div className="mt-4 text-center">
-                <span>Volver a </span>
-                <ActionLink to={signInUrl}>Inicio de Sesión</ActionLink>
-              </div>
+              {!emailSent &&
+                <div className="  mb-4 text-center">
+                  <span>Volver a </span>
+                  <ActionLink to={signInUrl}>Inicio de sesión</ActionLink>
+                </div>
+              }
+              
             </FormContainer>
           </Form>
         )}

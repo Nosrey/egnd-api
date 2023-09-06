@@ -14,3 +14,23 @@
     max-width: fit-content;
     position: relative;
 }
+
+input[name="password"] , input[name="confirmPassword"]{
+    /* Tus estilos para los inputs de tipo password aquí */
+    background-color: #F3F4F6 !important;
+  }
+
+  /* Estilo para la barra de desplazamiento */
+.containerRegister::-webkit-scrollbar {
+    width: 4px; 
+  }
+  
+  /* Estilo para el indicador de la barra de desplazamiento */
+  .containerRegister::-webkit-scrollbar-thumb {/* Color celeste */
+    border-radius: 10px; 
+  }
+  
+  /* Estilo para el fondo de la barra de desplazamiento */
+  .containerRegister::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color de fondo de la barra de desplazamiento */
+  }

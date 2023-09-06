@@ -96,6 +96,7 @@ function SignUpForm(props) {
                   name="email"
                   placeholder="Correo electronico"
                   component={Input}
+                  className="bg-[#F3F4F6]"
                 />
               </FormItem>
               <FormItem
@@ -133,6 +134,7 @@ function SignUpForm(props) {
                   name="businessName"
                   placeholder="Mi empresa SRL"
                   component={Input}
+                  className="bg-[#F3F4F6]"
                 />
               </FormItem>
               <FormItem
@@ -140,7 +142,7 @@ function SignUpForm(props) {
                 invalid={errors.modeloNegocio && touched.modeloNegocio}
                 errorMessage={errors.modeloNegocio}
               >
-                <Field name="modeloNegocio">
+                <Field name="modeloNegocio" >
                   {({ field, form }) => (
                     <Select
                       placeholder="Seleccionar..."
@@ -163,9 +165,10 @@ function SignUpForm(props) {
                 invalid={errors.moneda && touched.moneda}
                 errorMessage={errors.moneda}
               >
-                <Field name="moneda">
+                <Field name="moneda" >
                   {({ field, form }) => (
                     <Select
+                    className="bg-[#F3F4F6]"
                       placeholder="Seleccionar..."
                       field={field}
                       form={form}
@@ -191,7 +194,7 @@ function SignUpForm(props) {
               </Button>
               <div className="mt-4 text-center">
                 <span>¿Ya tienes una cuenta? </span>
-                <ActionLink to={signInUrl}>Inicia Sesión</ActionLink>
+                <ActionLink to={signInUrl}>Iniciar Sesión</ActionLink>
               </div>
             </FormContainer>
           </Form>
