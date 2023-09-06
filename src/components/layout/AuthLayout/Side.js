@@ -1,35 +1,29 @@
 import React, { cloneElement } from 'react'
-import { Avatar } from 'components/ui'
-import Logo from 'components/template/Logo'
-import { APP_NAME } from 'constants/app.constant'
+import { useLocation } from 'react-router-dom';
+import { useMedia } from 'utils/hooks/useMedia';
+import FooterAuth from './FooterAuth';
 
 function Side({ children, content, ...rest }) {
+    const media = useMedia();
+    const location = useLocation()
+
   return (
-    <div className="grid lg:grid-cols-3 h-full">
+    <><div className="grid  h-full">
       <div
-        className="bg-no-repeat bg-cover py-6 px-16 flex-col justify-between hidden lg:flex"
+        className={`bg-no-repeat bg-cover flex-col  flex ${media === "mobile" ? "items-center justify-center" : "py-6 px-16 justify-center items-center"}`}
         style={{
-          backgroundImage: `url('/img/others/auth-side-bg.jpg')`,
+          backgroundImage: `url('/img/others/fondo.png')`,
         }}
       >
-        <Logo mode="dark" />
-        <div>
-          <p className="text-lg text-white opacity-80">
-           Nuestro sitio se encuentra en desarrollo, visite nuestro LinkedIn para estar al tanto de las novedades.
-          </p>
-        </div>
-        <span className="text-white">
-          Copyright &copy; {`${new Date().getFullYear()}`}{' '}
-          <span className="font-semibold">{`${APP_NAME}`}</span>{' '}
-        </span>
-      </div>
-      <div className="col-span-2 flex flex-col justify-center items-center bg-white dark:bg-gray-800">
-        <div className="xl:min-w-[450px] px-8">
-          <div className="mb-8">{content}</div>
-          {children ? cloneElement(children, { ...rest }) : null}
+        <div className="flex flex-col justify-center items-center rounded-[20px] bg-[#F3F4F6] w-[60vw] min-w-[300px] max-w-xl py-4">
+          <div className={`xl:min-w-[450px] px-8  ${location.pathname === "/crear-cuenta" ? "h-[80vh] max-h-[500px] containerRegister overflow-y-scroll" :"" } `}>
+            <div className="mb-8">{content}</div>
+            {children ? cloneElement(children, { ...rest }) : null}
+          </div>
         </div>
       </div>
-    </div>
+
+    </div><FooterAuth /></>
   )
 }
 

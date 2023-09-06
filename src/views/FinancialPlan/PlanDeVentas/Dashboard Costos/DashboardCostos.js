@@ -17,6 +17,7 @@ import { useMedia } from 'utils/hooks/useMedia';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { resolveResul } from 'services/TotalProductsService';
+import MySpinner from 'components/shared/loaders/MySpinner';
 
 function DashboardCostos() {
   const media = useMedia();
@@ -38,6 +39,7 @@ function DashboardCostos() {
   const [volServ, setVolServ] = useState(0);
   const [dataAssump, setDataAssump] = useState();
   const [totalServ, setTotalServ] = useState(0);
+  const [showLoader, setShowLoader] = useState(true);
   const currentState = useSelector((state) => state.auth.user);
   const [yearSelected, setYearSelected] = useState({
     value: 'año 1',
@@ -747,7 +749,6 @@ function DashboardCostos() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log('[DATA]', data);
         if (data?.assumptionData[0]) {
           setDataAssump(data?.assumptionData[0]);
           createSelects();
@@ -760,6 +761,7 @@ function DashboardCostos() {
           calcTotals(data?.volumenData, data?.costoData, data?.precioData);
           calcVols(data?.volumenData);
         }
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, [
@@ -771,124 +773,134 @@ function DashboardCostos() {
   ]);
 
   return (
-    <div>
-      <div className="border-b-2 mb-8 pb-1">
-        <h4>Dashboard de Costos</h4>
-        <span>Costos directos</span>
-      </div>
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg">
-        <div className="px-4 py-5">
-          <div className="flex justify-end gap-[20px]">
-            <Select
-              className="w-[12%] min-w-[115px]"
-              placeholder="Año"
-              onChange={selectYear}
-              options={año}
-              value={yearSelected}
-            />
+    <>
+    {showLoader ? (
+        <MySpinner />
+      ) : (
+        <>
+        <div>
+          <div className="border-b-2 mb-8 pb-1">
+            <h4>Dashboard de Costos</h4>
+            <span>Costos directos</span>
+          </div>
+          <div className="border-solid border-2 border-#e5e7eb rounded-lg">
+            <div className="px-4 py-5">
+              <div className="flex justify-end gap-[20px]">
+                <Select
+                  className="w-[12%] min-w-[115px]"
+                  placeholder="Año"
+                  onChange={selectYear}
+                  options={año}
+                  value={yearSelected}
+                />
 
-            {yearSelected.value !== 'todo' && (
-              <Select
-                className="w-[12%] min-w-[115px]"
-                placeholder="Periodo"
-                options={periodo}
-                onChange={selectPeriodo}
-                value={periodoSelected}
-              >
-                {periodo.map((a) => (
-                  <MenuItem key={a.value} value={a.value}>
-                    {a.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          </div>
-          <div className="mt-[30px] mb-[30px] cursor-default">
-            <Total title="Costos Totales" data={totalCostos} />
-          </div>
-          <div className={` ${media === "mobile" ? " flex flex-col gap-y-4" : "grid grid-cols-3 gap-[20px]"} mt-[20px]`}>
-            <CardNumerica
-              type="default"
-              hasCurrency
-              title="Costo total productos"
-              cantidad={totalProd}
-            />
-            <CardNumerica
-              type="default"
-              title="Volumen de productos"
-              cantidad={volProd}
-            />
-            <CardNumerica
-              type="default"
-              hasCurrency
-              title="Costo medio por producto"
-              cantidad={volProd ? totalProd / volProd : 0}
-            />
-            <CardNumerica
-              type="default"
-              hasCurrency
-              title="Costo de servicios"
-              cantidad={totalServ}
-            />
-            <CardNumerica
-              type="default"
-              title="Volumen de servicios"
-              cantidad={volServ}
-            />
-            <CardNumerica
-              type="default"
-              title="Costo medio por servicio"
-              hasCurrency
-              cantidad={volServ ? totalServ / volServ : 0}
-            />
-          </div>
-          <div className={`flex ${media === "mobile" ? " flex-col mt-[30px]  pl-[10px] gap-y-3.5" : "justify-between items-center mt-[100px]  pl-[20px]"} ` }  >
-            <h5 className="cursor-default">
-              Representación de Costos sobre Ventas
-            </h5>
-            <div className="flex gap-[20px]">
-              <Select
-                className="w-[100%]"
-                placeholder="Producto"
-                options={productosOptions}
-                onChange={(e) => selecOptions('producto', e)}
-              />
+                {yearSelected.value !== 'todo' && (
+                  <Select
+                    className="w-[12%] min-w-[115px]"
+                    placeholder="Periodo"
+                    options={periodo}
+                    onChange={selectPeriodo}
+                    value={periodoSelected}
+                  >
+                    {periodo.map((a) => (
+                      <MenuItem key={a.value} value={a.value}>
+                        {a.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              </div>
+              <div className="mt-[30px] mb-[30px] cursor-default">
+                <Total title="Costos Totales" data={totalCostos} />
+              </div>
+              <div className={` ${media === "mobile" ? " flex flex-col gap-y-4" : "grid grid-cols-3 gap-[20px]"} mt-[20px]`}>
+                <CardNumerica
+                  type="default"
+                  hasCurrency
+                  title="Costo total productos"
+                  cantidad={totalProd}
+                />
+                <CardNumerica
+                  type="default"
+                  title="Volumen de productos"
+                  cantidad={volProd}
+                />
+                <CardNumerica
+                  type="default"
+                  hasCurrency
+                  title="Costo medio por producto"
+                  cantidad={volProd ? totalProd / volProd : 0}
+                />
+                <CardNumerica
+                  type="default"
+                  hasCurrency
+                  title="Costo de servicios"
+                  cantidad={totalServ}
+                />
+                <CardNumerica
+                  type="default"
+                  title="Volumen de servicios"
+                  cantidad={volServ}
+                />
+                <CardNumerica
+                  type="default"
+                  title="Costo medio por servicio"
+                  hasCurrency
+                  cantidad={volServ ? totalServ / volServ : 0}
+                />
+              </div>
+              <div className={`flex ${media === "mobile" ? " flex-col mt-[30px]  pl-[10px] gap-y-3.5" : "justify-between items-center mt-[100px]  pl-[20px]"} ` }  >
+                <h5 className="cursor-default">
+                  Representación de Costos sobre Ventas
+                </h5>
+                <div className="flex gap-[20px]">
+                  <Select
+                    className="w-[100%]"
+                    placeholder="Producto"
+                    options={productosOptions}
+                    onChange={(e) => selecOptions('producto', e)}
+                  />
 
-              <Select
-                className="w-[100%]"
-                placeholder="Canal"
-                options={canalesOptions}
-                onChange={(e) => selecOptions('canal', e)}
-              />
-              <Select
-                className="w-[100%]"
-                placeholder="País"
-                options={paisesOptions}
-                onChange={(e) => selecOptions('pais', e)}
-              />
+                  <Select
+                    className="w-[100%]"
+                    placeholder="Canal"
+                    options={canalesOptions}
+                    onChange={(e) => selecOptions('canal', e)}
+                  />
+                  <Select
+                    className="w-[100%]"
+                    placeholder="País"
+                    options={paisesOptions}
+                    onChange={(e) => selecOptions('pais', e)}
+                  />
+                </div>
+              </div>
+              {canalSelected && productoSelected && paisSelected ? (
+                <div className="mt-[50px] mb-[50px]">
+                  <GraficoDeBarraCosto
+                    typeView={typeViewGraf}
+                    volumen={volGrafico}
+                    comision={comisionGrafico}
+                    cargos={cargasGrafico}
+                    impuesto={impuestoGrafico}
+                  />
+                </div>
+              ) : (
+                <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                  <span className="text-center cursor-default">
+                    Para visualizar este gráfico es necesario seleccionar Producto,
+                    Canal y País.
+                  </span>
+                </div>
+              )}
             </div>
           </div>
-          {canalSelected && productoSelected && paisSelected ? (
-            <div className="mt-[50px] mb-[50px]">
-              <GraficoDeBarraCosto
-                typeView={typeViewGraf}
-                volumen={volGrafico}
-                comision={comisionGrafico}
-                cargos={cargasGrafico}
-                impuesto={impuestoGrafico}
-              />
-            </div>
-          ) : (
-            <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-              <span className="text-center cursor-default">
-                Para visualizar este gráfico es necesario seleccionar Producto,
-                Canal y País.
-              </span>
-            </div>
-          )}
         </div>
-      </div>
-    </div>
+        </>
+      )
+    }
+    </>
+    
   );
 }
 

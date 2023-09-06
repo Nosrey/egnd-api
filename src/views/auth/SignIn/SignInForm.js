@@ -91,6 +91,7 @@ function SignInForm(props) {
             <FormContainer>
               <FormItem
                 label="Correo electronico"
+                labelClass="text-[#292929] text-[14px] font-bold cursor-default"
                 invalid={errors.email && touched.email}
                 errorMessage={errors.email}
               >
@@ -98,25 +99,27 @@ function SignInForm(props) {
                   type="email"
                   autoComplete="off"
                   name="email"
-                  placeholder="Correo electronico"
+                  placeholder="Ejemplo: hola@hola.com"
                   component={Input}
+                  className="bg-[#F3F4F6]"
                 />
               </FormItem>
               <FormItem
                 label="Contraseña"
+                labelClass="text-[#292929] text-[14px] font-bold cursor-default"
                 invalid={errors.password && touched.password}
                 errorMessage={errors.password}
               >
                 <Field
                   autoComplete="off"
                   name="password"
-                  placeholder="Contraseña"
+                  placeholder="Ingrese aquí su contraseña"
                   component={PasswordInput}
                 />
               </FormItem>
-              <div className="flex justify-end mb-6">
-                <ActionLink to={forgotPasswordUrl}>
-                  Olvidaste la constraseña?
+              <div className="flex justify-end mb-[35px]">
+                <ActionLink to={forgotPasswordUrl} className="text-[#292929] text-[14px] mt-[-18px]">
+                ¿Olvidaste la contraseña?
                 </ActionLink>
               </div>
               <Button
@@ -127,9 +130,9 @@ function SignInForm(props) {
               >
                 {isSubmitting ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </Button>
-              <div className="mt-4 text-center">
-                <span>No tienes cuenta? </span>
-                <ActionLink to={signUpUrl}>Crear cuenta</ActionLink>
+              <div className=" mt-[35px] mb-[35px] text-center">
+                <span className="cursor-default">¿No tienes una cuenta?</span>
+                <ActionLink to={signUpUrl}> Crea una</ActionLink>
               </div>
             </FormContainer>
           </Form>
