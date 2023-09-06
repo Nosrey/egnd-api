@@ -3,7 +3,6 @@ import { Progress } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 
 function BarraDeProgresoMargenBruto({
-  totalVentas,
   selectYear,
   periodoSelected,
   dataAssump,
@@ -12,6 +11,7 @@ function BarraDeProgresoMargenBruto({
   infoForm,
 }) {
   let total = 0;
+  let totalProdServ = 0;
   let paises = [];
   let canales = [];
   let productos = [];
@@ -101,6 +101,13 @@ function BarraDeProgresoMargenBruto({
               indexYear,
               indexMonth,
             );
+            totalProdServ += getMargenResult(
+              indexPais,
+              indexChannel,
+              indexProduct,
+              indexYear,
+              indexMonth,
+            );
           }
         });
 
@@ -115,8 +122,16 @@ function BarraDeProgresoMargenBruto({
               indexYear,
               indexMonth,
             );
+            totalProdServ += getMargenResult(
+              indexPais,
+              indexChannel,
+              indexProduct,
+              indexYear,
+              indexMonth,
+            );
           }
         });
+
         break;
       default:
         break;
@@ -287,12 +302,14 @@ function BarraDeProgresoMargenBruto({
     }
   };
 
+  orderItems();
+
   return (
     <div>
       {type === 'pais' &&
         paises.map((country) => (
           <div key={country.name}>
-            <span className='cursor-default'>{country.name.toUpperCase()}</span>
+            <span className="cursor-default">{country.name.toUpperCase()}</span>
             <Progress
               percent={((country.total * 100) / total).toFixed(0)}
               color="teal-300"
@@ -302,7 +319,7 @@ function BarraDeProgresoMargenBruto({
       {type === 'canal' &&
         canales.map((country) => (
           <div key={country.name}>
-            <span className='cursor-default'>{country.name.toUpperCase()}</span>
+            <span className="cursor-default">{country.name.toUpperCase()}</span>
             <Progress
               percent={((country.total * 100) / total).toFixed(0)}
               color="violet-500"
@@ -313,9 +330,15 @@ function BarraDeProgresoMargenBruto({
       {type === 'producto' &&
         productos.map((country) => (
           <div key={country.name}>
-            <span className='cursor-default'>{country.name.toUpperCase()}</span>
+            <span>{country.name.toUpperCase()}</span>
             <Progress
-              percent={((country.total * 100) / total).toFixed(0)}
+              percent={
+                ((country.total * 100) / totalProdServ).toFixed(0) > 100
+                  ? 100
+                  : ((country.total * 100) / totalProdServ).toFixed(0) < 0
+                  ? 0
+                  : ((country.total * 100) / totalProdServ).toFixed(0)
+              }
               color="lime-300"
             />
           </div>
@@ -324,9 +347,15 @@ function BarraDeProgresoMargenBruto({
       {type === 'servicio' &&
         servicios.map((country) => (
           <div key={country.name}>
-            <span className='cursor-default'>{country.name.toUpperCase()}</span>
+            <span className="cursor-default">{country.name.toUpperCase()}</span>
             <Progress
-              percent={((country.total * 100) / total).toFixed(0)}
+              percent={
+                ((country.total * 100) / totalProdServ).toFixed(0) > 100
+                  ? 100
+                  : ((country.total * 100) / totalProdServ).toFixed(0) < 0
+                  ? 0
+                  : ((country.total * 100) / totalProdServ).toFixed(0)
+              }
               color="orange-300"
             />
           </div>

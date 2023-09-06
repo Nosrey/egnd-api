@@ -625,7 +625,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="pais"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}
@@ -641,7 +640,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="canal"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}
@@ -666,7 +664,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="producto"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}
@@ -684,7 +681,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="servicio"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}
