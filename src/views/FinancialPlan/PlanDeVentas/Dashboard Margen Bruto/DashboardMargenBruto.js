@@ -27,6 +27,7 @@ function DashboardMargenBruto() {
   const [showLoader, setShowLoader] = useState(true);
   const [totPerMonth, setTotPerMonth] = useState(0);
   const [percentMArgen, setPercentMArgen] = useState(0);
+  const [margenClient, setMargenClient] = useState(0);
   const [totalMargen, setTotalMargen] = useState(0);
   const currentState = useSelector((state) => state.auth.user);
   const [yearSelected, setYearSelected] = useState({
@@ -147,6 +148,7 @@ function DashboardMargenBruto() {
 
   const calcTotals = () => {
     let tot = 0;
+    let margenByClient = 0;
     let percent = 0;
     let totPerMonth = [];
 
@@ -192,6 +194,11 @@ function DashboardMargenBruto() {
                               indexM,
                             ),
                           );
+
+                          margenByClient = getAcumulateClients(
+                            0,
+                            yearSelected.year,
+                          );
                         }
                       } else if (periodoSelected.month === 6) {
                         if (indexM < 6) {
@@ -226,6 +233,11 @@ function DashboardMargenBruto() {
                               indexM,
                             ),
                           );
+
+                          margenByClient = getAcumulateClients(
+                            5,
+                            yearSelected.year,
+                          );
                         }
                       } else if (periodoSelected.month === 4) {
                         if (indexM < 3) {
@@ -259,6 +271,10 @@ function DashboardMargenBruto() {
                               indexY,
                               indexM,
                             ),
+                          );
+                          margenByClient = getAcumulateClients(
+                            2,
+                            yearSelected.year,
                           );
                         }
                       } else if (periodoSelected.month === 12) {
@@ -296,6 +312,10 @@ function DashboardMargenBruto() {
                             ),
                           );
                         }
+                        margenByClient = getAcumulateClients(
+                          11,
+                          yearSelected.year,
+                        );
                       }
                     } else {
                       tot += Math.round(
@@ -329,6 +349,10 @@ function DashboardMargenBruto() {
                           indexY,
                           indexM,
                         ),
+                      );
+                      margenByClient = getAcumulateClients(
+                        11,
+                        yearSelected.year,
                       );
                     }
                   }
@@ -367,6 +391,7 @@ function DashboardMargenBruto() {
                     ),
                   );
                 }
+                margenByClient = getAcumulateClients(11, yearSelected.year);
               }
             });
           });
@@ -374,6 +399,7 @@ function DashboardMargenBruto() {
       });
       setTotPerMonth(totPerMonth);
       setTotalMargen(tot);
+      setMargenClient(margenByClient);
       setPercentMArgen(percent);
     } else {
       selectYear({ value: 'año 1', label: 'Año 1', year: 0 });
@@ -404,6 +430,41 @@ function DashboardMargenBruto() {
         100) /
       getVentasResult(indexCountry, indexCanal, indexP, indexYear, indexMes);
     return isNaN(percent) ? 0 : Math.round(percent);
+  };
+
+  const getValueMes = (indexPais, indexCanal, indexProd, indexYear, indexMes) =>
+    volumenData[indexPais].stats[indexCanal].productos[indexProd].años[
+      indexYear
+    ].volMeses[MONTHS[indexMes]];
+
+  const getClientes = (
+    indexPais,
+    indexCanal,
+    indexProd,
+    indexYear,
+    indexMes,
+  ) => {
+    const vtasXCliente =
+      dataAssump.canales[indexCanal].items[indexProd].volumen;
+    const rdo =
+      getValueMes(indexPais, indexCanal, indexProd, indexYear, indexMes) /
+      vtasXCliente;
+    return rdo;
+  };
+
+  const getAcumulateClients = (indexMonth, indexYear) => {
+    let client = 0;
+    volumenData.map((v, indexC) => {
+      v.stats.map((s, indexS) => {
+        s.productos.map((p, indexP) => {
+          client += Math.trunc(
+            getClientes(indexC, indexS, indexP, indexYear, indexMonth),
+          );
+        });
+      });
+    });
+
+    return client;
   };
 
   useEffect(() => {
@@ -513,7 +574,7 @@ function DashboardMargenBruto() {
                     type="default"
                     title="Margen Bruto por Cliente"
                     hasCurrency
-                    cantidad={12}
+                    cantidad={totalMargen / margenClient}
                   />
                 </div>
 
