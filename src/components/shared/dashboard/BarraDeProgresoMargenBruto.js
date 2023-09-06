@@ -12,6 +12,7 @@ function BarraDeProgresoMargenBruto({
   infoForm,
 }) {
   let total = 0;
+  let totalProdServ = 0;
   let paises = [];
   let canales = [];
   let productos = [];
@@ -101,6 +102,13 @@ function BarraDeProgresoMargenBruto({
               indexYear,
               indexMonth,
             );
+            totalProdServ += getMargenResult(
+              indexPais,
+              indexChannel,
+              indexProduct,
+              indexYear,
+              indexMonth,
+            );
           }
         });
 
@@ -115,8 +123,16 @@ function BarraDeProgresoMargenBruto({
               indexYear,
               indexMonth,
             );
+            totalProdServ += getMargenResult(
+              indexPais,
+              indexChannel,
+              indexProduct,
+              indexYear,
+              indexMonth,
+            );
           }
         });
+
         break;
       default:
         break;
@@ -287,12 +303,15 @@ function BarraDeProgresoMargenBruto({
     }
   };
 
+  orderItems();
+
   return (
     <div>
       {type === 'pais' &&
         paises.map((country) => (
           <div key={country.name}>
             <span>{country.name.toUpperCase()}</span>
+
             <Progress
               percent={((country.total * 100) / total).toFixed(0)}
               color="amber-400"
@@ -314,8 +333,9 @@ function BarraDeProgresoMargenBruto({
         productos.map((country) => (
           <div key={country.name}>
             <span>{country.name.toUpperCase()}</span>
+
             <Progress
-              percent={((country.total * 100) / total).toFixed(0)}
+              percent={((country.total * 100) / totalProdServ).toFixed(0)}
               color="amber-400"
             />
           </div>
@@ -326,7 +346,7 @@ function BarraDeProgresoMargenBruto({
           <div key={country.name}>
             <span>{country.name.toUpperCase()}</span>
             <Progress
-              percent={((country.total * 100) / total).toFixed(0)}
+              percent={((country.total * 100) / totalProdServ).toFixed(0)}
               color="amber-400"
             />
           </div>
