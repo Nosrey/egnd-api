@@ -39,7 +39,7 @@ function DefaultItem(props) {
         >
           <VerticalMenuIcon icon={nav.icon} />
           {!sideCollapsed && (
-            <span>
+            <span className="cursor-default">
               <Trans i18nKey={nav.translateKey} defaults={nav.title} />
             </span>
           )}

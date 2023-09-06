@@ -94,7 +94,7 @@ const TimeInputField = forwardRef((props, ref) => {
         className={classNames('time-input-field', className)}
         {...rest}
       />
-      {withSeparator && <span> : </span>}
+      {withSeparator && <span className="cursor-default"> : </span>}
     </>
   )
 })

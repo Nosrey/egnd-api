@@ -17,7 +17,7 @@ function HorizontalMenuItem({ nav, isLink, manuVariant }) {
       {path && isLink ? (
         <HorizontalMenuNavLink path={path}>{itemTitle}</HorizontalMenuNavLink>
       ) : (
-        <span>{itemTitle}</span>
+        <span className="cursor-default">{itemTitle}</span>
       )}
     </MenuItem>
   )

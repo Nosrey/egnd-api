@@ -164,7 +164,7 @@ export function Notification({ className }) {
     >
       <Dropdown.Item variant="header">
         <div className="border-b border-gray-200 dark:border-gray-600 px-4 py-2 flex items-center justify-between">
-          <h6>Notifications</h6>
+          <h6 className="cursor-default">Notifications</h6>
           <Tooltip title="Mark all as read">
             <Button
               variant="plain"
@@ -197,7 +197,7 @@ export function Notification({ className }) {
                         {item.target}{' '}
                       </span>
                     )}
-                    <span>{item.description}</span>
+                    <span className="cursor-default">{item.description}</span>
                   </div>
                   <span className="text-xs">{item.date}</span>
                 </div>

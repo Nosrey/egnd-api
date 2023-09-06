@@ -95,13 +95,13 @@ function ResumenDeGasto() {
   return (
     <div>
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Consolidado de Gasto</h4>
-        <span>Gastos de Estructura</span>
+        <h4 className="cursor-default">Consolidado de Gasto</h4>
+        <span className="cursor-default">Gastos de Estructura</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Todos los Centros de Costo</h6>
+          <h6 className="cursor-default">Todos los Centros de Costo</h6>
         </div>
         {infoForm ? (
           <div className="container-countries">
@@ -140,7 +140,7 @@ function ResumenDeGasto() {
                                 <div className="flex flex-col" key={indexYear}>
                                   {index === 0 && (
                                     <div className="titleRow min-w-[62px]">
-                                      <p> Año {año.año}</p>
+                                      <p className="cursor-default"> Año {año.año}</p>
                                       <div
                                         className="iconYear"
                                         onClick={() => hideYear(indexYear)}
@@ -248,7 +248,7 @@ function ResumenDeGasto() {
                             <div className="flex flex-col" key={indexYear}>
                               
                                 <div className="titleRowR min-w-[62px]">
-                                  <p> Año {indexYear + 1}</p>
+                                  <p className="cursor-default"> Año {indexYear + 1}</p>
                                   <div
                                     className="iconYear"
                                     onClick={() => hideYear(indexYear)}
@@ -278,10 +278,10 @@ function ResumenDeGasto() {
                                   visibleItems.includes(indexYear) &&
                                   año && sumVerticales.length !== 0 &&
                                   sumVerticales[indexYear]?.map((valor, index) => (
-                                    <p className="w-[90px] text-center">{currency}{valor}</p>
+                                    <p className="w-[90px] text-center cursor-default">{currency}{valor}</p>
                                   ))
                                 }
-                                <p className="w-[90px] text-center font-bold">
+                                <p className="w-[90px] text-center font-bold cursor-default">
                                   {currency}{
                                     sumVerticales[indexYear]?.reduce((acumulador, numero) => acumulador + numero, 0)
                                   }
@@ -302,7 +302,7 @@ function ResumenDeGasto() {
         
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="cursor-default">
             Para acceder a este formulario primero debe completar el
               formulario de{' '}
               <Link className="text-indigo-700 underline"  to="/gastos-por-cc">

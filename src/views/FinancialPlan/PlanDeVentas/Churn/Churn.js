@@ -109,13 +109,13 @@ function Churn() {
         : (
           <>
             <div className="border-b-2 mb-8 pb-1">
-              <h4>Clientes</h4>
-              <span>Plan de ventas</span>
+              <h4 className="cursor-default">Clientes</h4>
+              <span className="cursor-default">Plan de ventas</span>
             </div>
 
             <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
               <div className="border-b-2 px-4 py-1">
-                <h6>Resumen de Alta y Churn</h6>
+                <h6 className="cursor-default">Resumen de Alta y Churn</h6>
               </div>
               {infoForm && volumenPrecio ? (
                 <Tabs defaultValue={defaultCountry}>
@@ -123,7 +123,7 @@ function Churn() {
                     {infoForm &&
                       Object.keys(infoForm).map((pais, index) => (
                         <TabNav key={index} value={pais}>
-                          <div className="capitalize">{pais}</div>
+                          <div className="capitalize cursor-default">{pais}</div>
                         </TabNav>
                       ))}
                   </TabList>

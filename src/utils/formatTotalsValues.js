@@ -8,7 +8,8 @@ export default function formatNumber(value) {
 };
 
 export const formatearNumero = (numero) => {
+  const esNegativo = Number(numero) < 0;
   const inputNumero = Number(numero?.replace(/\D/g, ''));
   const nuevoNum = inputNumero.toLocaleString('es-AR');
-  return nuevoNum;
+  return esNegativo ? `-${nuevoNum}` : nuevoNum;
 }

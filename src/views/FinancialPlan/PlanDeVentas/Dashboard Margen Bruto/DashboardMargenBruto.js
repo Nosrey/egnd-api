@@ -400,7 +400,7 @@ function DashboardMargenBruto() {
       setTotPerMonth(totPerMonth);
       setTotalMargen(tot);
       setMargenClient(margenByClient);
-      setPercentMArgen(percent);
+      setPercentMArgen(Math.round(percent));
     } else {
       selectYear({ value: 'año 1', label: 'Año 1', year: 0 });
       selectPeriodo({
@@ -527,14 +527,14 @@ function DashboardMargenBruto() {
         <>
           <div>
             <div className="border-b-2 mb-8 pb-1">
-              <h4>Dashboard de Margen Bruto</h4>
-              <span>Costos directos</span>
+              <h4 className="cursor-default">Dashboard de Margen Bruto</h4>
+              <span className="cursor-default">Costos directos</span>
             </div>
             <div className="border-solid border-2 border-#e5e7eb rounded-lg">
               <div className="px-4 py-5 pb-[60px]">
                 <div className="flex justify-end gap-[20px]">
                   <Select
-                    className="w-[12%]"
+                    className="w-[12%] min-w-[115px]"
                     placeholder="Año"
                     options={año}
                     value={yearSelected}
@@ -548,7 +548,7 @@ function DashboardMargenBruto() {
                   </Select>
                   {yearSelected.value !== 'todo' && (
                     <Select
-                      className="w-[12%]"
+                      className="w-[12%] min-w-[115px]"
                       placeholder="Periodo"
                       options={periodo}
                       value={periodoSelected}
@@ -625,7 +625,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="pais"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}
@@ -641,7 +640,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="canal"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}
@@ -666,7 +664,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="producto"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}
@@ -684,7 +681,6 @@ function DashboardMargenBruto() {
                       dataAssump={dataAssump}
                       type="servicio"
                       getMargenResult={getMargenBrutoResult}
-                      totalVentas={12}
                       selectYear={yearSelected}
                       periodoSelected={periodoSelected}
                       infoForm={infoForm}

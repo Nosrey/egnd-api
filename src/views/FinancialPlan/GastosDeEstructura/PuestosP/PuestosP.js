@@ -133,13 +133,13 @@ function PuestosP() {
               </Alert>
             )}
             <div className="border-b-2 mb-8 pb-1">
-              <h4>Salarios</h4>
-              <span>Headcount</span>
+              <h4 className="cursor-default">Salarios</h4>
+              <span className="cursor-default">Headcount</span>
             </div>
 
             <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
               <div className="border-b-2 px-4 py-1">
-                <h6>Salarios</h6>
+                <h6 className="cursor-default">Salarios</h6>
               </div>
               {infoForm ? (
                 <Tabs defaultValue={country}>

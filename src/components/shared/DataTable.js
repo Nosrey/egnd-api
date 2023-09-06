@@ -164,7 +164,7 @@ function DataTable(props) {
                         onClick={() => handleSort(column)}
                       >
                         {column.render('Header')}
-                        <span>
+                        <span className="cursor-default">
                           <Sorter sort={column.isSortedDesc} />
                         </span>
                       </div>

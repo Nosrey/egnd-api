@@ -151,7 +151,7 @@ function TableChurn(props) {
               {infoForm[pais].map((canal, indexCanal) => (
                 <section key={canal.canalName} className="contenedor">
                   <div className="titleChannel">
-                    <p className="canal">{canal.canalName}</p>
+                    <p className="canal cursor-default">{canal.canalName}</p>
                   </div>
                   <div>
                     <div>
@@ -161,7 +161,7 @@ function TableChurn(props) {
                           key={producto.id}
                         >
                           <FormItem className=" mb-1 w-[210px] mt-[81px] cursor-default">
-                            <p className="mt-[-20px] font-bold">Volumen</p>
+                            {/* <p className="mt-[-20px] font-bold">Volumen</p> */}
                             <Input
                               disabled
                               type="text"

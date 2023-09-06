@@ -89,7 +89,7 @@ function TablePlanDeCuentas({
               ))
             ) : (
               <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]">
-                <span>
+                <span className="cursor-default">
                   No hay cuentas creados. Créalos con el botón de Agregar.
                 </span>
               </div>

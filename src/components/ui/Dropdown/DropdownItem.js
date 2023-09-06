@@ -169,7 +169,7 @@ const DropdownItem = React.forwardRef((props, ref) => {
           variant={mode}
           className={classNames('dropdown-submenu-item', className)}
         >
-          <span>{children}</span>
+          <span className="cursor-default">{children}</span>
           {direction === 'rtl' ? <HiChevronLeft /> : <HiChevronRight />}
         </MenuItem>
         {renderSubmenu()}

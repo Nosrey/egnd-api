@@ -95,13 +95,13 @@ function GastosPorCC() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Proyección de Gastos por Centro de Costo</h4>
-        <span>Gastos de Estructura</span>
+        <h4 className="cursor-default">Proyección de Gastos por Centro de Costo</h4>
+        <span className="cursor-default">Gastos de Estructura</span>
       </div>
 
       <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
         <div className="border-b-2 px-4 py-1">
-          <h6>Centros de costo</h6>
+          <h6 className="cursor-default">Centros de costo</h6>
         </div>
         {infoForm && viewP ? (
           <Tabs defaultValue={country}>
@@ -145,7 +145,7 @@ function GastosPorCC() {
           </Tabs>
         ) : !viewP ? (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="cursor-default">
               Para acceder a este formulario primero debe completar el
               formulario{' '}
               <Link className="text-indigo-700 underline" to="/salarios">
@@ -156,7 +156,7 @@ function GastosPorCC() {
           </div>
         ) : (
           <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span>
+            <span className="cursor-default">
               Para acceder a este formulario primero debe completar el
               formulario{' '}
               <Link

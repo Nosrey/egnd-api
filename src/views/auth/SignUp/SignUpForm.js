@@ -193,7 +193,7 @@ function SignUpForm(props) {
                 {isSubmitting ? 'Creando cuenta...' : 'Crear Cuenta'}
               </Button>
               <div className="mt-4 text-center">
-                <span>¿Ya tienes una cuenta? </span>
+                <span className="cursor-default">¿Ya tienes una cuenta? </span>
                 <ActionLink to={signInUrl}>Iniciar Sesión</ActionLink>
               </div>
             </FormContainer>

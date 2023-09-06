@@ -59,7 +59,7 @@ export function UserDropdown({ className }) {
           >
             <Link className="flex gap-2 items-center" to={item.path}>
               <span className="text-xl opacity-50">{item.icon}</span>
-              <span>{item.label}</span>
+              <span className="cursor-default">{item.label}</span>
             </Link>
           </Dropdown.Item>
         ))}
@@ -68,7 +68,7 @@ export function UserDropdown({ className }) {
           <span className="text-xl opacity-50">
             <HiOutlineLogout />
           </span>
-          <span>Cerrar Sesión</span>
+          <span className="cursor-default">Cerrar Sesión</span>
         </Dropdown.Item>
       </Dropdown>
     </div>

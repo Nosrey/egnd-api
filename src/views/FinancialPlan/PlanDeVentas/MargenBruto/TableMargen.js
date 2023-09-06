@@ -4,7 +4,7 @@ import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
-import formatNumber, { formatearNumero } from 'utils/formatTotalsValues';
+import { formatearNumero } from 'utils/formatTotalsValues';
 
 const { TabContent } = Tabs;
 

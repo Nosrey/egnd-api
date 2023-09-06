@@ -3,7 +3,6 @@ import { Progress } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 
 function BarraDeProgresoMargenBruto({
-  totalVentas,
   selectYear,
   periodoSelected,
   dataAssump,
@@ -310,21 +309,20 @@ function BarraDeProgresoMargenBruto({
       {type === 'pais' &&
         paises.map((country) => (
           <div key={country.name}>
-            <span>{country.name.toUpperCase()}</span>
-
+            <span className="cursor-default">{country.name.toUpperCase()}</span>
             <Progress
               percent={((country.total * 100) / total).toFixed(0)}
-              color="amber-400"
+              color="teal-300"
             />
           </div>
         ))}
       {type === 'canal' &&
         canales.map((country) => (
           <div key={country.name}>
-            <span>{country.name.toUpperCase()}</span>
+            <span className="cursor-default">{country.name.toUpperCase()}</span>
             <Progress
               percent={((country.total * 100) / total).toFixed(0)}
-              color="amber-400"
+              color="violet-500"
             />
           </div>
         ))}
@@ -333,10 +331,15 @@ function BarraDeProgresoMargenBruto({
         productos.map((country) => (
           <div key={country.name}>
             <span>{country.name.toUpperCase()}</span>
-
             <Progress
-              percent={((country.total * 100) / totalProdServ).toFixed(0)}
-              color="amber-400"
+              percent={
+                ((country.total * 100) / totalProdServ).toFixed(0) > 100
+                  ? 100
+                  : ((country.total * 100) / totalProdServ).toFixed(0) < 0
+                  ? 0
+                  : ((country.total * 100) / totalProdServ).toFixed(0)
+              }
+              color="lime-300"
             />
           </div>
         ))}
@@ -344,10 +347,16 @@ function BarraDeProgresoMargenBruto({
       {type === 'servicio' &&
         servicios.map((country) => (
           <div key={country.name}>
-            <span>{country.name.toUpperCase()}</span>
+            <span className="cursor-default">{country.name.toUpperCase()}</span>
             <Progress
-              percent={((country.total * 100) / totalProdServ).toFixed(0)}
-              color="amber-400"
+              percent={
+                ((country.total * 100) / totalProdServ).toFixed(0) > 100
+                  ? 100
+                  : ((country.total * 100) / totalProdServ).toFixed(0) < 0
+                  ? 0
+                  : ((country.total * 100) / totalProdServ).toFixed(0)
+              }
+              color="orange-300"
             />
           </div>
         ))}

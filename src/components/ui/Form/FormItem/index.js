@@ -83,7 +83,7 @@ const FormItem = React.forwardRef((props, ref) => {
       >
         {asterisk && <span className="text-red-500 ltr:mr-1 rtl:ml-1">*</span>}
         {label}
-        {extra && <span>{extra}</span>}
+        {extra && <span className="cursor-default">{extra}</span>}
         {label && formItemLayout !== 'vertical' && ':'}
       </label>
       <div

@@ -15,7 +15,7 @@ function HorizontalMenuDropdownItem({ nav }) {
       {path ? (
         <HorizontalMenuNavLink path={path}>{itemTitle}</HorizontalMenuNavLink>
       ) : (
-        <span>{itemTitle}</span>
+        <span className="cursor-default">{itemTitle}</span>
       )}
     </Dropdown.Item>
   )

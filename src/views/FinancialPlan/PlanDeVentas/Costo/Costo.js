@@ -117,13 +117,13 @@ function Costo() {
                 </Alert>
               )}
               <div className="border-b-2 mb-8 pb-1">
-                <h4>Costos Unitarios</h4>
-                <span>Costos Directos</span>
+                <h4 className="cursor-default">Costos Unitarios</h4>
+                <span className="cursor-default">Costos Directos</span>
               </div>
 
               <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
                 <div className="border-b-2 px-4 py-1">
-                  <h6>Carga de productos / servicios</h6>
+                  <h6 className="cursor-default">Carga de productos / servicios</h6>
                 </div>
                 {infoForm && volumenPrecio ? (
                   <Tabs defaultValue={defaultCountry}>
@@ -131,7 +131,7 @@ function Costo() {
                       {infoForm &&
                         Object.keys(infoForm).map((pais, index) => (
                           <TabNav key={index} value={pais}>
-                            <div className="capitalize">{pais}</div>
+                            <div className="capitalize cursor-default">{pais}</div>
                           </TabNav>
                         ))}
                     </TabList>

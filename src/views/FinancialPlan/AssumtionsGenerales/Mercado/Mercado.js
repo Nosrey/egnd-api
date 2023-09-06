@@ -75,12 +75,12 @@ function Mercado() {
         </Alert>
       )}
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Mercado</h4>
-        <span>Supuestos del Modelo</span>
+        <h4 className="cursor-default">Mercado</h4>
+        <span className="cursor-default">Supuestos del Modelo</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="border-b-2 px-4 py-1">
-          <h6>Carga de datos</h6>
+          <h6 className="cursor-default">Carga de datos</h6>
         </div>
         <div className="px-4 py-5">
           <Formik
@@ -176,7 +176,7 @@ function Mercado() {
                         placeholder="Definición"
                         component={Input}
                       />
-                      <span>
+                      <span className="cursor-default">
                         * Defina el mercado al cual la compañía ve una
                         oportunidad de ofrecer su producto o servicio.
                       </span>
@@ -188,7 +188,7 @@ function Mercado() {
                   <div className={`flex ${media === "mobile" ?  "flex-col-reverse" : ""}   gap-[50px] items-center mt-[20px]`}>
                     <div className={`${media === "mobile" ?  "w-[100%]" : "w-[50%]"}`}>
                       <div>
-                        <span>TAM</span>
+                        <span className="cursor-default">TAM</span>
                         <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
                             // className="max-w-[100px]"
@@ -223,7 +223,7 @@ function Mercado() {
                         </div>
                       </div>
                       <div>
-                        <span>SAM</span>
+                        <span className="cursor-default">SAM</span>
                         <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
                             className="w-[30%]"
@@ -256,7 +256,7 @@ function Mercado() {
                         </div>
                       </div>
                       <div>
-                        <span>SOM</span>
+                        <span className="cursor-default">SOM</span>
                         <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
                             className="w-[30%]"

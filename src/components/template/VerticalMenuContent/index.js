@@ -81,7 +81,7 @@ function VerticalMenuContent(props) {
             label={
               <>
                 <VerticalMenuIcon icon={nav.icon} />
-                <span>
+                <span className="cursor-default">
                   <Trans
                     i18nKey={t(nav.translateKey) || nav.title}
                     defaults={nav.title}

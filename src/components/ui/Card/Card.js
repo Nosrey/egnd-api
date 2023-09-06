@@ -45,7 +45,7 @@ const Card = React.forwardRef((props, ref) => {
 
   const renderHeader = () => {
     if (typeof header === 'string') {
-      return <h4>{header}</h4>;
+      return <h4 className="cursor-default">{header}</h4>;
     }
     return <>{header}</>;
   };
@@ -59,7 +59,7 @@ const Card = React.forwardRef((props, ref) => {
       {header && (
         <div className={cardHeaderClass}>
           {renderHeader()}
-          {headerExtra && <span>{headerExtra}</span>}
+          {headerExtra && <span className="cursor-default">{headerExtra}</span>}
         </div>
       )}
       <div className={cardBodyClasss}>{children}</div>

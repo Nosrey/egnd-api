@@ -35,7 +35,7 @@ function ProgresoCircularScroll({ title, churnProducto }) {
                 <span className="font-bold">{churn.channel.toUpperCase()}</span>
                 {churn.items.map((item, indxChurn) => (
                   <div key={indxChurn} className="md:mb-0 mb-4 mx-6">
-                    <span>
+                    <span className="cursor-default">
                       {`${churnProducto.productos[
                         indxChurn
                       ].name.toUpperCase()} ${item.porcentajeChurn}%`}

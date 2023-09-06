@@ -97,9 +97,9 @@ function Drawer(props) {
         {title || closable ? (
           <div className={classNames('drawer-header', headerClass)}>
             {typeof title === 'string' ? (
-              <h4>{title}</h4>
+              <h4 className="cursor-default">{title}</h4>
             ) : (
-              <span>{title}</span>
+              <span className="cursor-default">{title}</span>
             )}
             {closable && renderCloseButton}
           </div>

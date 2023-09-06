@@ -197,7 +197,7 @@ function TableCapexQ(props) {
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
                         <div className="titleRow min-w-[62px]">
-                          <p> Año {año.año}</p>
+                          <p className="cursor-default"> Año {año.año}</p>
                           <div
                             className="iconYear"
                             onClick={() => hideYear(indexYear)}
@@ -342,7 +342,7 @@ function TableCapexQ(props) {
                 {AÑOS.map((año, indexYear) => (
                   <div className="flex flex-col" key={indexYear}>
                     <div className="titleRowR min-w-[62px]">
-                      <p> Año {indexYear + 1}</p>
+                      <p className="cursor-default"> Año {indexYear + 1}</p>
                       <div
                         className="iconYear"
                         onClick={() => hideYear(indexYear)}
@@ -372,11 +372,11 @@ function TableCapexQ(props) {
                         año &&
                         props.data.length !== 0 &&
                         MONTHS.map((valor, index) => (
-                          <p className="w-[90px] text-center">
+                          <p className="w-[90px] text-center cursor-default">
                             {formatearNumero(totals[indexYear][index])}
                           </p>
                         ))}
-                      <p className="w-[90px] text-center font-bold">
+                      <p className="w-[90px] text-center font-bold cursor-default">
                         {formatearNumero(
                           totals[indexYear].reduce(
                             (acumulador, numero) => acumulador + numero,

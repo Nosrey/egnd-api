@@ -298,12 +298,12 @@ function AssumptionVentas() {
       ) : (
         <>
           <div className="border-b-2 mb-8 pb-1">
-            <h4>Supuestos de Ventas</h4>
-            <span>Plan de ventas</span>
+            <h4 className='cursor-default'>Supuestos de Ventas</h4>
+            <span className='cursor-default'>Plan de ventas</span>
           </div>
           <div className="border-solid border-2 border-#e5e7eb rounded-lg">
             <div className="border-b-2 px-4 py-1">
-              <h6>Carga de productos / servicios</h6>
+              <h6 className='cursor-default'>Carga de productos / servicios</h6>
             </div>
             {media === 'mobile' ? (
               <ContainerScrollable

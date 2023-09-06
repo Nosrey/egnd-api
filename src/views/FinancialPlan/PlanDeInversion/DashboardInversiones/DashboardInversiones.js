@@ -9,8 +9,8 @@ function DashboardInversiones() {
   return (
     <div>
       <div className="border-b-2 mb-8 pb-1">
-        <h4>Dashboard de CAPEX</h4>
-        <span>Inversiones</span>
+        <h4 className="cursor-default">Dashboard de CAPEX</h4>
+        <span className="cursor-default">Inversiones</span>
       </div>
       <div className="border-solid border-2 border-#e5e7eb rounded-lg">
         <div className="px-4 py-5">

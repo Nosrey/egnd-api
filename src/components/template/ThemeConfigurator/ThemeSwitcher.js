@@ -62,7 +62,7 @@ function CustomSelectOption({ innerProps, label, value, isSelected }) {
     >
       <div className="flex items-center gap-2">
         <ColorBadge themeColor={value} />
-        <span>{label}</span>
+        <span className="cursor-default">{label}</span>
       </div>
       {isSelected && <HiCheck className="text-emerald-500 text-xl" />}
     </div>

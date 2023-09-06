@@ -192,7 +192,7 @@ export function Search({ className }) {
             ))}
             {searchResult.length === 0 && noResult && (
               <div className="my-10 text-center text-lg">
-                <span>No results for </span>
+                <span className="cursor-default">No results for </span>
                 <span className="heading-text">
                   '{inputRef.current?.value}'
                 </span>

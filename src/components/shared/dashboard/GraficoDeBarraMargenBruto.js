@@ -98,7 +98,7 @@ function GraficoDeBarraMargenBruto({
       series={[
         {
           data: totPerMonth,
-          name: 'Total de ventas',
+          name: 'Revenue',
         },
       ]}
       type="bar"
