@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import { FormContainer, FormItem, Input, Tabs, Tooltip } from 'components/ui';
 import { AÑOS, EMPTY_CARGOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -424,8 +425,9 @@ function TablePuestosPxQ(props) {
                                 placement="top-end"
                                 title={currency + formatearNumero(valor)}
                               >
-                                {currency}
-                                {formatearNumero(valor)}
+                                {currency}{" "}
+                                <ShortNumberNotation numero={valor} />
+
                               </Tooltip>
                             </p>
                           ))}
@@ -446,13 +448,12 @@ function TablePuestosPxQ(props) {
                             {index === 0 && currency}
                             {index === 0 &&
                               volTotal[indexYear] &&
-                              formatearNumero(
-                                volTotal[indexYear]?.values.reduce(
-                                  (total, current) =>
-                                    Math.round(Number(total) + Number(current)),
-                                  0,
-                                ),
-                              )}
+                              <ShortNumberNotation numero={volTotal[indexYear]?.values.reduce(
+                                (total, current) =>
+                                  Math.round(Number(total) + Number(current)),
+                                0,
+                              )} />
+                                        }
                           </Tooltip>
                         </p>
                       </div>
