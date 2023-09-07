@@ -18,7 +18,7 @@ function ShortNumberNotation({ numero }) {
 
   let exp = 0;
 
-  while (num >= 1000 && exp < 15) {
+  while (Math.abs(num) >= 1000 && exp < 15) {
     num /= 1000;
     exp += 3;
   }
@@ -26,7 +26,8 @@ function ShortNumberNotation({ numero }) {
   // Formatear el número con dos decimales si es igual o mayor a 1000
   const numeroFormateado = exp >= 3 ? num.toFixed(2) : num.toFixed(0);
 
-  return <span className="cursor-default">{`${numeroFormateado} ${sufijos[exp]}`}</span>;
+  return <span className="cursor-default">{`${numero < 0 ? ' -' : ''}${Math.abs(numeroFormateado)} ${sufijos[exp]}`}</span>;
+
 }
 
 export default ShortNumberNotation;

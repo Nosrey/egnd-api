@@ -163,6 +163,7 @@ function TableMargen(props) {
 
     // TOTALES VERTICALES
   const getSumVerticalPorMes = (indexCountry, indexYear, indexMes, idProd, country) => {
+  
     // identifico de que producto estoy hablando encontrandolo por su id
     const indexProd = infoForm[country][0].productos.findIndex((prod) => prod.id === idProd);
 
