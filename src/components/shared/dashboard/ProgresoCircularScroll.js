@@ -1,8 +1,10 @@
 import { Card, Progress } from 'components/ui';
 import { useEffect, useState } from 'react';
 import './scrollBar.css';
+import { useMedia } from 'utils/hooks/useMedia';
 
 function ProgresoCircularScroll({ title, churnProducto }) {
+  const media = useMedia();
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ function ProgresoCircularScroll({ title, churnProducto }) {
   }, []);
 
   return (
-    <Card className="w-[50%]">
+    <Card className={`${media === "mobile" ? "w-[100%]" : "w-[50%]"}`}>
       <div>
         <span className="text-lg">{title}</span>
         <div className="flex justify-center gap-[25px] mt-[10px]">

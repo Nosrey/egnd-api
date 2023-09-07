@@ -13,8 +13,11 @@ import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { showMultiplicacionPxQ } from 'utils/calcs';
 import formatNumber from 'utils/formatTotalsValues';
+import { useMedia } from 'utils/hooks/useMedia';
 
 function DashboardVentas() {
+    const media = useMedia();
+
   const [volumenData, setVolumenData] = useState();
   const currentState = useSelector((state) => state.auth.user);
   const [yearSelected, setYearSelected] = useState({
@@ -483,7 +486,7 @@ function DashboardVentas() {
                 <div className="mt-[30px] mb-[30px]">
                   <Total title="Total de Ventas" data={totalVentas} />
                 </div>
-                <div className="grid grid-cols-3 gap-[20px] mt-[20px]">
+                <div className={` ${media === "mobile" ? " flex flex-col gap-y-4" : "grid grid-cols-3 gap-[20px]"} mt-[20px]`}>
                   <CardNumerica
                     type="default"
                     title="Venta de Productos"
@@ -520,8 +523,8 @@ function DashboardVentas() {
                   />
                 </div>
                 {infoForm && (
-                  <div className="flex justify-center gap-[50px] mt-[50px] mb-[40px]">
-                    <div className="w-[50%]">
+                  <div className={`flex justify-center gap-[50px] mt-[50px] mb-[40px] ${media === "mobile" ? "flex-col" :"" } `}>
+                    <div className={` ${media === "mobile" ? "w-[100%]" : "w-[50%]"} `}>
                       {yearSelected.value === 'todo' ? (
                         <h5 className="mb-[30px]">
                           Distribución de Ventas por Año
@@ -537,7 +540,7 @@ function DashboardVentas() {
                         periodoSelected={periodoSelected}
                       />
                     </div>
-                    <div className="w-[50%]">
+                    <div className={` ${media === "mobile" ? "w-[100%]" : "w-[50%]"} `}>
                       <h5 className="mb-[30px]">
                         Distribución de Ventas por País
                       </h5>
@@ -558,7 +561,8 @@ function DashboardVentas() {
                       yearSelected.value === 'todo'
                         ? ''
                         : 'justify-between'
-                    } gap-[50px] mb-[40px]`}
+                    } gap-[50px] mb-[40px]
+                    ${media === "mobile" ? "flex-col" : ""}`}
                   >
                     {dataAssump.length !== 0 && (
                       <ProgresoCircularScroll
@@ -575,12 +579,13 @@ function DashboardVentas() {
                             (totalsCacr[yearSelected.year] / totalsCacr[0]) **
                             (1 / (yearSelected.year + 1) - 1)
                           ).toFixed(2)}
+                          ancho={media === "mobile" && "100%"}
                         />
                       )}
                   </div>
                 )}
                 <h5 className="mb-[20px]">Clientes</h5>
-                <div className="grid grid-cols-3 gap-[20px] mb-[40px]">
+                <div className={` ${media === "mobile" ? " flex flex-col gap-y-4" : "grid grid-cols-3 gap-[20px]"} mt-[20px]`}>
                   <CardNumerica
                     title="Clientes Nuevos"
                     type="clear"

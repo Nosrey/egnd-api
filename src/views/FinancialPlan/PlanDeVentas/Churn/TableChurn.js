@@ -215,42 +215,18 @@ function TableChurn(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          {getValueMes(
-                                            indexPais,
-                                            indexCanal,
-                                            indexProd,
-                                            indexYear,
-                                            indexMes,
-                                          ).toString().length > 7 ? (
-                                            <Tooltip
-                                              placement="top-end"
-                                              title={formatearNumero(
-                                                getValueMes(
-                                                  indexPais,
-                                                  indexCanal,
-                                                  indexProd,
-                                                  indexYear,
-                                                  indexMes,
-                                                ),
-                                              )}
-                                            >
-                                              <Input
-                                                className="w-[90px]"
-                                                type="text"
-                                                disabled
-                                                value={formatearNumero(
-                                                  getValueMes(
-                                                    indexPais,
-                                                    indexCanal,
-                                                    indexProd,
-                                                    indexYear,
-                                                    indexMes,
-                                                  ),
-                                                )}
-                                                name="month"
-                                              />
-                                            </Tooltip>
-                                          ) : (
+                                          <Tooltip
+                                            placement="top-end"
+                                            title={formatearNumero(
+                                              getValueMes(
+                                                indexPais,
+                                                indexCanal,
+                                                indexProd,
+                                                indexYear,
+                                                indexMes,
+                                              ),
+                                            )}
+                                          >
                                             <Input
                                               className="w-[90px]"
                                               type="text"
@@ -266,7 +242,7 @@ function TableChurn(props) {
                                               )}
                                               name="month"
                                             />
-                                          )}
+                                          </Tooltip>
                                         </FormItem>
                                       ),
                                     )}
