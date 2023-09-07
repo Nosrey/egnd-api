@@ -18,7 +18,7 @@ function TablePuestosPxQ(props) {
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
   const currency = useSelector((state) => state.auth.user.currency);
-  
+
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
   // verticales de ese producto. No existe la relacion producto -canal porque es una suma de las
@@ -26,6 +26,7 @@ function TablePuestosPxQ(props) {
   const initialConfig = () => {
     if (infoForm && props.head) {
       const head = { ...infoForm[props.head] };
+      let valor;
 
       let arrayvalores = [
         { id: 0, values: [] },
@@ -43,21 +44,32 @@ function TablePuestosPxQ(props) {
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
           for (let s = 0; s < MONTHS.length; s++) {
-            let valor =
-              Number(head.puestos[i].años[j].volMeses[MONTHS[s]]) *
-                Number(head.puestos[i].total) || 0;
+            if (j === 0 || head.puestos[i].incremento === 0) {
+              valor =
+                Number(head.puestos[i].años[j].volMeses[MONTHS[s]]) *
+                  Number(head.puestos[i].total) || 0;
+            } else {
+              valor =
+                (Number(head.puestos[i].años[j].volMeses[MONTHS[s]]) *
+                  Number(head.puestos[i].total) || 0) +
+                ((Number(head.puestos[i].años[j].volMeses[MONTHS[s]]) *
+                  Number(head.puestos[i].total) || 0) /
+                  100) *
+                  head.puestos[i].incremento;
+            }
 
             if (arrayvalores[j].values[s] >= 0) {
               arrayvalores[j].values[s] += valor;
-              arrayvalores[j].values[s] = Number(
-                arrayvalores[j].values[s],
-              ).toFixed(2);
+              // arrayvalores[j].values[s] = Number(
+              //   arrayvalores[j].values[s],
+              // )
             } else {
               arrayvalores[j].values.push(valor);
             }
           }
         }
       }
+
       setVolTotal([...arrayvalores]);
     }
   };
@@ -106,16 +118,51 @@ function TablePuestosPxQ(props) {
     return calcs;
   };
 
-  const totHor = (volTotal, total) => {
+  const totHor = (volTotal, total, indexYear, incremento) => {
     let res;
     if (!volTotal || !total) {
       res = 0;
-    } else {
+    }
+    if (indexYear === 0 || incremento === 0) {
       res = volTotal * total;
+      res = res.toFixed(2);
+    } else {
+      const inicial = volTotal * total;
+      res = inicial + ((volTotal * total) / 100) * incremento;
       res = res.toFixed(2);
     }
 
     return res;
+  };
+
+  const addPercentYear = (cc, indexMes, indexYear, head) => {
+    let sum = 0;
+
+    sum =
+      Number(
+        calcPercent(
+          infoForm[cc].puestos[head].total,
+          infoForm[cc].puestos[head].incremento,
+          indexMes,
+          indexYear,
+          cc,
+          head,
+        )[indexYear][indexMes],
+      ) +
+      Number(
+        (calcPercent(
+          infoForm[cc].puestos[head].total,
+          infoForm[cc].puestos[head].incremento,
+          indexMes,
+          indexYear,
+          cc,
+          head,
+        )[indexYear][indexMes] /
+          100) *
+          infoForm[cc].puestos[head].incremento,
+      );
+
+    return sum;
   };
 
   const formatearNumero = (numero) => {
@@ -162,7 +209,10 @@ function TablePuestosPxQ(props) {
                               <div className="flex flex-col" key={indexYear}>
                                 {index === 0 && (
                                   <div className="titleRow min-w-[62px]">
-                                    <p className='cursor-default'> Año {año.año}</p>
+                                    <p className="cursor-default">
+                                      {' '}
+                                      Año {año.año}
+                                    </p>
                                     <div
                                       className="iconYear"
                                       onClick={() => hideYear(indexYear)}
@@ -195,7 +245,9 @@ function TablePuestosPxQ(props) {
                                             </p>
                                           ),
                                         )}
-                                      <p className="month w-[90px] cursor-default">Total</p>
+                                      <p className="month w-[90px] cursor-default">
+                                        Total
+                                      </p>
                                     </div>
                                   )}
                                   <div className="flex gap-x-3 gap-y-3">
@@ -211,26 +263,9 @@ function TablePuestosPxQ(props) {
                                           >
                                             <Tooltip
                                               placement="top-end"
-                                              title={currency +
+                                              title={
+                                                currency +
                                                 formatNumber(
-                                                calcPercent(
-                                                  infoForm[cc].puestos[head]
-                                                    .total,
-                                                  infoForm[cc].puestos[head]
-                                                    .incremento,
-                                                  indexMes,
-                                                  indexYear,
-                                                  cc,
-                                                  head,
-                                                )[indexYear][indexMes])
-                                              }
-                                            >
-                                              <Input
-                                                className="w-[90px]"
-                                                type="text"
-                                                disabled
-                                                prefix={currency}
-                                                value={formatearNumero(
                                                   calcPercent(
                                                     infoForm[cc].puestos[head]
                                                       .total,
@@ -241,7 +276,39 @@ function TablePuestosPxQ(props) {
                                                     cc,
                                                     head,
                                                   )[indexYear][indexMes],
-                                                )}
+                                                )
+                                              }
+                                            >
+                                              <Input
+                                                className="w-[90px]"
+                                                type="text"
+                                                disabled
+                                                prefix={currency}
+                                                value={
+                                                  infoForm[cc].puestos[head]
+                                                    .incremento === 0 ||
+                                                  indexYear === 0
+                                                    ? formatearNumero(
+                                                        calcPercent(
+                                                          infoForm[cc].puestos[
+                                                            head
+                                                          ].total,
+                                                          infoForm[cc].puestos[
+                                                            head
+                                                          ].incremento,
+                                                          indexMes,
+                                                          indexYear,
+                                                          cc,
+                                                          head,
+                                                        )[indexYear][indexMes],
+                                                      )
+                                                    : addPercentYear(
+                                                        cc,
+                                                        indexMes,
+                                                        indexYear,
+                                                        head,
+                                                      )
+                                                }
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -250,34 +317,38 @@ function TablePuestosPxQ(props) {
                                       )}
 
                                     <FormItem className="mb-0">
-                                    <Tooltip
-                                      placement="top-end"
-                                      title={currency +
-                                        formatearNumero(
-                                          totHor(
-                                            infoForm[cc].puestos[head].total,
-                                            infoForm[cc].puestos[head].años[
-                                              indexYear
-                                            ].volTotal,
-                                          ),
-                                        )
-                                      }
-                                    >
-                                    <Input
-                                        className="w-[90px]"
-                                        type="text"
-                                        disabled
-                                        prefix={currency}
-                                        value={formatearNumero(
-                                          totHor(
-                                            infoForm[cc].puestos[head].total,
-                                            infoForm[cc].puestos[head].años[
-                                              indexYear
-                                            ].volTotal,
-                                          ),
-                                        )}
-                                      />
-                                    </Tooltip>
+                                      <Tooltip
+                                        placement="top-end"
+                                        title={
+                                          currency +
+                                          formatearNumero(
+                                            totHor(
+                                              infoForm[cc].puestos[head].total,
+                                              infoForm[cc].puestos[head].años[
+                                                indexYear
+                                              ].volTotal,
+                                            ),
+                                          )
+                                        }
+                                      >
+                                        <Input
+                                          className="w-[90px]"
+                                          type="text"
+                                          disabled
+                                          prefix={currency}
+                                          value={formatearNumero(
+                                            totHor(
+                                              infoForm[cc].puestos[head].total,
+                                              infoForm[cc].puestos[head].años[
+                                                indexYear
+                                              ].volTotal,
+                                              indexYear,
+                                              infoForm[cc].puestos[head]
+                                                .incremento,
+                                            ),
+                                          )}
+                                        />
+                                      </Tooltip>
                                     </FormItem>
                                   </div>
                                 </div>
@@ -312,7 +383,7 @@ function TablePuestosPxQ(props) {
                     <div className="flex flex-col" key={indexYear}>
                       {index === 0 && (
                         <div className="titleRowR min-w-[62px]">
-                          <p className='cursor-default'> Año {indexYear + 1}</p>
+                          <p className="cursor-default"> Año {indexYear + 1}</p>
                           <div
                             className="iconYear"
                             onClick={() => hideYear(indexYear)}
@@ -337,7 +408,9 @@ function TablePuestosPxQ(props) {
                               {mes}
                             </p>
                           ))}
-                        {index === 0 && <p className="month w-[90px] cursor-default">Total</p>}
+                        {index === 0 && (
+                          <p className="month w-[90px] cursor-default">Total</p>
+                        )}
                         {index !== 0 && <p className="month w-[90px]" />}
                       </div>
                       <div className="flex gap-x-3 gap-y-3">
@@ -352,36 +425,35 @@ function TablePuestosPxQ(props) {
                                 title={currency + formatearNumero(valor)}
                               >
                                 {currency}
-                              {formatearNumero(valor)}
+                                {formatearNumero(valor)}
                               </Tooltip>
-                              
                             </p>
                           ))}
                         <p className="w-[90px] text-center font-bold cursor-default">
                           <Tooltip
                             placement="top-end"
-                            title={currency + formatearNumero(
-                              volTotal[indexYear]?.values.reduce(
-                                (total, current) =>
-                                  Math.round(Number(total) + Number(current)),
-                                0,
-                              ),
-                            )}
+                            title={
+                              currency +
+                              formatearNumero(
+                                volTotal[indexYear]?.values.reduce(
+                                  (total, current) =>
+                                    Math.round(Number(total) + Number(current)),
+                                  0,
+                                ),
+                              )
+                            }
                           >
-
-                          {index === 0 && currency}
-
-                          {index === 0 &&
-                            volTotal[indexYear] &&
-                            formatearNumero(
-                              volTotal[indexYear]?.values.reduce(
-                                (total, current) =>
-                                  Math.round(Number(total) + Number(current)),
-                                0,
-                              ),
-                            )}
+                            {index === 0 && currency}
+                            {index === 0 &&
+                              volTotal[indexYear] &&
+                              formatearNumero(
+                                volTotal[indexYear]?.values.reduce(
+                                  (total, current) =>
+                                    Math.round(Number(total) + Number(current)),
+                                  0,
+                                ),
+                              )}
                           </Tooltip>
-                         
                         </p>
                       </div>
                     </div>
