@@ -62,7 +62,7 @@ function AssumptionGeneral() {
   };
 
   const getInfo = () => {
-    getUser(currentState.id)
+    getUser(localStorage.getItem("userId"))
     .then((data) => {
       setInfo(data);
     })

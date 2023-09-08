@@ -12,27 +12,27 @@ import ImageMercado from '../../../../assets/image/Mercado.png';
 const validationSchema = Yup.object().shape({
   mercado: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(100, '¡Demasiado largo!')
-    .required('Requerido'),
+    .max(100, '¡Demasiado largo!'),
+    // .required('Requerido'),
   definicion: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(100, '¡Demasiado largo!')
-    .required('Requerido'),
-  valorTam: Yup.string().required('Requerido'),
+    .max(100, '¡Demasiado largo!'),
+    // .required('Requerido'),
+  // valorTam: Yup.string().required('Requerido'),
   tam: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(100, '¡Demasiado largo!')
-    .required('Requerido'),
-  valorSam: Yup.string().required('Requerido'),
+    .max(100, '¡Demasiado largo!'),
+    // .required('Requerido'),
+  // valorSam: Yup.string().required('Requerido'),
   sam: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(100, '¡Demasiado largo!')
-    .required('Requerido'),
-  valorSom: Yup.string().required('Requerido'),
+    .max(100, '¡Demasiado largo!'),
+    // .required('Requerido'),
+  // valorSom: Yup.string().required('Requerido'),
   som: Yup.string()
     .min(3, '¡Demasiado corto!')
-    .max(100, '¡Demasiado largo!')
-    .required('Requerido'),
+    .max(100, '¡Demasiado largo!'),
+    // .required('Requerido'),
 });
 
 function Mercado() {
@@ -104,7 +104,7 @@ function Mercado() {
                   }
             }
             validationSchema={validationSchema}
-            onSubmit={(values, { resetForm, setSubmitting }) => {
+            onSubmit={(values) => {
               const newValorTam = removePunctuation(values.valorTam);
               const newValorSam = removePunctuation(values.valorSam);
               const newValorSom = removePunctuation(values.valorSom);
@@ -141,6 +141,7 @@ function Mercado() {
                     setShowErrorAlert(false);
                   }, 5000);
                 });
+              
             }}
           >
             {({ touched, errors, resetForm, values }) => (
@@ -344,6 +345,9 @@ function Mercado() {
         </div>
       </div>
     </div>
+
+
+
   );
 }
 

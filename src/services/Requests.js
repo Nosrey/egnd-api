@@ -8,7 +8,8 @@ const app = store.getState();
 // const auth = JSON.parse(ls.auth);
 
 const URL_API = 'https://api.egndfinance.com';
-const idUser = app.auth.user.id && app.auth.user.id;
+// const idUser = app.auth.user.id && app.auth.user.id;
+const idUser = localStorage.getItem("userId")
 
 const compareChannelsInfo = (newChannel, oldChannel) => {
   let updatedChannel = { ...newChannel };
@@ -175,7 +176,9 @@ export const editBusinessInfo = async (
     );
     formData.append('image', imagePath);
 
-    const response = await fetch(`${URL_API}/api/users/${idUser}`, {
+
+
+    const response = await fetch(`${URL_API}/api/users/${idUser || localStorage.getItem("userId")}`, {
       method: 'PUT',
       body: formData,
     });
