@@ -42,6 +42,7 @@ function DashboardVentas() {
   const [totalsCacr, setTotalsCacr] = useState();
   const [newClients, setNewClients] = useState(0);
   const [showLoader, setShowLoader] = useState(true);
+  const [infoVolToCalculateClient, setInfoVolToCalculateClient] = useState()
 
   const selectYear = (event) => {
     setYearSelected(event);
@@ -262,7 +263,7 @@ function DashboardVentas() {
     let tot = 0;
     let newC = 0;
     if (infoForm && dataAssump) {
-      Object.values(infoForm).map((d, indexPais) => {
+      Object.values(infoVolToCalculateClient).map((d, indexPais) => {
         d.map((i, indexChannel) => {
           i.productos.map((p, indexProd) => {
             p.años.map((a, indexY) => {
@@ -270,10 +271,14 @@ function DashboardVentas() {
                 if (yearSelected.year === indexY) {
                   MONTHS.map((o, indexMes) => {
                     if (periodoSelected.month || periodoSelected.month === 0) {
-                      if (periodoSelected.month === 0) {
-                        tot += 0;
+                      if (periodoSelected.month === 0 && indexMes === 0) {
+                        tot += Math.floor(
+                            a.volMeses[MONTHS[indexMes]] /
+                              dataAssump.canales[indexChannel].items[indexProd]
+                                .volumen,
+                          )
                       } else if (periodoSelected.month === 4) {
-                        if (indexMes === 3) {
+                        if (indexMes === 2) {
                           tot += Math.floor(
                             a.volMeses[MONTHS[indexMes]] /
                               dataAssump.canales[indexChannel].items[indexProd]
@@ -335,16 +340,6 @@ function DashboardVentas() {
                       }
                     } else {
                       if (indexMes === 11) {
-                        console.log(
-                          '+',
-                          getClientes(
-                            indexPais,
-                            indexChannel,
-                            indexProd,
-                            indexY,
-                            indexMes,
-                          ),
-                        );
                         tot += Math.floor(
                           a.volMeses[MONTHS[indexMes]] /
                             dataAssump.canales[indexChannel].items[indexProd]
@@ -418,6 +413,21 @@ function DashboardVentas() {
           setDataVol(data?.volumenData);
           setVolumenData(data?.volumenData);
           calcVols(data?.volumenData);
+
+          // seteo la info delvolumen para usar par alos cliente sporque si uso info form estoy usando el valor de ventas
+          const datosPrecargadosVol = {};
+          let volDataOrdenada = JSON.parse(localStorage.getItem("volumenData")).sort((a, b) =>
+          a.countryName.localeCompare(b.countryName),
+          );
+          for (let i = 0; i < volDataOrdenada.length; i++) {
+            datosPrecargadosVol[volDataOrdenada[i].countryName] =
+              volDataOrdenada[i].stats;
+          }
+          setInfoVolToCalculateClient(() => ({ ...datosPrecargadosVol }));
+          // **********************************
+           // **********************************
+
+        // Seteo la info de ventas PxQ
           const datosPrecargados = {};
           let dataVentas = showMultiplicacionPxQ(
             data?.volumenData.sort((a, b) =>
@@ -431,6 +441,10 @@ function DashboardVentas() {
             datosPrecargados[dataVentas[i].countryName] = dataVentas[i].stats;
           }
           setInfoForm(() => ({ ...datosPrecargados }));
+          // **********************************
+           // **********************************
+         
+
           calcTotals();
           calcCacr(data?.volumenData);
           calcClentes();
