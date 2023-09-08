@@ -1,6 +1,6 @@
 const appConfig = {
   apiPrefix: '/api',
-  authenticatedEntryPath: '/home',
+  authenticatedEntryPath: '/inicio',
 
   unAuthenticatedEntryPath: '/iniciar-sesion',
   tourPath: '/',

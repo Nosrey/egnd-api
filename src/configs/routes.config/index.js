@@ -8,8 +8,8 @@ export const publicRoutes = [...authRoute];
 export const protectedRoutes = [
   {
     key: 'home',
-    path: '/home',
-    component: React.lazy(() => import('views/Home')),
+    path: '/inicio',
+    component: React.lazy(() => import('views/inicio')),
     authority: [],
   },
   {
