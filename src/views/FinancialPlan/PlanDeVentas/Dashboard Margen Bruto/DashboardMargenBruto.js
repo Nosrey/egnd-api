@@ -172,15 +172,14 @@ function DashboardMargenBruto() {
                               indexM,
                             ),
                           );
-                          percent += Math.abs(
+                          percent += 
                             calculatePercent(
                               indexCountry,
                               indexChannel,
                               indexO,
                               indexY,
                               indexM,
-                            ),
-                          );
+                            )
 
                           if (!totPerMonth[indexM]) {
                             totPerMonth.push(0);
@@ -212,15 +211,13 @@ function DashboardMargenBruto() {
                             ),
                           );
                           percent +=
-                            Math.abs(
                               calculatePercent(
                                 indexCountry,
                                 indexChannel,
                                 indexO,
                                 indexY,
                                 indexM,
-                              ),
-                            ) / 6;
+                              );
                           if (!totPerMonth[indexM]) {
                             totPerMonth.push(0);
                           }
@@ -241,6 +238,7 @@ function DashboardMargenBruto() {
                         }
                       } else if (periodoSelected.month === 4) {
                         if (indexM < 3) {
+                          console.log("ACA")
                           tot += Math.round(
                             getMargenBrutoResult(
                               indexCountry,
@@ -251,15 +249,14 @@ function DashboardMargenBruto() {
                             ),
                           );
                           percent +=
-                            Math.abs(
-                              calculatePercent(
+                            calculatePercent(
                                 indexCountry,
                                 indexChannel,
                                 indexO,
                                 indexY,
                                 indexM,
-                              ),
-                            ) / 3;
+                              )
+                            ;
                           if (!totPerMonth[indexM]) {
                             totPerMonth.push(0);
                           }
@@ -290,15 +287,13 @@ function DashboardMargenBruto() {
                           );
 
                           percent +=
-                            Math.abs(
                               calculatePercent(
                                 indexCountry,
                                 indexChannel,
                                 indexO,
                                 indexY,
                                 indexM,
-                              ),
-                            ) / 6;
+                              );
                           if (!totPerMonth[indexM - 6]) {
                             totPerMonth.push(0);
                           }
@@ -328,16 +323,14 @@ function DashboardMargenBruto() {
                         ),
                       );
 
-                      percent +=
-                        Math.abs(
+                      percent +=                       
                           calculatePercent(
                             indexCountry,
                             indexChannel,
                             indexO,
                             indexY,
                             indexM,
-                          ),
-                        ) / 12;
+                          );
                       if (!totPerMonth[indexM]) {
                         totPerMonth.push(0);
                       }
@@ -369,15 +362,13 @@ function DashboardMargenBruto() {
                     ),
                   );
                   percent +=
-                    Math.abs(
                       calculatePercent(
                         indexCountry,
                         indexChannel,
                         indexO,
                         indexY,
                         i,
-                      ),
-                    ) / 12;
+                      ) ;
                   if (!totPerMonth[i]) {
                     totPerMonth.push(0);
                   }
@@ -400,7 +391,32 @@ function DashboardMargenBruto() {
       setTotPerMonth(totPerMonth);
       setTotalMargen(tot);
       setMargenClient(margenByClient);
-      setPercentMArgen(Math.round(percent));
+      let cantidadMeses;
+      switch (periodoSelected.month) {
+        case 0:
+          cantidadMeses = 1;
+          break;
+        case 4:
+          cantidadMeses = 3;
+        break;
+        case 6:
+          cantidadMeses = 6;
+        break;
+        case 12:
+          cantidadMeses = 6;
+        break;
+        case undefined:
+          cantidadMeses = 12;
+        break;
+      
+        default:
+          break;
+      }
+      if (infoForm) {
+        const cant = (Object.keys(infoForm).length + infoForm[Object.keys(infoForm)[0]].length + infoForm[Object.keys(infoForm)[0]][0].productos.length) *cantidadMeses
+        setPercentMArgen(Math.round(percent / cant));
+        
+      }
     } else {
       selectYear({ value: 'año 1', label: 'Año 1', year: 0 });
       selectPeriodo({
@@ -419,7 +435,7 @@ function DashboardMargenBruto() {
     indexMes,
   ) => {
     // margen bruto x 100 / ventas
-    const percent =
+    let percent =
       (getMargenBrutoResult(
         indexCountry,
         indexCanal,
@@ -429,6 +445,13 @@ function DashboardMargenBruto() {
       ) *
         100) /
       getVentasResult(indexCountry, indexCanal, indexP, indexYear, indexMes);
+      // console.log("PORECNTAJE",percent)
+      if (percent === -Infinity ) {
+        percent = -100
+      }
+      if (percent === Infinity ) {
+        percent = 100
+      }
     return isNaN(percent) ? 0 : Math.round(percent);
   };
 

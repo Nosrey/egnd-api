@@ -196,8 +196,16 @@ function TableMargen(props) {
     // PORCENTAJES
   const calculatePercent = (indexCountry, indexCanal, indexP, indexYear, indexMes) => {
     // margen bruto x 100 / ventas 
-    const percent = (getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes) * 100 ) /
+    let percent = (getMargenBrutoResult(indexCountry, indexCanal, indexP, indexYear, indexMes) * 100 ) /
     getVentasResult(indexCountry, indexCanal, indexP, indexYear, indexMes)
+
+    if (percent === -Infinity ) {
+      percent = -100
+    }
+    if (percent === Infinity ) {
+      percent = 100
+    }
+      
      return isNaN(percent) ? 0 : Math.round(percent)
   }
 
