@@ -3,6 +3,7 @@
 import BarraDeProgresoMargenBruto from 'components/shared/dashboard/BarraDeProgresoMargenBruto';
 import CardNumerica from 'components/shared/dashboard/CardNumerica';
 import GraficoDeBarraMargenBruto from 'components/shared/dashboard/GraficoDeBarraMargenBruto';
+import GraficoDeBarraMargenBrutoTwo from 'components/shared/dashboard/GraficoDeBarraMargenBrutoTwo';
 import ProgresoCircular from 'components/shared/dashboard/ProgresoCircular';
 import Total from 'components/shared/dashboard/Total';
 import MySpinner from 'components/shared/loaders/MySpinner';
@@ -172,14 +173,13 @@ function DashboardMargenBruto() {
                               indexM,
                             ),
                           );
-                          percent += 
-                            calculatePercent(
-                              indexCountry,
-                              indexChannel,
-                              indexO,
-                              indexY,
-                              indexM,
-                            )
+                          percent += calculatePercent(
+                            indexCountry,
+                            indexChannel,
+                            indexO,
+                            indexY,
+                            indexM,
+                          );
 
                           if (!totPerMonth[indexM]) {
                             totPerMonth.push(0);
@@ -210,14 +210,13 @@ function DashboardMargenBruto() {
                               indexM,
                             ),
                           );
-                          percent +=
-                              calculatePercent(
-                                indexCountry,
-                                indexChannel,
-                                indexO,
-                                indexY,
-                                indexM,
-                              );
+                          percent += calculatePercent(
+                            indexCountry,
+                            indexChannel,
+                            indexO,
+                            indexY,
+                            indexM,
+                          );
                           if (!totPerMonth[indexM]) {
                             totPerMonth.push(0);
                           }
@@ -238,7 +237,7 @@ function DashboardMargenBruto() {
                         }
                       } else if (periodoSelected.month === 4) {
                         if (indexM < 3) {
-                          console.log("ACA")
+                          console.log('ACA');
                           tot += Math.round(
                             getMargenBrutoResult(
                               indexCountry,
@@ -248,15 +247,13 @@ function DashboardMargenBruto() {
                               indexM,
                             ),
                           );
-                          percent +=
-                            calculatePercent(
-                                indexCountry,
-                                indexChannel,
-                                indexO,
-                                indexY,
-                                indexM,
-                              )
-                            ;
+                          percent += calculatePercent(
+                            indexCountry,
+                            indexChannel,
+                            indexO,
+                            indexY,
+                            indexM,
+                          );
                           if (!totPerMonth[indexM]) {
                             totPerMonth.push(0);
                           }
@@ -286,14 +283,13 @@ function DashboardMargenBruto() {
                             ),
                           );
 
-                          percent +=
-                              calculatePercent(
-                                indexCountry,
-                                indexChannel,
-                                indexO,
-                                indexY,
-                                indexM,
-                              );
+                          percent += calculatePercent(
+                            indexCountry,
+                            indexChannel,
+                            indexO,
+                            indexY,
+                            indexM,
+                          );
                           if (!totPerMonth[indexM - 6]) {
                             totPerMonth.push(0);
                           }
@@ -323,14 +319,13 @@ function DashboardMargenBruto() {
                         ),
                       );
 
-                      percent +=                       
-                          calculatePercent(
-                            indexCountry,
-                            indexChannel,
-                            indexO,
-                            indexY,
-                            indexM,
-                          );
+                      percent += calculatePercent(
+                        indexCountry,
+                        indexChannel,
+                        indexO,
+                        indexY,
+                        indexM,
+                      );
                       if (!totPerMonth[indexM]) {
                         totPerMonth.push(0);
                       }
@@ -361,14 +356,13 @@ function DashboardMargenBruto() {
                       i,
                     ),
                   );
-                  percent +=
-                      calculatePercent(
-                        indexCountry,
-                        indexChannel,
-                        indexO,
-                        indexY,
-                        i,
-                      ) ;
+                  percent += calculatePercent(
+                    indexCountry,
+                    indexChannel,
+                    indexO,
+                    indexY,
+                    i,
+                  );
                   if (!totPerMonth[i]) {
                     totPerMonth.push(0);
                   }
@@ -398,24 +392,27 @@ function DashboardMargenBruto() {
           break;
         case 4:
           cantidadMeses = 3;
-        break;
+          break;
         case 6:
           cantidadMeses = 6;
-        break;
+          break;
         case 12:
           cantidadMeses = 6;
-        break;
+          break;
         case undefined:
           cantidadMeses = 12;
-        break;
-      
+          break;
+
         default:
           break;
       }
       if (infoForm) {
-        const cant = (Object.keys(infoForm).length + infoForm[Object.keys(infoForm)[0]].length + infoForm[Object.keys(infoForm)[0]][0].productos.length) *cantidadMeses
+        const cant =
+          (Object.keys(infoForm).length +
+            infoForm[Object.keys(infoForm)[0]].length +
+            infoForm[Object.keys(infoForm)[0]][0].productos.length) *
+          cantidadMeses;
         setPercentMArgen(Math.round(percent / cant));
-        
       }
     } else {
       selectYear({ value: 'año 1', label: 'Año 1', year: 0 });
@@ -445,13 +442,13 @@ function DashboardMargenBruto() {
       ) *
         100) /
       getVentasResult(indexCountry, indexCanal, indexP, indexYear, indexMes);
-      // console.log("PORECNTAJE",percent)
-      if (percent === -Infinity ) {
-        percent = -100
-      }
-      if (percent === Infinity ) {
-        percent = 100
-      }
+    // console.log("PORECNTAJE",percent)
+    if (percent === -Infinity) {
+      percent = -100;
+    }
+    if (percent === Infinity) {
+      percent = 100;
+    }
     return isNaN(percent) ? 0 : Math.round(percent);
   };
 
@@ -632,6 +629,35 @@ function DashboardMargenBruto() {
                     />
                   </div>
                 </div>
+
+                {infoForm && costoData && volumenData && precioData && (
+                  <div className=" mt-[40px]">
+                    <h5 className="cursor-default">
+                      Proyección Margen Bruto Nominal
+                    </h5>
+                    <div
+                      className={`flex ${
+                        media === 'mobile' ? 'flex-col' : ''
+                      } w-[100%] gap-[30px]  justify-between`}
+                    >
+                      <div
+                        className={`${
+                          media === 'mobile' ? 'w-[100%]' : 'w-[60%]'
+                        } `}
+                      >
+                        <GraficoDeBarraMargenBrutoTwo
+                          costoData={costoData}
+                          volumenData={volumenData}
+                          precioData={precioData}
+                          infoForm={infoForm}
+                          yearSelected={yearSelected}
+                          periodoSelected={periodoSelected}
+                          totPerMonth={totPerMonth}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div
                   className={`flex gap-[30px] mt-[50px] ${
