@@ -87,8 +87,7 @@ function TablePuestosPxQ(props) {
         // obtengo un array de 120 nrs
         const resultadoAcumulado = suma.reduce((acumulador, array) =>
           acumulador.map(
-            (valor, índice) =>
-              Math.round(valor) + Math.round(array[índice]),
+            (valor, índice) => Math.round(valor) + Math.round(array[índice]),
           ),
         );
         // obtengo 10 arrays de 12 num cda unos , osea uno por anio
@@ -243,8 +242,10 @@ function TablePuestosPxQ(props) {
   };
 
   const formatearNumero = (numero) => {
-    const nuevoNum = numero.toLocaleString('es-AR');
-    return nuevoNum;
+    if (numero) {
+      const nuevoNum = numero.toLocaleString('es-AR');
+      return nuevoNum;
+    }
   };
 
   const submitInfoForm = () => {
