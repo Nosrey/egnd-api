@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable react-hooks/exhaustive-deps */
 import BarraDeProgresoHeadcount from 'components/shared/dashboard/BarraDeProgresoHeadcount';
 import CardNumerica from 'components/shared/dashboard/CardNumerica';
@@ -245,7 +246,7 @@ function DashboardHeadcount() {
                 if (periodoSelected.month || periodoSelected.month === 0) {
                   if (periodoSelected.month === 0) {
                     if (indexM === 0) {
-                      tot += a.volMeses[MONTHS[indexM]] * d.total;
+                      tot += calculoTotals(a.volMeses[MONTHS[indexM]], d.total);
                       cantPers += a.volMeses[MONTHS[indexM]];
                       if (tots[indexM] || tots[indexM] === 0) {
                         tots[indexM] += a.volMeses[MONTHS[indexM]];
@@ -258,7 +259,7 @@ function DashboardHeadcount() {
                   }
                   if (periodoSelected.month === 4) {
                     if (indexM < 3) {
-                      tot += a.volMeses[MONTHS[indexM]] * d.total;
+                      tot += calculoTotals(a.volMeses[MONTHS[indexM]], d.total);
                       cantPers += a.volMeses[MONTHS[indexM]];
                       if (tots[indexM] || tots[indexM] === 0) {
                         tots[indexM] += a.volMeses[MONTHS[indexM]];
@@ -271,7 +272,7 @@ function DashboardHeadcount() {
                   }
                   if (periodoSelected.month === 6) {
                     if (indexM < 6) {
-                      tot += a.volMeses[MONTHS[indexM]] * d.total;
+                      tot += calculoTotals(a.volMeses[MONTHS[indexM]], d.total);
                       cantPers += a.volMeses[MONTHS[indexM]];
                       if (tots[indexM] || tots[indexM] === 0) {
                         tots[indexM] += a.volMeses[MONTHS[indexM]];
@@ -284,7 +285,7 @@ function DashboardHeadcount() {
                   }
                   if (periodoSelected.month === 12) {
                     if (indexM > 5) {
-                      tot += a.volMeses[MONTHS[indexM]] * d.total;
+                      tot += calculoTotals(a.volMeses[MONTHS[indexM]], d.total);
                       cantPers += a.volMeses[MONTHS[indexM]];
                       if (tots[indexM - 6] || tots[indexM - 6] === 0) {
                         tots[indexM - 6] += a.volMeses[MONTHS[indexM]];
@@ -296,7 +297,7 @@ function DashboardHeadcount() {
                     setTypeView(secondSem);
                   }
                 } else {
-                  tot += a.volMeses[MONTHS[indexM]] * d.total;
+                  tot += calculoTotals(a.volMeses[MONTHS[indexM]], d.total);
                   cantPers += a.volMeses[MONTHS[indexM]];
                   setTypeView(month);
                   if (tots[indexM] || tots[indexM] === 0) {
@@ -308,7 +309,7 @@ function DashboardHeadcount() {
                 }
               }
             } else if (!yearSelected.year) {
-              tot += a.volMeses[MONTHS[indexM]] * d.total;
+              tot += calculoTotals(a.volMeses[MONTHS[indexM]], d.total);
               cantPers += a.volMeses[MONTHS[indexM]];
               setTypeView(year);
               if (tots[indexY] || tots[indexY] === 0) {
@@ -322,10 +323,18 @@ function DashboardHeadcount() {
         });
       });
     });
-
     setTotal(tot);
     setCantPers(cantPers);
     setTotalsPers(tots);
+  };
+
+  const calculoTotals = (vol, tot) => {
+    let res;
+
+    res = Number(vol) * Number(tot);
+
+    if (isNaN(res)) return 0;
+    return res;
   };
 
   useEffect(() => {
@@ -366,7 +375,7 @@ function DashboardHeadcount() {
 
   return (
     <>
-    {showLoader ? (
+      {showLoader ? (
         <MySpinner />
       ) : (
         <>
@@ -405,7 +414,13 @@ function DashboardHeadcount() {
                 <div className="mt-[30px] mb-[30px] cursor-default">
                   <Total title="Monto Total" data={total} />
                 </div>
-                <div className={` ${media === "mobile" ? " flex flex-col gap-y-4" : "grid grid-cols-3 gap-[20px]"} mt-[20px]`}>
+                <div
+                  className={` ${
+                    media === 'mobile'
+                      ? ' flex flex-col gap-y-4'
+                      : 'grid grid-cols-3 gap-[20px]'
+                  } mt-[20px]`}
+                >
                   <CardNumerica
                     type="default"
                     title="Cantidad de Personal"
@@ -447,8 +462,18 @@ function DashboardHeadcount() {
                   </div>
                 )}
 
-                <div className={` ${media === "mobile" ? "flex flex-col" : "flex gap-[30px] mt-[100px]" }` }>
-                  <div className={` ${media === "mobile" ? "w-full" : "w-[30%] "} flex flex-col gap-[30px]` }>
+                <div
+                  className={` ${
+                    media === 'mobile'
+                      ? 'flex flex-col'
+                      : 'flex gap-[30px] mt-[100px]'
+                  }`}
+                >
+                  <div
+                    className={` ${
+                      media === 'mobile' ? 'w-full' : 'w-[30%] '
+                    } flex flex-col gap-[30px]`}
+                  >
                     <h5 className="cursor-default pl-[20px]">FTE</h5>
                     <CardNumerica
                       type="default"
@@ -459,7 +484,11 @@ function DashboardHeadcount() {
                   </div>
 
                   {dataHeadcount && (
-                    <div className={` ${media === "mobile" ? "w-full" : "w-[70%] " } flex flex-col gap-[30px] mt-[50px]` }>
+                    <div
+                      className={` ${
+                        media === 'mobile' ? 'w-full' : 'w-[70%] '
+                      } flex flex-col gap-[30px] mt-[50px]`}
+                    >
                       <h5 className="cursor-default">Evolución de Headcount</h5>
                       <GraficoDeBarraHeadcountThree
                         typeView={typeView}
@@ -476,13 +505,20 @@ function DashboardHeadcount() {
                     <h5 className="cursor-default pl-[20px]">
                       Evolución FTE por mes
                     </h5>
-                    <GraficoDeBarraHeadcountFour typeView={typeView} ftes={ftes} />
+                    <GraficoDeBarraHeadcountFour
+                      typeView={typeView}
+                      ftes={ftes}
+                    />
                   </div>
                 )}
 
                 <div className="flex gap-[30px] mt-[100px] mb-[50px]">
                   {dataHeadcount && (
-                    <div className={` ${media === "mobile" ? "w-full" : "w-[50%]"} flex flex-col gap-[30px]` }>
+                    <div
+                      className={` ${
+                        media === 'mobile' ? 'w-full' : 'w-[50%]'
+                      } flex flex-col gap-[30px]`}
+                    >
                       <h5>Gasto en personal por Centro de Costo</h5>
                       <BarraDeProgresoHeadcount
                         dataHeadcount={dataHeadcount}
@@ -496,9 +532,9 @@ function DashboardHeadcount() {
               </div>
             </div>
           </div>
-        </>)}
+        </>
+      )}
     </>
-    
   );
 }
 
