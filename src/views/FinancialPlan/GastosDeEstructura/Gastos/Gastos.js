@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { Button, Input, Alert } from 'components/ui';
 import { createGastosGeneral, getUser } from 'services/Requests';
 import { useSelector } from 'react-redux';
+import { useMedia } from 'utils/hooks/useMedia';
 
 function Gastos() {
+  const media = useMedia();
   const currentState = useSelector((state) => state.auth.user);
   const [showWarningEmpty, setShowWarningEmpty] = useState(false);
   const [showWarningLimit, setShowWarningLimit] = useState(false);
@@ -166,8 +168,12 @@ function Gastos() {
           <h6 className="cursor-default">Seleccione sus Centros de Costos</h6>
         </div>
         <form onSubmit={handleSubmit} className="p-8">
-          <div className="flex">
-            <div className="w-1/2 flex flex-col justify-center gap-y-2.5 pr-8">
+          <div className={`flex ${media === 'mobile' ? 'flex-col' : ' '}`}>
+            <div
+              className={`w-1/2 flex flex-col justify-center gap-y-2.5 pr-8 ${
+                media === 'mobile' ? 'w-[100%]' : ''
+              }`}
+            >
               {Object.keys(initialValues.centroDeGastos).map(
                 (checkbox, index) => (
                   <div className="flex items-center gap-x-2">
@@ -206,9 +212,15 @@ function Gastos() {
                 </Button>
               </div>
             </div>
-            <div className="w-1/2 pl-8">
+            <div
+              className={`w-1/2 pl-8 ${
+                media === 'mobile' ? 'w-[100%] pl-0 mt-8' : ''
+              }`}
+            >
               <div className="flex flex-col gap-y-3">
-                <span className="cursor-default">Incremento cargas sociales</span>
+                <span className="cursor-default">
+                  Incremento cargas sociales
+                </span>
                 <div className="w-[30%]">
                   <Input
                     type="number"
