@@ -20,6 +20,7 @@ const businessOptions = [
   { value: 'saas', label: 'SaaS' },
   { value: 'transaccional', label: 'Transaccional' },
   { value: 'producto', label: 'Producto' },
+  { value: 'servicio', label: 'Servicio' },
   { value: 'suscripcion', label: 'Suscripcion' },
 ];
 

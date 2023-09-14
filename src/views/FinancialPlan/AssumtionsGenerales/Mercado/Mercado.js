@@ -46,12 +46,21 @@ function Mercado() {
 
   const [valueForm, setValueForm] = useState({});
   const [isInitialValuesSet, setIsInitialValuesSet] = useState(false);
+  const [percentSam, setPercentSam] = useState()
+  const [percentSom, setPercentSom] = useState()
+  const [valorTam, setValorTam] = useState(0)
 
+  
   useEffect(() => {
     getUser(currentState)
       .then((data) => {
         if (data.mercadoData.length !== 0) {
           setValueForm(data.mercadoData[0]);
+          setValorTam(data.mercadoData[0].valorTam)
+          setPercentSam(Number(data.mercadoData[0].valorSam) * 100 / Number(data.mercadoData[0].valorTam));
+          setPercentSom(Number(data.mercadoData[0].valorSom) * 100 / Number(data.mercadoData[0].valorTam));
+
+      
           setIsInitialValuesSet(true);
         }
       })
@@ -62,6 +71,21 @@ function Mercado() {
 
   const removePunctuation = (value) => value?.replace(/[.,]/g, '');
 
+  const calculatePercent = (value, type) => {
+    if (valorTam !== 0 ) {
+      switch (type) {
+        case "sam":
+          setPercentSam(Number(value) * 100 / Number(valorTam))
+          break;
+        case "som":
+          setPercentSom(Number(value) * 100 / Number(valorTam))
+
+        break;
+        default:
+          break;
+      }
+    }
+  }
   return (
     <div>
       {showSuccessAlert && (
@@ -144,7 +168,7 @@ function Mercado() {
               
             }}
           >
-            {({ touched, errors, resetForm, values }) => (
+            {({ touched, errors, resetForm, values,setFieldValue }) => (
               <Form>
                 <FormContainer>
                   <div className={`flex ${media === "mobile" ?  "flex-col" : ""} gap-[16px]`}>
@@ -205,6 +229,14 @@ function Mercado() {
                               component={Input}
                               prefix={currency}
                               value={formatearNumero(values?.valorTam)}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                console.log("editanto tAM",newValue);
+                                setValorTam(newValue)
+                                setFieldValue('valorTam', newValue);
+                                
+
+                              }}
                             />
                           </FormItem>
                           <FormItem
@@ -224,7 +256,7 @@ function Mercado() {
                         </div>
                       </div>
                       <div>
-                        <span className="cursor-default">SAM</span>
+                        <span className="cursor-default">SAM</span> {valorTam !== 0 && <span className=' inline-block bg-[#f4f4f4] rounded-lg pt-[2px] pb-[2px] px-[8px] ml-[20px] text-[#5A8EC7] text-xs font-bold'>{Math.round(percentSam)}%</span>}
                         <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
                             className="w-[30%]"
@@ -239,6 +271,11 @@ function Mercado() {
                               component={Input}
                               prefix={currency}
                               value={formatearNumero(values?.valorSam)}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                calculatePercent(Number(removePunctuation(newValue)), "sam")
+                                setFieldValue('valorSam', newValue);
+                              }}
                             />
                           </FormItem>
                           <FormItem
@@ -257,7 +294,7 @@ function Mercado() {
                         </div>
                       </div>
                       <div>
-                        <span className="cursor-default">SOM</span>
+                        <span className="cursor-default">SOM</span> {valorTam !== 0 &&<span  className=' inline-block bg-[#f4f4f4] rounded-lg pt-[2px] pb-[2px] px-[8px] ml-[20px] text-[#5A8EC7] text-xs font-bold'>{Math.round(percentSom)}%</span>}
                         <div className="flex gap-[16px] mt-2.5 w-[100%]">
                           <FormItem
                             className="w-[30%]"
@@ -272,6 +309,11 @@ function Mercado() {
                               component={Input}
                               prefix={currency}
                               value={formatearNumero(values?.valorSom)}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                calculatePercent(Number(removePunctuation(newValue)), "som")
+                                setFieldValue('valorSom', newValue);
+                              }}
                             />
                           </FormItem>
                           <FormItem
