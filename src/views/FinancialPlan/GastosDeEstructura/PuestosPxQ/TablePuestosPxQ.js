@@ -119,28 +119,21 @@ function TablePuestosPxQ(props) {
     return calcs;
   };
 
-  const totHor = (volTotal, total, indexYear, incremento) => {
-    let res;
-    if (!volTotal || !total) {
-      res = 0;
-    }
-    if (indexYear === 0 || incremento === 0) {
-      res = volTotal * total;
-      res = res.toFixed(2);
-    } else {
-      const inicial = volTotal * total;
-      res = inicial + ((volTotal * total) / 100) * incremento;
-      res = res.toFixed(2);
+  const totHor = (cc, indexYear, head) => {
+    let sum = 0;
+
+    for (let j = 0; j < 12; j++) {
+      sum += addPercentYear(cc, j, indexYear, head);
     }
 
-    return res;
+    return sum;
   };
 
   const addPercentYear = (cc, indexMes, indexYear, head) => {
     let sum = 0;
 
-    sum =
-      Number(
+    if (indexYear === 0 || infoForm[cc].puestos[head].incremento === 0) {
+      sum = Number(
         calcPercent(
           infoForm[cc].puestos[head].total,
           infoForm[cc].puestos[head].incremento,
@@ -149,19 +142,26 @@ function TablePuestosPxQ(props) {
           cc,
           head,
         )[indexYear][indexMes],
-      ) +
-      Number(
-        (calcPercent(
-          infoForm[cc].puestos[head].total,
-          infoForm[cc].puestos[head].incremento,
-          indexMes,
-          indexYear,
-          cc,
-          head,
-        )[indexYear][indexMes] /
-          100) *
-          infoForm[cc].puestos[head].incremento,
       );
+
+      return sum;
+    }
+    let value = Number(
+      calcPercent(
+        infoForm[cc].puestos[head].total,
+        infoForm[cc].puestos[head].incremento,
+        indexMes,
+        0,
+        cc,
+        head,
+      )[0][indexMes],
+    );
+
+    for (let i = 0; i < indexYear; i++) {
+      sum =
+        value + Number((value / 100) * infoForm[cc].puestos[head].incremento);
+      value = sum;
+    }
 
     return sum;
   };
@@ -267,16 +267,12 @@ function TablePuestosPxQ(props) {
                                               title={
                                                 currency +
                                                 formatNumber(
-                                                  calcPercent(
-                                                    infoForm[cc].puestos[head]
-                                                      .total,
-                                                    infoForm[cc].puestos[head]
-                                                      .incremento,
+                                                  addPercentYear(
+                                                    cc,
                                                     indexMes,
                                                     indexYear,
-                                                    cc,
                                                     head,
-                                                  )[indexYear][indexMes],
+                                                  ),
                                                 )
                                               }
                                             >
@@ -285,31 +281,14 @@ function TablePuestosPxQ(props) {
                                                 type="text"
                                                 disabled
                                                 prefix={currency}
-                                                value={
-                                                  infoForm[cc].puestos[head]
-                                                    .incremento === 0 ||
-                                                  indexYear === 0
-                                                    ? formatearNumero(
-                                                        calcPercent(
-                                                          infoForm[cc].puestos[
-                                                            head
-                                                          ].total,
-                                                          infoForm[cc].puestos[
-                                                            head
-                                                          ].incremento,
-                                                          indexMes,
-                                                          indexYear,
-                                                          cc,
-                                                          head,
-                                                        )[indexYear][indexMes],
-                                                      )
-                                                    : addPercentYear(
-                                                        cc,
-                                                        indexMes,
-                                                        indexYear,
-                                                        head,
-                                                      )
-                                                }
+                                                value={formatearNumero(
+                                                  addPercentYear(
+                                                    cc,
+                                                    indexMes,
+                                                    indexYear,
+                                                    head,
+                                                  ),
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -323,12 +302,7 @@ function TablePuestosPxQ(props) {
                                         title={
                                           currency +
                                           formatearNumero(
-                                            totHor(
-                                              infoForm[cc].puestos[head].total,
-                                              infoForm[cc].puestos[head].años[
-                                                indexYear
-                                              ].volTotal,
-                                            ),
+                                            totHor(cc, indexYear, head),
                                           )
                                         }
                                       >
@@ -338,15 +312,7 @@ function TablePuestosPxQ(props) {
                                           disabled
                                           prefix={currency}
                                           value={formatearNumero(
-                                            totHor(
-                                              infoForm[cc].puestos[head].total,
-                                              infoForm[cc].puestos[head].años[
-                                                indexYear
-                                              ].volTotal,
-                                              indexYear,
-                                              infoForm[cc].puestos[head]
-                                                .incremento,
-                                            ),
+                                            totHor(cc, indexYear, head),
                                           )}
                                         />
                                       </Tooltip>
@@ -425,9 +391,8 @@ function TablePuestosPxQ(props) {
                                 placement="top-end"
                                 title={currency + formatearNumero(valor)}
                               >
-                                {currency}{" "}
+                                {currency}{' '}
                                 <ShortNumberNotation numero={valor} />
-
                               </Tooltip>
                             </p>
                           ))}
@@ -446,14 +411,15 @@ function TablePuestosPxQ(props) {
                             }
                           >
                             {index === 0 && currency}
-                            {index === 0 &&
-                              volTotal[indexYear] &&
-                              <ShortNumberNotation numero={volTotal[indexYear]?.values.reduce(
-                                (total, current) =>
-                                  Math.round(Number(total) + Number(current)),
-                                0,
-                              )} />
-                                        }
+                            {index === 0 && volTotal[indexYear] && (
+                              <ShortNumberNotation
+                                numero={volTotal[indexYear]?.values.reduce(
+                                  (total, current) =>
+                                    Math.round(Number(total) + Number(current)),
+                                  0,
+                                )}
+                              />
+                            )}
                           </Tooltip>
                         </p>
                       </div>
