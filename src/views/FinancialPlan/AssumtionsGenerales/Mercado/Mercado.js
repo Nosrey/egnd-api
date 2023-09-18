@@ -49,6 +49,8 @@ function Mercado() {
   const [percentSam, setPercentSam] = useState()
   const [percentSom, setPercentSom] = useState()
   const [valorTam, setValorTam] = useState(0)
+  const [valorSam, setValorSam] = useState(0)
+  const [valorSom, setValorSom] = useState(0)
 
   
   useEffect(() => {
@@ -57,6 +59,8 @@ function Mercado() {
         if (data.mercadoData.length !== 0) {
           setValueForm(data.mercadoData[0]);
           setValorTam(data.mercadoData[0].valorTam)
+          setValorSam(data.mercadoData[0].valorSam)
+          setValorSom(data.mercadoData[0].valorSom)
           setPercentSam(Number(data.mercadoData[0].valorSam) * 100 / Number(data.mercadoData[0].valorTam));
           setPercentSom(Number(data.mercadoData[0].valorSom) * 100 / Number(data.mercadoData[0].valorTam));
 
@@ -72,13 +76,24 @@ function Mercado() {
   const removePunctuation = (value) => value?.replace(/[.,]/g, '');
 
   const calculatePercent = (value, type) => {
+    if (typeof(value) === "string") {
+      value = Number(removePunctuation(value));
+    }
+    let tam
+    if (typeof(valorTam) === "string") {
+      tam = Number(removePunctuation(valorTam));
+    } else {
+      tam = valorTam;
+    }
     if (valorTam !== 0 ) {
+      let rdo = value * 100 / tam;
+      rdo = Number.isNaN(rdo) || rdo === Infinity ? 0 : rdo;
       switch (type) {
         case "sam":
-          setPercentSam(Number(value) * 100 / Number(valorTam))
+          setPercentSam(rdo)
           break;
         case "som":
-          setPercentSom(Number(value) * 100 / Number(valorTam))
+          setPercentSom(rdo)
 
         break;
         default:
@@ -86,6 +101,14 @@ function Mercado() {
       }
     }
   }
+
+  useEffect(() => {
+    if (valorTam) {
+      calculatePercent(valorSam, "sam");
+      calculatePercent(valorSom, "som");
+    }
+  }, [valorTam])
+  
   return (
     <div>
       {showSuccessAlert && (
@@ -231,11 +254,8 @@ function Mercado() {
                               value={formatearNumero(values?.valorTam)}
                               onChange={(e) => {
                                 const newValue = e.target.value;
-                                console.log("editanto tAM",newValue);
                                 setValorTam(newValue)
                                 setFieldValue('valorTam', newValue);
-                                
-
                               }}
                             />
                           </FormItem>
@@ -273,6 +293,7 @@ function Mercado() {
                               value={formatearNumero(values?.valorSam)}
                               onChange={(e) => {
                                 const newValue = e.target.value;
+                                setValorSam(newValue)
                                 calculatePercent(Number(removePunctuation(newValue)), "sam")
                                 setFieldValue('valorSam', newValue);
                               }}
@@ -311,6 +332,8 @@ function Mercado() {
                               value={formatearNumero(values?.valorSom)}
                               onChange={(e) => {
                                 const newValue = e.target.value;
+                                setValorSom(newValue)
+
                                 calculatePercent(Number(removePunctuation(newValue)), "som")
                                 setFieldValue('valorSom', newValue);
                               }}
