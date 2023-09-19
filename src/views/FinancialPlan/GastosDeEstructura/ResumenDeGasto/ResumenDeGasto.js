@@ -8,10 +8,10 @@ import { FormContainer,
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {  getUser } from 'services/Requests';
-import { Cuentas } from 'constants/cuentas.constant';
 import { AÑOS, MONTHS } from 'constants/forms.constants';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import MySpinner from 'components/shared/loaders/MySpinner';
 
 
 function ResumenDeGasto() {
@@ -20,6 +20,8 @@ function ResumenDeGasto() {
   const [visibleItems, setVisibleItems] = useState([0]);
   const currency = useSelector((state) => state.auth.user.currency);
   const [sumVerticales, setSumVerticales] = useState({});
+  const [showLoader, setShowLoader] = useState(true);
+
 
     // Logica para mostrar las SUMATORIAS VERTICALES , 
   const generateSumVertical = () => {
@@ -78,6 +80,7 @@ function ResumenDeGasto() {
         if (data?.gastosPorCCData.length !== 0) {
           setInfoForm(() => ({ ...data?.gastosPorCCData[0].centroDeCostos[0] }))
         } 
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -93,6 +96,10 @@ function ResumenDeGasto() {
   }
 
   return (
+    <>
+    {showLoader ?
+      <MySpinner/>
+  : (
     <div>
       <div className="border-b-2 mb-8 pb-1">
         <h4 className="cursor-default">Consolidado de Gasto</h4>
@@ -134,7 +141,7 @@ function ResumenDeGasto() {
                                 value={infoForm["Administración"].cuentas[head].name}
                               />
                             </FormItem>
-  
+
                             {infoForm["Administración"].cuentas[head].años.map(
                               (año, indexYear) => (
                                 <div className="flex flex-col" key={indexYear}>
@@ -153,7 +160,7 @@ function ResumenDeGasto() {
                                       </div>
                                     </div>
                                   )}
-  
+
                                   <div className="titleMonths gap-x-3 gap-y-1 mt-[18px] flex flex-col">
                                     {index === 0 && (
                                       <div className="titleMonths gap-x-3 flex">
@@ -163,7 +170,7 @@ function ResumenDeGasto() {
                                             (mes, indexMes) => (
                                               <p
                                                 key={indexMes}
-                                                className="month w-[90px] capitalize"
+                                                className="month w-[90px]  cursor-default capitalize"
                                               >
                                                 {
                                                   Object.keys(año.volMeses)[
@@ -173,7 +180,7 @@ function ResumenDeGasto() {
                                               </p>
                                             ),
                                           )}
-                                        <p className="month w-[90px]">Total</p>
+                                        <p className="month w-[90px]  cursor-default">Total</p>
                                       </div>
                                     )}
                                     <div className="flex gap-x-3 gap-y-3">
@@ -235,7 +242,7 @@ function ResumenDeGasto() {
                   {sumVerticales && sumVerticales.length !== 0 && (
                     <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
                       <div className="flex items-center">
-                        <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
+                        <p className=" text-[#707470] font-bold  cursor-default mb-3 text-left w-[500px] ">
                           Total
                         </p>
                       </div>
@@ -244,7 +251,7 @@ function ResumenDeGasto() {
                         <div
                           className="flex gap-x-3 w-fit pt-3 ml-[200px] "
                         >
-                           {AÑOS.map((año, indexYear) => (
+                          {AÑOS.map((año, indexYear) => (
                             <div className="flex flex-col" key={indexYear}>
                               
                                 <div className="titleRowR min-w-[62px]">
@@ -266,7 +273,7 @@ function ResumenDeGasto() {
                                   MONTHS.map((mes, indexMes) => (
                                     <p
                                       key={indexMes}
-                                      className="month w-[90px] capitalize"
+                                      className="month  cursor-default w-[90px] capitalize"
                                     >
                                       {mes}
                                     </p>
@@ -314,7 +321,9 @@ function ResumenDeGasto() {
         )}
       </div>
     </div>
-  );
+    
+    )
+  }
+    </>)
 }
-
 export default ResumenDeGasto;
