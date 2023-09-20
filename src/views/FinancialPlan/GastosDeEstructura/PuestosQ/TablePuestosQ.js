@@ -18,6 +18,7 @@ function TablePuestosQ(props) {
   const [head, setHeads] = useState(props.head);
   const [visibleItems, setVisibleItems] = useState([0]);
   const [volTotal, setVolTotal] = useState([]);
+  const [showPlaceholderPuestos, setShowPlaceholderPuestos] = useState(false);
 
   // Logica para mostrar las SUMATORIAS VERTICALES , se construye por pais un array de
   // productos donde tengo adentro de cada producto el atributo sum que es un array de las sumatorias
@@ -38,6 +39,10 @@ function TablePuestosQ(props) {
         { id: 8, values: [] },
         { id: 9, values: [] },
       ];
+
+      if (head.puestos.length === 0) {
+        setShowPlaceholderPuestos(true);
+      }
 
       for (let i = 0; i < head.puestos.length; i++) {
         for (let j = 0; j < head.puestos[i].años.length; j++) {
@@ -219,7 +224,10 @@ function TablePuestosQ(props) {
                               <div className="flex flex-col" key={indexYear}>
                                 {index === 0 && (
                                   <div className="titleRow min-w-[62px]">
-                                    <p className="cursor-default"> Año {año.año}</p>
+                                    <p className="cursor-default">
+                                      {' '}
+                                      Año {año.año}
+                                    </p>
                                     <div
                                       className="iconYear"
                                       onClick={() => hideYear(indexYear)}
@@ -316,7 +324,14 @@ function TablePuestosQ(props) {
             </FormContainer>
           </TabContent>
         ))}
-
+      {showPlaceholderPuestos && (
+        <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg">
+          <span className="text-center cursor-default">
+            Todavía no hay puestos creados para este Centro De Costos. Puede
+            crearlos haciendo click en Agregar Item.
+          </span>
+        </div>
+      )}
       <div className="flex gap-x-3 flex-end">
         <Button
           className="border mt-6b  mt-[40px]"

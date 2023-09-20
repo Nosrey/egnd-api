@@ -246,7 +246,7 @@ function TableCapexP(props) {
                         disabled
                         type="text"
                         name="name"
-                        value={formateoDescripcion(cta.descripcion)}
+                        value={cta.descripcion}
                       />
                     </FormItem>
                   </div>

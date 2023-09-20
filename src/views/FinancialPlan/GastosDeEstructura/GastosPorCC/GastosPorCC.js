@@ -5,6 +5,7 @@ import { Cuentas } from 'constants/cuentas.constant';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { Link } from 'react-router-dom';
 import { getUser } from 'services/Requests';
 import TableGastosPorCC from './TableGastosPorCC';
@@ -23,6 +24,8 @@ function GastosPorCC() {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [country, setCountry] = useState(defaultCountry);
+  const [showLoader, setShowLoader] = useState(true);
+
   const currentState = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -78,6 +81,7 @@ function GastosPorCC() {
           setCountry(def);
           setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
         }
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -94,6 +98,10 @@ function GastosPorCC() {
           {errorMessage}
         </Alert>
       )}
+      {showLoader ?
+            <MySpinner/>
+      : (
+      <>
       <div className="border-b-2 mb-8 pb-1">
         <h4 className="cursor-default">Proyección de Gastos por Centro de Costo</h4>
         <span className="cursor-default">Gastos de Estructura</span>
@@ -170,6 +178,8 @@ function GastosPorCC() {
           </div>
         )}
       </div>
+      </>
+      )}
     </div>
   );
 }
