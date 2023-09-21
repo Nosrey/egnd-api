@@ -131,6 +131,10 @@ function TablePuestosPxQ(props) {
 
   const addPercentYear = (cc, indexMes, indexYear, head) => {
     let sum = 0;
+    const q =
+      props.data[cc].puestos[head].años[indexYear].volMeses[MONTHS[indexMes]];
+
+    const tot = infoForm[cc].puestos[head].total;
 
     if (indexYear === 0 || infoForm[cc].puestos[head].incremento === 0) {
       sum = Number(
@@ -146,21 +150,15 @@ function TablePuestosPxQ(props) {
 
       return sum;
     }
-    let value = Number(
-      calcPercent(
-        infoForm[cc].puestos[head].total,
-        infoForm[cc].puestos[head].incremento,
-        indexMes,
-        0,
-        cc,
-        head,
-      )[0][indexMes],
-    );
+
+    let value2 =
+      tot !== 0
+        ? tot + Number((tot / 100) * infoForm[cc].puestos[head].incremento)
+        : 0;
 
     for (let i = 0; i < indexYear; i++) {
-      sum =
-        value + Number((value / 100) * infoForm[cc].puestos[head].incremento);
-      value = sum;
+      sum = value2 * Number(q);
+      value2 += Number((value2 / 100) * infoForm[cc].puestos[head].incremento);
     }
 
     return sum;

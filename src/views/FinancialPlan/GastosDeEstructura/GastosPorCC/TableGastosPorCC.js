@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import {
   Button,
   FormContainer,
@@ -323,14 +324,11 @@ function TablePuestosPxQ(props) {
                           : 'mt-[20px] w-[100px]'
                       }`}
                     >
-                      <Input
-                        type="text"
-                        name="precioInicial"
-                        disabled={index === 0}
-                        prefix={currency}
-                        value={formatearNumero(
+                      <Tooltip
+                        placement="top-end"
+                        title={`${currency} ${formatearNumero(
                           infoForm[head].cuentas[cta].precioInicial,
-                        )}
+                        )}`}
                         onChange={(e) =>
                           handleOnChangeInitialValue(
                             head,
@@ -341,7 +339,27 @@ function TablePuestosPxQ(props) {
                             null,
                           )
                         }
-                      />
+                      >
+                        <Input
+                          type="text"
+                          name="precioInicial"
+                          disabled={index === 0}
+                          prefix={currency}
+                          value={formatearNumero(
+                            infoForm[head].cuentas[cta].precioInicial,
+                          )}
+                          onChange={(e) =>
+                            handleOnChangeInitialValue(
+                              head,
+                              infoForm[head].cuentas[cta].id,
+                              e.target.value,
+                              'precioInicial',
+                              null,
+                              null,
+                            )
+                          }
+                        />
+                      </Tooltip>
                     </FormItem>
                   </div>
 
@@ -465,15 +483,15 @@ function TablePuestosPxQ(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={
+                                  title={`${currency} ${formatearNumero(
                                     index === 0
                                       ? volTotal[indexYear].values[indexMes]
                                       : infoForm[head].cuentas[cta].años[
                                           indexYear
                                         ].volMeses[
                                           Object.keys(año.volMeses)[indexMes]
-                                        ]
-                                  }
+                                        ],
+                                  )}`}
                                 >
                                   <Input
                                     className="w-[90px]"
@@ -520,8 +538,20 @@ function TablePuestosPxQ(props) {
                                   : infoForm[head].cuentas[cta].precioInicial
                                   ? año.volTotal
                                   : 0,
-                              )}
-                            />
+                              )}`}
+                            >
+                              <Input
+                                className="w-[90px]"
+                                type="text"
+                                disabled
+                                prefix={currency}
+                                value={formatearNumero(
+                                  infoForm[head].cuentas[cta].precioInicial
+                                    ? año.volTotal
+                                    : 0,
+                                )}
+                              />
+                            </Tooltip>
                           </FormItem>
                         </div>
                       </div>
@@ -578,6 +608,7 @@ function TablePuestosPxQ(props) {
                         sumVerticales[head].sum.length !== 0 &&
                         sumVerticales[head].sum[indexYear].map(
                           (valor, index) => (
+
                             <p className="w-[90px] text-center cursor-default">
                               {formatearNumero(
                                 Number(valor) +
@@ -587,12 +618,23 @@ function TablePuestosPxQ(props) {
                           ),
                         )}
                       <p className="w-[90px] text-center font-bold cursor-default">
-                        {formatearNumero(
-                          sumVerticales[head].sum[indexYear].reduce(
-                            (acumulador, numero) => acumulador + numero,
-                            0,
-                          ),
-                        )}
+                        <Tooltip
+                          placement="top-end"
+                          title={`${currency} ${formatearNumero(
+                            sumVerticales[head].sum[indexYear].reduce(
+                              (acumulador, numero) => acumulador + numero,
+                              0,
+                            ),
+                          )}`}
+                        >
+                          {currency}&nbsp;
+                          <ShortNumberNotation
+                            numero={sumVerticales[head].sum[indexYear].reduce(
+                              (acumulador, numero) => acumulador + numero,
+                              0,
+                            )}
+                          />
+                        </Tooltip>
                       </p>
                     </div>
                   </div>
