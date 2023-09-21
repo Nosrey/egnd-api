@@ -508,7 +508,13 @@ function TablePuestosPxQ(props) {
                               disabled
                               prefix={currency}
                               value={formatearNumero(
-                                infoForm[head].cuentas[cta].precioInicial
+                                index === 0
+                                  ? volTotal[indexYear].values.reduce(
+                                      (acumulador, numero) =>
+                                        Number(acumulador) + Number(numero),
+                                      0,
+                                    )
+                                  : infoForm[head].cuentas[cta].precioInicial
                                   ? año.volTotal
                                   : 0,
                               )}
@@ -570,7 +576,10 @@ function TablePuestosPxQ(props) {
                         sumVerticales[head].sum[indexYear].map(
                           (valor, index) => (
                             <p className="w-[90px] text-center cursor-default">
-                              {formatearNumero(valor)}
+                              {formatearNumero(
+                                Number(valor) +
+                                  Number(volTotal[indexYear].values[index]),
+                              )}
                             </p>
                           ),
                         )}
