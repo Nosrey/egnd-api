@@ -520,10 +520,19 @@ function TablePuestosPxQ(props) {
                               </FormItem>
                             ))}
                           <FormItem className="mb-0">
-                            <Tooltip
-                              placement="top-end"
-                              title={`${currency} ${formatearNumero(
-                                infoForm[head].cuentas[cta].precioInicial
+                            <Input
+                              className="w-[90px]"
+                              type="text"
+                              disabled
+                              prefix={currency}
+                              value={formatearNumero(
+                                index === 0
+                                  ? volTotal[indexYear].values.reduce(
+                                      (acumulador, numero) =>
+                                        Number(acumulador) + Number(numero),
+                                      0,
+                                    )
+                                  : infoForm[head].cuentas[cta].precioInicial
                                   ? año.volTotal
                                   : 0,
                               )}`}
@@ -596,15 +605,13 @@ function TablePuestosPxQ(props) {
                         sumVerticales[head].sum.length !== 0 &&
                         sumVerticales[head].sum[indexYear].map(
                           (valor, index) => (
-                            <Tooltip
-                              placement="top-end"
-                              title={`${currency} ${formatearNumero(valor)}`}
-                            >
-                              <p className="w-[90px] text-center cursor-default">
-                                {currency}&nbsp;
-                                <ShortNumberNotation numero={valor} />
-                              </p>
-                            </Tooltip>
+
+                            <p className="w-[90px] text-center cursor-default">
+                              {formatearNumero(
+                                Number(valor) +
+                                  Number(volTotal[indexYear].values[index]),
+                              )}
+                            </p>
                           ),
                         )}
                       <p className="w-[90px] text-center font-bold cursor-default">
