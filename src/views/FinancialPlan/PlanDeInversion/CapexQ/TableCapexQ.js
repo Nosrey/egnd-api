@@ -332,7 +332,7 @@ function TableCapexQ(props) {
       {props.data.length !== 0 && (
         <div className="bg-indigo-50 px-[25px] py-[30px] pb-[40px] w-fit rounded mt-[60px]">
           <div className="flex items-center">
-            <p className=" text-[#707470] font-bold mb-3 text-left w-[500px] ">
+            <p className=" text-[#707470] font-bold mb-3 cursor-default text-left w-[500px] ">
               Inversion neta (alta)
             </p>
           </div>
@@ -360,12 +360,12 @@ function TableCapexQ(props) {
                         MONTHS.map((mes, indexMes) => (
                           <p
                             key={indexMes}
-                            className="month w-[90px] capitalize"
+                            className="month cursor-default w-[90px] capitalize"
                           >
                             {mes}
                           </p>
                         ))}
-                      <p className="month w-[90px]">Total</p>
+                      <p className="month w-[90px] cursor-default">Total</p>
                     </div>
                     <div className="flex gap-x-3 gap-y-3">
                       {visibleItems.includes(indexYear) &&

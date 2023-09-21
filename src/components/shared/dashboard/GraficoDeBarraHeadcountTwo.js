@@ -12,6 +12,12 @@ function GraficoDeBarraHeadcountTwo({
   const currency = useSelector((state) => state.auth.user.currency);
   const [dataView, setDataView] = useState([]);
 
+  const calcTotal = (vol, tot) => {
+    if (!vol || !tot) return 0;
+
+    return vol * tot;
+  };
+
   useEffect(() => {
     let head = [];
     dataHeadcount.map((d, indexD) => {
@@ -29,63 +35,91 @@ function GraficoDeBarraHeadcountTwo({
                       if (periodoSelected.month === 0) {
                         if (indexM === 0) {
                           if (h.data[indexM] || h.data[indexM] === 0) {
-                            h.data[indexM] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           } else {
                             h.data.push(0);
-                            h.data[indexM] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           }
                         }
                       }
                       if (periodoSelected.month === 4) {
                         if (indexM < 4) {
                           if (h.data[indexM] || h.data[indexM] === 0) {
-                            h.data[indexM] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           } else {
                             h.data.push(0);
-                            h.data[indexM] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           }
                         }
                       }
                       if (periodoSelected.month === 6) {
                         if (indexM < 6) {
                           if (h.data[indexM] || h.data[indexM] === 0) {
-                            h.data[indexM] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           } else {
                             h.data.push(0);
-                            h.data[indexM] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           }
                         }
                       }
                       if (periodoSelected.month === 12) {
                         if (indexM > 5) {
                           if (h.data[indexM - 6] || h.data[indexM - 6] === 0) {
-                            h.data[indexM - 6] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM - 6] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           } else {
                             h.data.push(0);
-                            h.data[indexM - 6] +=
-                              a.volMeses[MONTHS[indexM]] * m.total;
+                            h.data[indexM - 6] += calcTotal(
+                              a.volMeses[MONTHS[indexM]],
+                              m.total,
+                            );
                           }
                         }
                       }
                     } else if (h.data[indexM] || h.data[indexM] === 0) {
-                      h.data[indexM] += a.volMeses[MONTHS[indexM]] * m.total;
+                      h.data[indexM] += calcTotal(
+                        a.volMeses[MONTHS[indexM]],
+                        m.total,
+                      );
                     } else {
                       h.data.push(0);
-                      h.data[indexM] += a.volMeses[MONTHS[indexM]] * m.total;
+                      h.data[indexM] += calcTotal(
+                        a.volMeses[MONTHS[indexM]],
+                        m.total,
+                      );
                     }
                   }
                 } else if (h.data[indexY] || h.data[indexY] === 0) {
-                  h.data[indexY] += a.volMeses[MONTHS[indexM]] * m.total;
+                  h.data[indexY] += calcTotal(
+                    a.volMeses[MONTHS[indexM]],
+                    m.total,
+                  );
                 } else {
                   h.data.push(0);
-                  h.data[indexY] += a.volMeses[MONTHS[indexM]] * m.total;
+                  h.data[indexY] += calcTotal(
+                    a.volMeses[MONTHS[indexM]],
+                    m.total,
+                  );
                 }
               });
             });

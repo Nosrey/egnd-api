@@ -284,7 +284,7 @@ function GraficoDeBarraMargenBrutoTwo({
 
   const data = [
     {
-      name: 'Cantidad de RRHH',
+      name: 'Revenue promedio',
       data: dataView,
     },
   ];

@@ -6,6 +6,7 @@ import { AÑOS2, AÑOS3 } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createCapexP, createCapexQ, getUser } from 'services/Requests';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { v4 as uuid } from 'uuid';
 import TableCapexQ from './TableCapexQ';
 
@@ -16,6 +17,7 @@ function CapexQ() {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const currentState = useSelector((state) => state.auth.user);
+  const [showLoader, setShowLoader] = useState(true);
 
   const addBien = (newBien) => {
     if (bienes.length === 15) {
@@ -125,6 +127,7 @@ function CapexQ() {
             años: [...AÑOS2],
           });
         }
+        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -145,34 +148,39 @@ function CapexQ() {
         <h4 className="cursor-default">Estimación de volumen de Inversiones</h4>
         <span className="cursor-default">Inversiones</span>
       </div>
+      
+    {showLoader ?
+      <MySpinner/>
+      : (
+        <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+          <div className="border-b-2 px-4 py-1">
+            <h6 className="cursor-default">Cantidad de Bienes</h6>
+          </div>
 
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-        <div className="border-b-2 px-4 py-1">
-          <h6 className="cursor-default">Cantidad de Bienes</h6>
+          <Tabs>
+            {bienes.length !== 0 && (
+              <div className="container-countries">
+                <FormContainer className="cont-countries">
+                  <ContainerScrollable
+                    contenido={
+                      <TableCapexQ
+                        data={bienes}
+                        addBien={addBien}
+                        setBienes={setBienes}
+                        submit={submit}
+                        showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
+                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                        errorMessage={(error) => setErrorMessage(error)}
+                      />
+                    }
+                  />
+                </FormContainer>
+              </div>
+            )}
+          </Tabs>
         </div>
-
-        <Tabs>
-          {bienes.length !== 0 && (
-            <div className="container-countries">
-              <FormContainer className="cont-countries">
-                <ContainerScrollable
-                  contenido={
-                    <TableCapexQ
-                      data={bienes}
-                      addBien={addBien}
-                      setBienes={setBienes}
-                      submit={submit}
-                      showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
-                      showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                      errorMessage={(error) => setErrorMessage(error)}
-                    />
-                  }
-                />
-              </FormContainer>
-            </div>
-          )}
-        </Tabs>
-      </div>
+      )}
+    
     </div>
   );
 }

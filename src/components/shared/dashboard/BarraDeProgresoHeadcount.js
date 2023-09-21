@@ -11,6 +11,13 @@ function BarraDeProgresoHeadcount({
   periodoSelected,
 }) {
   const [dataView, setDataView] = useState([]);
+
+  const calcTotal = (vol, tot) => {
+    if (!vol || !tot) return 0;
+
+    return vol * tot;
+  };
+
   useEffect(() => {
     let head = [];
     dataHeadcount.map((d, indexD) => {
@@ -27,30 +34,42 @@ function BarraDeProgresoHeadcount({
                     if (periodoSelected.month || periodoSelected.month === 0) {
                       if (periodoSelected.month === 0) {
                         if (indexM === 0) {
-                          h.total += a.volMeses[MONTHS[indexM]] * m.total;
+                          h.total += calcTotal(
+                            a.volMeses[MONTHS[indexM]],
+                            m.total,
+                          );
                         }
                       }
                       if (periodoSelected.month === 4) {
                         if (indexM < 3) {
-                          h.total += a.volMeses[MONTHS[indexM]] * m.total;
+                          h.total += calcTotal(
+                            a.volMeses[MONTHS[indexM]],
+                            m.total,
+                          );
                         }
                       }
                       if (periodoSelected.month === 6) {
                         if (indexM < 6) {
-                          h.total += a.volMeses[MONTHS[indexM]] * m.total;
+                          h.total += calcTotal(
+                            a.volMeses[MONTHS[indexM]],
+                            m.total,
+                          );
                         }
                       }
                       if (periodoSelected.month === 12) {
                         if (indexM > 5) {
-                          h.total += a.volMeses[MONTHS[indexM]] * m.total;
+                          h.total += calcTotal(
+                            a.volMeses[MONTHS[indexM]],
+                            m.total,
+                          );
                         }
                       }
                     } else {
-                      h.total += a.volMeses[MONTHS[indexM]] * m.total;
+                      h.total += calcTotal(a.volMeses[MONTHS[indexM]], m.total);
                     }
                   }
                 } else {
-                  h.total += a.volMeses[MONTHS[indexM]] * m.total;
+                  h.total += calcTotal(a.volMeses[MONTHS[indexM]], m.total);
                 }
               });
             });
