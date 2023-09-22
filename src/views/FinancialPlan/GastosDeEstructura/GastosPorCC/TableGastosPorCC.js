@@ -66,7 +66,19 @@ function TablePuestosPxQ(props) {
     }
   };
 
-  const calcFirstCenter = () => {};
+  const calcFirstCenter = () => {
+    Object.values(infoForm[head].cuentas).map((cta, index) => {
+      if (index === 0) {
+        cta.años.map((año, indexYear) => {
+          MONTHS.map((mes, indexMes) => {
+            año.volMeses[mes] = Number(volTotal[indexYear].values[indexMes]);
+          });
+        });
+      }
+    });
+
+    console.log('info', infoForm);
+  };
 
   // Logica para mostrar las SUMATORIAS VERTICALES ,
   const generateSumVertical = () => {
@@ -111,6 +123,7 @@ function TablePuestosPxQ(props) {
   useEffect(() => {
     if (infoForm && props.head) {
       initialConfig();
+      calcFirstCenter();
       console.log('vt', volTotal);
       setHeads(props.head);
       generateSumVertical();
@@ -328,9 +341,11 @@ function TablePuestosPxQ(props) {
                         name="precioInicial"
                         disabled={index === 0}
                         prefix={currency}
-                        value={formatearNumero(
-                          infoForm[head].cuentas[cta].precioInicial,
-                        )}
+                        value={
+                          formatearNumero(
+                            infoForm[head].cuentas[cta].precioInicial,
+                          ) || 0
+                        }
                         onChange={(e) =>
                           handleOnChangeInitialValue(
                             head,
@@ -466,28 +481,23 @@ function TablePuestosPxQ(props) {
                                 <Tooltip
                                   placement="top-end"
                                   title={
-                                    index === 0
-                                      ? volTotal[indexYear].values[indexMes]
-                                      : infoForm[head].cuentas[cta].años[
-                                          indexYear
-                                        ].volMeses[
-                                          Object.keys(año.volMeses)[indexMes]
-                                        ]
+                                    infoForm[head].cuentas[cta].años[indexYear]
+                                      .volMeses[
+                                      Object.keys(año.volMeses)[indexMes]
+                                    ]
                                   }
                                 >
                                   <Input
                                     className="w-[90px]"
                                     type="text"
                                     disabled={index === 0}
-                                    value={formatearNumero(
-                                      index === 0
-                                        ? volTotal[indexYear].values[indexMes]
-                                        : infoForm[head].cuentas[cta].años[
-                                            indexYear
-                                          ].volMeses[
-                                            Object.keys(año.volMeses)[indexMes]
-                                          ],
-                                    )}
+                                    value={
+                                      infoForm[head].cuentas[cta].años[
+                                        indexYear
+                                      ].volMeses[
+                                        Object.keys(año.volMeses)[indexMes]
+                                      ]
+                                    }
                                     name="month"
                                     prefix={currency}
                                     onChange={(e) => {
@@ -510,17 +520,16 @@ function TablePuestosPxQ(props) {
                               type="text"
                               disabled
                               prefix={currency}
-                              value={formatearNumero(
+                              value={
                                 index === 0
                                   ? volTotal[indexYear].values.reduce(
                                       (acumulador, numero) =>
                                         Number(acumulador) + Number(numero),
                                       0,
                                     )
-                                  : infoForm[head].cuentas[cta].precioInicial
-                                  ? año.volTotal
-                                  : 0,
-                              )}
+                                  : infoForm[head].cuentas[cta].precioInicial &&
+                                    año.volTotal
+                              }
                             />
                           </FormItem>
                         </div>
@@ -579,10 +588,7 @@ function TablePuestosPxQ(props) {
                         sumVerticales[head].sum[indexYear].map(
                           (valor, index) => (
                             <p className="w-[90px] text-center cursor-default">
-                              {formatearNumero(
-                                Number(valor) +
-                                  Number(volTotal[indexYear].values[index]),
-                              )}
+                              {formatearNumero(valor)}
                             </p>
                           ),
                         )}
