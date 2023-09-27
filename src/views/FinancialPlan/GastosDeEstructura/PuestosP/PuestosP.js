@@ -92,7 +92,7 @@ function PuestosP() {
               data?.puestosPData[0].puestosp[0][p].visible &&
               data?.puestosPData[0].puestosp[0][p],
           );
-        } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
+        } else if (data?.gastosGeneralData[0] &&  data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
           } else {
@@ -105,7 +105,7 @@ function PuestosP() {
             (p) => data?.gastosGeneralData[0].centroDeGastos[p],
           );
         }
-        setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
+        setCargaSocial(data?.gastosGeneralData[0] ? data?.gastosGeneralData[0].cargasSociales : 0);
         setDefaultCountry(def);
         setCountry(def);
         setShowLoader(false);
