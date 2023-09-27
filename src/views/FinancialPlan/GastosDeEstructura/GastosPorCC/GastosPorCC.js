@@ -1,11 +1,11 @@
 /* eslint-disable no-lonely-if */
 import ContainerScrollable from 'components/shared/ContainerScrollable';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { Alert, FormContainer, Tabs } from 'components/ui';
 import { Cuentas } from 'constants/cuentas.constant';
 import { AÑOS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import MySpinner from 'components/shared/loaders/MySpinner';
 import { Link } from 'react-router-dom';
 import { getUser } from 'services/Requests';
 import TableGastosPorCC from './TableGastosPorCC';
@@ -36,7 +36,7 @@ function GastosPorCC() {
         for (let i = 0; i < Cuentas.length; i++) {
           let head = {};
           head.id = i;
-          head['años'] = [...AÑOS];
+          head['años'] = JSON.parse(JSON.stringify(AÑOS));
           head.name = Cuentas[i];
           head.precioInicial = 0;
           head.tasa = 0;
@@ -44,9 +44,9 @@ function GastosPorCC() {
           heads.push(head);
           let h = {};
           h.visible = puestosQ[cc];
-          h.cuentas = [...heads];
+          h.cuentas = JSON.parse(JSON.stringify(heads));
 
-          estructura[cc] = { ...h };
+          estructura[cc] = JSON.parse(JSON.stringify(h));
         }
       });
       setInfoForm(() => ({ ...estructura }));
@@ -98,87 +98,91 @@ function GastosPorCC() {
           {errorMessage}
         </Alert>
       )}
-      {showLoader ?
-            <MySpinner/>
-      : (
-      <>
-      <div className="border-b-2 mb-8 pb-1">
-        <h4 className="cursor-default">Proyección de Gastos por Centro de Costo</h4>
-        <span className="cursor-default">Gastos de Estructura</span>
-      </div>
+      {showLoader ? (
+        <MySpinner />
+      ) : (
+        <>
+          <div className="border-b-2 mb-8 pb-1">
+            <h4 className="cursor-default">
+              Proyección de Gastos por Centro de Costo
+            </h4>
+            <span className="cursor-default">Gastos de Estructura</span>
+          </div>
 
-      <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
-        <div className="border-b-2 px-4 py-1">
-          <h6 className="cursor-default">Centros de costo</h6>
-        </div>
-        {infoForm && viewP ? (
-          <Tabs defaultValue={country}>
-            <TabList>
-              {puestosQ &&
-                Object.keys(infoForm).map(
-                  (cc, index) =>
-                    infoForm[cc].visible && (
-                      <TabNav key={index} value={cc}>
-                        <div
-                          className="capitalize"
-                          onClick={() => setCountry(cc)}
-                        >
-                          {cc}
-                        </div>
-                      </TabNav>
-                    ),
-                )}
-            </TabList>
-            {infoForm && (
-              <div className="container-countries">
-                <FormContainer className="cont-countries">
-                  <ContainerScrollable
-                    contenido={
-                      <TableGastosPorCC
-                        data={infoForm}
-                        puestosP={puestosP}
-                        showAlertSuces={(boolean) =>
-                          setShowSuccessAlert(boolean)
+          <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
+            <div className="border-b-2 px-4 py-1">
+              <h6 className="cursor-default">Centros de costo</h6>
+            </div>
+            {infoForm && viewP ? (
+              <Tabs defaultValue={country}>
+                <TabList>
+                  {puestosQ &&
+                    Object.keys(infoForm).map(
+                      (cc, index) =>
+                        infoForm[cc].visible && (
+                          <TabNav key={index} value={cc}>
+                            <div
+                              className="capitalize"
+                              onClick={() => setCountry(cc)}
+                            >
+                              {cc}
+                            </div>
+                          </TabNav>
+                        ),
+                    )}
+                </TabList>
+                {infoForm && (
+                  <div className="container-countries">
+                    <FormContainer className="cont-countries">
+                      <ContainerScrollable
+                        contenido={
+                          <TableGastosPorCC
+                            data={infoForm}
+                            puestosP={puestosP}
+                            showAlertSuces={(boolean) =>
+                              setShowSuccessAlert(boolean)
+                            }
+                            showAlertError={(boolean) =>
+                              setShowErrorAlert(boolean)
+                            }
+                            errorMessage={(error) => setErrorMessage(error)}
+                            head={country}
+                            cargaSocial={cargaSocial}
+                          />
                         }
-                        showAlertError={(boolean) => setShowErrorAlert(boolean)}
-                        errorMessage={(error) => setErrorMessage(error)}
-                        head={country}
-                        cargaSocial={cargaSocial}
                       />
-                    }
-                  />
-                </FormContainer>
+                    </FormContainer>
+                  </div>
+                )}
+              </Tabs>
+            ) : !viewP ? (
+              <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                <span className="cursor-default">
+                  Para acceder a este formulario primero debe completar el
+                  formulario{' '}
+                  <Link className="text-indigo-700 underline" to="/salarios">
+                    Salarios
+                  </Link>{' '}
+                  .
+                </span>
+              </div>
+            ) : (
+              <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
+                <span className="cursor-default">
+                  Para acceder a este formulario primero debe completar el
+                  formulario{' '}
+                  <Link
+                    className="text-indigo-700 underline"
+                    to="/supuestos-gastos"
+                  >
+                    Supuesto de Gasto de Estructura
+                  </Link>{' '}
+                  .
+                </span>
               </div>
             )}
-          </Tabs>
-        ) : !viewP ? (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span className="cursor-default">
-              Para acceder a este formulario primero debe completar el
-              formulario{' '}
-              <Link className="text-indigo-700 underline" to="/salarios">
-                Salarios
-              </Link>{' '}
-              .
-            </span>
           </div>
-        ) : (
-          <div className="py-[25px] bg-[#F6F6F5] flex justify-center rounded-lg mb-[30px]  mt-[30px] ml-[30px] mr-[30px]">
-            <span className="cursor-default">
-              Para acceder a este formulario primero debe completar el
-              formulario{' '}
-              <Link
-                className="text-indigo-700 underline"
-                to="/supuestos-gastos"
-              >
-                Supuesto de Gasto de Estructura
-              </Link>{' '}
-              .
-            </span>
-          </div>
-        )}
-      </div>
-      </>
+        </>
       )}
     </div>
   );
