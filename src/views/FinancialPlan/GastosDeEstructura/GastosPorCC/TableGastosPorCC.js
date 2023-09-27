@@ -62,22 +62,18 @@ function TablePuestosPxQ(props) {
           }
         }
       }
-      setVolTotal([...arrayvalores]);
+      setVolTotal(arrayvalores);
     }
   };
 
   const calcFirstCenter = () => {
-    Object.values(infoForm[head].cuentas).map((cta, index) => {
-      if (index === 0) {
-        cta.años.map((año, indexYear) => {
-          MONTHS.map((mes, indexMes) => {
-            año.volMeses[mes] = Number(volTotal[indexYear].values[indexMes]);
-          });
-        });
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 12; j++) {
+        infoForm[head].cuentas[0].años[i].volMeses[MONTHS[j]] = Number(
+          volTotal[i].values[j],
+        );
       }
-    });
-
-    console.log('info', infoForm);
+    }
   };
 
   // Logica para mostrar las SUMATORIAS VERTICALES ,
@@ -124,11 +120,10 @@ function TablePuestosPxQ(props) {
     if (infoForm && props.head) {
       initialConfig();
       calcFirstCenter();
-      console.log('vt', volTotal);
       setHeads(props.head);
       generateSumVertical();
     }
-  }, [infoForm]);
+  }, [infoForm, head]);
 
   useEffect(() => {
     initialConfig();

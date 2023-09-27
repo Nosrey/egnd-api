@@ -20,6 +20,7 @@ function ResumenDeGasto() {
   const [sumVerticales, setSumVerticales] = useState({});
   const [showLoader, setShowLoader] = useState(true);
   const [info, setInfo] = useState(null);
+  const [cuentasSum, setCuentasSum] = useState();
 
   // Logica para mostrar las SUMATORIAS VERTICALES ,
   const generateSumVertical = () => {
@@ -64,6 +65,8 @@ function ResumenDeGasto() {
   useEffect(() => {
     if (infoForm) {
       generateSumVertical();
+      createStructureToSum();
+      applySumByAccount();
     }
   }, [infoForm]);
 
@@ -130,6 +133,38 @@ function ResumenDeGasto() {
       );
     }
     return sum;
+  };
+
+  const createStructureToSum = () => {
+    let cuentas = [];
+    Object.values(infoForm).forEach((i, index) => {
+      i.cuentas.forEach((c, indexC) => {
+        if (index === 0) {
+          let head = {};
+          head.id = indexC;
+          head.name = c.name;
+          head['años'] = [...AÑOS];
+          cuentas.push(head);
+        }
+      });
+    });
+    applySumByAccount(cuentas);
+  };
+
+  const applySumByAccount = (cuentas) => {
+    if (cuentas) {
+      Object.values(infoForm).forEach((i, index) => {
+        i.cuentas.forEach((c, indexC) => {
+          c.años.forEach((year, indexYear) => {
+            MONTHS.forEach((month, indexMonth) => {
+              cuentas[indexC].años[indexYear].volMeses[month] += Number(
+                c.años[indexYear].volMeses[month],
+              );
+            });
+          });
+        });
+      });
+    }
   };
 
   return (
