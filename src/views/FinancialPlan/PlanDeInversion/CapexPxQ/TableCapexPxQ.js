@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import { FormContainer, FormItem, Input, Tooltip } from 'components/ui';
 import { AÑOS, MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
@@ -87,7 +88,6 @@ function TableCapexPxQ(props) {
     const nuevoNum = inputNumero.toLocaleString('es-AR');
     return nuevoNum;
   };
-
 
   const totals = calcTotals();
 
@@ -191,16 +191,16 @@ function TableCapexPxQ(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={`$${
+                                  title={`${currency} ${formatearNumero(
                                     cta.años[indexYear].volMeses[
                                       Object.keys(año.volMeses)[indexMes]
                                     ] *
-                                    (Number(
-                                      capexQ[index].años[indexYear].volMeses[
-                                        Object.keys(año.volMeses)[indexMes]
-                                      ],
-                                    ) || 0)
-                                  }`}
+                                      (Number(
+                                        capexQ[index].años[indexYear].volMeses[
+                                          Object.keys(año.volMeses)[indexMes]
+                                        ],
+                                      ) || 0),
+                                  )}`}
                                 >
                                   <Input
                                     className="w-[90px]"
@@ -224,16 +224,22 @@ function TableCapexPxQ(props) {
                               </FormItem>
                             ))}
                           <FormItem className="mb-0">
-                            <Input
-                              className="w-[90px]"
-                              type="text"
-                              value={formatearNumero(
+                            <Tooltip
+                              placement="top-end"
+                              title={`${currency} ${formatearNumero(
                                 cta.años[indexYear].volTotal,
-                              )}
-
-                              disabled
-                              prefix={currency}
-                            />
+                              )}`}
+                            >
+                              <Input
+                                className="w-[90px]"
+                                type="text"
+                                value={formatearNumero(
+                                  cta.años[indexYear].volTotal,
+                                )}
+                                disabled
+                                prefix={currency}
+                              />
+                            </Tooltip>
                           </FormItem>
                         </div>
                       </div>
@@ -289,23 +295,41 @@ function TableCapexPxQ(props) {
                         año &&
                         props.capexP.length !== 0 &&
                         MONTHS.map((valor, index) => (
-                          <p className="w-[90px] text-center cursor-default">
-                            {currency}
-                            {formatearNumero(totals[indexYear][index])}
-                          </p>
+                          <Tooltip
+                            placement="top-end"
+                            title={`${currency} ${formatearNumero(
+                              totals[indexYear][index],
+                            )}`}
+                          >
+                            <p className="w-[90px] text-center cursor-default">
+                              {currency}&nbsp;
+                              <ShortNumberNotation
+                                numero={totals[indexYear][index]}
+                              />
+                            </p>
+                          </Tooltip>
                         ))}
-                      <p className="w-[90px] text-center font-bold cursor-default">
-                        {/* {currency} */}
 
-                        {indexYear === 0 && currency}
-
-                        {formatearNumero(
+                      <Tooltip
+                        placement="top-end"
+                        title={`${currency} ${formatearNumero(
                           totals[indexYear].reduce(
                             (acumulador, numero) => acumulador + numero,
                             0,
                           ),
-                        )}
-                      </p>
+                        )}`}
+                      >
+                        <p className="w-[90px] text-center font-bold cursor-default">
+                          {/* {currency} */}
+                          {indexYear === 0 && currency}&nbsp;
+                          <ShortNumberNotation
+                            numero={totals[indexYear].reduce(
+                              (acumulador, numero) => acumulador + numero,
+                              0,
+                            )}
+                          />
+                        </p>
+                      </Tooltip>
                     </div>
                   </div>
                 ))}
