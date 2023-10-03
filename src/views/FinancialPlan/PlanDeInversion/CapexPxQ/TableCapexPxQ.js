@@ -338,8 +338,19 @@ function TableCapexPxQ(props) {
           </div>
 
           <p className=" pl-[45px] text-[#707470]  mb-3 text-left w-[500px] ">
-            TOTAL: {currency}
-            {formatearNumero(tot)}
+            TOTAL: 
+            
+            <Tooltip
+                        placement="top-end"
+                        title={`${currency} ${formatearNumero(tot)}`}
+                      >
+                        <p className="w-[90px] text-center font-bold cursor-default">
+                        {currency}{" "}
+                          <ShortNumberNotation
+                            numero={tot}
+                          />
+                        </p>
+                      </Tooltip>
           </p>
         </div>
       )}
