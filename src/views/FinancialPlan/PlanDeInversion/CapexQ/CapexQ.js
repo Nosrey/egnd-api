@@ -80,23 +80,22 @@ function CapexQ() {
       let idUser = localStorage.getItem('userId');
       const info = { info: bienes, idUser };
 
-      createCapexQ(info)
-        .then((resp) => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          if (resp.success) {
-            setShowSuccessAlert(true);
-            setTimeout(() => {
-              setShowSuccessAlert(false);
-            }, 5000);
-            validateData(info.info);
-          } else {
-            setErrorMessage('Ha ocurrido un error');
-            setShowErrorAlert(true);
-            setTimeout(() => {
-              setShowErrorAlert(false);
-            }, 5000);
-          }
-        })
+      createCapexQ(info).then((resp) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (resp.success) {
+          setShowSuccessAlert(true);
+          setTimeout(() => {
+            setShowSuccessAlert(false);
+          }, 5000);
+          validateData(info.info);
+        } else {
+          setErrorMessage('Ha ocurrido un error');
+          setShowErrorAlert(true);
+          setTimeout(() => {
+            setShowErrorAlert(false);
+          }, 5000);
+        }
+      });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setErrorMessage('Completa los campos vacios');
@@ -148,10 +147,10 @@ function CapexQ() {
         <h4 className="cursor-default">Estimación de volumen de Inversiones</h4>
         <span className="cursor-default">Inversiones</span>
       </div>
-      
-    {showLoader ?
-      <MySpinner/>
-      : (
+
+      {showLoader ? (
+        <MySpinner />
+      ) : (
         <div className="border-solid border-2 border-#e5e7eb rounded-lg relative">
           <div className="border-b-2 px-4 py-1">
             <h6 className="cursor-default">Cantidad de Bienes</h6>
@@ -168,7 +167,9 @@ function CapexQ() {
                         addBien={addBien}
                         setBienes={setBienes}
                         submit={submit}
-                        showAlertSuces={(boolean) => setShowSuccessAlert(boolean)}
+                        showAlertSuces={(boolean) =>
+                          setShowSuccessAlert(boolean)
+                        }
                         showAlertError={(boolean) => setShowErrorAlert(boolean)}
                         errorMessage={(error) => setErrorMessage(error)}
                       />
@@ -180,7 +181,6 @@ function CapexQ() {
           </Tabs>
         </div>
       )}
-    
     </div>
   );
 }
