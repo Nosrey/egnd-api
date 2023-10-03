@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import {
   Button,
   FormContainer,
@@ -237,7 +238,18 @@ function TableCapexQ(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={`${mes} - año ${indexYear + 1}`}
+                                  title={formatearNumero(
+                                    cta.años[indexYear].volMeses[mes],
+                                  )}
+                                  name="month"
+                                  onChange={(e) => {
+                                    handleChangeValues(
+                                      cta.id,
+                                      e,
+                                      indexYear,
+                                      mes,
+                                    );
+                                  }}
                                 >
                                   <Input
                                     className="w-[90px]"
@@ -259,14 +271,21 @@ function TableCapexQ(props) {
                               </FormItem>
                             ))}
                           <FormItem className="mb-0">
-                            <Input
-                              className="w-[90px]"
-                              type="text"
-                              value={formatearNumero(
+                            <Tooltip
+                              placement="top-end"
+                              title={formatearNumero(
                                 cta.años[indexYear].volTotal,
                               )}
-                              disabled
-                            />
+                            >
+                              <Input
+                                className="w-[90px]"
+                                type="text"
+                                value={formatearNumero(
+                                  cta.años[indexYear].volTotal,
+                                )}
+                                disabled
+                              />
+                            </Tooltip>
                           </FormItem>
                         </div>
                       </div>
@@ -372,18 +391,35 @@ function TableCapexQ(props) {
                         año &&
                         props.data.length !== 0 &&
                         MONTHS.map((valor, index) => (
-                          <p className="w-[90px] text-center cursor-default">
-                            {formatearNumero(totals[indexYear][index])}
-                          </p>
+                          <Tooltip
+                            placement="top-end"
+                            title={formatearNumero(totals[indexYear][index])}
+                          >
+                            <p className="w-[90px] text-center cursor-default">
+                              <ShortNumberNotation
+                                numero={totals[indexYear][index]}
+                              />
+                            </p>
+                          </Tooltip>
                         ))}
-                      <p className="w-[90px] text-center font-bold cursor-default">
-                        {formatearNumero(
+                      <Tooltip
+                        placement="top-end"
+                        title={formatearNumero(
                           totals[indexYear].reduce(
                             (acumulador, numero) => acumulador + numero,
                             0,
                           ),
                         )}
-                      </p>
+                      >
+                        <p className="w-[90px] text-center font-bold cursor-default">
+                          <ShortNumberNotation
+                            numero={totals[indexYear].reduce(
+                              (acumulador, numero) => acumulador + numero,
+                              0,
+                            )}
+                          />
+                        </p>
+                      </Tooltip>
                     </div>
                   </div>
                 ))}

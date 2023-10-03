@@ -27,7 +27,6 @@ function CapexPxQ() {
           setCapexQ(data?.capexQData[0]?.capexQ);
         }
 
-
         setShowLoader(false);
       })
       .catch((error) => console.error(error));
@@ -46,9 +45,9 @@ function CapexPxQ() {
         </Alert>
       )}
 
-    {showLoader ?
-      <MySpinner/>
-      : (
+      {showLoader ? (
+        <MySpinner />
+      ) : (
         <>
           <div className="border-b-2 mb-8 pb-1">
             <h4 className="cursor-default">Visualización de Inversiones</h4>
@@ -72,7 +71,9 @@ function CapexPxQ() {
                             showAlertSuces={(boolean) =>
                               setShowSuccessAlert(boolean)
                             }
-                            showAlertError={(boolean) => setShowErrorAlert(boolean)}
+                            showAlertError={(boolean) =>
+                              setShowErrorAlert(boolean)
+                            }
                             errorMessage={(error) => setErrorMessage(error)}
                           />
                         }
@@ -86,8 +87,11 @@ function CapexPxQ() {
                 <span className="cursor-default">
                   Para acceder a este formulario primero debe completar el
                   formulario de{' '}
-                  <Link className="text-indigo-700 underline" to="/costo-inversion">
-                    Estimación de Costo  de Inversiones
+                  <Link
+                    className="text-indigo-700 underline"
+                    to="/costo-inversion"
+                  >
+                    Estimación de Costo de Inversiones
                   </Link>{' '}
                   .
                 </span>
@@ -97,7 +101,10 @@ function CapexPxQ() {
                 <span className="cursor-default">
                   Para acceder a este formulario primero debe completar el
                   formulario de{' '}
-                  <Link className="text-indigo-700 underline" to="/volumen-inversion">
+                  <Link
+                    className="text-indigo-700 underline"
+                    to="/volumen-inversion"
+                  >
                     Volumen de Inversiones
                   </Link>{' '}
                   .
@@ -107,7 +114,6 @@ function CapexPxQ() {
           </div>
         </>
       )}
-      
     </div>
   );
 }
