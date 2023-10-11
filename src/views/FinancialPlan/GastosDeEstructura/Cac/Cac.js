@@ -3,6 +3,9 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unsafe-optional-chaining */
+
+/// FALTA : tiket medio , margen bruto   par acalcular el LTV 
+// despues hay que ver si lo que se hace cuando se tra la data tiene las validaciones correctas y en que caso debo mostrar algun plaveholder si me falta algun dato 
 import MySpinner from 'components/shared/loaders/MySpinner'; 
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
