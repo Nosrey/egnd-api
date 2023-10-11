@@ -252,4 +252,14 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'CAC',
+    path: '/cac',
+    component: React.lazy(() =>
+      import(
+        'views/FinancialPlan/GastosDeEstructura/Cac/Cac'
+      ),
+    ),
+    authority: [],
+  },
 ];

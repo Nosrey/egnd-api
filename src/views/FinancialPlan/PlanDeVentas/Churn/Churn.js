@@ -72,6 +72,10 @@ function Churn() {
           setVolumenPrecio(true);
           const datosPrecargados = {};
           if (data?.costoData.length !== 0) {
+           
+            data?.costoData.sort((a, b) =>
+            a.countryName.localeCompare(b.countryName),
+          )
             for (let i = 0; i < data?.costoData.length; i++) {
               datosPrecargados[data?.costoData[i].countryName] =
                 data?.costoData[i].stats;
