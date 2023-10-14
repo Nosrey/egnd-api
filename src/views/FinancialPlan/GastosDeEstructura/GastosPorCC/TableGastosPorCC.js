@@ -286,6 +286,8 @@ function TablePuestosPxQ(props) {
       });
   };
 
+  console.log('info', infoForm);
+
   return (
     <>
       {infoForm && (
