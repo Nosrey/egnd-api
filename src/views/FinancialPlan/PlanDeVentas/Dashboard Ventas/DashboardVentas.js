@@ -133,6 +133,7 @@ function DashboardVentas() {
                         }
                       }
                     } else {
+                      console.log("UN ANIO");
                       if (dataAssump.productos[indexO].type === 'producto') {
                         totProd += Number(a.ventasTotal);
                       } else {
@@ -318,6 +319,7 @@ function DashboardVentas() {
                                 );
                         }
                       } else if (periodoSelected.month === 12) {
+                       
                         if (indexMes === 11) {
                           tot += Math.floor(
                             a.volMeses[MONTHS[indexMes]] /
@@ -339,6 +341,7 @@ function DashboardVentas() {
                         }
                       }
                     } else {
+                      // CODIGO PARA EL AÑO COMPLETO
                       if (indexMes === 11) {
                         tot += Math.floor(
                           a.volMeses[MONTHS[indexMes]] /
@@ -360,6 +363,7 @@ function DashboardVentas() {
                   });
                 }
               } else {
+                
                 MONTHS.map((o, indexMes) => {
                   if (indexMes === 11) {
                     tot +=

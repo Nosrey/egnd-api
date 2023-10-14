@@ -304,7 +304,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseGastosDeEstructura.item5',
-            path: '/',
+            path: '/cac',
             title: 'CAC',
             translateKey: 'nav.collapseGastosDeEstructura.item5',
             icon: '',

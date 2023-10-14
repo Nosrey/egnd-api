@@ -120,7 +120,8 @@ function PuestosQ() {
               data?.puestosQData[0].puestosq[0][p].visible &&
               data?.puestosQData[0].puestosq[0][p],
           );
-        } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
+        }      
+        else if (data?.gastosGeneralData[0] && data?.gastosGeneralData[0]?.centroDeGastos.length !== 0) {
           setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
           setInfo(data?.gastosGeneralData[0].centroDeGastos);
           def = Object.keys(data?.gastosGeneralData[0].centroDeGastos).find(

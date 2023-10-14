@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import {
   Button,
   FormContainer,
@@ -252,13 +253,6 @@ function TablePuestosPxQ(props) {
     setInfoForm(newData);
   };
 
-  const formatearNumero = (numero) => {
-    if (numero) {
-      const nuevoNum = numero.toLocaleString('es-AR');
-      return nuevoNum;
-    }
-  };
-
   const submitInfoForm = () => {
     let idUser = localStorage.getItem('userId');
     const keyArray = Object.keys(infoForm);
@@ -286,7 +280,14 @@ function TablePuestosPxQ(props) {
       });
   };
 
-  console.log('info', infoForm);
+  const formatearNumero = (numero) => {
+    if (typeof numero !== 'string') {
+      numero = numero.toString();
+    }
+    const inputNumero = Number(numero.replace(/\D/g, ''));
+    const nuevoNum = inputNumero.toLocaleString('es-AR');
+    return nuevoNum;
+  };
 
   return (
     <>
@@ -333,27 +334,36 @@ function TablePuestosPxQ(props) {
                           : 'mt-[20px] w-[100px]'
                       }`}
                     >
-                      <Input
-                        type="text"
-                        name="precioInicial"
-                        disabled={index === 0}
-                        prefix={currency}
-                        value={
+                      <Tooltip
+                        placement="top-end"
+                        title={`${currency} ${
                           formatearNumero(
                             infoForm[head].cuentas[cta].precioInicial,
                           ) || 0
-                        }
-                        onChange={(e) =>
-                          handleOnChangeInitialValue(
-                            head,
-                            infoForm[head].cuentas[cta].id,
-                            e.target.value,
-                            'precioInicial',
-                            null,
-                            null,
-                          )
-                        }
-                      />
+                        }`}
+                      >
+                        <Input
+                          type="text"
+                          name="precioInicial"
+                          disabled={index === 0}
+                          prefix={currency}
+                          value={
+                            formatearNumero(
+                              infoForm[head].cuentas[cta].precioInicial,
+                            ) || 0
+                          }
+                          onChange={(e) =>
+                            handleOnChangeInitialValue(
+                              head,
+                              infoForm[head].cuentas[cta].id,
+                              e.target.value,
+                              'precioInicial',
+                              null,
+                              null,
+                            )
+                          }
+                        />
+                      </Tooltip>
                     </FormItem>
                   </div>
 
@@ -477,24 +487,24 @@ function TablePuestosPxQ(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={
+                                  title={`${currency} ${formatearNumero(
                                     infoForm[head].cuentas[cta].años[indexYear]
                                       .volMeses[
                                       Object.keys(año.volMeses)[indexMes]
-                                    ]
-                                  }
+                                    ],
+                                  )}`}
                                 >
                                   <Input
                                     className="w-[90px]"
                                     type="text"
                                     disabled={index === 0}
-                                    value={
+                                    value={formatearNumero(
                                       infoForm[head].cuentas[cta].años[
                                         indexYear
                                       ].volMeses[
                                         Object.keys(año.volMeses)[indexMes]
-                                      ]
-                                    }
+                                      ],
+                                    )}
                                     name="month"
                                     prefix={currency}
                                     onChange={(e) => {
@@ -512,12 +522,9 @@ function TablePuestosPxQ(props) {
                               </FormItem>
                             ))}
                           <FormItem className="mb-0">
-                            <Input
-                              className="w-[90px]"
-                              type="text"
-                              disabled
-                              prefix={currency}
-                              value={
+                            <Tooltip
+                              placement="top-end"
+                              title={`${currency} ${formatearNumero(
                                 index === 0
                                   ? volTotal[indexYear].values.reduce(
                                       (acumulador, numero) =>
@@ -525,9 +532,26 @@ function TablePuestosPxQ(props) {
                                       0,
                                     )
                                   : infoForm[head].cuentas[cta].precioInicial &&
-                                    año.volTotal
-                              }
-                            />
+                                      año.volTotal,
+                              )}`}
+                            >
+                              <Input
+                                className="w-[90px]"
+                                type="text"
+                                disabled
+                                prefix={currency}
+                                value={formatearNumero(
+                                  index === 0
+                                    ? volTotal[indexYear].values.reduce(
+                                        (acumulador, numero) =>
+                                          Number(acumulador) + Number(numero),
+                                        0,
+                                      )
+                                    : infoForm[head].cuentas[cta]
+                                        .precioInicial && año.volTotal,
+                                )}
+                              />
+                            </Tooltip>
                           </FormItem>
                         </div>
                       </div>
@@ -584,19 +608,36 @@ function TablePuestosPxQ(props) {
                         sumVerticales[head].sum.length !== 0 &&
                         sumVerticales[head].sum[indexYear].map(
                           (valor, index) => (
-                            <p className="w-[90px] text-center cursor-default">
-                              {formatearNumero(valor)}
-                            </p>
+                            <Tooltip
+                              placement="top-end"
+                              title={`${currency} ${formatearNumero(valor)}`}
+                            >
+                              <p className="w-[90px] text-center cursor-default">
+                                {currency}&nbsp;
+                                <ShortNumberNotation numero={valor} />
+                              </p>
+                            </Tooltip>
                           ),
                         )}
-                      <p className="w-[90px] text-center font-bold cursor-default">
-                        {formatearNumero(
+                      <Tooltip
+                        placement="top-end"
+                        title={`${currency} ${formatearNumero(
                           sumVerticales[head].sum[indexYear].reduce(
                             (acumulador, numero) => acumulador + numero,
                             0,
                           ),
-                        )}
-                      </p>
+                        )}`}
+                      >
+                        <p className="w-[90px] text-center font-bold cursor-default">
+                          {currency}&nbsp;
+                          <ShortNumberNotation
+                            numero={sumVerticales[head].sum[indexYear].reduce(
+                              (acumulador, numero) => acumulador + numero,
+                              0,
+                            )}
+                          />
+                        </p>
+                      </Tooltip>
                     </div>
                   </div>
                 ))}

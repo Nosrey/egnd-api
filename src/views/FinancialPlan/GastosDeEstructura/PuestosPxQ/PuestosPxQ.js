@@ -76,6 +76,7 @@ function PuestosPxQ() {
         let def;
         if (data?.puestosPData[0]) setVisibleP(true);
         if (data?.puestosPData[0] && data?.puestosQData[0]) {
+          console.log("aca")
           setPuestosQ(data?.puestosQData[0].puestosq[0]);
           setInfoForm(data?.puestosPData[0].puestosp[0]);
           def = Object.keys(data?.puestosPData[0].puestosp[0]).find(
@@ -85,8 +86,8 @@ function PuestosPxQ() {
           );
           setDefaultCountry(def);
           setCountry(def);
-          setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
-        } else if (data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
+          setCargaSocial(data?.gastosGeneralData[0] ? data?.gastosGeneralData[0].cargasSociales : 0 );
+        } else if ( data?.gastosGeneralData[0] && data?.gastosGeneralData[0].centroDeGastos.length !== 0) {
           if (data?.puestosQData[0]) {
             setPuestosQ(data?.puestosQData[0].puestosq[0]);
           } else {
@@ -98,7 +99,7 @@ function PuestosPxQ() {
           );
           setDefaultCountry(def);
           setCountry(def);
-          setCargaSocial(data?.gastosGeneralData[0].cargasSociales);
+          setCargaSocial(data?.gastosGeneralData[0] ? data?.gastosGeneralData[0].cargasSociales : 0);
         }
         setShowLoader(false);
       })

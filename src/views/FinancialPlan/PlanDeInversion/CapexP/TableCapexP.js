@@ -3,6 +3,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
+import ShortNumberNotation from 'components/shared/shortNumberNotation/ShortNumberNotation';
 import {
   Button,
   FormContainer,
@@ -268,6 +269,7 @@ function TableCapexP(props) {
                       <Input
                         type="text"
                         name="precioInicial"
+                        prefix={currency}
                         value={formatearNumero(cta.precioInicial)}
                         onChange={(e) =>
                           handleOnChangeInitialValue(
@@ -389,7 +391,13 @@ function TableCapexP(props) {
                               >
                                 <Tooltip
                                   placement="top-end"
-                                  title={`${mes} - año ${indexYear + 1}`}
+                                  title={currency + formatearNumero(
+                                    cta.precioInicial !== 0
+                                      ? cta.años[indexYear].volMeses[
+                                          Object.keys(año.volMeses)[indexMes]
+                                        ]
+                                      : 0,
+                                  )}
                                 >
                                   <Input
                                     className="w-[90px]"
@@ -469,12 +477,17 @@ function TableCapexP(props) {
                         año &&
                         props.data.length !== 0 &&
                         MONTHS.map((valor, index) => (
-                          <p className="w-[90px] text-center cursor-default">
-                            <p className="w-[90px] text-center cursor-default">
-                              {currency}
-                              {formatearNumero(totals[indexYear][index])}
-                            </p>
-                          </p>
+                          <Tooltip
+                              placement="top-end"
+                              title={currency + formatearNumero(totals[indexYear][index])}
+                            >
+                              <p className="w-[90px] text-center cursor-default">
+                                {currency}{" "}
+                                <ShortNumberNotation
+                                  numero={totals[indexYear][index]}
+                                />
+                              </p>
+                            </Tooltip>
                         ))}
                     </div>
                   </div>
