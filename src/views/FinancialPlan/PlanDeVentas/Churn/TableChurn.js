@@ -48,20 +48,26 @@ function TableChurn(props) {
   };
 
   const getChurn = (indexPais, indexCanal, indexProd, indexYear, indexMes) => {
-    const churn =
+    let rdo
+    if (indexMes === 0 && indexYear=== 0) {
+      rdo=''
+    } else {
+      const churn =
       props.assumptionData[0].churns[indexCanal].items[indexProd]
         .porcentajeChurn;
-    const vtasXCliente =
-      props.assumptionData[0].canales[indexCanal].items[indexProd].volumen;
-    const volMesPasado = getValueMes(
-      indexPais,
-      indexCanal,
-      indexProd,
-      indexYear,
-      Number(indexMes) - 1,
-    );
+      const vtasXCliente =
+        props.assumptionData[0].canales[indexCanal].items[indexProd].volumen;
+      const volMesPasado = getValueMes(
+        indexPais,
+        indexCanal,
+        indexProd,
+        indexYear,
+        Number(indexMes) - 1,
+      );
 
-    const rdo = ((volMesPasado / vtasXCliente) * churn) / 100;
+      rdo = ((volMesPasado / vtasXCliente) * churn) / 100;
+    }
+   
     return rdo;
   };
 
@@ -73,6 +79,13 @@ function TableChurn(props) {
       indexYear,
       Number(indexMes) - 1,
     );
+    const volEsteMes = getValueMes(
+      indexPais,
+      indexCanal,
+      indexProd,
+      indexYear,
+      indexMes
+    );
     const volMesAntepasado = getValueMes(
       indexPais,
       indexCanal,
@@ -80,17 +93,18 @@ function TableChurn(props) {
       indexYear,
       Number(indexMes) - 2,
     );
-    const vtasXCliente =
+    const volXCliente =
       props.assumptionData[0].canales[indexCanal].items[indexProd].volumen;
     const churn =
       props.assumptionData[0].churns[indexCanal].items[indexProd]
         .porcentajeChurn;
 
-    const rdo =
-      volMesPasado / vtasXCliente -
-      (volMesAntepasado / vtasXCliente -
-        ((volMesAntepasado / vtasXCliente) * churn) / 100) -
-      ((volMesAntepasado / vtasXCliente) * churn) / 100;
+        let rdo
+      if (indexMes === 0 && indexYear === 0) {
+        rdo = volEsteMes/ volXCliente
+      } else {
+        rdo= getFinal(indexPais, indexCanal, indexProd, indexYear, indexMes-1)
+      }
     return rdo;
   };
 
@@ -102,22 +116,32 @@ function TableChurn(props) {
       indexYear,
       Number(indexMes) - 1,
     );
-    const vtasXCliente =
-      props.assumptionData[0].canales[indexCanal].items[indexProd].volumen;
-    const churn =
-      props.assumptionData[0].churns[indexCanal].items[indexProd]
-        .porcentajeChurn;
-    const volMes = getValueMes(
+    const volEsteMes = getValueMes(
       indexPais,
       indexCanal,
       indexProd,
       indexYear,
-      indexMes,
+      indexMes
     );
-    const rdo =
-      volMes / vtasXCliente -
-      (volMesPasado / vtasXCliente -
-        ((volMesPasado / vtasXCliente) * churn) / 100);
+    const volXCliente =
+      props.assumptionData[0].canales[indexCanal].items[indexProd].volumen;
+
+    const clientesMesPasado = volMesPasado/ volXCliente;
+    const clientesEsteMes = volEsteMes / volXCliente;
+
+    const churnTeorico =
+      props.assumptionData[0].churns[indexCanal].items[indexProd]
+        .porcentajeChurn;
+
+    let rdo;
+    if (indexMes=== 0 && indexYear===0) {
+      rdo = ''
+    } else {
+      rdo = (clientesEsteMes - clientesMesPasado >= 0)
+      ? (clientesEsteMes - clientesMesPasado + ((volMesPasado / volXCliente) * churnTeorico) / 100) 
+      : 0;
+    }
+
     return rdo;
   };
 
@@ -129,17 +153,37 @@ function TableChurn(props) {
       indexYear,
       Number(indexMes) - 1,
     );
-    const vtasXCliente =
+    const volEsteMes = getValueMes(
+      indexPais,
+      indexCanal,
+      indexProd,
+      indexYear,
+      indexMes
+    );
+    const volXCliente =
       props.assumptionData[0].canales[indexCanal].items[indexProd].volumen;
-    const churn =
-      props.assumptionData[0].churns[indexCanal].items[indexProd]
-        .porcentajeChurn;
-    const rdo = ((volMesPasado / vtasXCliente) * churn) / 100;
+
+    const clientesMesPasado = volMesPasado/ volXCliente;
+    const clientesEsteMes = volEsteMes / volXCliente;
+    
+    const churnTeorico =
+    props.assumptionData[0].churns[indexCanal].items[indexProd]
+      .porcentajeChurn;
+    
+    let rdo;
+    if (indexMes=== 0 && indexYear===0) {
+      rdo = ''
+    } else {
+      rdo = (clientesEsteMes - clientesMesPasado >= 0)
+      ? ((volMesPasado / volXCliente) * churnTeorico) / 100
+      : (clientesMesPasado - clientesEsteMes);
+     }
+
     return rdo;
   };
 
   const getFinal = (indexPais, indexCanal, indexProd, indexYear, indexMes) =>
-    getAltas(indexPais, indexCanal, indexProd, indexYear, indexMes) -
+   ( getInicio(indexPais, indexCanal, indexProd, indexYear, indexMes)+ getAltas(indexPais, indexCanal, indexProd, indexYear, indexMes)) -
     getBajas(indexPais, indexCanal, indexProd, indexYear, indexMes);
 
   return (
@@ -330,37 +374,29 @@ function TableChurn(props) {
                                           ).toString().length > 7 ? (
                                             <Tooltip
                                               placement="top-end"
-                                              title={
-                                                indexMes === 0
-                                                  ? ''
-                                                  : formatNumber(
-                                                      getChurn(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              title={formatNumber(
+                                                getChurn(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                             >
                                               <Input
                                                 className="w-[90px]"
                                                 type="text"
                                                 disabled
-                                                value={
-                                                  indexMes === 0
-                                                    ? ''
-                                                    : formatNumber(
-                                                        getChurn(
-                                                          indexPais,
-                                                          indexCanal,
-                                                          indexProd,
-                                                          indexYear,
-                                                          indexMes,
-                                                        ),
-                                                      )
-                                                }
+                                                value={formatNumber(
+                                                  getChurn(
+                                                    indexPais,
+                                                    indexCanal,
+                                                    indexProd,
+                                                    indexYear,
+                                                    indexMes,
+                                                  ),
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -369,19 +405,15 @@ function TableChurn(props) {
                                               className="w-[90px]"
                                               type="text"
                                               disabled
-                                              value={
-                                                indexMes === 0
-                                                  ? ''
-                                                  : formatNumber(
-                                                      getChurn(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              value={formatNumber(
+                                                getChurn(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                               name="month"
                                             />
                                           )}
@@ -399,19 +431,7 @@ function TableChurn(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          {(indexMes === 0 || indexMes === 1
-                                            ? 0
-                                            : formatNumber(
-                                                getInicio(
-                                                  indexPais,
-                                                  indexCanal,
-                                                  indexProd,
-                                                  indexYear,
-                                                  indexMes,
-                                                ),
-                                              ) < 0
-                                            ? 0
-                                            : formatNumber(
+                                          {formatNumber(
                                                 getInicio(
                                                   indexPais,
                                                   indexCanal,
@@ -420,61 +440,34 @@ function TableChurn(props) {
                                                   indexMes,
                                                 ),
                                               )
-                                          ).length > 7 ? (
+                                          .length > 7 ? (
                                             <Tooltip
                                               placement="top-end"
                                               title={
-                                                indexMes === 0 || indexMes === 1
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getInicio(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    ) < 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getInicio(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
+                                                formatNumber(
+                                                  getInicio(
+                                                    indexPais,
+                                                    indexCanal,
+                                                    indexProd,
+                                                    indexYear,
+                                                    indexMes,
+                                                  ),
+                                                )
                                               }
                                             >
                                               <Input
                                                 className="w-[90px] border-2 border-solid border-gray-800"
                                                 type="text"
                                                 disabled
-                                                value={
-                                                  indexMes === 0 ||
-                                                  indexMes === 1
-                                                    ? 0
-                                                    : formatNumber(
-                                                        getInicio(
-                                                          indexPais,
-                                                          indexCanal,
-                                                          indexProd,
-                                                          indexYear,
-                                                          indexMes,
-                                                        ),
-                                                      ) < 0
-                                                    ? 0
-                                                    : formatNumber(
-                                                        getInicio(
-                                                          indexPais,
-                                                          indexCanal,
-                                                          indexProd,
-                                                          indexYear,
-                                                          indexMes,
-                                                        ),
-                                                      )
-                                                }
+                                                value={formatNumber(
+                                                  getInicio(
+                                                    indexPais,
+                                                    indexCanal,
+                                                    indexProd,
+                                                    indexYear,
+                                                    indexMes,
+                                                  ),
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -483,29 +476,15 @@ function TableChurn(props) {
                                               className="w-[90px] border-2 border-solid border-gray-800"
                                               type="text"
                                               disabled
-                                              value={
-                                                indexMes === 0 || indexMes === 1
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getInicio(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    ) < 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getInicio(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              value={formatNumber(
+                                                getInicio(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                               name="month"
                                             />
                                           )}
@@ -523,37 +502,7 @@ function TableChurn(props) {
                                           className="mb-0 "
                                           key={indexMes}
                                         >
-                                          {indexMes === 0 ? (
-                                            <Input
-                                              className="w-[90px] border-2 border-solid border-gray-800"
-                                              type="text"
-                                              disabled
-                                              value={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    ) < 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
-                                              name="month"
-                                            />
-                                          ) : formatNumber(
+                                          {formatNumber(
                                               getAltas(
                                                 indexPais,
                                                 indexCanal,
@@ -564,37 +513,29 @@ function TableChurn(props) {
                                             ).length > 7 ? (
                                             <Tooltip
                                               placement="top-end"
-                                              title={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getAltas(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              title={formatNumber(
+                                                getAltas(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                             >
                                               <Input
                                                 className="w-[90px] border-2 border-solid border-grey-800"
                                                 type="text"
                                                 disabled
-                                                value={
-                                                  indexMes === 0
-                                                    ? 0
-                                                    : formatNumber(
-                                                        getAltas(
-                                                          indexPais,
-                                                          indexCanal,
-                                                          indexProd,
-                                                          indexYear,
-                                                          indexMes,
-                                                        ),
-                                                      )
-                                                }
+                                                value={formatNumber(
+                                                  getAltas(
+                                                    indexPais,
+                                                    indexCanal,
+                                                    indexProd,
+                                                    indexYear,
+                                                    indexMes,
+                                                  ),
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -603,19 +544,15 @@ function TableChurn(props) {
                                               className="w-[90px] border-2 border-solid border-gray-800"
                                               type="text"
                                               disabled
-                                              value={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getAltas(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              value={formatNumber(
+                                                getAltas(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                               name="month"
                                             />
                                           )}
@@ -633,37 +570,7 @@ function TableChurn(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          {indexMes === 0 ? (
-                                            <Input
-                                              className="w-[90px] border-2 border-solid border-gray-800"
-                                              type="text"
-                                              disabled
-                                              value={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    ) < 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
-                                              name="month"
-                                            />
-                                          ) : formatNumber(
+                                          {formatNumber(
                                               getBajas(
                                                 indexPais,
                                                 indexCanal,
@@ -674,37 +581,29 @@ function TableChurn(props) {
                                             ).length > 7 ? (
                                             <Tooltip
                                               placement="top-end"
-                                              title={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getBajas(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              title={formatNumber(
+                                                getBajas(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                             >
                                               <Input
                                                 className="w-[90px] border-2 border-solid border-gray-800"
                                                 type="text"
                                                 disabled
-                                                value={
-                                                  indexMes === 0
-                                                    ? 0
-                                                    : formatNumber(
-                                                        getBajas(
-                                                          indexPais,
-                                                          indexCanal,
-                                                          indexProd,
-                                                          indexYear,
-                                                          indexMes,
-                                                        ),
-                                                      )
-                                                }
+                                                value={formatNumber(
+                                                  getBajas(
+                                                    indexPais,
+                                                    indexCanal,
+                                                    indexProd,
+                                                    indexYear,
+                                                    indexMes,
+                                                  ),
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -713,19 +612,15 @@ function TableChurn(props) {
                                               className="w-[90px] border-2 border-solid border-gray-800"
                                               type="text"
                                               disabled
-                                              value={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getBajas(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              value={formatNumber(
+                                                getBajas(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                               name="month"
                                             />
                                           )}
@@ -743,37 +638,7 @@ function TableChurn(props) {
                                           className="mb-0"
                                           key={indexMes}
                                         >
-                                          {indexMes === 0 ? (
-                                            <Input
-                                              className="w-[90px] border-2 border-solid border-gray-800"
-                                              type="text"
-                                              disabled
-                                              value={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    ) < 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
-                                              name="month"
-                                            />
-                                          ) : formatNumber(
+                                          {formatNumber(
                                               getFinal(
                                                 indexPais,
                                                 indexCanal,
@@ -800,57 +665,29 @@ function TableChurn(props) {
                                             ).length > 7 ? (
                                             <Tooltip
                                               placement="top-end"
-                                              title={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    ) < 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              title={formatNumber(
+                                                getFinal(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                             >
                                               <Input
                                                 className="w-[90px] border-2 border-solid border-gray-800"
                                                 type="text"
                                                 disabled
-                                                value={
-                                                  indexMes === 0
-                                                    ? 0
-                                                    : formatNumber(
-                                                        getFinal(
-                                                          indexPais,
-                                                          indexCanal,
-                                                          indexProd,
-                                                          indexYear,
-                                                          indexMes,
-                                                        ),
-                                                      ) < 0
-                                                    ? 0
-                                                    : formatNumber(
-                                                        getFinal(
-                                                          indexPais,
-                                                          indexCanal,
-                                                          indexProd,
-                                                          indexYear,
-                                                          indexMes,
-                                                        ),
-                                                      )
-                                                }
+                                                value={formatNumber(
+                                                  getFinal(
+                                                    indexPais,
+                                                    indexCanal,
+                                                    indexProd,
+                                                    indexYear,
+                                                    indexMes,
+                                                  ),
+                                                )}
                                                 name="month"
                                               />
                                             </Tooltip>
@@ -859,29 +696,15 @@ function TableChurn(props) {
                                               className="w-[90px] border-2 border-solid border-gray-800"
                                               type="text"
                                               disabled
-                                              value={
-                                                indexMes === 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    ) < 0
-                                                  ? 0
-                                                  : formatNumber(
-                                                      getFinal(
-                                                        indexPais,
-                                                        indexCanal,
-                                                        indexProd,
-                                                        indexYear,
-                                                        indexMes,
-                                                      ),
-                                                    )
-                                              }
+                                              value={formatNumber(
+                                                getFinal(
+                                                  indexPais,
+                                                  indexCanal,
+                                                  indexProd,
+                                                  indexYear,
+                                                  indexMes,
+                                                ),
+                                              )}
                                               name="month"
                                             />
                                           )}

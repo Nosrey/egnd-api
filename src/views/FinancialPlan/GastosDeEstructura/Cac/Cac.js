@@ -6,13 +6,18 @@
 
 /// FALTA : tiket medio , margen bruto   par acalcular el LTV 
 // despues hay que ver si lo que se hace cuando se tra la data tiene las validaciones correctas y en que caso debo mostrar algun plaveholder si me falta algun dato 
+import ContainerScrollable from 'components/shared/ContainerScrollable';
 import MySpinner from 'components/shared/loaders/MySpinner'; 
+import { FormContainer } from 'components/ui';
 import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { showMultiplicacionPxQ } from 'utils/calcs';
 import formatNumber from 'utils/formatTotalsValues';
+import TableCac from './TableCac';
+import GraficoDashed from './GraficoDashed';
+import GraficoDeBarra from './GraficoDeBarra';
 
 function Cac() {
   const [showLoader, setShowLoader] = useState(true);
@@ -215,7 +220,9 @@ function Cac() {
       .catch((error) => console.error(error));
   }, []);
 
-
+  const CAC = [223, 329, 452, 730, 813,1029, 1112, 1343, 1390, 1407 ];
+  const LTV = [22, 43, 52, 73, 81, 89, 111, 134, 192, 207 ];
+  const LTVCAC = [10.14, 7.65, 8.69, 10, 10.04, 11.56, 10.02, 10.02, 7.23, 6.79 ];
   return (
     <>
       {showLoader ? (
@@ -229,8 +236,32 @@ function Cac() {
               </h4>
               <span className="cursor-default">Gastos de Estructura</span>
             </div>
+            <div className="container-countries">
+              <FormContainer className="cont-countries">
+                <ContainerScrollable
+                  contenido={
+                    <TableCac
+                      cac={CAC}
+                      ltv={LTV}
+                      ltvcac={LTVCAC}
+                    />
+                  }
+                />
+              </FormContainer>
+            </div>
 
+            <div className=" mt-[40px]">
+                <h5>CAC y LTV</h5>
+                <GraficoDashed   cac={CAC} ltv={LTV}/>
+              </div>
 
+              <div className=" mt-[40px]">
+                  <h5>LTV / CAC</h5>
+
+                  <GraficoDeBarra
+                    data={LTVCAC }
+                  />
+                </div>
           </div>
         </>
       )}
