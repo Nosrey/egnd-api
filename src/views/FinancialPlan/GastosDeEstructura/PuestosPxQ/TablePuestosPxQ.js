@@ -173,6 +173,8 @@ function TablePuestosPxQ(props) {
     return nuevoNum;
   };
 
+  console.log('[INFO]', infoForm);
+
   return (
     <>
       {infoForm &&

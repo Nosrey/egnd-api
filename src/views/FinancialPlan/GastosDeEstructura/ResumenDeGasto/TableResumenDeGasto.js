@@ -8,8 +8,8 @@ import {
   FormContainer,
   FormItem,
   Input,
-  Tabs,
   Select,
+  Tabs,
   Tooltip,
 } from 'components/ui';
 import { AÑOS, MONTHS, optionsIncremento } from 'constants/forms.constants';
@@ -384,7 +384,10 @@ function TableResumenDeGasto(props) {
                               <div className="flex flex-col" key={indexYear}>
                                 {index === 0 && (
                                   <div className="titleRow min-w-[62px]">
-                                    <p className="cursor-default"> Año {año.año}</p>
+                                    <p className="cursor-default">
+                                      {' '}
+                                      Año {año.año}
+                                    </p>
                                     <div
                                       className="iconYear"
                                       onClick={() => hideYear(indexYear)}

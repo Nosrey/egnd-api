@@ -20,31 +20,27 @@ function BarraDeProgresoGastos({
       });
     });
     setDataView(cuentas);
+
+    dataView.sort((a1, a2) => {
+      if (a1.data > a2.data) {
+        return -1;
+      }
+      if (a1.total < a2.data) {
+        return 1;
+      }
+      return 0;
+    });
   }, [periodoSelected, yearSelected]);
 
-  dataView.sort((a1, a2) => {
-    if (a1.data > a2.data) {
-      return -1;
-    }
-    if (a1.total < a2.data) {
-      return 1;
-    }
-    return 0;
-  });
-
-  return (
+  return dataView.map((cuenta) => {
     <div>
-      {dataView.map((cuenta) => {
-        <div>
-          <span className="cursor-default">{cuenta.name.toUpperCase()}</span>
-          <Progress
-            percent={((cuenta.data * 100) / totalVentas).toFixed(0)}
-            color="amber-400"
-          />
-        </div>;
-      })}
-    </div>
-  );
+      <span className="cursor-default">{cuenta.name}</span>
+      <Progress
+        percent={((cuenta.data * 100) / totalVentas).toFixed(0)}
+        color="amber-400"
+      />
+    </div>;
+  });
 }
 
 export default BarraDeProgresoGastos;

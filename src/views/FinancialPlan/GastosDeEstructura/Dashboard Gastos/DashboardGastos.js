@@ -467,7 +467,7 @@ function DashboardGastos() {
                 {totalPorCuenta.length !== 0 && nameDataView.length !== 0 && (
                   <div className="flex gap-[30px] mt-[40px]">
                     <h5>TOP 3 Cuentas Contables con más gasto</h5>
-                    <div className="w-[50%] flex flex-col gap-[30px]">
+                    <div className="w-[30%] flex flex-col gap-[30px]">
                       <BarraDeProgresoGastos
                         data={totalPorCuenta}
                         totalVentas={total}

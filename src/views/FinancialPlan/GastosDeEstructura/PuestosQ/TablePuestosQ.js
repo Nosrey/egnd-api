@@ -162,6 +162,7 @@ function TablePuestosQ(props) {
     });
 
     if (submit) {
+      console.log('entraaaaa');
       props.postPuestoQData([infoForm]);
     }
   };
