@@ -388,7 +388,7 @@ const navigationConfig = [
           },
           {
             key: 'collapseGastosFinancierosParaOperacion.item2',
-            path: '/',
+            path: '/prestamos',
             title: 'Préstamos ',
             translateKey: 'nav.collapseGastosFinancierosParaOperacion.item2',
             icon: '',

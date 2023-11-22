@@ -400,3 +400,10 @@ export const optionsBienes = [
     medida: 'UNIDAD',
   },
 ];
+
+export const mesesPrestamos = [
+  { value: 'Marzo', label: 'Marzo' },
+  { value: 'Abril', label: 'Abril' },
+  { value: 'Mayo', label: 'Mayo' },
+  { value: 'Junio', label: 'Junio' },
+];
