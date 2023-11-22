@@ -204,26 +204,26 @@ function TableChurn(props) {
   };
 
   
-    useEffect(() => {
-      if (infoForm) {
-        const  copy = JSON.parse(JSON.stringify(infoForm));
-        // Obtener las claves (paises) del objeto
-        const paises = Object.keys(copy);
-        // Iterar sobre las claves (paises)
-        paises.forEach((pais, indexPais) => {
-          // Iterar sobre los elementos del array de cada pais
-          copy[pais].forEach((canal, indexCanal) => {
-            // Modificar la propiedad 'productos'
-            canal.productos.forEach((prod, indexProd) => {
-             prod.valoresInicioChurn= inicio(indexPais,indexCanal, indexProd)
-            })
-          });
+  useEffect(() => {
+    if (infoForm) {
+      const  copy = JSON.parse(JSON.stringify(infoForm));
+      // Obtener las claves (paises) del objeto
+      const paises = Object.keys(copy);
+      // Iterar sobre las claves (paises)
+      paises.forEach((pais, indexPais) => {
+        // Iterar sobre los elementos del array de cada pais
+        copy[pais].forEach((canal, indexCanal) => {
+          // Modificar la propiedad 'productos'
+          canal.productos.forEach((prod, indexProd) => {
+            prod.valoresInicioChurn= inicio(indexPais,indexCanal, indexProd)
+          })
         });
-        setValoresInicio(copy)
-        console.log(copy)
+      });
+      setValoresInicio(copy)
+      console.log(copy)
 
-      }
-    }, [infoForm]);
+    }
+  }, [infoForm]);
 
   return (
     <>
