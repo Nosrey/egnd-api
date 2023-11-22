@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { showMultiplicacionPxQ } from 'utils/calcs';
 import formatNumber from 'utils/formatTotalsValues';
+import { modifyDataWithInitialClients } from 'utils/hoc/clientsCalcs';
 import TableCac from './TableCac';
 import GraficoDashed from './GraficoDashed';
 import GraficoDeBarra from './GraficoDeBarra';
@@ -26,12 +27,13 @@ function Cac() {
   const [infoVolToCalculateClient, setInfoVolToCalculateClient] = useState()
   const [dataAssump, setDataAssump] = useState();
   const [gastosPorCCData, setGastosPorCCData] = useState();
-  const [valoresCAC, setValoresCAC] = useState();
+  const [valoresCAC, setValoresCAC] = useState([]);
   const [infoForm, setInfoForm] = useState();
   const [volumenData, setVolumenData] = useState();
   const [assumptionData, setAssumptionData] = useState();
+  const [churnDataXProd, setChurnDataXProd] = useState();
 
-
+  
   const calcNewClients = (data, indexY, indexMes, indexChannel, indexProd) =>
     Number(
       formatNumber(
@@ -122,8 +124,8 @@ function Cac() {
       let anos = cc[i].años;
       let volTotalArray = [];
     
-      for (let j = 0; j < anos.length; j++) {
-        let {volMeses} = anos[j];
+      for (let j = 0; j < anos?.length; j++) {
+        let {volMeses} = anos[j]?? 0;
         let volTotal = volMeses && Object.values(volMeses).reduce((acc, value) => acc + value, 0);
         volTotalArray.push(volTotal);
       }
@@ -141,18 +143,20 @@ function Cac() {
   }
 
   const  costosMktyComercial = (gastosPorCCData) => {
-    // let comercialInfo = gastosPorCCData[0].centroDeCostos[0].Comercial.visible ? gastosPorCCData[0].centroDeCostos[0].Comercial.cuentas : [];
-    console.log(gastosPorCCData[0])
-    // let mktInfo = gastosPorCCData[0].centroDeCostos[0].Marketing.visible ? gastosPorCCData[0].centroDeCostos[0].Marketing.cuentas : [];
+    let comercialInfo = gastosPorCCData[0].centroDeCostos[0].Comercial.visible ? gastosPorCCData[0].centroDeCostos[0].Comercial.cuentas : [];
+    let mktInfo = gastosPorCCData[0].centroDeCostos[0].Marketing.visible ? gastosPorCCData[0].centroDeCostos[0].Marketing.cuentas : [];
 
-    // const totGastoComercial = [...getTotalPorCC(comercialInfo)];
-    // const totGastoMkt = [...getTotalPorCC(mktInfo)];
-    // console.log(totGastoComercial)
+    const totGastoComercial = [...getTotalPorCC(comercialInfo)];
+    const totGastoMkt = [...getTotalPorCC(mktInfo)];
     const resultadoCAC = [];
-    // for (let i = 0; i < totGastoComercial.length; i++) {
-    //   resultadoCAC.push(Math.round(totGastoComercial[i] + totGastoMkt[i]));
-    // }
-    console.log(resultadoCAC)
+    const maxLength = Math.max(totGastoComercial.length, totGastoMkt.length);
+    
+    for (let i = 0; i < maxLength; i++) {
+      // Usa el operador de fusión nula para proporcionar 0 si la posición es undefined porque si no tengo gasto en comercial o mk unod e lso arrays va aser []
+      const valorComercial = totGastoComercial[i] ?? 0;
+      const valorMkt = totGastoMkt[i] ?? 0;
+      resultadoCAC.push(valorComercial + valorMkt);
+    }
     return resultadoCAC;
   }
 
@@ -257,65 +261,63 @@ function Cac() {
    
 
   const calculateCicloCliente = () => {
-    let dataBajas = []
-    let dataClientesInicio = []
+    // ciclo clientes = 1/ %Churn
+    // % churn = 
+    const arrayChurns=[]
+    for (let i = 0; i < 10; i++) {
+      const paises = Object.keys(churnDataXProd);
+      // Iterar sobre las claves (paises)
+      paises.forEach((pais, indexPais) => {
+        // Iterar sobre los elementos del array de cada pais
+        churnDataXProd[pais].forEach((canal, indexCanal) => {
+        
+          canal.productos.forEach((prod, indexProd) => {
+            // sumo no promedio , cambiar eso si lo piden los clientes
+            const sumatoriaPorcentajesChurnEseAnio = prod.churnPorcetajes[i].reduce((total, valor) => total + valor, 0)
+            // aca obtve un unico vlaor que es la suma de los % chunr de un anio de UN producto de unc anal de un pais , buscar la forma de sumar ahora los de todo el anio de todas las variabel para pushar
+            console.log(prod.churnPorcetajes[i].reduce((total, valor) => total + valor, 0));
 
-    for (let guia = 0; guia < 10; guia++) {
-      let dataBajasAnio = []
-      let dataClientesInicioAnio = []
-      Object.values(infoForm).map((m, indexPais) => {
-        m.map((p, indexCanal) => {
-          p.productos.map((o, indexProd) => {
-            o.años.map((a, indexYear) => {
-              if (indexYear=== guia) {
-                MONTHS.map((s, indexMes) => {
-                  dataBajasAnio.push( getBajas(indexPais, indexCanal, indexProd, indexYear, indexMes))
-                  dataClientesInicioAnio.push( getInicio(indexPais, indexCanal, indexProd, indexYear, indexMes))
-
-                });
-              }
-            });
-          });
+          })
         });
       });
-      // obtengo un array de 10  posiciones , cada posicin en la sumatoria de todas las bajas de ese anio, si es '' o nan lo suma como 0 
-      dataBajas.push(dataBajasAnio.reduce((acumulador, valor) => acumulador + (isNaN(valor) ? 0 : (typeof valor === 'string' ? 0 : Math.round(valor))), 0))
-      dataClientesInicio.push(dataClientesInicioAnio.reduce((acumulador, valor) => acumulador + (isNaN(valor) ? 0 : (typeof valor === 'string' ? 0 : Math.round(valor))), 0))
+      
     }
-    
-    console.log(dataClientesInicio)
-    // const churnFinal = dataBajas/clientesInicio;
-    // return 1/churnFinal; // array de die valores d esto
+    // return  // array de die valores d 1/ %Churn de ese anio de todos los prod
   }
   
   const calculateCAC = () => {
     const costos = costosMktyComercial(gastosPorCCData);
     const nuevosClientes = calculateClients(); 
-    // calculateCicloCliente()
-    return costos.map((elemento, indice) => elemento / nuevosClientes[indice]);
+    return costos.map((elemento, indice) => Math.round(elemento / nuevosClientes[indice]));
   }
 
-  // const calculateLTV = () => {
-  //   const cicloCLiente = calculateCicloCliente(gastosPorCCData);
-  //   const avClientes = calculateAvClientes(); 
-  //   const margenBruto = calculateCMGB(); 
-  //   return cicloCLiente * avClientes * margenBruto; //son aarrays
-  // }
+  const calculateLTV = () => {
+    const cicloCLiente = calculateCicloCliente(gastosPorCCData);
+    console.log('ltv calculando ciclo clicnete: ', cicloCLiente)
+    // const avClientes = calculateAvClientes(); 
+    // const margenBruto = calculateCMGB(); 
+    // return cicloCLiente * avClientes * margenBruto; //son aarrays
+  }
 
   useEffect(() => {
     if (infoVolToCalculateClient && dataAssump && gastosPorCCData) {
-      console.log(gastosPorCCData)
-      setValoresCAC([...calculateCAC()])
+      setValoresCAC(calculateCAC())
     }
   }, [infoVolToCalculateClient, dataAssump, gastosPorCCData])
 
   useEffect(() => {
-    if (infoForm) {
+    if (infoForm && volumenData && assumptionData) {
       calculateVentas()
+      // le agrego a cada producto de cada canal de cada pais los atributos valoresInicioChurn y churnPorcetajes que lo voy a anecesitar para calcular cosas como calculateCicloCliente()
+      setChurnDataXProd(modifyDataWithInitialClients(infoForm,volumenData, assumptionData))
     }
   }, [infoForm])
 
-
+  useEffect(() => {
+    if (churnDataXProd) {
+      calculateLTV()
+    }
+  }, [churnDataXProd])
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
@@ -339,7 +341,6 @@ function Cac() {
             setDataAssump(data.assumptionData[0]);
           }
 
-           console.log(data)
            if (data.gastosPorCCData.length !== 0) {
              setGastosPorCCData(()=> ({ ...data.gastosPorCCData} ))
            } else {
@@ -350,6 +351,7 @@ function Cac() {
             // setVolumenData(data?.volumenData.sort((a, b) =>
             //   a.countryName.localeCompare(b.countryName),
             // ))
+            console.log('antes de guardar',data.volumenData)
             setVolumenData(data?.volumenData)
           }
 
@@ -361,11 +363,14 @@ function Cac() {
           }
           // Seteo la info de ventas PxQ
             const datosPrecargados = {};
+            const copyVolData = JSON.parse(JSON.stringify(data?.volumenData))
+            const copyPcioData = JSON.parse(JSON.stringify(data?.precioData))
+
             let dataVentas = showMultiplicacionPxQ(
-              data?.volumenData.sort((a, b) =>
+              copyVolData.sort((a, b) =>
                 a.countryName.localeCompare(b.countryName),
               ),
-              data?.precioData.sort((a, b) =>
+              copyPcioData.sort((a, b) =>
                 a.countryName.localeCompare(b.countryName),
               ),
             );
@@ -394,37 +399,40 @@ function Cac() {
         <MySpinner />
       ) : (
         <>
+        { valoresCAC.length !== 0 && 
           <div>
-            <div className="border-b-2 mb-8 pb-1">
-              <h4 className="cursor-default">
-                CAC
-              </h4>
-              <span className="cursor-default">Gastos de Estructura</span>
-            </div>
-            <div className="container-countries">
-              <FormContainer className="cont-countries">
-                <ContainerScrollable
-                  contenido={
-                    <TableCac
-                      cac={CAC}
-                      ltv={LTV}
-                      ltvcac={LTVCAC}
-                    />
-                  }
-                />
-              </FormContainer>
+          <div className="border-b-2 mb-8 pb-1">
+            <h4 className="cursor-default">
+              CAC
+            </h4>
+            <span className="cursor-default">Gastos de Estructura</span>
+          </div>
+          <div className="container-countries">
+            <FormContainer className="cont-countries">
+              <ContainerScrollable
+                contenido={
+                  <TableCac
+                    cac={valoresCAC}
+                    ltv={LTV}
+                    ltvcac={LTVCAC}
+                  />
+                }
+              />
+            </FormContainer>
+          </div>
+
+          <div className=" mt-[40px]">
+              <h5>CAC y LTV</h5>
+              <GraficoDashed   cac={CAC} ltv={LTV}/>
             </div>
 
             <div className=" mt-[40px]">
-                <h5>CAC y LTV</h5>
-                <GraficoDashed   cac={CAC} ltv={LTV}/>
+                <h5>LTV / CAC</h5>
+                <GraficoDashedLTVCAC  ltvcac={LTVCAC} />
               </div>
-
-              <div className=" mt-[40px]">
-                  <h5>LTV / CAC</h5>
-                  <GraficoDashedLTVCAC  ltvcac={LTVCAC} />
-                </div>
-          </div>
+        </div>
+        }
+          
         </>
       )}
     </>

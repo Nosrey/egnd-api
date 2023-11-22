@@ -5,7 +5,7 @@ import {
   Input,
   Tooltip,
 } from 'components/ui';
-import { useState } from 'react';
+import { useEffect , useState} from 'react';
 
 
 function TableCac(props) {
@@ -13,7 +13,9 @@ function TableCac(props) {
   const [ltv, setLtv ]= useState(props.ltv);
   const [ltvCac, setLtvCac] = useState(props.ltvcac);
 
-
+  useEffect(() => {
+    console.log(cac)
+  }, [props])
   return (
     <>
     { cac && ltv && ltvCac && 
