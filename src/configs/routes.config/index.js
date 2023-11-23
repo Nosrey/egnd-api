@@ -268,4 +268,12 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  {
+    key: 'PyL',
+    path: '/pyl',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/Estados Financieros/PyL/PyL'),
+    ),
+    authority: [],
+  },
 ];

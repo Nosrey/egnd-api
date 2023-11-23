@@ -81,7 +81,6 @@ function MargenBruto() {
           );
           setCostoData(ordererCostoData);
 
-          // REVISAR PORQUE RAZON EN LA DATA ME LLEGA MAL LA INFO SOLO DE VOLUMEN, NO DEVUELVE LO MISMO QE EL ENDPOINT
           const vol = JSON.parse(localStorage.getItem("volumenData"))
           const ordererVolData = vol.sort((a, b) =>
           a.countryName.localeCompare(b.countryName),
