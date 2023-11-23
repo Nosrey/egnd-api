@@ -121,6 +121,10 @@ function Churn() {
               <div className="border-b-2 px-4 py-1">
                 <h6 className="cursor-default">Resumen de Alta y Churn</h6>
               </div>
+              <div  className=" px-4 py-1">
+                <span className="text-xs">*Recuerde que si ve valores en 0 es posible que pare ese item le esté faltando cargar información en Cantidad y Volumen o Precio para poder realizar los cálculos. 
+                </span>
+              </div>
               {infoForm && volumenPrecio ? (
                 <Tabs defaultValue={defaultCountry}>
                   <TabList>

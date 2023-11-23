@@ -7,7 +7,7 @@ const app = store.getState();
 // const ls = JSON.parse(window.localStorage.getItem('admin'));
 // const auth = JSON.parse(ls.auth);
 
-const URL_API = 'https://api.egndfinance.com';
+const URL_API = 'http://localhost:8080';
 // const idUser = app.auth.user.id && app.auth.user.id;
 const idUser = localStorage.getItem('userId');
 
@@ -153,6 +153,10 @@ export const getUser = async (id = idUser) => {
     localStorage.setItem(
       'puestoPData',
       JSON.stringify(data.response.puestosPData),
+    );
+    localStorage.setItem(
+      'gastosPorCCData',
+      JSON.stringify(data.response.gastosPorCCData),
     );
     return data.response;
   } catch (error) {
@@ -588,6 +592,30 @@ const updatePuestosPData = (estructura, centroDeGastos) => {
   }
 };
 
+const updateGastosPorCCData = (estructura, centroDeGastos) => {
+  const oldGastosPorCCData = JSON.parse(
+    localStorage.getItem('gastosPorCCData'),
+  );
+  if (oldGastosPorCCData.length !== 0) {
+    console.log(oldGastosPorCCData[0].centroDeCostos);
+    console.log('estructura', estructura);
+    console.log(centroDeGastos);
+    const newData = oldGastosPorCCData[0].centroDeCostos.map((item) => {
+      const nuevoItem = {};
+      Object.keys(item).forEach((key) => {
+        nuevoItem[key] = {
+          ...item[key],
+          visible: centroDeGastos[key],
+        };
+      });
+      return nuevoItem;
+    });
+    let idUser = localStorage.getItem('userId');
+    const info = { body: newData, idUser };
+    createGastosPorCC(info);
+  }
+};
+
 export const createGastosGeneral = async ({
   centroDeGastos,
   cargasSociales,
@@ -636,6 +664,7 @@ export const createGastosGeneral = async ({
     // // la lleno con la info correspopndiente para suplantar las tablas
     updatePuestosQData(estructura, centroDeGastos);
     updatePuestosPData(estructura, centroDeGastos);
+    updateGastosPorCCData(estructura, centroDeGastos);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -695,6 +724,63 @@ export const createCapexP = async ({ info, idUser }) => {
         capexP: info,
         idUser,
       }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error.message);
+    throw error;
+  }
+};
+
+export const createPrestamo = async (info) => {
+  const body = JSON.stringify({
+    ...info,
+  });
+
+  try {
+    const response = await fetch(`${URL_API}/api/prestamos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body,
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error.message);
+    throw error;
+  }
+};
+
+export const deletePrestamo = async (idPrestamo) => {
+  try {
+    const response = await fetch(`${URL_API}/api/prestamos/${idPrestamo}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error.message);
+    throw error;
+  }
+};
+
+export const putPrestamo = async (idPrestamo, info) => {
+  const body = JSON.stringify({
+    ...info,
+  });
+  try {
+    const response = await fetch(`${URL_API}/api/prestamos/${idPrestamo}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body,
     });
     const data = await response.json();
     return data;

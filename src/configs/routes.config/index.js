@@ -256,9 +256,15 @@ export const protectedRoutes = [
     key: 'CAC',
     path: '/cac',
     component: React.lazy(() =>
-      import(
-        'views/FinancialPlan/GastosDeEstructura/Cac/Cac'
-      ),
+      import('views/FinancialPlan/GastosDeEstructura/Cac/Cac'),
+    ),
+    authority: [],
+  },
+  {
+    key: 'prestamos',
+    path: '/prestamos',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/Prestamos/Prestamos'),
     ),
     authority: [],
   },

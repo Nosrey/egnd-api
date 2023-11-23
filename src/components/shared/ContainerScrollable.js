@@ -68,7 +68,7 @@ function ContainerScrollable(props) {
   };
   return (
     <div
-      className="wrapper p-4 overflow-x-auto scroll-smooth relative "
+      className="wrapper p-4 overflow-x-auto scroll-smooth relative"
       ref={containerTableRef}
       onScroll={iconVisibility}
       onMouseDown={handleMouseDown}

@@ -30,7 +30,7 @@ function PuestosPxQ() {
     if (info) {
       Object.keys(puestosQ).map((cc, index) => {
         let heads = [];
-        for (let i = 0; i < puestos[0][cc].length; i++) {
+        for (let i = 0; i < puestos[0][cc]?.length; i++) {
           let head = {};
           head.id = i;
           head['años'] = [...AÑOS];
