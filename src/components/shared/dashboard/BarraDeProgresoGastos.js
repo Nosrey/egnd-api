@@ -19,9 +19,8 @@ function BarraDeProgresoGastos({
         data: d,
       });
     });
-    setDataView(cuentas);
 
-    dataView.sort((a1, a2) => {
+    setDataView(cuentas.sort((a1, a2) => {
       if (a1.data > a2.data) {
         return -1;
       }
@@ -29,18 +28,22 @@ function BarraDeProgresoGastos({
         return 1;
       }
       return 0;
-    });
+    }));
   }, [periodoSelected, yearSelected]);
 
-  return dataView.map((cuenta) => {
+  return  (
     <div>
-      <span className="cursor-default">{cuenta.name}</span>
-      <Progress
-        percent={((cuenta.data * 100) / totalVentas).toFixed(0)}
-        color="amber-400"
-      />
-    </div>;
-  });
+      {dataView.map((cuenta,i) => (
+        <div  key={i}>
+          <span className="cursor-default">{cuenta.name}</span>
+          <Progress
+            percent={((cuenta.data * 100) / totalVentas).toFixed(0)}
+            color="amber-400"
+          />
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export default BarraDeProgresoGastos;
