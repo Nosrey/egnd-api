@@ -28,12 +28,17 @@ function Cac() {
   const [dataAssump, setDataAssump] = useState();
   const [gastosPorCCData, setGastosPorCCData] = useState();
   const [valoresCAC, setValoresCAC] = useState([]);
+  const [valoresLTV, setValoresLTV] = useState([]);
+  const [valoresLTVCAC, setValoresLTVCAC] = useState([]);
+
   const [infoForm, setInfoForm] = useState();
   const [volumenData, setVolumenData] = useState();
   const [assumptionData, setAssumptionData] = useState();
   const [churnDataXProd, setChurnDataXProd] = useState();
+  const [costoData, setCostoData] = useState();
 
-  
+  // CAC 
+
   const calcNewClients = (data, indexY, indexMes, indexChannel, indexProd) =>
     Number(
       formatNumber(
@@ -87,7 +92,6 @@ function Cac() {
     // retorno un array de 10 numeros  ,el total de clientes nuevos por cada año
     return nuevoClientes;
   }
-
   
   const calculateVentas = () => {
     let dataVentas = []
@@ -114,7 +118,7 @@ function Cac() {
       });
     }
     
-    // retorno un array de 10 numeros  ,el total de clientes nuevos por cada año
+    // retorno un array de 10 numeros  ,el total de ventas por cada año
     return dataVentas;
   }
 
@@ -160,144 +164,166 @@ function Cac() {
     return resultadoCAC;
   }
 
-
-  // LTV
-
-  const getValueMes = (indexPais, indexCanal, indexProd, indexYear, indexMes) =>
-    infoVolToCalculateClient[volumenData[indexPais].countryName][indexCanal].productos[indexProd].años[
-      indexYear
-    ].volMeses[MONTHS[indexMes]];
-
-
-  const getBajas = (indexPais, indexCanal, indexProd, indexYear, indexMes) => {
-    const volMesPasado = getValueMes(
-      indexPais,
-      indexCanal,
-      indexProd,
-      indexYear,
-      Number(indexMes) - 1,
-    );
-   
-    const volEsteMes = getValueMes(
-      indexPais,
-      indexCanal,
-      indexProd,
-      indexYear,
-      indexMes
-    );
-    const volXCliente =assumptionData[0].canales[indexCanal].items[indexProd].volumen;
-    const clientesMesPasado = volMesPasado/ volXCliente;
-    const clientesEsteMes = volEsteMes / volXCliente;
-    const churnTeorico = assumptionData[0].churns[indexCanal].items[indexProd].porcentajeChurn;
-    
-    let rdo;
-    if (indexMes=== 0 && indexYear===0) {
-      rdo = ''
-    } else {
-      rdo = (clientesEsteMes - clientesMesPasado >= 0)
-      ? ((volMesPasado / volXCliente) * churnTeorico) / 100
-      : (clientesMesPasado - clientesEsteMes);
-     }
-
-    return rdo;
-  };
-
-  const getInicio = (indexPais, indexCanal, indexProd, indexYear, indexMes) => {
-    const volEsteMes = getValueMes(
-      indexPais,
-      indexCanal,
-      indexProd,
-      indexYear,
-      indexMes
-    );
-    const volXCliente = assumptionData[0].canales[indexCanal].items[indexProd].volumen;
-
-      let rdo
-      if (indexMes === 0 && indexYear === 0) {
-        rdo = volEsteMes/ volXCliente
-      } else {
-        rdo= getFinal(indexPais, indexCanal, indexProd, indexYear, indexMes-1)
-      }
-    return rdo;
-  };
-
- 
-  const getAltas = (indexPais, indexCanal, indexProd, indexYear, indexMes) => {
-    const volMesPasado = getValueMes(
-      indexPais,
-      indexCanal,
-      indexProd,
-      indexYear,
-      Number(indexMes) - 1,
-    );
-    const volEsteMes = getValueMes(
-      indexPais,
-      indexCanal,
-      indexProd,
-      indexYear,
-      indexMes
-    );
-    const volXCliente = assumptionData[0].canales[indexCanal].items[indexProd].volumen;
-
-    const clientesMesPasado = volMesPasado/ volXCliente;
-    const clientesEsteMes = volEsteMes / volXCliente;
-
-    const churnTeorico = assumptionData[0].churns[indexCanal].items[indexProd].porcentajeChurn;
-
-    let rdo;
-    if (indexMes=== 0 && indexYear===0) {
-      rdo = ''
-    } else {
-      rdo = (clientesEsteMes - clientesMesPasado >= 0)
-      ? (clientesEsteMes - clientesMesPasado + ((volMesPasado / volXCliente) * churnTeorico) / 100) 
-      : 0;
-    }
-
-    return rdo;
-  };
-
-  const getFinal = (indexPais, indexCanal, indexProd, indexYear, indexMes) =>( getInicio(indexPais, indexCanal, indexProd, indexYear, indexMes)+ getAltas(indexPais, indexCanal, indexProd, indexYear, indexMes)) -
-  getBajas(indexPais, indexCanal, indexProd, indexYear, indexMes);
-   
-
-  const calculateCicloCliente = () => {
-    // ciclo clientes = 1/ %Churn
-    // % churn = 
-    const arrayChurns=[]
-    for (let i = 0; i < 10; i++) {
-      const paises = Object.keys(churnDataXProd);
-      // Iterar sobre las claves (paises)
-      paises.forEach((pais, indexPais) => {
-        // Iterar sobre los elementos del array de cada pais
-        churnDataXProd[pais].forEach((canal, indexCanal) => {
-        
-          canal.productos.forEach((prod, indexProd) => {
-            // sumo no promedio , cambiar eso si lo piden los clientes
-            const sumatoriaPorcentajesChurnEseAnio = prod.churnPorcetajes[i].reduce((total, valor) => total + valor, 0)
-            // aca obtve un unico vlaor que es la suma de los % chunr de un anio de UN producto de unc anal de un pais , buscar la forma de sumar ahora los de todo el anio de todas las variabel para pushar
-            console.log(prod.churnPorcetajes[i].reduce((total, valor) => total + valor, 0));
-
-          })
-        });
-      });
-      
-    }
-    // return  // array de die valores d 1/ %Churn de ese anio de todos los prod
-  }
-  
   const calculateCAC = () => {
     const costos = costosMktyComercial(gastosPorCCData);
     const nuevosClientes = calculateClients(); 
     return costos.map((elemento, indice) => Math.round(elemento / nuevosClientes[indice]));
   }
+  // ********************** fin calculos de CAC // **********************
 
+  // LTV
+   
+  function redondearHaciaArribaConDosDecimales(numero) {
+    // Multiplicar por 100 para mover dos decimales a la izquierda
+    let multiplicado = numero * 100;
+    // Redondear hacia arriba
+    let redondeado = Math.ceil(multiplicado);
+    // Dividir por 100 para devolver los dos decimales
+    let resultado = redondeado / 100;
+    
+    return resultado;
+}
+
+  const calculateCicloCliente = () => {
+    // ciclo clientes = 1/ %Churn
+    // % churn = 
+    const arrayCiclos=[]
+    for (let i = 0; i < 10; i++) {
+      let acum = 0;
+      const paises = Object.keys(churnDataXProd);
+      // Iterar sobre las claves (paises)
+      paises.forEach((pais, indexPais) => {
+        // Iterar sobre los elementos del array de cada pais
+        churnDataXProd[pais].forEach((canal, indexCanal) => {
+          canal.productos.forEach((prod, indexProd) => {
+            const sumatoriaPorcentajesChurnEseAnio = prod.churnPorcetajes[i].reduce((total, valor) => total + valor, 0)
+            acum += isNaN(sumatoriaPorcentajesChurnEseAnio) ? 0 : sumatoriaPorcentajesChurnEseAnio ;
+          })
+        });
+      });
+      arrayCiclos.push(redondearHaciaArribaConDosDecimales(1/acum * 100)) // esto es porque la formula de ciclo cliente es 1/churn %
+    }
+    return arrayCiclos  // array de diez valores d 1/ %Churn de ese anio de todos los prod
+  }
+  
+  const calculateAvClientes = () => {
+    //   ventas/ cant clientes finales , es decir el valor de inicio del mes 0 del anio siguiente
+    const ventas = calculateVentas();
+    const arrayAvClientes=[]
+    for (let i = 0; i < 10; i++) {
+      let acumClientesFinales = 0;
+      const paises = Object.keys(churnDataXProd);
+      // Iterar sobre las claves (paises)
+      paises.forEach((pais, indexPais) => {
+        // Iterar sobre los elementos del array de cada pais
+        churnDataXProd[pais].forEach((canal, indexCanal) => {
+          canal.productos.forEach((prod, indexProd) => {
+            // para el vlaor final de mi primer anio necesito el valor inicio de mi anio siguiente por eso i+1
+            const clientesFinalesEsteProd = i !== 9 ? prod.valoresInicioChurn[i+1][0] : prod.valoresInicioChurn[i][11];
+            acumClientesFinales += clientesFinalesEsteProd;
+          })
+        });
+      });
+      
+      arrayAvClientes.push(redondearHaciaArribaConDosDecimales(ventas[i]/acumClientesFinales)) // ventas / clientes finales
+    }
+    return arrayAvClientes  // array de diez valores d ventas / clientes finales de ese anio
+  }
+
+  const calculateCostosUnitarios = () => {
+    console.log(costoData)
+    const arrayCostosUnitarios=[]
+    for (let i = 0; i < 10; i++) {
+      let acum = 0;
+
+      // Iterar sobre las claves (paises)
+      costoData.forEach((pais, indexPais) => {
+        // Iterar sobre los elementos del array de cada pais
+        pais.stats.forEach((canal, indexCanal) => {
+          canal.productos.forEach((prod, indexProd) => {
+            MONTHS.map((s, indexM) => {
+              acum += isNaN(prod.años[i].volMeses[s]) ? 0 : prod.años[i].volMeses[s]
+
+            })
+          })
+        });
+      });
+      arrayCostosUnitarios.push(acum) 
+    }
+
+    console.log("Costos Unitarios   :  ",arrayCostosUnitarios)
+    return arrayCostosUnitarios
+  }
+  
+  const totComisionesPercent = () => {
+    let comisiones = 0
+
+      costoData.forEach((pais, indexPais) => {
+        pais.stats.forEach((canal, indexCanal) => {
+          canal.productos.forEach((prod, indexProd) => {
+            comisiones += prod.comision;
+            comisiones += prod.cargos;
+            comisiones += prod.impuesto;
+          })
+        });
+      });
+
+    return comisiones;
+  }
+  const calculateCostosTotales = () => {
+    // a cada posicion, es decir, a cada anio de mi array de Costos Unitarios tengo que sumarle los costos por comisiones e impuestos
+    // estos costos me vienen en la data expresados en % , es decir si dice 1% , el valor de ese costo que tengo qeu sumar es el 1% SOBRE LAS VENTAS
+    const comisionesPercent = totComisionesPercent(); // me devuelve las comisiones totales por anio teniendo en cuenta todos los prod , canales y paises
+    const ventas = calculateVentas();
+    const costosUnitarios = calculateCostosUnitarios();
+
+    const arrCostosComisiones = []// diez posiciones de mis costos extras por anio
+
+    for (let i = 0; i < ventas.length; i++) {
+      let porcentajeComisiones = (comisionesPercent / 100) * ventas[i];
+      arrCostosComisiones.push(porcentajeComisiones);
+    }
+
+    const arrCostosTotales = []
+    for (let i = 0; i < arrCostosComisiones.length; i++) {
+      arrCostosTotales.push(arrCostosComisiones[i] + costosUnitarios[i]);
+    }
+    return arrCostosTotales   // array de diez posiciones sumando en cada una los costos extras por comisiones mas lso costos unitarios
+  }
+
+  const calculateMargenBruto = () => {
+    const costosTotales =   calculateCostosTotales();
+    const ventas = calculateVentas();
+    const resultado = [];
+    for (let i = 0; i < ventas.length; i++) {
+      // Calcular la ganancia restando costos de ventas
+      let ganancia = ventas[i] - costosTotales[i];
+    
+      // Calcular el porcentaje de ganancia en relación con las ventas
+      let porcentajeGanancia = (ganancia / ventas[i]) * 100;
+    
+      resultado.push(redondearHaciaArribaConDosDecimales(porcentajeGanancia));
+    }
+    return resultado;
+  }
+  
   const calculateLTV = () => {
     const cicloCLiente = calculateCicloCliente(gastosPorCCData);
-    console.log('ltv calculando ciclo clicnete: ', cicloCLiente)
-    // const avClientes = calculateAvClientes(); 
-    // const margenBruto = calculateCMGB(); 
-    // return cicloCLiente * avClientes * margenBruto; //son aarrays
+    const avClientes = calculateAvClientes(); 
+    const margenBruto = calculateMargenBruto(); 
+    console.log('ltv calculando margen: ', margenBruto)
+    const resultado = [];
+
+    if (cicloCLiente.length === avClientes.length && avClientes.length === margenBruto.length) {
+      for (let i = 0; i < cicloCLiente.length; i++) {
+        resultado[i] = Math.round(cicloCLiente[i] * avClientes[i] * margenBruto[i]);
+      }
+    } else {
+      console.log("Los arrays no tienen la misma longitud.");
+    }
+    return resultado; // cicloCLiente * avClientes * margenBruto; //son aarrays
   }
+ // ********************** fin calculos de LTV // **********************
 
   useEffect(() => {
     if (infoVolToCalculateClient && dataAssump && gastosPorCCData) {
@@ -314,10 +340,26 @@ function Cac() {
   }, [infoForm])
 
   useEffect(() => {
-    if (churnDataXProd) {
-      calculateLTV()
+    if (churnDataXProd && costoData) {
+      setValoresLTV(calculateLTV())
     }
-  }, [churnDataXProd])
+  }, [churnDataXProd, costoData])
+
+  useEffect(() => {
+    if (valoresCAC.length !== 0 && valoresLTV.length !== 0) {
+      // calculo LTV / CAC
+      const resultado = [];
+
+      if (valoresLTV.length === valoresCAC.length) {
+        for (let i = 0; i < valoresLTV.length; i++) {
+          resultado[i] = valoresLTV[i] / valoresCAC[i]; // LTV /CAC
+        }
+        setValoresLTVCAC(resultado)
+      } else {
+        console.log("Los arrays no tienen la misma longitud.");
+      }
+    }
+  }, [valoresCAC, valoresLTV])
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
@@ -339,6 +381,12 @@ function Cac() {
 
            if (data.assumptionData[0]) {
             setDataAssump(data.assumptionData[0]);
+
+            if (data.costoData.length !== 0 ) {
+              setCostoData(data.costoData)
+            } else {
+              alert('Es necesario completar Costos Unitarios para visualizar esta pantalla')
+            }
           }
 
            if (data.gastosPorCCData.length !== 0) {
@@ -390,16 +438,13 @@ function Cac() {
       .catch((error) => console.error(error));
   }, []);
 
-  const LTV = [22, 43, 52, 73, 81, 89, 111, 134, 192, 207 ];
-  const CAC = [223, 329, 452, 730, 813,1029, 1112, 1343, 1390, 1407 ];
-  const LTVCAC = [0.09, 0.13, 0.11, 0.1, 0.09, 0.08, 0.09,0.09, 0.13, 0.14 ];
   return (
     <>
       {showLoader ? (
         <MySpinner />
       ) : (
         <>
-        { valoresCAC.length !== 0 && 
+        { valoresCAC.length !== 0 && valoresLTV.length !== 0 &&  valoresLTVCAC.length !== 0 &&
           <div>
           <div className="border-b-2 mb-8 pb-1">
             <h4 className="cursor-default">
@@ -413,8 +458,8 @@ function Cac() {
                 contenido={
                   <TableCac
                     cac={valoresCAC}
-                    ltv={LTV}
-                    ltvcac={LTVCAC}
+                    ltv={valoresLTV}
+                    ltvcac={valoresLTVCAC}
                   />
                 }
               />
@@ -423,12 +468,12 @@ function Cac() {
 
           <div className=" mt-[40px]">
               <h5>CAC y LTV</h5>
-              <GraficoDashed   cac={CAC} ltv={LTV}/>
+              <GraficoDashed   cac={valoresCAC} ltv={valoresLTV}/>
             </div>
 
             <div className=" mt-[40px]">
                 <h5>LTV / CAC</h5>
-                <GraficoDashedLTVCAC  ltvcac={LTVCAC} />
+                <GraficoDashedLTVCAC  ltvcac={valoresLTVCAC} />
               </div>
         </div>
         }

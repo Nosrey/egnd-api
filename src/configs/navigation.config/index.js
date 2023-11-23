@@ -410,7 +410,7 @@ const navigationConfig = [
         subMenu: [
           {
             key: 'collapseEstadosFinancieros.item1',
-            path: '/',
+            path: '/pyl',
             title: 'P&L',
             translateKey: 'nav.collapseEstadosFinancieros.item1',
             icon: '',
