@@ -15,6 +15,7 @@ function ResumenDeGasto() {
   const [infoForm, setInfoForm] = useState();
   const currentState = useSelector((state) => state.auth.user);
   const [puestosQ, setPuestosQ] = useState([]);
+  const [puestosP, setPuestosP] = useState([]);
   const [visibleItems, setVisibleItems] = useState([0]);
   const currency = useSelector((state) => state.auth.user.currency);
   const [sumVerticales, setSumVerticales] = useState({});
@@ -72,13 +73,14 @@ function ResumenDeGasto() {
 
   useEffect(() => {
     let estructura = {};
+    console.log('[PQ]', puestosQ);
     if (info) {
       Object.keys(puestosQ).map((cc, index) => {
         let heads = [];
         for (let i = 0; i < Cuentas.length; i++) {
           let head = {};
           head.id = i;
-          head['años'] = [...AÑOS];
+          head['años'] = JSON.parse(JSON.stringify(AÑOS));
           head.name = Cuentas[i];
           head.precioInicial = 0;
           head.tasa = 0;
@@ -86,9 +88,9 @@ function ResumenDeGasto() {
           heads.push(head);
           let h = {};
           h.visible = puestosQ[cc];
-          h.cuentas = [...heads];
+          h.cuentas = JSON.parse(JSON.stringify(heads));
 
-          estructura[cc] = { ...h };
+          estructura[cc] = JSON.parse(JSON.stringify(h));
         }
       });
       setInfoForm(() => ({ ...estructura }));
@@ -108,7 +110,9 @@ function ResumenDeGasto() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
+        console.log('[datasup]', data);
         if (data?.gastosPorCCData.length !== 0) {
+          console.log('[DATA]', data?.gastosPorCCData[0].centroDeCostos[0]);
           setInfoForm(() => ({
             ...data?.gastosPorCCData[0].centroDeCostos[0],
           }));
@@ -119,6 +123,9 @@ function ResumenDeGasto() {
           }
         }
         setPuestosQ(data?.gastosGeneralData[0].centroDeGastos);
+        if (data?.puestosPData[0]) {
+          setPuestosP(data?.puestosPData[0].puestosp[0]);
+        }
         setShowLoader(false);
       })
       .catch((error) => console.error(error));
@@ -166,7 +173,7 @@ function ResumenDeGasto() {
       });
     }
   };
-
+  console.log('[INFO]', infoForm);
   return (
     <>
       {showLoader ? (

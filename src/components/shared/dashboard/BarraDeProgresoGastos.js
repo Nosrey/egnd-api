@@ -1,24 +1,27 @@
 // import { Progress } from 'components/ui';
 import { Progress } from 'components/ui';
+import { useEffect, useState } from 'react';
 
 function BarraDeProgresoGastos({
   data,
   nameCuentas,
   totalVentas,
-  selectYear,
   periodoSelected,
+  yearSelected,
 }) {
-  let cuentas = [];
+  const [dataView, setDataView] = useState([]);
 
-  if (data && nameCuentas) {
+  useEffect(() => {
+    let cuentas = [];
     data.forEach((d, indexD) => {
       cuentas.push({
         name: nameCuentas[indexD],
         data: d,
       });
     });
+    setDataView(cuentas);
 
-    cuentas.sort((a1, a2) => {
+    dataView.sort((a1, a2) => {
       if (a1.data > a2.data) {
         return -1;
       }
@@ -27,23 +30,17 @@ function BarraDeProgresoGastos({
       }
       return 0;
     });
-  }
+  }, [periodoSelected, yearSelected]);
 
-  console.log('c', cuentas);
-  return (
+  return dataView.map((cuenta) => {
     <div>
-      {cuentas.map((country, indexC) => {
-        <div key={country.name}>
-          <span className="cursor-default">{country.name.toUpperCase()}</span>
-          <Progress
-            // percent={((country.data * 100) / totalVentas).toFixed(0)}
-            percent={100}
-            color="amber-400"
-          />
-        </div>;
-      })}
-    </div>
-  );
+      <span className="cursor-default">{cuenta.name}</span>
+      <Progress
+        percent={((cuenta.data * 100) / totalVentas).toFixed(0)}
+        color="amber-400"
+      />
+    </div>;
+  });
 }
 
 export default BarraDeProgresoGastos;
