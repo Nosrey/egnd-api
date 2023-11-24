@@ -95,27 +95,20 @@ function Cac() {
   
   const calculateVentas = () => {
     let dataVentas = []
-    let tot = 0;
-
     for (let guia = 0; guia < 10; guia++) {
+      let tot = 0;
       Object.values(infoForm).map((m, indexPais) => {
         m.map((p) => {
           p.productos.map((o, indexO) => {
             o.años.map((a, indexY) => {
               if (indexY=== guia) {
-                MONTHS.map((s, indexM) => {
-                  tot += Number(a.ventasTotal);
-                  if (indexO === p.productos.length-1 && indexPais === Object.values(infoForm).length -1 && indexM === 11) {
-                        const valor = isNaN(tot) ? 0 : tot
-                        dataVentas.push(valor)
-                        tot= 0
-                      }
+                tot += Number(a.ventasTotal ? a.ventasTotal : 0);
+                  }
                 });
-              }
+              });
             });
           });
-        });
-      });
+      dataVentas.push(tot)
     }
     
     // retorno un array de 10 numeros  ,el total de ventas por cada año
@@ -224,14 +217,12 @@ function Cac() {
           })
         });
       });
-      
       arrayAvClientes.push(redondearHaciaArribaConDosDecimales(ventas[i]/acumClientesFinales)) // ventas / clientes finales
     }
     return arrayAvClientes  // array de diez valores d ventas / clientes finales de ese anio
   }
 
-  const calculateCostosUnitarios = () => {
-    console.log(costoData)
+  const calculateCostosAnualesProd = () => {
     const arrayCostosUnitarios=[]
     for (let i = 0; i < 10; i++) {
       let acum = 0;
@@ -242,7 +233,11 @@ function Cac() {
         pais.stats.forEach((canal, indexCanal) => {
           canal.productos.forEach((prod, indexProd) => {
             MONTHS.map((s, indexM) => {
-              acum += isNaN(prod.años[i].volMeses[s]) ? 0 : prod.años[i].volMeses[s]
+              const costoU = isNaN(prod.años[i].volMeses[s]) ? 0 : prod.años[i].volMeses[s];
+              const vol = isNaN(volumenData[indexPais].stats[indexCanal].productos[indexProd].años[i].volMeses[s]) ? 0
+              : volumenData[indexPais].stats[indexCanal].productos[indexProd].años[i].volMeses[s];
+              
+              acum += costoU * vol;
 
             })
           })
@@ -251,42 +246,38 @@ function Cac() {
       arrayCostosUnitarios.push(acum) 
     }
 
-    console.log("Costos Unitarios   :  ",arrayCostosUnitarios)
     return arrayCostosUnitarios
   }
   
-  const totComisionesPercent = () => {
-    let comisiones = 0
-
+  const totComisiones = () => {
+    let comisiones = []
+    for (let i = 0; i < 10; i++) {
+      let sum = 0
       costoData.forEach((pais, indexPais) => {
         pais.stats.forEach((canal, indexCanal) => {
           canal.productos.forEach((prod, indexProd) => {
-            comisiones += prod.comision;
-            comisiones += prod.cargos;
-            comisiones += prod.impuesto;
+              // deinfo form saco las ventas de ese pord de ese canal de ese pais
+              const ventas = infoForm[pais.countryName][indexCanal].productos[indexProd].años[i].ventasTotal;
+              
+              // de costo data saco las comisiones 
+              sum += (prod.comision / 100) * ventas;
+              sum += (prod.cargos / 100) * ventas;
+              sum += (prod.impuesto / 100) * ventas;
           })
         });
       });
-
+      comisiones.push(sum)
+    }
     return comisiones;
   }
   const calculateCostosTotales = () => {
     // a cada posicion, es decir, a cada anio de mi array de Costos Unitarios tengo que sumarle los costos por comisiones e impuestos
-    // estos costos me vienen en la data expresados en % , es decir si dice 1% , el valor de ese costo que tengo qeu sumar es el 1% SOBRE LAS VENTAS
-    const comisionesPercent = totComisionesPercent(); // me devuelve las comisiones totales por anio teniendo en cuenta todos los prod , canales y paises
-    const ventas = calculateVentas();
-    const costosUnitarios = calculateCostosUnitarios();
-
-    const arrCostosComisiones = []// diez posiciones de mis costos extras por anio
-
-    for (let i = 0; i < ventas.length; i++) {
-      let porcentajeComisiones = (comisionesPercent / 100) * ventas[i];
-      arrCostosComisiones.push(porcentajeComisiones);
-    }
+    const comisiones = totComisiones(); // me devuelve las comisiones totales en $ por anio teniendo en cuenta todos los prod , canales y paises
+    const costosUnitarios = calculateCostosAnualesProd();
 
     const arrCostosTotales = []
-    for (let i = 0; i < arrCostosComisiones.length; i++) {
-      arrCostosTotales.push(arrCostosComisiones[i] + costosUnitarios[i]);
+    for (let i = 0; i < costosUnitarios.length; i++) {
+      arrCostosTotales.push(costosUnitarios[i] + comisiones[i]);
     }
     return arrCostosTotales   // array de diez posiciones sumando en cada una los costos extras por comisiones mas lso costos unitarios
   }
@@ -301,7 +292,6 @@ function Cac() {
     
       // Calcular el porcentaje de ganancia en relación con las ventas
       let porcentajeGanancia = (ganancia / ventas[i]) * 100;
-    
       resultado.push(redondearHaciaArribaConDosDecimales(porcentajeGanancia));
     }
     return resultado;
@@ -311,7 +301,6 @@ function Cac() {
     const cicloCLiente = calculateCicloCliente(gastosPorCCData);
     const avClientes = calculateAvClientes(); 
     const margenBruto = calculateMargenBruto(); 
-    console.log('ltv calculando margen: ', margenBruto)
     const resultado = [];
 
     if (cicloCLiente.length === avClientes.length && avClientes.length === margenBruto.length) {
@@ -340,7 +329,7 @@ function Cac() {
   }, [infoForm])
 
   useEffect(() => {
-    if (churnDataXProd && costoData) {
+    if (churnDataXProd && costoData && infoForm) {
       setValoresLTV(calculateLTV())
     }
   }, [churnDataXProd, costoData])
@@ -399,7 +388,6 @@ function Cac() {
             // setVolumenData(data?.volumenData.sort((a, b) =>
             //   a.countryName.localeCompare(b.countryName),
             // ))
-            console.log('antes de guardar',data.volumenData)
             setVolumenData(data?.volumenData)
           }
 

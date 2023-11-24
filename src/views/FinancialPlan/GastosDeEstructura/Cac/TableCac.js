@@ -13,9 +13,6 @@ function TableCac(props) {
   const [ltv, setLtv ]= useState(props.ltv);
   const [ltvCac, setLtvCac] = useState(props.ltvcac);
 
-  useEffect(() => {
-    console.log(cac)
-  }, [props])
   return (
     <>
     { cac && ltv && ltvCac && 

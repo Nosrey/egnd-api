@@ -163,12 +163,6 @@ const churnPorcentaje = (indexPais, indexCanal, indexProd, volumenData, assumpti
           volumenData
         );
         let clientesMesPasado = volMesPasado/ volXCliente
-
-        if (i ===0 && j=== 2&& indexPais === 0 && indexCanal=== 0 && indexProd===0) {
-         console.log("BAJAS",bajas) 
-         console.log("inico mes pasado",clientesMesPasado) 
-
-        }
           subarray.push(bajas / clientesMesPasado *100); 
       }
 
@@ -193,6 +187,5 @@ export const modifyDataWithInitialClients =(originalData, volumenData, assumptio
           })
         });
       })
-      console.log("***********88RETORNO****" , copy)
   return copy
 }
