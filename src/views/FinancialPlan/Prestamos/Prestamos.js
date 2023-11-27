@@ -3,15 +3,9 @@
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import MySpinner from 'components/shared/loaders/MySpinner';
 import { Alert, FormContainer, Tabs } from 'components/ui';
-import { AÑOS3 } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  createCapexP,
-  createPrestamo,
-  getUser,
-  putPrestamo,
-} from 'services/Requests';
+import { createPrestamo, getUser, putPrestamo } from 'services/Requests';
 import TableCapexQ from './TablePrestamos';
 
 export default function Prestamos() {
@@ -27,7 +21,7 @@ export default function Prestamos() {
   const addPrestamo = (newPrestamo) => {
     if (prestamos.length === 5) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setErrorMessage('Se llegó al límite de 5 prestamos');
+      setErrorMessage('Se llegó al límite de 5 préstamos');
       setShowErrorAlert(true);
       setTimeout(() => {
         setShowErrorAlert(false);
@@ -46,37 +40,6 @@ export default function Prestamos() {
     });
 
     return isEmpty;
-  };
-
-  const validateData = (info) => {
-    let data = JSON.parse(JSON.stringify(info));
-    data = [data];
-
-    Object.values(data[0]).map((d) => {
-      const find = capexP.capexP.find((c) => c.id === d.id);
-      if (find) {
-        d.precioInicial = find.precioInicial;
-        d.tasa = find.tasa;
-        d.incremento = find.incremento;
-        d.años = find.años;
-      } else {
-        d.precioInicial = 0;
-        d.tasa = 0;
-        d.incremento = 'mensual';
-        d.años = [...AÑOS3];
-      }
-    });
-
-    const f = [];
-
-    Object.values(data[0]).map((d) => {
-      f.push(d);
-    });
-
-    let idUser = localStorage.getItem('userId');
-    const inf = { info: f, idUser };
-
-    createCapexP(inf);
   };
 
   const submit = () => {
