@@ -4,8 +4,6 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unsafe-optional-chaining */
 
-/// FALTA : tiket medio , margen bruto   par acalcular el LTV 
-// despues hay que ver si lo que se hace cuando se tra la data tiene las validaciones correctas y en que caso debo mostrar algun plaveholder si me falta algun dato 
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import MySpinner from 'components/shared/loaders/MySpinner'; 
 import { FormContainer } from 'components/ui';
@@ -13,12 +11,11 @@ import { MONTHS } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
-import { showMultiplicacionPxQ } from 'utils/calcs';
+import { calculateCostosAnuales, calculateCostosTotales, calculateMargenBrutoPorcentaje, calculateVentas, redondearHaciaArribaConDosDecimales, showMultiplicacionPxQ, totComisiones } from 'utils/calcs';
 import formatNumber from 'utils/formatTotalsValues';
 import { modifyDataWithInitialClients } from 'utils/hoc/clientsCalcs';
 import TableCac from './TableCac';
 import GraficoDashed from './GraficoDashed';
-import GraficoDeBarra from './GraficoDeBarra';
 import GraficoDashedLTVCAC from './GraficoDashedLTVCAC';
 
 function Cac() {
@@ -92,28 +89,6 @@ function Cac() {
     // retorno un array de 10 numeros  ,el total de clientes nuevos por cada año
     return nuevoClientes;
   }
-  
-  const calculateVentas = () => {
-    let dataVentas = []
-    for (let guia = 0; guia < 10; guia++) {
-      let tot = 0;
-      Object.values(infoForm).map((m, indexPais) => {
-        m.map((p) => {
-          p.productos.map((o, indexO) => {
-            o.años.map((a, indexY) => {
-              if (indexY=== guia) {
-                tot += Number(a.ventasTotal ? a.ventasTotal : 0);
-                  }
-                });
-              });
-            });
-          });
-      dataVentas.push(tot)
-    }
-    
-    // retorno un array de 10 numeros  ,el total de ventas por cada año
-    return dataVentas;
-  }
 
   const getTotalPorCC  = (cc) =>{
     // Logica para obtener un array de 10 posiciones correspondiente al total gastado en ese centro de costo por año
@@ -165,17 +140,6 @@ function Cac() {
   // ********************** fin calculos de CAC // **********************
 
   // LTV
-   
-  function redondearHaciaArribaConDosDecimales(numero) {
-    // Multiplicar por 100 para mover dos decimales a la izquierda
-    let multiplicado = numero * 100;
-    // Redondear hacia arriba
-    let redondeado = Math.ceil(multiplicado);
-    // Dividir por 100 para devolver los dos decimales
-    let resultado = redondeado / 100;
-    
-    return resultado;
-}
 
   const calculateCicloCliente = () => {
     // ciclo clientes = 1/ %Churn
@@ -201,7 +165,7 @@ function Cac() {
   
   const calculateAvClientes = () => {
     //   ventas/ cant clientes finales , es decir el valor de inicio del mes 0 del anio siguiente
-    const ventas = calculateVentas();
+    const ventas = calculateVentas(infoForm);
     const arrayAvClientes=[]
     for (let i = 0; i < 10; i++) {
       let acumClientesFinales = 0;
@@ -221,86 +185,11 @@ function Cac() {
     }
     return arrayAvClientes  // array de diez valores d ventas / clientes finales de ese anio
   }
-
-  const calculateCostosAnualesProd = () => {
-    const arrayCostosUnitarios=[]
-    for (let i = 0; i < 10; i++) {
-      let acum = 0;
-
-      // Iterar sobre las claves (paises)
-      costoData.forEach((pais, indexPais) => {
-        // Iterar sobre los elementos del array de cada pais
-        pais.stats.forEach((canal, indexCanal) => {
-          canal.productos.forEach((prod, indexProd) => {
-            MONTHS.map((s, indexM) => {
-              const costoU = isNaN(prod.años[i].volMeses[s]) ? 0 : prod.años[i].volMeses[s];
-              const vol = isNaN(volumenData[indexPais].stats[indexCanal].productos[indexProd].años[i].volMeses[s]) ? 0
-              : volumenData[indexPais].stats[indexCanal].productos[indexProd].años[i].volMeses[s];
-              
-              acum += costoU * vol;
-
-            })
-          })
-        });
-      });
-      arrayCostosUnitarios.push(acum) 
-    }
-
-    return arrayCostosUnitarios
-  }
-  
-  const totComisiones = () => {
-    let comisiones = []
-    for (let i = 0; i < 10; i++) {
-      let sum = 0
-      costoData.forEach((pais, indexPais) => {
-        pais.stats.forEach((canal, indexCanal) => {
-          canal.productos.forEach((prod, indexProd) => {
-              // deinfo form saco las ventas de ese pord de ese canal de ese pais
-              const ventas = infoForm[pais.countryName][indexCanal].productos[indexProd].años[i].ventasTotal;
-              
-              // de costo data saco las comisiones 
-              sum += (prod.comision / 100) * ventas;
-              sum += (prod.cargos / 100) * ventas;
-              sum += (prod.impuesto / 100) * ventas;
-          })
-        });
-      });
-      comisiones.push(sum)
-    }
-    return comisiones;
-  }
-  const calculateCostosTotales = () => {
-    // a cada posicion, es decir, a cada anio de mi array de Costos Unitarios tengo que sumarle los costos por comisiones e impuestos
-    const comisiones = totComisiones(); // me devuelve las comisiones totales en $ por anio teniendo en cuenta todos los prod , canales y paises
-    const costosUnitarios = calculateCostosAnualesProd();
-
-    const arrCostosTotales = []
-    for (let i = 0; i < costosUnitarios.length; i++) {
-      arrCostosTotales.push(costosUnitarios[i] + comisiones[i]);
-    }
-    return arrCostosTotales   // array de diez posiciones sumando en cada una los costos extras por comisiones mas lso costos unitarios
-  }
-
-  const calculateMargenBruto = () => {
-    const costosTotales =   calculateCostosTotales();
-    const ventas = calculateVentas();
-    const resultado = [];
-    for (let i = 0; i < ventas.length; i++) {
-      // Calcular la ganancia restando costos de ventas
-      let ganancia = ventas[i] - costosTotales[i];
-    
-      // Calcular el porcentaje de ganancia en relación con las ventas
-      let porcentajeGanancia = (ganancia / ventas[i]) * 100;
-      resultado.push(redondearHaciaArribaConDosDecimales(porcentajeGanancia));
-    }
-    return resultado;
-  }
   
   const calculateLTV = () => {
     const cicloCLiente = calculateCicloCliente(gastosPorCCData);
     const avClientes = calculateAvClientes(); 
-    const margenBruto = calculateMargenBruto(); 
+    const margenBruto = calculateMargenBrutoPorcentaje(costoData, infoForm, volumenData); 
     const resultado = [];
 
     if (cicloCLiente.length === avClientes.length && avClientes.length === margenBruto.length) {
@@ -322,7 +211,7 @@ function Cac() {
 
   useEffect(() => {
     if (infoForm && volumenData && assumptionData) {
-      calculateVentas()
+      calculateVentas(infoForm)
       // le agrego a cada producto de cada canal de cada pais los atributos valoresInicioChurn y churnPorcetajes que lo voy a anecesitar para calcular cosas como calculateCicloCliente()
       setChurnDataXProd(modifyDataWithInitialClients(infoForm,volumenData, assumptionData))
     }
