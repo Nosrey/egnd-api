@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
@@ -8,12 +9,15 @@ import { Button, FormContainer, FormItem, Input, Select } from 'components/ui';
 import { mesesPrestamos } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import { deletePrestamo } from 'services/Requests';
+import { formatNumberPrestamos } from 'utils/formatTotalsValues';
 import { v4 as uuid } from 'uuid';
 
-function TableCapexQ(props) {
+function TablePrestamos(props) {
   const [showRemoveProd, setShowRemoveProd] = useState(false);
   const [seeButtons, setSeeButtons] = useState(false);
+  const currency = useSelector((state) => state.auth.user.currency);
 
   const hableChangePrestamo = (cta, e) => {
     let bien;
@@ -50,7 +54,7 @@ function TableCapexQ(props) {
   const calcTasaMensual = (tasaAnu) => {
     if (Number(tasaAnu) === 0) return 0;
 
-    return Number(tasaAnu) / 12;
+    return Number(tasaAnu) / 12 || 0;
   };
 
   const calcPagoMensual = (monto, tasaAnual, plazo) => {
@@ -70,26 +74,47 @@ function TableCapexQ(props) {
   const calcInteresTotal = (monto, tasaAnual, plazo) =>
     calcCapInt(monto, tasaAnual, plazo) - Number(monto) || 0;
 
-  const calcInteresMensual = (monto, tasaAnual, plazo) =>
-    calcInteresTotal(monto, tasaAnual, plazo) / Number(plazo) || 0;
+  const calcInteresMensual = (monto, tasaAnual, plazo) => {
+    if (isNaN(calcInteresTotal(monto, tasaAnual, plazo) / Number(plazo))) {
+      return 0;
+    }
+    return calcInteresTotal(monto, tasaAnual, plazo) / Number(plazo);
+  };
 
   const calcCapitalMensual = (monto, tasaAnual, plazo) =>
     calcPagoMensual(monto, tasaAnual, plazo) -
-    calcInteresMensual(monto, tasaAnual, plazo);
+      calcInteresMensual(monto, tasaAnual, plazo) || 0;
 
   const viewButtons = () => {
     let view = false;
 
-    if (props.data.length > 1) view = true;
+    if (props.data.length === 1) {
+      if (
+        props.data[0].titulo !== '' &&
+        Number(props.data[0].monto) >= 0 &&
+        Number(props.data[0].plazo) >= 0 &&
+        Number(props.data[0].tasaAnual) >= 0 &&
+        props.data[0].mesInicio !== ''
+      )
+        view = true;
+    }
 
-    if (
-      props.data[0].titulo !== '' &&
-      Number(props.data[0].monto) >= 0 &&
-      Number(props.data[0].plazo) >= 0 &&
-      Number(props.data[0].tasaAnual) >= 0 &&
-      props.data[0].mesInicio !== ''
-    )
-      view = true;
+    if (props.data.length > 1) {
+      props.data.forEach((d) => {
+        if (
+          d.titulo !== '' &&
+          Number(d.monto) >= 0 &&
+          Number(d.plazo) >= 0 &&
+          Number(d.tasaAnual) >= 0 &&
+          d.mesInicio !== ''
+        ) {
+          view = true;
+        } else {
+          view = false;
+        }
+      });
+    }
+
     setSeeButtons(view);
   };
 
@@ -131,7 +156,7 @@ function TableCapexQ(props) {
           <FormContainer>
             <section className="contenedor">
               {props.data.map((cta, index) => (
-                <div className="flex  gap-x-3 " key={cta.titulo}>
+                <div className="flex  gap-x-3 ">
                   <div className="flex flex-col ">
                     {index === 0 && (
                       <div className="titleRow min-w-[62px]">
@@ -158,7 +183,7 @@ function TableCapexQ(props) {
 
                   <div className="flex flex-col ">
                     {index === 0 && (
-                      <div className="titleRow min-w-[62px]">
+                      <div className="titleRow min-w-[22px]">
                         <p> Monto</p>
                       </div>
                     )}
@@ -166,13 +191,14 @@ function TableCapexQ(props) {
                     <FormItem
                       className={`${
                         index === 0
-                          ? 'mt-[40px] w-[300px]'
-                          : 'mt-[20px] w-[300px]'
+                          ? 'mt-[40px] w-[180px]'
+                          : 'mt-[20px] w-[180px]'
                       }`}
                     >
                       <Input
                         name="monto"
                         type="number"
+                        prefix={currency}
                         value={cta.monto}
                         onChange={(e) => handleChangeInputs(cta, e, 'monto')}
                       />
@@ -195,6 +221,7 @@ function TableCapexQ(props) {
                     >
                       <Input
                         name="plazo"
+                        type="number"
                         value={cta.plazo}
                         onChange={(e) => handleChangeInputs(cta, e, 'plazo')}
                       />
@@ -217,6 +244,8 @@ function TableCapexQ(props) {
                     >
                       <Input
                         name="tasaAnual"
+                        type="number"
+                        suffix="%"
                         value={cta.tasaAnual}
                         onChange={(e) =>
                           handleChangeInputs(cta, e, 'tasaAnual')
@@ -280,6 +309,7 @@ function TableCapexQ(props) {
                     >
                       <Input
                         name="unidad"
+                        suffix="%"
                         disabled
                         value={calcTasaMensual(cta.tasaAnual)}
                       />
@@ -304,10 +334,9 @@ function TableCapexQ(props) {
                       <Input
                         name="unidad"
                         disabled
-                        value={calcPagoMensual(
-                          cta.monto,
-                          cta.tasaAnual,
-                          cta.plazo,
+                        prefix={currency}
+                        value={formatNumberPrestamos(
+                          calcPagoMensual(cta.monto, cta.tasaAnual, cta.plazo),
                         )}
                       />
                     </FormItem>
@@ -331,10 +360,13 @@ function TableCapexQ(props) {
                       <Input
                         name="unidad"
                         disabled
-                        value={calcCapitalMensual(
-                          cta.monto,
-                          cta.tasaAnual,
-                          cta.plazo,
+                        prefix={currency}
+                        value={formatNumberPrestamos(
+                          calcCapitalMensual(
+                            cta.monto,
+                            cta.tasaAnual,
+                            cta.plazo,
+                          ),
                         )}
                       />
                     </FormItem>
@@ -358,10 +390,13 @@ function TableCapexQ(props) {
                       <Input
                         name="unidad"
                         disabled
-                        value={calcInteresMensual(
-                          cta.monto,
-                          cta.tasaAnual,
-                          cta.plazo,
+                        prefix={currency}
+                        value={formatNumberPrestamos(
+                          calcInteresMensual(
+                            cta.monto,
+                            cta.tasaAnual,
+                            cta.plazo,
+                          ),
                         )}
                       />
                     </FormItem>
@@ -385,10 +420,9 @@ function TableCapexQ(props) {
                       <Input
                         name="unidad"
                         disabled
-                        value={calcInteresTotal(
-                          cta.monto,
-                          cta.tasaAnual,
-                          cta.plazo,
+                        prefix={currency}
+                        value={formatNumberPrestamos(
+                          calcInteresTotal(cta.monto, cta.tasaAnual, cta.plazo),
                         )}
                       />
                     </FormItem>
@@ -412,7 +446,10 @@ function TableCapexQ(props) {
                       <Input
                         name="unidad"
                         disabled
-                        value={calcCapInt(cta.monto, cta.tasaAnual, cta.plazo)}
+                        prefix={currency}
+                        value={formatNumberPrestamos(
+                          calcCapInt(cta.monto, cta.tasaAnual, cta.plazo),
+                        )}
                       />
                     </FormItem>
                   </div>
@@ -487,4 +524,4 @@ function TableCapexQ(props) {
   );
 }
 
-export default TableCapexQ;
+export default TablePrestamos;
