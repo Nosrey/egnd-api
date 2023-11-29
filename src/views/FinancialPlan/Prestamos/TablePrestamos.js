@@ -344,7 +344,7 @@ function TablePrestamos(props) {
 
                   <div className="flex flex-col">
                     {index === 0 && (
-                      <div className="titleRow min-w-[62px]">
+                      <div className="titleRow min-w-[62px] text-center leading-3">
                         <p>Capital Mensual</p>
                       </div>
                     )}
@@ -374,7 +374,7 @@ function TablePrestamos(props) {
 
                   <div className="flex flex-col">
                     {index === 0 && (
-                      <div className="titleRow min-w-[62px]">
+                      <div className="titleRow min-w-[62px] text-center leading-3">
                         <p>Interés Mensual</p>
                       </div>
                     )}
