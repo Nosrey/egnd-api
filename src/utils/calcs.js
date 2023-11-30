@@ -243,3 +243,21 @@ export const calculateMargenBrutoPorcentaje = (costoData, infoForm, volumenData)
   return resultado;
 }
 
+export  const calculateCtas = (infoCuentas) => {
+  const CCActivos = Object.keys(infoCuentas).filter((key) => infoCuentas[key].visible === true);
+  const arrayCtas = []
+  
+  for (let ctaIndex = 0; ctaIndex < 12; ctaIndex++) { // evaluo doce cuentas
+    let arrayanios=[]
+    for (let anio = 0; anio < 10; anio++) { // x cada anio
+      let sumAnio = 0
+        for (let i = 0; i < CCActivos.length; i++) { // de todos mis cc activos
+
+          sumAnio += infoCuentas[CCActivos[i]].cuentas[ctaIndex].años[anio].volTotal
+        }
+        arrayanios.push(sumAnio)
+    }
+    arrayCtas.push(arrayanios)
+  }
+    return arrayCtas // rray de 12 posiciones (una pro cada cuenta) con un array de 10 posiciones adentro correspondiente al total por cada anio gastado ene sa cuenta
+}

@@ -255,11 +255,18 @@ function TablePuestosPxQ(props) {
 
   const submitInfoForm = () => {
     let idUser = localStorage.getItem('userId');
+
     const keyArray = Object.keys(infoForm);
     const copy = { ...infoForm };
     for (let x = 0; x < keyArray.length; x++) {
       copy[keyArray[x]].sum = [];
+
+      for (let i = 0; i < 10; i++) {  // GUARDO CAMBIEN EL GASTO TOTAL ANUAL PARA LA CTA REMUN Y CARGAS SOCIALES
+        copy[keyArray[x]].cuentas[0].años[i].volTotal =    Object.values(copy[keyArray[x]].cuentas[0].años[i].volMeses).reduce((a, b) => a + b, 0)    
+      }
+      
     }
+
     const body = [copy];
     const data = { body, idUser };
 
@@ -521,6 +528,7 @@ function TablePuestosPxQ(props) {
                                 </Tooltip>
                               </FormItem>
                             ))}
+                            {/* ESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */}
                           <FormItem className="mb-0">
                             <Tooltip
                               placement="top-end"
@@ -553,6 +561,9 @@ function TablePuestosPxQ(props) {
                               />
                             </Tooltip>
                           </FormItem>
+
+                         {/* ESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */}
+
                         </div>
                       </div>
                     </div>

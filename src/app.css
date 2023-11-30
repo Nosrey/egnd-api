@@ -6,6 +6,11 @@
 .wrapper::-webkit-scrollbar {
     display: none;
 }
+.linea {
+  border: 1px solid rgb(88, 87, 87);
+  width: 100%;
+  margin-bottom: 18px;
+}
 
 /* .wrapper.dragging .countrie {
     pointer-events: none;

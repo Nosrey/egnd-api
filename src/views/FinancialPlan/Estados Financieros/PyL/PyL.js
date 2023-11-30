@@ -11,13 +11,14 @@ import { FormContainer } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
-import { calculateCostosAnuales, calculateCostosAnualesTipo, calculateCostosTotales, calculateMargenBrutoPesos, calculateMargenBrutoPorcentaje, calculateVentas,calculateVentasTipo, showMultiplicacionPxQ, totComisiones, totComisionesTipo } from 'utils/calcs';
+import { calculateCostosAnuales, calculateCostosAnualesTipo, calculateCostosTotales, calculateCtas, calculateMargenBrutoPesos, calculateMargenBrutoPorcentaje, calculateVentas,calculateVentasTipo, showMultiplicacionPxQ, totComisiones, totComisionesTipo } from 'utils/calcs';
 import TablePyL from '../TablePyL';
 
 function PyL() {
   const [showLoader, setShowLoader] = useState(false);
   const currentState = useSelector((state) => state.auth.user);
   const [infoForm, setInfoForm] = useState();
+  const [infoCuentas, setInfoCuentas] = useState();
   const [costoData, setCostoData] = useState();
   const [volumenData, setVolumenData] = useState();
 
@@ -35,6 +36,8 @@ function PyL() {
   const [costosTotales, setCostosTotales] = useState();
   const [mbPesos, setMbPesos] = useState();
   const [mbPorcentaje, setMbPorcentaje] = useState();
+  const [gastoEnCtas, setGastoEnCtas] = useState();
+  const [ctasListado, setCtasListado] = useState();
 
   useEffect(() => {
     if (infoForm ) {
@@ -64,6 +67,18 @@ function PyL() {
     }
   }, [costoData, infoForm, volumenData]);
 
+ 
+  useEffect(() => {
+    if (infoCuentas) {
+      setGastoEnCtas(calculateCtas(infoCuentas))
+
+      let arrayCtas =[]
+      for (let i = 0; i < 12; i++) {
+        arrayCtas.push(infoCuentas.Administración.cuentas[i].name)
+      }
+      setCtasListado(arrayCtas)
+    }
+  }, [infoCuentas]);
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
@@ -101,6 +116,15 @@ function PyL() {
          
         } else {
           console.log("Es necesario completar la informacion de Gastos Generales")
+        }
+
+        
+        if (data?.gastosPorCCData.length !== 0) {
+          setInfoCuentas(() => ({
+            ...data?.gastosPorCCData[0].centroDeCostos[0],
+          }));
+        } else {
+          console.log("Falta completar info en Gastos por Centro de costo")
         }
 
        
@@ -143,7 +167,10 @@ function PyL() {
                     costoTotales={costosTotales || []}
                     mbPesos={mbPesos || []}
                     mbPorcentaje={mbPorcentaje || []}
-                  />
+                    ctasListado={ctasListado || []}
+                    gastoEnCtas={gastoEnCtas || []}
+
+                    />
                 }
               />
             </FormContainer>

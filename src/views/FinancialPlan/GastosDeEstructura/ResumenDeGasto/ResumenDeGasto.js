@@ -73,7 +73,6 @@ function ResumenDeGasto() {
 
   useEffect(() => {
     let estructura = {};
-    console.log('[PQ]', puestosQ);
     if (info) {
       Object.keys(puestosQ).map((cc, index) => {
         let heads = [];
@@ -110,9 +109,7 @@ function ResumenDeGasto() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        console.log('[datasup]', data);
         if (data?.gastosPorCCData.length !== 0) {
-          console.log('[DATA]', data?.gastosPorCCData[0].centroDeCostos[0]);
           setInfoForm(() => ({
             ...data?.gastosPorCCData[0].centroDeCostos[0],
           }));
@@ -137,6 +134,16 @@ function ResumenDeGasto() {
     for (let i = 0; i < arrayKeys.length; i++) {
       sum += Math.round(
         infoForm[arrayKeys[i]].cuentas[cta].años[year].volMeses[mes],
+      );
+    }
+    return sum;
+  };
+  const sumAnio = (cta, year) => {
+    const arrayKeys = Object.keys(infoForm);
+    let sum = 0;
+    for (let i = 0; i < arrayKeys.length; i++) {
+      sum += Math.round(
+        infoForm[arrayKeys[i]].cuentas[cta].años[year].volTotal,
       );
     }
     return sum;
@@ -173,7 +180,6 @@ function ResumenDeGasto() {
       });
     }
   };
-  console.log('[INFO]', infoForm);
   return (
     <>
       {showLoader ? (
@@ -334,10 +340,8 @@ function ResumenDeGasto() {
                                                 disabled
                                                 prefix={currency}
                                                 value={
-                                                  infoForm['Administración']
-                                                    .cuentas[head].precioInicial
-                                                    ? año.volTotal
-                                                    : 0
+                                                  sumAnio( head,
+                                                    indexYear)
                                                 }
                                               />
                                             </FormItem>
