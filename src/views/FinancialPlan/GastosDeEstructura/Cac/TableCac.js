@@ -6,6 +6,7 @@ import {
   Tooltip,
 } from 'components/ui';
 import { useEffect , useState} from 'react';
+import { formatNumberPrestamos } from 'utils/formatTotalsValues';
 
 
 function TableCac(props) {
@@ -38,15 +39,15 @@ function TableCac(props) {
                             <FormItem
                                 className="mb-0"
                             >
-                                {año.toString().length > 3 ? (
+                                {año.toString().length > 4 ? (
                                 <Tooltip
                                     placement="top-end"
-                                    title={año}
+                                    title={formatNumberPrestamos(año)}
                                 >
                                     <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={año}
+                                    value={formatNumberPrestamos(año)}
                                     name="year"
                                     disabled
                                     />
@@ -55,7 +56,7 @@ function TableCac(props) {
                                 <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={(año)}
+                                    value={formatNumberPrestamos(año)}
                                     name="year"
                                     disabled
                                 />
@@ -81,7 +82,7 @@ function TableCac(props) {
                             <FormItem
                                 className="mb-0"
                             >
-                                {año.toString().length > 3 ? (
+                                {año.toString().length > 4 ? (
                                 <Tooltip
                                     placement="top-end"
                                     title={año}
@@ -89,7 +90,7 @@ function TableCac(props) {
                                     <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={año}
+                                    value={formatNumberPrestamos(año)}
                                     name="year"
                                     disabled
                                     />
@@ -98,7 +99,7 @@ function TableCac(props) {
                                 <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={(año)}
+                                    value={formatNumberPrestamos(año)}
                                     name="year"
                                     disabled
                                 />
@@ -124,7 +125,7 @@ function TableCac(props) {
                             <FormItem
                                 className="mb-0"
                             >
-                                {Math.round(año).toString().length > 3 ? (
+                                {Math.round(año).toString().length > 4 ? (
                                 <Tooltip
                                     placement="top-end"
                                     title={año}
@@ -132,7 +133,7 @@ function TableCac(props) {
                                     <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={año}
+                                    value={formatNumberPrestamos(año)}
                                     name="year"
                                     disabled
                                     />
@@ -141,7 +142,7 @@ function TableCac(props) {
                                 <Input
                                     className="w-[90px]"
                                     type="text"
-                                    value={(año)}
+                                    value={formatNumberPrestamos(año)}
                                     name="year"
                                     disabled
                                 />
