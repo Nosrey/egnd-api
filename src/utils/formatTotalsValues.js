@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+
 import numeral from 'numeral';
 
 export default function formatNumber(value) {
@@ -18,7 +19,24 @@ export const formatearNumero = (numero) => {
 
 export const formatNumberPrestamos = (number) => {
   const myNumeral = numeral(number);
-  const currencyString = myNumeral.format('0,0.00');
+  const currencyString = myNumeral.format('0.0,00');
 
-  return currencyString;
+  const fraseActF = currencyString.toString().replace(',', '.');
+
+  let count = 0;
+  let another = '';
+
+  for (let i = 0; i < fraseActF.length; i++) {
+    if (fraseActF[i] === '.') {
+      count++;
+    }
+
+    if (fraseActF[i] === '.' && count > 1) {
+      another += ',';
+    } else {
+      another += fraseActF[i];
+    }
+  }
+
+  return another;
 };
