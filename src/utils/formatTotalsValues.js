@@ -19,7 +19,7 @@ export const formatearNumero = (numero) => {
 
 export const formatNumberPrestamos = (number) => {
   const myNumeral = numeral(number);
-  const currencyString = myNumeral.format('0.0,00');
+  const currencyString = myNumeral.format('0.0,');
 
   const fraseActF = currencyString.toString().replace(',', '.');
 
@@ -37,6 +37,5 @@ export const formatNumberPrestamos = (number) => {
       another += fraseActF[i];
     }
   }
-
   return another;
 };

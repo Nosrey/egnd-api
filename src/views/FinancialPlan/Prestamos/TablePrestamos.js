@@ -5,7 +5,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
-import { Button, FormContainer, FormItem, Input, Select } from 'components/ui';
+import { Button, FormContainer, FormItem, Input, Select, Tooltip } from 'components/ui';
 import { mesesPrestamos } from 'constants/forms.constants';
 import { useEffect, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
@@ -35,6 +35,8 @@ function TablePrestamos(props) {
   };
 
   const handleChangeInputs = (cta, e, campo) => {
+    let valorNuevo = ((campo === 'plazo' || campo === 'monto') && e.target.value[0] === '0') ? e.target.value.slice(1)  : e.target.value
+    
     let bien;
 
     if (cta._id) {
@@ -44,7 +46,7 @@ function TablePrestamos(props) {
     }
 
     const copyBien = [...props.data];
-    copyBien[bien][campo] = e.target.value;
+    copyBien[bien][campo] = valorNuevo;
 
     props.setPrestamos([...copyBien]);
 
@@ -65,7 +67,7 @@ function TablePrestamos(props) {
 
     const secondTerm = (1 + tasaMensual) ** Number(plazo) - 1;
 
-    return firstTerm / secondTerm || 0;
+    return (firstTerm / secondTerm).toFixed(2) || 0;
   };
 
   const calcCapInt = (monto, tasaAnual, plazo) =>
@@ -311,7 +313,7 @@ function TablePrestamos(props) {
                         name="unidad"
                         suffix="%"
                         disabled
-                        value={calcTasaMensual(cta.tasaAnual)}
+                        value={formatNumberPrestamos(calcTasaMensual(cta.tasaAnual))}
                       />
                     </FormItem>
                   </div>
@@ -331,14 +333,23 @@ function TablePrestamos(props) {
                           : 'mt-[20px] w-[100px]'
                       }`}
                     >
-                      <Input
-                        name="unidad"
-                        disabled
-                        prefix={currency}
-                        value={formatNumberPrestamos(
-                          calcPagoMensual(cta.monto, cta.tasaAnual, cta.plazo),
-                        )}
-                      />
+                       <Tooltip
+                          placement="top-end"
+                          title={currency + formatNumberPrestamos(
+                            calcPagoMensual(cta.monto, cta.tasaAnual, cta.plazo),
+                          )}
+                        >
+                          <Input
+                            name="unidad"
+                            disabled
+                            prefix={currency}
+                            value={formatNumberPrestamos(
+                              calcPagoMensual(cta.monto, cta.tasaAnual, cta.plazo),
+                            )}
+                          />
+
+                        </Tooltip>
+                      
                     </FormItem>
                   </div>
 
@@ -357,7 +368,17 @@ function TablePrestamos(props) {
                           : 'mt-[20px] w-[100px]'
                       }`}
                     >
-                      <Input
+                      <Tooltip
+                          placement="top-end"
+                          title={currency + formatNumberPrestamos(
+                            calcCapitalMensual(
+                              cta.monto,
+                              cta.tasaAnual,
+                              cta.plazo,
+                            ),
+                          )}
+                        >
+                        <Input
                         name="unidad"
                         disabled
                         prefix={currency}
@@ -369,6 +390,9 @@ function TablePrestamos(props) {
                           ),
                         )}
                       />
+
+                        </Tooltip>
+                     
                     </FormItem>
                   </div>
 
@@ -387,7 +411,17 @@ function TablePrestamos(props) {
                           : 'mt-[20px] w-[100px]'
                       }`}
                     >
-                      <Input
+                      <Tooltip
+                          placement="top-end"
+                          title={currency + formatNumberPrestamos(
+                            calcInteresMensual(
+                              cta.monto,
+                              cta.tasaAnual,
+                              cta.plazo,
+                            ),
+                          )}
+                        >
+                        <Input
                         name="unidad"
                         disabled
                         prefix={currency}
@@ -399,6 +433,9 @@ function TablePrestamos(props) {
                           ),
                         )}
                       />
+
+                        </Tooltip>
+                      
                     </FormItem>
                   </div>
 
@@ -417,7 +454,13 @@ function TablePrestamos(props) {
                           : 'mt-[20px] w-[100px]'
                       }`}
                     >
-                      <Input
+                      <Tooltip
+                          placement="top-end"
+                          title={currency + formatNumberPrestamos(
+                            calcInteresTotal(cta.monto, cta.tasaAnual, cta.plazo),
+                          )}
+                        >
+                           <Input
                         name="unidad"
                         disabled
                         prefix={currency}
@@ -425,6 +468,8 @@ function TablePrestamos(props) {
                           calcInteresTotal(cta.monto, cta.tasaAnual, cta.plazo),
                         )}
                       />
+                        </Tooltip>
+                     
                     </FormItem>
                   </div>
 
@@ -434,7 +479,7 @@ function TablePrestamos(props) {
                         <p>Cap + Interes</p>
                       </div>
                     )}
-
+                  
                     <FormItem
                       disabled
                       className={`${
@@ -443,7 +488,13 @@ function TablePrestamos(props) {
                           : 'mt-[20px] w-[100px]'
                       }`}
                     >
-                      <Input
+                      <Tooltip
+                          placement="top-end"
+                          title={currency + formatNumberPrestamos(
+                            calcCapInt(cta.monto, cta.tasaAnual, cta.plazo),
+                          )}
+                        >
+                          <Input
                         name="unidad"
                         disabled
                         prefix={currency}
@@ -451,6 +502,8 @@ function TablePrestamos(props) {
                           calcCapInt(cta.monto, cta.tasaAnual, cta.plazo),
                         )}
                       />
+                        </Tooltip>
+                      
                     </FormItem>
                   </div>
                 </div>

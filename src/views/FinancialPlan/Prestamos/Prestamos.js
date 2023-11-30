@@ -48,7 +48,6 @@ export default function Prestamos() {
 
     if (!isEmpty) {
       prestamos.forEach((p) => {
-        console.log('[P]', p, prestamosInit);
         if (p._id) {
           putPrestamo(p._id, p).then((resp) => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
