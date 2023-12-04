@@ -68,6 +68,7 @@ function TableCapexP(props) {
           precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
           currentMonth++;
         } else if (cuenta.incremento === 'trimestral') {
+
           if (
             mes === 'marzo' ||
             mes === 'junio' ||
@@ -78,6 +79,7 @@ function TableCapexP(props) {
             currentMonth++;
           }
         } else if (cuenta.incremento === 'anual') {
+
           if (mes === 'diciembre') {
             precioActual *= 1 + parseInt(cuenta.tasa, 10) / 100;
             currentMonth++;
@@ -95,8 +97,10 @@ function TableCapexP(props) {
   };
 
   const handleOnChangeInitialValue = (id, newValue, key, mes, indexYear) => {
-    const inputNumero = Number(newValue.replace(/\D/g, ''));
-
+    const inputNumero = (newValue !== 'mensual' && newValue !== 'trimestral' && newValue !== 'anual') ?
+    Number(newValue.replace(/\D/g, '')) :
+    newValue
+    
     const newData = [...infoForm];
     const ctaIndex = newData.findIndex((bien) => bien.id === id);
 
@@ -185,15 +189,6 @@ function TableCapexP(props) {
 
       return total;
     }
-  };
-
-  const formateoDescripcion = (numero) => {
-    if (typeof numero !== 'string') {
-      numero = numero.toString();
-    }
-    const inputNumero = Number(numero.replace(/\D/g, ''));
-    const nuevoNum = inputNumero.toLocaleString('es-AR');
-    return nuevoNum;
   };
 
   const totals = calcTotals();

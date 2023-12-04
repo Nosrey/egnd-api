@@ -378,12 +378,12 @@ export const optionsBienes = [
   {
     value: 'Terreno',
     label: 'Terreno',
-    amortizacion: 0,
+    amortizacion: 10,
     medida: 'UNIDAD',
   },
   {
-    value: 'Producto Tecnologico',
-    label: 'Producto Tecnologico',
+    value: 'Producto Tecnológico',
+    label: 'Producto Tecnológico',
     amortizacion: 3,
     medida: 'UNIDAD',
   },
