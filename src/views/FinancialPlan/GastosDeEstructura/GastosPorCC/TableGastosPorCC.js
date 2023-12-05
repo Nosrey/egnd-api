@@ -207,8 +207,12 @@ function TablePuestosPxQ(props) {
     mes,
     indexYear,
   ) => {
-    const inputNumero = Number(newValue.replace(/\D/g, ''));
-
+    let inputNumero;
+    if (key !== 'mesInicial') {
+      inputNumero = Number(newValue.replace(/\D/g, ''));
+    } else {
+      inputNumero = newValue;
+    }
     const newData = { ...infoForm };
     const ctaIndex = newData[cc].cuentas.findIndex(
       (cta) => cta.id === idCuenta,
@@ -261,10 +265,12 @@ function TablePuestosPxQ(props) {
     for (let x = 0; x < keyArray.length; x++) {
       copy[keyArray[x]].sum = [];
 
-      for (let i = 0; i < 10; i++) {  // GUARDO CAMBIEN EL GASTO TOTAL ANUAL PARA LA CTA REMUN Y CARGAS SOCIALES
-        copy[keyArray[x]].cuentas[0].años[i].volTotal =    Object.values(copy[keyArray[x]].cuentas[0].años[i].volMeses).reduce((a, b) => a + b, 0)    
+      for (let i = 0; i < 10; i++) {
+        // GUARDO CAMBIEN EL GASTO TOTAL ANUAL PARA LA CTA REMUN Y CARGAS SOCIALES
+        copy[keyArray[x]].cuentas[0].años[i].volTotal = Object.values(
+          copy[keyArray[x]].cuentas[0].años[i].volMeses,
+        ).reduce((a, b) => a + b, 0);
       }
-      
     }
 
     const body = [copy];
@@ -528,7 +534,7 @@ function TablePuestosPxQ(props) {
                                 </Tooltip>
                               </FormItem>
                             ))}
-                            {/* ESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */}
+                          {/* ESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */}
                           <FormItem className="mb-0">
                             <Tooltip
                               placement="top-end"
@@ -562,8 +568,7 @@ function TablePuestosPxQ(props) {
                             </Tooltip>
                           </FormItem>
 
-                         {/* ESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */}
-
+                          {/* ESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE */}
                         </div>
                       </div>
                     </div>

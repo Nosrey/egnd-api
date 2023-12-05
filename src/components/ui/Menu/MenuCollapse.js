@@ -1,61 +1,61 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import classNames from 'classnames'
-import { motion } from 'framer-motion'
-import PropTypes from 'prop-types'
-import { useContext, useEffect, useState } from 'react'
-import { HiChevronDown } from 'react-icons/hi'
-import { useConfig } from '../ConfigProvider'
-import { CollapseContextProvider } from './context/collapseContext'
-import MenuContext from './context/menuContext'
+import classNames from 'classnames';
+import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { useContext, useEffect, useState } from 'react';
+import { HiChevronDown } from 'react-icons/hi';
+import { useConfig } from '../ConfigProvider';
+import { CollapseContextProvider } from './context/collapseContext';
+import MenuContext from './context/menuContext';
 
 function MenuCollapse(props) {
   const { children, className, eventKey, expanded, label, onToggle, last } =
-    props
+    props;
 
-  const [isExpanded, setIsExpanded] = useState(expanded)
+  const [isExpanded, setIsExpanded] = useState(expanded);
 
   const { menuItemHeight, variant, sideCollapsed, defaultExpandedKeys } =
-    useContext(MenuContext)
+    useContext(MenuContext);
 
-  const { direction } = useConfig()
+  const { direction } = useConfig();
 
   useEffect(() => {
     if (defaultExpandedKeys.includes(eventKey)) {
-      setIsExpanded(true)
+      setIsExpanded(true);
     }
     if (expanded !== isExpanded) {
-      setIsExpanded(true)
+      setIsExpanded(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expanded, onToggle, eventKey, defaultExpandedKeys])
+  }, [expanded, onToggle, eventKey, defaultExpandedKeys]);
 
   const toggleCollapse = (e) => {
     if (typeof onToggle === 'function') {
-      onToggle(!isExpanded, e)
+      onToggle(!isExpanded, e);
     }
-    setIsExpanded(!isExpanded)
-  }
+    setIsExpanded(!isExpanded);
+  };
 
   const getChildrenHeight = () => {
-    let height = 0
+    let height = 0;
     if (isExpanded && children && children.length) {
-      height = children.length * menuItemHeight
+      height = children.length * menuItemHeight;
     }
     if (isExpanded && children && !children.length) {
-      height = menuItemHeight
+      height = menuItemHeight;
     }
 
     if (last) {
-      return height + 900
+      return height + 900;
     }
-    return height
-  }
+    return height;
+  };
 
   const menuCollapseItemClass = classNames(
     'menu-collapse-item',
     `menu-collapse-item-${variant}`,
-    className
-  )
+    className,
+  );
 
   return (
     <div className="menu-collapse">
@@ -86,7 +86,7 @@ function MenuCollapse(props) {
         </motion.ul>
       </CollapseContextProvider>
     </div>
-  )
+  );
 }
 
 MenuCollapse.propTypes = {
@@ -95,11 +95,11 @@ MenuCollapse.propTypes = {
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   children: PropTypes.node,
   className: PropTypes.string,
-}
+};
 
 MenuCollapse.defaultProps = {
   expanded: false,
   label: null,
-}
+};
 
-export default MenuCollapse
+export default MenuCollapse;

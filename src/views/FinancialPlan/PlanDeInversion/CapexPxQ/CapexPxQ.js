@@ -1,9 +1,9 @@
 /* eslint-disable no-lonely-if */
 import ContainerScrollable from 'components/shared/ContainerScrollable';
+import MySpinner from 'components/shared/loaders/MySpinner';
 import { Alert, FormContainer, Tabs } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import MySpinner from 'components/shared/loaders/MySpinner';
 import { Link } from 'react-router-dom';
 import { getUser } from 'services/Requests';
 import TableCapexPxQ from './TableCapexPxQ';
@@ -20,13 +20,18 @@ function CapexPxQ() {
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
-        if (data?.capexPData[0]?.length !== 0) {
+        if (
+          data?.capexPData.length !== 0 &&
+          data?.capexPData[0]?.length !== 0
+        ) {
           setCapexP(data?.capexPData[0]?.capexP);
         }
-        if (data?.capexQData[0]?.length !== 0) {
+        if (
+          data?.capexPData.length !== 0 &&
+          data?.capexQData[0]?.length !== 0
+        ) {
           setCapexQ(data?.capexQData[0]?.capexQ);
         }
-
         setShowLoader(false);
       })
       .catch((error) => console.error(error));
