@@ -4,7 +4,7 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unsafe-optional-chaining */
-import { MONTHS } from 'constants/forms.constants';
+import { MONTHS, optionsBienes } from 'constants/forms.constants';
 
 export const  redondearHaciaArribaConDosDecimales = (numero) =>{
   // Multiplicar por 100 para mover dos decimales a la izquierda
@@ -19,6 +19,9 @@ export const  redondearHaciaArribaConDosDecimales = (numero) =>{
 
 
 export const showMultiplicacionPxQ = (dataVolumen, dataPrecio) => {
+  console.log('DATA VOL', dataVolumen)
+  console.log('DATA PRECIO  ', dataPrecio)
+
   for (let i = 0; i < dataVolumen.length; i++) {
     // entro a cada pais
     for (let x = 0; x < dataVolumen[i].stats.length; x++) {
@@ -260,4 +263,75 @@ export  const calculateCtas = (infoCuentas) => {
     arrayCtas.push(arrayanios)
   }
     return arrayCtas // rray de 12 posiciones (una pro cada cuenta) con un array de 10 posiciones adentro correspondiente al total por cada anio gastado ene sa cuenta
+}
+
+export const multiplicacionPxQCapex = (dataVolumen, dataPrecio) => {
+  for (let i = 0; i < dataVolumen.length; i++) {
+    // entro a cada bien
+      for (
+        let t = 0;
+        t < dataVolumen[i].años.length;
+        t++
+      ) {
+        // año
+        const totalesAnio = [];
+        MONTHS.forEach((month) => {
+          // OBTENGO EL VALOR DE CADA OUTPUT QUE ES PRECIO X VOLUMEN
+          const volMes =
+            dataVolumen[i].años[t].volMeses[month];
+          const precioMes =
+            dataPrecio[i].años[t].volMeses[month];
+          const PxQMes = (dataVolumen[i].años[t].volMeses[month] = Math.round(volMes) * Math.round(precioMes));
+          totalesAnio.push(PxQMes);
+          return PxQMes;
+        });
+        const totalCapexAnual = totalesAnio.reduce((a, b) => a + b, 0); // CALCULO EL TOTAL POR Anio
+        dataVolumen[i].años[t].ventasTotal =
+          totalCapexAnual;
+      }
+    }
+  return dataVolumen;
+};
+
+export const calcAmortizaciones = (PxQCapex) => {
+  const myArrayAmort = [0,0,0,0,0,0,0,0,0,0]
+
+    for (let j = 0; j < PxQCapex.length; j++) { // cada bien
+      for (let a = 0; a < PxQCapex[j].años.length; a++) { // cada anio
+        MONTHS.map((s, indexM) => {
+          let valorMensual = 0
+          if (PxQCapex[j].años[a].volMeses[s] !== 0 ) {
+            const valorBien = PxQCapex[j].años[a].volMeses[s];
+            const objetoEncontrado = optionsBienes.find(opcion => opcion.value === PxQCapex[j].bien);
+            const anioAmort = objetoEncontrado.amortizacion;
+            let cantMeses = anioAmort * 12
+            valorMensual = valorBien / cantMeses
+
+            const mesesRestantesPrimerAnio = 12 - indexM;
+            const pcioAmortizadoPrimerAnio = mesesRestantesPrimerAnio * valorMensual;
+            myArrayAmort[a] += pcioAmortizadoPrimerAnio;
+
+            for (let x = 1; x < anioAmort - 1; x++) {
+              const pcioAmortizado = 12 * valorMensual;
+              const anioCurrent = a + x;
+              
+              if (anioCurrent <= 9) { // dentro del plazo planteado
+                myArrayAmort[anioCurrent] += pcioAmortizado;
+              }
+            }
+
+            if (anioAmort > 1) {
+              const mesesRestantesUltimoAnio = indexM === 0 ? 12 - indexM : indexM;
+              const pcioAmortizadoUltimoAnio = mesesRestantesUltimoAnio * valorMensual;
+              const anioUltimo = a + anioAmort - 1;
+
+              if (anioUltimo <= 9) { // dentro del plazo planteado
+                myArrayAmort[anioUltimo] += pcioAmortizadoUltimoAnio;
+              }
+            }              
+          }
+        })
+      }
+    }
+  return myArrayAmort
 }

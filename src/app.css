@@ -39,3 +39,14 @@ input[name="password"] , input[name="confirmPassword"]{
   .containerRegister::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* Color de fondo de la barra de desplazamiento */
   }
+
+  .iconDesplegable {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    margin-top: 7px;
+    margin-left: -12px;
+  }

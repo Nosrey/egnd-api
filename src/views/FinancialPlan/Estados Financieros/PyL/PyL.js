@@ -11,7 +11,7 @@ import { FormContainer } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
-import { calculateCostosAnuales, calculateCostosAnualesTipo, calculateCostosTotales, calculateCtas, calculateMargenBrutoPesos, calculateMargenBrutoPorcentaje, calculateVentas,calculateVentasTipo, showMultiplicacionPxQ, totComisiones, totComisionesTipo } from 'utils/calcs';
+import { calcAmortizaciones, calculateCostosAnuales, calculateCostosAnualesTipo, calculateCostosTotales, calculateCtas, calculateMargenBrutoPesos, calculateMargenBrutoPorcentaje, calculateVentas,calculateVentasTipo, multiplicacionPxQCapex, showMultiplicacionPxQ, totComisiones, totComisionesTipo } from 'utils/calcs';
 import TablePyL from '../TablePyL';
 
 function PyL() {
@@ -21,6 +21,8 @@ function PyL() {
   const [infoCuentas, setInfoCuentas] = useState();
   const [costoData, setCostoData] = useState();
   const [volumenData, setVolumenData] = useState();
+  const [capexPData, setCapexPData] = useState();
+  const [capexQData, setCapexQData] = useState();
 
   // INFO A MOSTRAR EN LA TABLA 
   const [ventasTot, setVentasTot] = useState();
@@ -38,6 +40,8 @@ function PyL() {
   const [mbPorcentaje, setMbPorcentaje] = useState();
   const [gastoEnCtas, setGastoEnCtas] = useState();
   const [ctasListado, setCtasListado] = useState();
+  const [amortizaciones, setAmortizaciones] = useState();
+  const [intereses, setIntereses] = useState([20390, 24390, 24390,24390,24390,24390,24390,24390,24390,24390]);
 
   useEffect(() => {
     if (infoForm ) {
@@ -79,6 +83,14 @@ function PyL() {
       setCtasListado(arrayCtas)
     }
   }, [infoCuentas]);
+
+  useEffect(() => {
+    if (capexPData && capexQData) {
+      const PxQCapex = multiplicacionPxQCapex(capexQData, capexPData)
+      setAmortizaciones(calcAmortizaciones(PxQCapex))
+    }
+  }, [capexPData, capexQData]);
+
   useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
@@ -127,6 +139,21 @@ function PyL() {
           console.log("Falta completar info en Gastos por Centro de costo")
         }
 
+        if (data?.capexPData[0]?.length !== 0) {
+          setCapexPData(data?.capexPData[0]?.capexP);
+          console.log("CAPEX PRECIO", data?.capexPData[0]?.capexP)
+
+        }else {
+          console.log("Falta completar info en Costo Inversiones")
+        }
+
+        if (data?.capexQData[0]?.length !== 0) {
+          setCapexQData(data?.capexQData[0]?.capexQ);
+          console.log("CAPEXvol" , data?.capexQData[0]?.capexQ)
+        }else {
+          console.log("Falta completar info en Volumen de Inversiones")
+        }
+
        
         setShowLoader(false);
       })
@@ -169,6 +196,8 @@ function PyL() {
                     mbPorcentaje={mbPorcentaje || []}
                     ctasListado={ctasListado || []}
                     gastoEnCtas={gastoEnCtas || []}
+                    amortizaciones={amortizaciones || []}
+                    intereses={intereses || []}
 
                     />
                 }
