@@ -1,12 +1,12 @@
-import React, { useContext } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { MenuContextProvider } from './context/menuContext'
-import useUncertainRef from '../hooks/useUncertainRef'
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useContext } from 'react';
+import useUncertainRef from '../hooks/useUncertainRef';
+import useUniqueId from '../hooks/useUniqueId';
 import DropdownMenuContext, {
-  useDropdownMenuContext,
   DropdownMenuContextProvider,
-} from './context/dropdownMenuContext'
-import useUniqueId from '../hooks/useUniqueId'
+  useDropdownMenuContext,
+} from './context/dropdownMenuContext';
+import { MenuContextProvider } from './context/menuContext';
 
 const Menu = React.forwardRef((props, ref) => {
   const {
@@ -19,32 +19,32 @@ const Menu = React.forwardRef((props, ref) => {
     placement,
     menuClass,
     ...rest
-  } = props
+  } = props;
 
-  const menuRef = useUncertainRef(ref)
-  const menuId = useUniqueId('menu-')
-  const upperMenuControl = useContext(DropdownMenuContext)
-  const menuControl = useDropdownMenuContext(menuRef, upperMenuControl)
+  const menuRef = useUncertainRef(ref);
+  const menuId = useUniqueId('menu-');
+  const upperMenuControl = useContext(DropdownMenuContext);
+  const menuControl = useDropdownMenuContext(menuRef, upperMenuControl);
 
   const getTransform = (deg) => {
-    const rotate = `rotateX(${deg}deg)`
+    const rotate = `rotateX(${deg}deg)`;
     if (placement && placement.includes('center')) {
-      return `${rotate} translateX(-50%)`
+      return `${rotate} translateX(-50%)`;
     }
-    return rotate
-  }
+    return rotate;
+  };
 
   const enterStyle = {
     opacity: 1,
     visibility: 'visible',
     transform: getTransform(0),
-  }
+  };
   const exitStyle = {
     opacity: 0,
     visibility: 'hidden',
     transform: getTransform(40),
-  }
-  const initialStyle = exitStyle
+  };
+  const initialStyle = exitStyle;
 
   return (
     <MenuContextProvider
@@ -72,7 +72,7 @@ const Menu = React.forwardRef((props, ref) => {
         </AnimatePresence>
       </DropdownMenuContextProvider>
     </MenuContextProvider>
-  )
-})
+  );
+});
 
-export default Menu
+export default Menu;
