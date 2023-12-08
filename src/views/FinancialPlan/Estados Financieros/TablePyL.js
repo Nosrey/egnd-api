@@ -12,7 +12,7 @@ import { formatNumberPrestamos } from 'utils/formatTotalsValues';
 import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 
 
-const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER COSTOS EN UN SOLO ACORDION  y ESTILOS , tomar datos para enviar al back poner boton guardar
+const impGanancias = 20 
   function TablePyL(props) {
     const [vtasTot, setVtasTot] = useState([]);
     const [vtasProd, setVtasProd] = useState([]);
@@ -41,6 +41,54 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
     const [rdoNeto, setRdoNeto] = useState([]);
     const [RNPorcentaje, setRNPorcentaje] = useState([]);
 
+
+    // ***************** INPUTS ANIO 0 ******************
+    const [inputsValues, setinputsValues] = useState({
+        vtasTot: "0" ,
+        vtasProd: "0" ,
+        vtasServ: "0" ,
+        costoProd: "0" ,
+        costoServ: "0" ,
+        costoProduccionTotal: "0" ,
+        costoComision: "0" ,
+        costoImpuesto: "0" ,
+        costoCargos: "0" ,
+        costoComerciales: "0" ,
+        costoTotales: "0" ,
+        MBPesos: "0" ,
+        MBPorcentaje: "0" ,
+        ctasListado: "0" ,
+        gastoEnCtas: ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"] ,
+        gastoEnCtasTotal: "0" ,
+        EBITDA: "0" , 
+        EBITDAPorcentaje: "0" ,
+        amortizaciones: "0" ,
+        EBIT: "0" ,
+        EBITPorcentaje: "0" ,
+        intereses: "0" ,
+        BAT: "0" ,
+        IIGG: "0" ,
+        rdoNeto: "0" , 
+        RNPorcentaje: "0" ,
+    });
+
+   const handleChangeInputs = (key , value , indexCta) => {
+        const copy = {...inputsValues}
+        if (value.startsWith("0")) {
+            value = value.slice(1);
+        }
+        
+        if (key === 'gastoEnCtas') {
+            copy.gastoEnCtas[indexCta] = value
+        } else {
+            copy[key] = value
+        }
+        setinputsValues(copy)
+    }
+
+    // **********************************************
+
+    // ***************** ACORDION ******************
 
     const [hiddenItems, setHiddenItems] = useState([true, true, true, true]);
     const [allOpen, setAllOpen] = useState(false);
@@ -77,6 +125,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
         }
         
       }, [hiddenItems]);
+    // **********************************************
+
 
     useEffect(() => {
        setVtasTot(props.vtasTot)
@@ -203,7 +253,7 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
       }, [rdoNeto, vtasTot]);
 
       const submitInfoForm = () => {
-        console.log("rdo")
+        console.log(inputsValues)
       }
     return (
       <>
@@ -241,7 +291,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.vtasProd}
+                                      onChange={(e) => handleChangeInputs('vtasProd' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -308,8 +359,9 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
                                       name="initial"
+                                      value={inputsValues.vtasServ}
+                                      onChange={(e) => handleChangeInputs('vtasServ' , e.target.value)}
                                       prefix='$'
 
                                   />
@@ -390,8 +442,9 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
                                       name="initial"
+                                      value={inputsValues.vtasTot}
+                                      onChange={(e) => handleChangeInputs('vtasTot' , e.target.value)}
                                       prefix='$'
 
                                   />
@@ -453,7 +506,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoProd}
+                                      onChange={(e) => handleChangeInputs('costoProd' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -517,7 +571,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoServ}
+                                      onChange={(e) => handleChangeInputs('costoServ' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -582,7 +637,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoProduccionTotal}
+                                      onChange={(e) => handleChangeInputs('costoProduccionTotal' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -645,7 +701,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoImpuesto}
+                                      onChange={(e) => handleChangeInputs('costoImpuesto' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -710,7 +767,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoComision}
+                                      onChange={(e) => handleChangeInputs('costoComision' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -775,7 +833,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoCargos}
+                                      onChange={(e) => handleChangeInputs('costoCargos' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -840,7 +899,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoComerciales}
+                                      onChange={(e) => handleChangeInputs('costoComerciales' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -904,7 +964,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.costoTotales}
+                                      onChange={(e) => handleChangeInputs('costoTotales' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -967,7 +1028,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.MBPesos}
+                                      onChange={(e) => handleChangeInputs('MBPesos' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1029,7 +1091,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.MBPorcentaje}
+                                      onChange={(e) => handleChangeInputs('MBPorcentaje' , e.target.value)}
                                       name="initial"
                                       prefix='%'
 
@@ -1099,7 +1162,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.gastoEnCtas[indexCta]}
+                                      onChange={(e) => handleChangeInputs('gastoEnCtas' , e.target.value, indexCta)}
                                       name="initial"
                                       prefix='$'
 
@@ -1167,7 +1231,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.gastoEnCtasTotal}
+                                      onChange={(e) => handleChangeInputs('gastoEnCtasTotal' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1209,7 +1274,7 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                   </div>
                 {/** *********** ****************  ************ */}
 
-                { !hiddenItems[3] && <>
+                
                  {/** *********** EBITDA  ************ */}
 
                  <div
@@ -1231,7 +1296,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.EBITDA}
+                                      onChange={(e) => handleChangeInputs('EBITDA' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1295,7 +1361,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.EBITDAPorcentaje}
+                                      onChange={(e) => handleChangeInputs('EBITDAPorcentaje' , e.target.value)}
                                       name="initial"
                                       prefix='%'
 
@@ -1338,7 +1405,7 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                       ))}
                   </div>
                 {/** *********** ****************  ************ */}
-
+                { !hiddenItems[3] && <>
                 {/** *********** Amortizaciones  ************ */}
 
                    <div
@@ -1359,7 +1426,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.amortizaciones}
+                                      onChange={(e) => handleChangeInputs('amortizaciones' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1424,7 +1492,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.EBIT}
+                                      onChange={(e) => handleChangeInputs('EBIT' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1487,7 +1556,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.EBITPorcentaje}
+                                      onChange={(e) => handleChangeInputs('EBITPorcentaje' , e.target.value)}
                                       name="initial"
                                       prefix='%'
 
@@ -1552,7 +1622,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.intereses}
+                                      onChange={(e) => handleChangeInputs('intereses' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1617,7 +1688,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.BAT}
+                                      onChange={(e) => handleChangeInputs('BAT' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1680,7 +1752,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.IIGG}
+                                      onChange={(e) => handleChangeInputs('IIGG' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1748,7 +1821,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.rdoNeto}
+                                      onChange={(e) => handleChangeInputs('rdoNeto' , e.target.value)}
                                       name="initial"
                                       prefix='$'
 
@@ -1811,7 +1885,8 @@ const impGanancias = 20 // traer del pyl y si no lo cargo mando un cero PONER CO
                                   <Input
                                       className="w-[130px]"
                                       type="text"
-                                      value={0}
+                                      value={inputsValues.RNPorcentaje}
+                                      onChange={(e) => handleChangeInputs('RNPorcentaje' , e.target.value)}
                                       name="initial"
                                       prefix='%'
 
