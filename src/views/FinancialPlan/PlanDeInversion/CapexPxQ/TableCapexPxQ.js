@@ -93,6 +93,8 @@ function TableCapexPxQ(props) {
 
   const tot = calcTotal();
   const totHor = calcHor();
+
+  console.log("tot",totals)
   return (
     <>
       {capexP && (
@@ -227,14 +229,20 @@ function TableCapexPxQ(props) {
                             <Tooltip
                               placement="top-end"
                               title={`${currency} ${formatearNumero(
-                                cta.años[indexYear].volTotal,
+                                    totals[indexYear].reduce(
+                            (acumulador, numero) => acumulador + numero,
+                            0,
+                          )
                               )}`}
                             >
                               <Input
                                 className="w-[90px]"
                                 type="text"
                                 value={formatearNumero(
-                                  cta.años[indexYear].volTotal,
+                                      totals[indexYear].reduce(
+                            (acumulador, numero) => acumulador + numero,
+                            0,
+                          )
                                 )}
                                 disabled
                                 prefix={currency}

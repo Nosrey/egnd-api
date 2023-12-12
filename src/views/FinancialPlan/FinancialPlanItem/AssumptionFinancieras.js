@@ -28,6 +28,7 @@ const plazos = {
 };
 
 const defaultState = {
+  impGanancias: "",
   cobranzas: plazos,
   pagoProducto: plazos,
   pagoServicio: plazos,
@@ -73,7 +74,7 @@ function AssumptionsFinancieras() {
   }, [setDataFinanciera]);
 
   const setFormValues = (index, campo, value) => {
-    if (index !== 'stock') {
+    if (index !== 'stock' && index !== "impGanancias") {
       const input = tiempos[index].name;
       const state = dataFinanciera.input;
       const newData = { ...dataFinanciera[campo], [input]: value };
