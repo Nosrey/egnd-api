@@ -7,12 +7,12 @@
 
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import MySpinner from 'components/shared/loaders/MySpinner'; 
-import { FormContainer } from 'components/ui';
+import { Alert, FormContainer } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
 import { calcAmortizaciones, calculateCostosAnuales, calculateCostosAnualesTipo, calculateCostosTotales, calculateCtas, calculateMargenBrutoPesos, calculateMargenBrutoPorcentaje, calculateVentas,calculateVentasTipo, multiplicacionPxQCapex, showMultiplicacionPxQ, totComisiones, totComisionesTipo } from 'utils/calcs';
-import TablePyL from '../TablePyL';
+import TablePyL from './TablePyL';
 
 function PyL() {
   const [showLoader, setShowLoader] = useState(false);
@@ -42,6 +42,8 @@ function PyL() {
   const [ctasListado, setCtasListado] = useState();
   const [amortizaciones, setAmortizaciones] = useState();
   const [intereses, setIntereses] = useState([20390, 24390, 24390,24390,24390,24390,24390,24390,24390,24390]);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   useEffect(() => {
     if (infoForm ) {
@@ -141,15 +143,12 @@ function PyL() {
 
         if (data?.capexPData[0]?.length !== 0) {
           setCapexPData(data?.capexPData[0]?.capexP);
-          console.log("CAPEX PRECIO", data?.capexPData[0]?.capexP)
-
         }else {
           console.log("Falta completar info en Costo Inversiones")
         }
 
         if (data?.capexQData[0]?.length !== 0) {
           setCapexQData(data?.capexQData[0]?.capexQ);
-          console.log("CAPEXvol" , data?.capexQData[0]?.capexQ)
         }else {
           console.log("Falta completar info en Volumen de Inversiones")
         }
@@ -163,6 +162,16 @@ function PyL() {
 
   return (
     <>
+    {showSuccessAlert && (
+        <Alert className="mb-4" type="success" showIcon>
+          Los datos se guardaron satisfactoriamente.
+        </Alert>
+      )}
+      {showErrorAlert && (
+        <Alert className="mb-4" type="danger" showIcon>
+          No se pudieron guardar los datos.
+        </Alert>
+      )}
       {showLoader ? (
         <MySpinner />
       ) : (
@@ -198,6 +207,10 @@ function PyL() {
                     gastoEnCtas={gastoEnCtas || []}
                     amortizaciones={amortizaciones || []}
                     intereses={intereses || []}
+                    showAlertSuces={(boolean) =>
+                      setShowSuccessAlert(boolean)
+                    }
+                    showAlertError={(boolean) => setShowErrorAlert(boolean)}
 
                     />
                 }

@@ -276,4 +276,36 @@ export const protectedRoutes = [
     ),
     authority: [],
   },
+  // {
+  //   key: 'CashflowIndirecto',
+  //   path: '/cashflow-indirecto',
+  //   component: React.lazy(() =>
+  //     import('views/FinancialPlan/Estados Financieros/CashflowIndirecto/CashflowIndirecto'),
+  //   ),
+  //   authority: [],
+  // },
+  // {
+  //   key: 'CashflowDirecto',
+  //   path: '/cashflow-directo',
+  //   component: React.lazy(() =>
+  //     import('views/FinancialPlan/Estados Financieros/CashflowDirecto/CashflowDirecto'),
+  //   ),
+  //   authority: [],
+  // },
+  // {
+  //   key: 'Balance',
+  //   path: '/balance',
+  //   component: React.lazy(() =>
+  //     import('views/FinancialPlan/Estados Financieros/Balance/Balance'),
+  //   ),
+  //   authority: [],
+  // },
+  {
+    key: 'WorkingCapital',
+    path: '/working-capital',
+    component: React.lazy(() =>
+      import('views/FinancialPlan/Estados Financieros/WorkingCapital/WorkingCapital'),
+    ),
+    authority: [],
+  },
 ];
