@@ -829,3 +829,30 @@ export const createMercado = async (
 
   throw new Error('Error en la petición POST');
 };
+
+
+export const createPyL = async (values) => {
+  try {
+    const response = await fetch(`${URL_API}/api/pl`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error', error);
+    throw error;
+  }
+};
+
+export const getPyLInfo = async (id = idUser) => {
+  try {
+    const resp = await fetch(`${URL_API}/api/pl/${id}`);
+    const data = await resp.json();
+    return data.response;
+  } catch (error) {
+    console.error('Error:', error);
+    throw new Error('No se pudo obtener los datos del usuario.');
+  }
+};

@@ -60,9 +60,11 @@
     "collapseEstadosFinancieros": {
       "collapseEstadosFinancieros": "Estados Financieros",
       "item1": "P&L",
-      "item2": "Cashflow Directo e Indirecto",
-      "item3": "Balance y Working Capital",
-      "item4": "Dashboard Financiero"
+      "item2": "Cashflow Indirecto",
+      "item3": "Cashflow Directo",
+      "item4": "Balance ",
+      "item5": "Working Capital",
+      "item6": "Dashboard Financiero"
     }
   }
 }
