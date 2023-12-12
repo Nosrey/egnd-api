@@ -521,6 +521,7 @@ export const createPuestosv = async (body) => {
 };
 
 export const createAssumpFinanciera = async (
+  impGanancias,
   cobranzas,
   pagoProducto,
   pagoServicio,
@@ -534,6 +535,7 @@ export const createAssumpFinanciera = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        impGanancias,
         cobranzas,
         pagoProducto,
         pagoServicio,
