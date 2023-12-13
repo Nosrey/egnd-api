@@ -50,12 +50,16 @@ function TableCapexPxQ(props) {
     }
   };
   const calcHor = () => {
-    let tot = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const totsHor = []
+
     if (capexP && capexQ) {
       capexP.map((d, index) => {
+        if(!totsHor[index]){
+          totsHor.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        }
         for (let i = 0; i <= 9; i++) {
           for (let j = 0; j <= 11; j++) {
-            tot[i] +=
+            totsHor[index][i] +=
               Number(d.años[i].volMeses[MONTHS[j]]) *
               (Number(capexQ[index].años[i].volMeses[MONTHS[j]]) || 0);
           }
@@ -63,7 +67,7 @@ function TableCapexPxQ(props) {
       });
     }
 
-    return tot;
+    return totsHor;
   };
 
   const calcTotal = () => {
@@ -94,7 +98,6 @@ function TableCapexPxQ(props) {
   const tot = calcTotal();
   const totHor = calcHor();
 
-  console.log("tot",totals)
   return (
     <>
       {capexP && (
@@ -229,21 +232,14 @@ function TableCapexPxQ(props) {
                             <Tooltip
                               placement="top-end"
                               title={`${currency} ${formatearNumero(
-                                    totals[indexYear].reduce(
-                            (acumulador, numero) => acumulador + numero,
-                            0,
-                          )
+                                    totHor[index][indexYear]
                               )}`}
                             >
                               <Input
                                 className="w-[90px]"
                                 type="text"
                                 value={formatearNumero(
-                                      totals[indexYear].reduce(
-                            (acumulador, numero) => acumulador + numero,
-                            0,
-                          )
-                                )}
+                                  totHor[index][indexYear] )}
                                 disabled
                                 prefix={currency}
                               />
