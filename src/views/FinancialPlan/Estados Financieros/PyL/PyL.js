@@ -11,7 +11,7 @@ import { Alert, FormContainer } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
-import { calcAmortizaciones, calculateCostosAnuales, calculateCostosAnualesTipo, calculateCostosTotales, calculateCtas, calculateMargenBrutoPesos, calculateMargenBrutoPorcentaje, calculateVentas,calculateVentasTipo, multiplicacionPxQCapex, showMultiplicacionPxQ, totComisiones, totComisionesTipo } from 'utils/calcs';
+import { calcAmortizaciones, calcInteresMensual, calcInteresesPagadosPorAnio, calculateCostosAnuales, calculateCostosAnualesTipo, calculateCostosTotales, calculateCtas, calculateMargenBrutoPesos, calculateMargenBrutoPorcentaje, calculateVentas,calculateVentasTipo, multiplicacionPxQCapex, showMultiplicacionPxQ, totComisiones, totComisionesTipo } from 'utils/calcs';
 import TablePyL from './TablePyL';
 
 function PyL() {
@@ -23,6 +23,7 @@ function PyL() {
   const [volumenData, setVolumenData] = useState();
   const [capexPData, setCapexPData] = useState();
   const [capexQData, setCapexQData] = useState();
+  const [prestamosData, setPrestamosData] = useState();
 
   // INFO A MOSTRAR EN LA TABLA 
   const [ventasTot, setVentasTot] = useState();
@@ -41,7 +42,7 @@ function PyL() {
   const [gastoEnCtas, setGastoEnCtas] = useState();
   const [ctasListado, setCtasListado] = useState();
   const [amortizaciones, setAmortizaciones] = useState();
-  const [intereses, setIntereses] = useState([20390, 24390, 24390,24390,24390,24390,24390,24390,24390,24390]);
+  const [intereses, setIntereses] = useState();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
@@ -94,6 +95,12 @@ function PyL() {
   }, [capexPData, capexQData]);
 
   useEffect(() => {
+    if (prestamosData ) {
+      setIntereses(calcInteresesPagadosPorAnio(prestamosData) )
+    }
+  }, [prestamosData]);
+
+  useEffect(() => {
     getUser(currentState.id)
       .then((data) => {
         if (data?.gastosGeneralData.length !== 0) {
@@ -132,7 +139,6 @@ function PyL() {
           console.log("Es necesario completar la informacion de Gastos Generales")
         }
 
-        
         if (data?.gastosPorCCData.length !== 0) {
           setInfoCuentas(() => ({
             ...data?.gastosPorCCData[0].centroDeCostos[0],
@@ -151,6 +157,12 @@ function PyL() {
           setCapexQData(data?.capexQData[0]?.capexQ);
         }else {
           console.log("Falta completar info en Volumen de Inversiones")
+        }
+
+        if (data?.prestamos?.length !== 0) {
+          setPrestamosData(data?.prestamos);
+        }else {
+          console.log("Falta completar info en la sección de Préstamos")
         }
 
        

@@ -19,9 +19,6 @@ export const  redondearHaciaArribaConDosDecimales = (numero) =>{
 
 
 export const showMultiplicacionPxQ = (dataVolumen, dataPrecio) => {
-  console.log('DATA VOL', dataVolumen)
-  console.log('DATA PRECIO  ', dataPrecio)
-
   for (let i = 0; i < dataVolumen.length; i++) {
     // entro a cada pais
     for (let x = 0; x < dataVolumen[i].stats.length; x++) {
@@ -334,4 +331,68 @@ export const calcAmortizaciones = (PxQCapex) => {
       }
     }
   return myArrayAmort
+}
+
+export const calcTasaMensual = (tasaAnu) => {
+  if (Number(tasaAnu) === 0) return 0;
+
+  return Number(tasaAnu) / 12 || 0;
+};
+
+export const calcPagoMensual = (monto, tasaAnual, plazo) => {
+  const tasaMensual = calcTasaMensual(tasaAnual) / 100;
+
+  const firstTerm =
+    Number(monto) * (tasaMensual * (1 + tasaMensual) ** Number(plazo));
+
+  const secondTerm = (1 + tasaMensual) ** Number(plazo) - 1;
+
+  return (firstTerm / secondTerm).toFixed(2) || 0;
+};
+
+export const calcCapInt = (monto, tasaAnual, plazo) =>
+  calcPagoMensual(monto, tasaAnual, plazo) * Number(plazo) || 0;
+
+
+export const calcInteresTotal = (monto, tasaAnual, plazo) =>
+calcCapInt(monto, tasaAnual, plazo) - Number(monto) || 0;
+
+export const calcInteresMensual = (monto, tasaAnual, plazo) => {
+  if (isNaN(calcInteresTotal(monto, tasaAnual, plazo) / Number(plazo))) {
+    return 0;
+  }
+  return calcInteresTotal(monto, tasaAnual, plazo) / Number(plazo);
+};
+
+export const calcInteresesPagadosPorAnio = (prestamosData) => {
+  let dataIntereses = [0,0,0,0,0,0,0,0,0,0]
+
+  for (let i = 0; i < prestamosData.length; i++) {
+    const { mesInicio, monto, plazo, tasaAnual } = prestamosData[i];
+    const indexMes = MONTHS.indexOf(mesInicio.toLowerCase()) +1 ; // el +1 es porque se empiezan a pagar desde el mes siguiente
+    const montoMensual = calcInteresMensual(monto,tasaAnual,plazo)
+
+    // se asume que comienzan en el anio 1 porque no haay posibildiad de elegir anio
+    const mesesRestantesPrimerAnio = 12 - indexMes;
+    const interesesAnioUno = mesesRestantesPrimerAnio * montoMensual;
+    dataIntereses[0] +=  interesesAnioUno;
+
+    const mesesQueFaltan = parseInt(plazo) - mesesRestantesPrimerAnio;
+    if (mesesQueFaltan > 12) {
+      const anios = Math.ceil(mesesQueFaltan/12)
+      for (let x = 0; x < anios; x++) {
+        if (x === anios-1) {
+          const mesesRestantes= mesesQueFaltan % 12;
+          dataIntereses[x+1] +=  mesesRestantes * montoMensual;
+        } else {
+          dataIntereses[x+1] +=  12 * montoMensual;
+        }
+
+      }
+      console.log('ocupo mas de una nio')
+    } else {
+      dataIntereses[1] +=  mesesQueFaltan * montoMensual;
+    }
+  }
+  return dataIntereses
 }

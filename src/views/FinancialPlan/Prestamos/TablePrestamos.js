@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { deletePrestamo } from 'services/Requests';
+import { calcInteresMensual, calcInteresTotal, calcPagoMensual, calcCapInt, calcTasaMensual } from 'utils/calcs';
 import { formatNumberPrestamos } from 'utils/formatTotalsValues';
 import { v4 as uuid } from 'uuid';
 
@@ -51,36 +52,6 @@ function TablePrestamos(props) {
     props.setPrestamos([...copyBien]);
 
     viewButtons();
-  };
-
-  const calcTasaMensual = (tasaAnu) => {
-    if (Number(tasaAnu) === 0) return 0;
-
-    return Number(tasaAnu) / 12 || 0;
-  };
-
-  const calcPagoMensual = (monto, tasaAnual, plazo) => {
-    const tasaMensual = calcTasaMensual(tasaAnual) / 100;
-
-    const firstTerm =
-      Number(monto) * (tasaMensual * (1 + tasaMensual) ** Number(plazo));
-
-    const secondTerm = (1 + tasaMensual) ** Number(plazo) - 1;
-
-    return (firstTerm / secondTerm).toFixed(2) || 0;
-  };
-
-  const calcCapInt = (monto, tasaAnual, plazo) =>
-    calcPagoMensual(monto, tasaAnual, plazo) * Number(plazo) || 0;
-
-  const calcInteresTotal = (monto, tasaAnual, plazo) =>
-    calcCapInt(monto, tasaAnual, plazo) - Number(monto) || 0;
-
-  const calcInteresMensual = (monto, tasaAnual, plazo) => {
-    if (isNaN(calcInteresTotal(monto, tasaAnual, plazo) / Number(plazo))) {
-      return 0;
-    }
-    return calcInteresTotal(monto, tasaAnual, plazo) / Number(plazo);
   };
 
   const calcCapitalMensual = (monto, tasaAnual, plazo) =>
