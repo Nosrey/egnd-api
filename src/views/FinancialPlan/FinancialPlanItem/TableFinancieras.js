@@ -101,7 +101,7 @@ function TableFinancieras({
                     >
                       <Field
                         placeholder="0"
-                        name={`impGanancias`}
+                        name='impGanancias'
                         value={dataFinanciera.impGanancias}
                         type="number"
                         size="sm"
