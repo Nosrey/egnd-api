@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
 import React, { useMemo, forwardRef } from 'react'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
