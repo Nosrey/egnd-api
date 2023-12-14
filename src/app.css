@@ -16,7 +16,7 @@
     pointer-events: none;
 } */
 .cont-countries {
-    max-width: fit-content;
+    /* max-width: fit-content; */
     position: relative;
 }
 

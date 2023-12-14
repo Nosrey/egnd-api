@@ -9,7 +9,7 @@ import {
   import { useEffect , useState} from 'react';
 import { useSelector } from 'react-redux';
 import { formatNumberPrestamos } from 'utils/formatTotalsValues';
-import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
+import { createWorkingCapital, getWorkingCapitalInfo } from 'services/Requests';
 
   function TableWorkingCapital(props) {
     const [creditosVentas, setCreditosVentas] = useState([]);
@@ -17,6 +17,7 @@ import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
     const [deudasComerciales, setDeudasComerciales] = useState([]);
     const [posicionAlCierre, setPosicionAlCierre] = useState([]);
     const [variacion, setVariacion] = useState([]);
+    const currentState = useSelector((state) => state.auth.user);
 
     // ***************** INPUTS ANIO 0 ******************
     const [inputsValues, setinputsValues] = useState({
@@ -83,7 +84,33 @@ import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 
       const submitInfoForm = () => {
         console.log(inputsValues)
+        const value = {...inputsValues, idUser:localStorage.getItem('userId') }
+        createWorkingCapital(value).then((resp) =>{
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            props.showAlertSuces(true);
+            setTimeout(() => {
+              props.showAlertSuces(false);
+            }, 5000);
+        }).catch ((error) => {
+            console.error(error)
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            props.showAlertError(true);
+            setTimeout(() => {
+              props.showAlertError(false);
+            }, 5000);
+        })
       }
+
+      useEffect(() => {
+        getWorkingCapitalInfo(currentState.id)
+          .then((data) => {
+            if (data.length !==0) {
+                setinputsValues(data[0])
+            } 
+            
+          })
+          .catch((error) => console.error(error));
+      }, []);
     return (
       <>
       { 

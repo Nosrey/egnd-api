@@ -7,7 +7,7 @@
 
 import ContainerScrollable from 'components/shared/ContainerScrollable';
 import MySpinner from 'components/shared/loaders/MySpinner'; 
-import { FormContainer } from 'components/ui';
+import { Alert, FormContainer } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getUser } from 'services/Requests';
@@ -16,7 +16,8 @@ import TableWorkingCapital from './TableWorkingCapital';
 function WorkingCapital() {
   const [showLoader, setShowLoader] = useState(false);
   const currentState = useSelector((state) => state.auth.user);
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   // INFO A MOSTRAR EN LA TABLA 
 //   const [ventasTot, setVentasTot] = useState();
 
@@ -32,6 +33,16 @@ function WorkingCapital() {
 
   return (
     <>
+     {showSuccessAlert && (
+        <Alert className="mb-4" type="success" showIcon>
+          Los datos se guardaron satisfactoriamente.
+        </Alert>
+      )}
+      {showErrorAlert && (
+        <Alert className="mb-4" type="danger" showIcon>
+          No se pudieron guardar los datos.
+        </Alert>
+      )}
       {showLoader ? (
         <MySpinner />
       ) : (
@@ -53,7 +64,10 @@ function WorkingCapital() {
                     creditosVentas={[100, 340, 444, 230, 140, 30, 499, 670, 190, 300]}
                     bienesDeCambio={[100, 340, 444, 230, 140, 30, 499, 670, 190, 300]}
                     deudasComerciales={[10, 34, 44, 23, 14, 3, 49, 67, 19, 30]}
-
+                    showAlertSuces={(boolean) =>
+                      setShowSuccessAlert(boolean)
+                    }
+                    showAlertError={(boolean) => setShowErrorAlert(boolean)}
                     />
                 }
               />

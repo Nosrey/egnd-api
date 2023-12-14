@@ -164,9 +164,10 @@ function PyL() {
         }else {
           console.log("Falta completar info en la sección de Préstamos")
         }
-
+        setTimeout(() => {
+          setShowLoader(false)
+        }, 4000);
        
-        setShowLoader(false);
       })
       .catch((error) => console.error(error));
   }, []);
