@@ -7,7 +7,7 @@ const app = store.getState();
 // const ls = JSON.parse(window.localStorage.getItem('admin'));
 // const auth = JSON.parse(ls.auth);
 
-const URL_API = 'http://localhost:8080';
+const URL_API = 'https://api.egndfinance.com';
 // const idUser = app.auth.user.id && app.auth.user.id;
 const idUser = localStorage.getItem('userId');
 
